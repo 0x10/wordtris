@@ -1,0 +1,204 @@
+/*!*****************************************************************************
+ * @file wt_storage.h
+ * @brief interface for storing and loading data
+ *
+ * This file was developed as part of wordtris
+ *
+ * @author Christian Kranz
+ * 
+ * @copyright Copyright 2019 by Christian Kranz
+ *            All rights reserved.
+ *            None of this file or parts of it may be
+ *            copied, redistributed or used in any other way
+ *            without written approval of Christian Kranz
+ *
+ ******************************************************************************/
+#ifndef _WT_STORAGE_H_
+#define _WT_STORAGE_H_
+
+#include <fstream>
+#include "wt_types.h"
+
+#define STORAGE  WtStorageCtr::instance()
+class WtStorageCtr 
+{
+private:
+    // changes affect devices with installed base
+    typedef struct
+    {
+        uint32_t magic;
+    } _FileHeader;
+
+    // changes affect devices with installed base
+    typedef struct
+    {
+        WtSettings   settings;
+        WtHighscores highscores;       
+    } _FileData;
+
+    typedef struct
+    {
+        _FileHeader  header;
+        _FileData    data;
+    } _PersistentFileStructure;
+
+    // least significant word is fixed magic and most sig. word
+    // may represent file structure
+    static           const uint32_t m_header_magic = 0x0001ADDE;
+    static constexpr const char*    m_fname        = "wordtris.dat";
+
+// singleton definition
+public:
+    static WtStorageCtr& instance()
+    {
+        static WtStorageCtr _instance;
+        return _instance;
+    }
+    ~WtStorageCtr()
+    {
+    }
+private:
+    WtStorageCtr()
+    {
+        m_storage_copy.header.magic = m_header_magic;
+        m_storage_copy.data.settings = WtSettings();
+        m_storage_copy.data.highscores.clear();
+    }
+    WtStorageCtr( const WtStorageCtr& ); 
+    WtStorageCtr & operator = (const WtStorageCtr &);
+
+public:
+    /**************************
+     *
+     *************************/
+    void store_settings( WtSettings& settings )
+    {
+        m_storage_copy.data.settings = settings;
+
+        write_to_file();
+    }
+
+    /**************************
+     *
+     *************************/
+    void store_highscores( WtHighscores& scores )
+    {
+        m_storage_copy.data.highscores = scores;
+
+        if ( ! write_to_file() )
+        {
+            std::cout << "write failed" << std::endl;
+        }
+        else
+            std::cout << "write success" << std::endl;
+    }
+
+    /**************************
+     *
+     *************************/
+    bool load()
+    {
+        bool read_successful = read_from_file();
+
+
+        std::cout << "read was " << (read_successful ? "successful" : "not successful") << std::endl;
+
+        if ( !read_successful )
+        {
+            //load default
+        }
+
+        std::cout << "highscores.size() == " << m_storage_copy.data.highscores.size() << std::endl;
+        std::cout << "settings.language == " << m_storage_copy.data.settings.language << std::endl;
+        std::cout << "settings.game mode == " << m_storage_copy.data.settings.game_mode << std::endl;
+        std::cout << "settings.diff == " << m_storage_copy.data.settings.difficulty << std::endl;
+        // distribute
+        //
+        return read_successful;
+    }
+
+    /**************************
+     *
+     *************************/
+    WtSettings get_settings()
+    {
+        return m_storage_copy.data.settings;
+    }
+private:
+
+    /**************************
+     *
+     *************************/
+    bool write_to_file()
+    {
+        bool success = false;
+
+        std::ofstream output_file( m_fname, std::ios::binary );
+        if ( output_file.is_open() )
+        {
+            m_storage_copy.header.magic = m_header_magic;
+
+            output_file.write( (char*)&m_storage_copy.header, sizeof(m_storage_copy.header));
+
+            m_storage_copy.data.settings.write( output_file );
+            for(size_t idx = 0; idx < m_storage_copy.data.highscores.size(); idx++ )
+            {
+                m_storage_copy.data.highscores[idx].write( output_file );
+            }
+
+            output_file.close();
+
+            success = true;
+        }
+
+        return success;
+    }
+
+    /**************************
+     *
+     *************************/
+    bool read_from_file()
+    {
+        bool success = false;
+
+        std::ifstream input_file( m_fname, std::ios::binary );
+        if ( input_file.is_open() )
+        {
+            input_file.read( (char*)&m_storage_copy.header, sizeof(m_storage_copy.header) );
+
+            //if ( (! input_file.eof()) && (!input_file.fail()) ) in case latter wont work
+            if ( input_file.gcount() == sizeof(m_storage_copy.header) )
+            {
+                // check binary compatibility
+                if ( m_storage_copy.header.magic == m_header_magic )
+                {
+                    std::cout << "read: header matches\n";
+
+                    m_storage_copy.data.settings.read( input_file );
+
+                    m_storage_copy.data.highscores.clear();
+                    while( !input_file.eof() )
+                    {
+                        WtScoreEntry tmp;
+                        if ( tmp.read( input_file ) )
+                            m_storage_copy.data.highscores.push_back( tmp );
+                    }
+
+                    // check read size
+                    // todo..
+                    {
+                        success = true;
+                    }
+                }
+            }
+        }
+
+        return success;
+    }
+
+private:
+   _PersistentFileStructure m_storage_copy;
+};
+
+
+#endif /* _WT_STORAGE_H_ */

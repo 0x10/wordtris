@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<translations>
+    <tu>
+        <src>ABC?E</src>
+        <l code="en">ABC?E</l>
+        <l code="de">ABC?E</l>
+        <l code="fr">ABC?E</l>
+    </tu>
+    <tu>
+        <src>back</src>
+        <l code="en">Back</l>
+        <l code="de">Zurueck</l>
+        <l code="fr">Retour</l>
+    </tu>
+    <tu>
+        <src>build rows.\nthe more equal symbols, more points.</src>
+        <l code="en">Build rows!\nThe more equal gems, more points!</l>
+        <l code="de">Fuelle Zeilen!\nSammle gleiche Steine pro Zeile</l>
+        <l code="fr">Construire lignes!</l>
+    </tu>
+    <tu>
+        <src>Complete the sequence!</src>
+        <l code="en">Fill the gaps in the sequence!</l>
+        <l code="de">Setze die fallenden Steine in die Sequenz!</l>
+        <l code="fr">Mettez les pierres dans les bons trous!</l>
+    </tu>
+    <tu>
+        <src>difficulty: </src>
+        <l code="en">Difficulty: </l>
+        <l code="de">Schwierigkeit: </l>
+        <l code="fr">Difficulte: </l>
+    </tu>
+    <tu>
+        <src>easy</src>
+        <l code="en">Easy</l>
+        <l code="de">Leicht</l>
+        <l code="fr">Simple</l>
+    </tu>
+    <tu>
+        <src>Fill Rows</src>
+        <l code="en">Fill Rows</l>
+        <l code="de">Fuelle Zeilen</l>
+        <l code="fr">Construire lignes</l>
+    </tu>
+    <tu>
+        <src>Guess it!</src>
+        <l code="en">Guess the word!</l>
+        <l code="de">Rate das Wort!</l>
+        <l code="fr">Devinez le mot!</l>
+    </tu>
+    <tu>
+        <src>Guess the word: </src>
+        <l code="en">Guess the word:</l>
+        <l code="de">Rate das Wort:</l>
+        <l code="fr">Devinez le mot:</l>
+    </tu>
+    <tu>
+        <src>hard</src>
+        <l code="en">Hard</l>
+        <l code="de">Schwer</l>
+        <l code="fr">Difficile</l>
+    </tu>
+    <tu>
+        <src>language: </src>
+        <l code="en">Language: </l>
+        <l code="de">Sprache: </l>
+        <l code="fr">Lingue: </l>
+    </tu>
+    <tu>
+        <src>no help provided</src>
+        <l code="en">No help provided.</l>
+        <l code="de">Keine Hilfe verfuegbar.</l>
+        <l code="fr">Aucune aide n'est fournie.</l>
+    </tu>
+    <tu>
+        <src>normal</src>
+        <l code="en">Medium</l>
+        <l code="de">Mittel</l>
+        <l code="fr">Classique</l>
+    </tu>
+    <tu>
+        <src>options</src>
+        <l code="en">Settings</l>
+        <l code="de">Einstellungen</l>
+        <l code="fr">Parametres</l>
+    </tu>
+    <tu>
+        <src>player</src>
+        <l code="en">Player</l>
+        <l code="de">Spieler</l>
+        <l code="fr">Joueur</l>
+    </tu>
+    <tu>
+        <src>quit</src>
+        <l code="en">Quit</l>
+        <l code="de">Beenden</l>
+        <l code="fr">Finir</l>
+    </tu>
+    <tu>
+        <src>resume</src>
+        <l code="en">Resume</l>
+        <l code="de">Fortsetzen</l>
+        <l code="fr">Continuer</l>
+    </tu>
+    <tu>
+        <src>select game mode</src>
+        <l code="en">Select Game</l>
+        <l code="de">Spiel auswaehlen</l>
+        <l code="fr">Selectionner un jeu</l>
+    </tu>
+    <tu>
+        <src>start game</src>
+        <l code="en">Start!</l>
+        <l code="de">Los!</l>
+        <l code="fr">Lance!</l>
+    </tu>
+    <tu>
+        <src>Try to place the falling letters at the correct position of the given sequence.</src>
+        <l code="en">Try to place the falling letters at the correct position of the given sequence.</l>
+        <l code="de">Platziere die fallenden Buchstaben in die richtigen Felder.</l>
+        <l code="fr">Placez les lettres qui tombent dans les bons champs.</l>
+    </tu>
+    <tu>
+        <src>you lost! :P</src>
+        <l code="en">You lost!</l>
+        <l code="de">Du hast verloren!</l>
+        <l code="fr">Tu as perdu!</l>
+    </tu>
+</translations>
