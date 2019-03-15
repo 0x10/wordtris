@@ -74,8 +74,6 @@ protected:
         m_grid_font = new WtSdlFont( "grid", GRID_FONT_SIZE, GRID_FONT_SIZE, "grid_font.bmp", m_renderer );
         m_text_font = new WtSdlFont( "text", TEXT_FONT_SIZE, TEXT_FONT_SIZE*2, "text_font.bmp", m_renderer );
 
-        m_button_img = get_texture( "menu_btn.bmp" );
-        m_pause_button_img = get_texture( "pause.bmp" );
     }
 
     ~WtDrawingPolicySdl()
@@ -174,7 +172,22 @@ protected:
       *************************/   
     void set_bg( const std::string bg_img )
     {
-        m_bg_img = get_texture( bg_img );
+        m_bg_img_path = bg_img;
+    }
+
+    /**************************
+      *
+      *************************/   
+    void draw_icon( const WtCoord&    pos,
+                    const std::string fname )
+    {
+        SDL_Texture* button_img = get_texture( fname );
+        SDL_Rect Message_rect;
+        Message_rect.x = pos.x;
+        Message_rect.y = pos.y;
+        Message_rect.w = 500;//todo get_texture_size( buttom_img );
+        Message_rect.h = 80;
+        SDL_RenderCopy(m_renderer, button_img, NULL, &Message_rect);
     }
 
     /**************************
@@ -183,12 +196,13 @@ protected:
     void draw_button( const WtCoord&    pos,
                       const std::string text )
     {
+        SDL_Texture*  button_img = get_texture( "menu_btn.bmp" );
         SDL_Rect Message_rect;
         Message_rect.x = pos.x;
         Message_rect.y = pos.y;
         Message_rect.w = 500;
         Message_rect.h = 80;
-        SDL_RenderCopy(m_renderer, m_button_img, NULL, &Message_rect);
+        SDL_RenderCopy(m_renderer, button_img, NULL, &Message_rect);
 
         size_t text_center_w = ( text.length() / 2 ) * m_text_font->width();
         size_t button_center_x = ( 500 / 2 + pos.x );
@@ -217,12 +231,13 @@ protected:
       *************************/   
     void draw_pause_button( const WtCoord& pos )
     {
+        SDL_Texture*  pause_button_img = get_texture( "pause.bmp" );
         SDL_Rect Message_rect;
         Message_rect.x = pos.x;
         Message_rect.y = pos.y;
         Message_rect.w = 42;
         Message_rect.h = 42;
-        SDL_RenderCopy(m_renderer, m_pause_button_img, NULL, &Message_rect);
+        SDL_RenderCopy(m_renderer, pause_button_img, NULL, &Message_rect);
     }
 
     /**************************
@@ -242,12 +257,13 @@ private:
      *************************/
     void draw_bg()
     {
+        SDL_Texture* bg_img = get_texture( m_bg_img_path );
         SDL_Rect Message_rect;
         Message_rect.x = 0;
         Message_rect.y = 0;
         Message_rect.w = SDL_WIDTH;
         Message_rect.h = SDL_HEIGHT;
-        SDL_RenderCopy(m_renderer, m_bg_img, NULL, &Message_rect);
+        SDL_RenderCopy(m_renderer, bg_img, NULL, &Message_rect);
     }
 
     /**************************
@@ -333,6 +349,7 @@ private:
         {
             // load from file
             // insert into cache
+            std::cout << "load from file.. " << fname << std::endl;
             m_texture_cache[fname] = WtSdlUtils::loadAssetToTexture( fname, m_renderer );
 
             tex = m_texture_cache[fname];
@@ -346,9 +363,6 @@ private:
 //    TTF_Font*     sans;
 
     std::string   m_bg_img_path;
-    SDL_Texture*  m_bg_img;
-    SDL_Texture*  m_button_img;
-    SDL_Texture*  m_pause_button_img;
 
     WtSdlFont*    m_grid_font;
     WtSdlFont*    m_text_font;
