@@ -22,7 +22,6 @@
 #include "global.h"
 #include "wt_menu_if.h"
 #include "wt_drawing.h"
-#include "wt_menu_game_mode_select.h"
 #include "wt_menu_settings.h"
 #include "wt_menu_pause.h"
 
@@ -41,8 +40,11 @@ public:
     }
 private:
     WtMenuCtr() :
-        WtMenuIf( 0x100 )
+        WtMenuIf( 0x100, "bg_menu.bmp" )
     {
+        add_button( WtButton( 1, WtCoord( 170, 493 ), WtDim( 200, 200 ), "start_btn.bmp" ) );
+        add_button( WtButton( 2, WtCoord( 105, 800 ), WtDim( 100, 100 ), "score_btn.bmp" ) );
+        add_button( WtButton( 3, WtCoord( 332, 800 ), WtDim( 100, 100 ), "settings_btn.bmp" ) );
     }
     WtMenuCtr( const WtMenuCtr& ); 
     WtMenuCtr & operator = (const WtMenuCtr &);
@@ -63,7 +65,6 @@ public:
     {
         WtMenuIf::listen( listener );
         m_settings.listen( listener );
-        m_select_mode.listen( listener );
     }
 private:
     /**************************
@@ -74,10 +75,10 @@ private:
         switch( TO_BUTTON_ID( id ) )
         {
             case 1:
-                enter_child_menu( m_select_mode );
+                leave();
                 break;
             case 2:
-                leave();
+                //leave();
                 break;
             case 3:
                 enter_child_menu( m_settings );
@@ -95,21 +96,9 @@ private:
     /**************************
      *
      *************************/
-    virtual void show_self()
-    {
-        size_t offset_x = (ACTIVE_WINDOW_WIDTH - 500) / 2;
-        size_t offset_y = (ACTIVE_WINDOW_HEIGHT / 2) - (ACTIVE_WINDOW_HEIGHT / 4 )+ 120;
-
-        add_button( 1, WtCoord(offset_x, offset_y), WtDim(500, 80), WtL10n::tr("select game mode"), false );
-        add_button( 2, WtCoord(offset_x, offset_y+80+20), WtDim(500, 80), WtL10n::tr("start game"), false );
-        add_button( 3, WtCoord(offset_x, offset_y+160+40), WtDim(500, 80), WtL10n::tr("options"), false );
-    }
-
-    /**************************
-     *
-     *************************/
     virtual void menu_update()
     {
+#if 0
         std::string text[] = { "Team:","=====", "Coding / Artwork", "C. Kranz", "Idea / Android Support", "W. Krzeslowski" };
         static uint8_t text_id = 0;
         static float lastpos = 0.0;
@@ -120,9 +109,9 @@ private:
         
         if (lastpos == 0)
             text_id = (text_id+2)%6;
+#endif
     }
 private:
-    WtMenuSelectMode m_select_mode;
     WtMenuSettings   m_settings;
     WtMenuPause      m_pause_menu;
 };

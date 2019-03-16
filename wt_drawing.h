@@ -17,7 +17,7 @@
 #define _WT_DRAWING_H_
 
 #include "global.h"
-
+#include "wt_button.h"
 #include "wt_player.h"
 #include "wt_board.h"
 #include "wt_active_letter.h"
@@ -126,10 +126,11 @@ public:
     /**************************
       *
       *************************/   
-    void draw_button( const WtCoord&    pos,
-                      const std::string text )
+    void draw_button( WtButton& button )
     {
-        DrawingPolicy::draw_button( pos, text );
+        DrawingPolicy::draw_button( button.x(), button.y(),
+                                    button.width(), button.height(), 
+                                    button.image(), button.label() );
     }
 
     /**************************

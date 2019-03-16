@@ -34,7 +34,9 @@ public:
     virtual void draw_message( const std::string msg ) =0;
     virtual void update() =0;
     virtual void set_bg( const std::string bg_img ) =0;
-    virtual void draw_button( const WtCoord&    pos,
+    virtual void draw_button( const size_t& x, const size_t& y,
+                      const size_t& w, const size_t& h,
+                      const std::string img,
                       const std::string text ) =0;
     virtual void draw_text( const WtCoord&    pos,
                        const std::string text ) =0;

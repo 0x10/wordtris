@@ -19,23 +19,24 @@
 #include "wt_backend_select.h"
 #include "wt_settings_observer_if.h"
 #include "wt_input.h"
+#include "wt_button.h"
 
 #define MENU_BUTTON_ID( id ) (this->get_id() + id)
 #define TO_BUTTON_ID( id ) (id - this->get_id())
 
 class WtMenuIf : WtInputObserver
 {
-private:
-    static constexpr const char* background_image = "bg_menu.bmp";
 public:
-    WtMenuIf() :
+    WtMenuIf( std::string bg_img="bg_menu.bmp" ) :
         m_menu_id(0xFF00),
-        m_shall_leave( false )
+        m_shall_leave( false ),
+        m_bg( bg_img )
     {
     }
-    WtMenuIf( uint16_t menu_id ) :
+    WtMenuIf( uint16_t menu_id, std::string bg_img="bg_menu.bmp") :
         m_menu_id( menu_id ),
-        m_shall_leave( false )
+        m_shall_leave( false ),
+        m_bg( bg_img )
     {
     }
     ~WtMenuIf()
@@ -62,6 +63,7 @@ public:
             ACTIVE_INPUT.read();
 
             ACTIVE_WINDOW.clr();
+
             show_self();
 
             menu_update();
@@ -77,12 +79,7 @@ public:
 
 protected:
     /**************************
-     *
-     *************************/
-    virtual void show_self() = 0;
-
-    /**************************
-     *
+     * signal
      *************************/
     virtual void menu_left()
     {
@@ -90,20 +87,13 @@ protected:
     }
 
     /**************************
-     *
+     * signal
      *************************/
     virtual void menu_update()
     {
 
     }
 
-    /**************************
-     *
-     *************************/
-    virtual std::string get_bg_img()
-    {
-        return WtMenuIf::background_image;
-    }
 
     /**************************
      *
@@ -124,16 +114,15 @@ protected:
     /**************************
      *
      *************************/
-    void add_button( const uint8_t  id,
-                     const WtCoord& pos,
-                     const WtDim&   size,
-                     std::string    label, 
-                     bool           labelIsImage )
+    void add_button( WtButton button )
     {
         bool already_exists = false;
+
+        button.set_id( MENU_BUTTON_ID( button.id() ) );
+
         for(size_t idx=0;idx<m_buttons.size();idx++)
         {
-            if ( MENU_BUTTON_ID( id ) == m_buttons[idx] )
+            if ( button.id() == m_buttons[idx].id() )
             {
                 already_exists = true;
                 break;
@@ -142,29 +131,27 @@ protected:
 
         if (! already_exists)
         {
-            m_buttons.push_back( MENU_BUTTON_ID( id ) );
-
-            ACTIVE_INPUT.add_button( MENU_BUTTON_ID( id ), pos, size );
+            m_buttons.push_back( button );
         }
-
-        if ( ! labelIsImage )
-            ACTIVE_WINDOW.draw_button( pos, label );
     }
 
     /**************************
       *
       *************************/   
     void add_list( const WtCoord&                  pos,
+                   const WtDim&                    size,
+                   const std::string               btn_image,
                    const std::vector<std::string>& texts )
     {
         WtCoord working_pos = pos;
         for ( size_t idx = 0; idx < texts.size(); idx++ )
         {
-            add_button( idx, working_pos, WtDim( 500, 80 ), texts[idx], false );
-            working_pos.y += (80 + 20);
+            add_button( WtButton( idx, working_pos, size, btn_image, texts[idx] ) );
+            working_pos.y += (size.h + 20);
         }
     }
 
+#if 0
     /**************************
      *
      *************************/
@@ -174,13 +161,14 @@ protected:
 
         for (size_t i=0;i<m_buttons.size();i++)
         {
-            if ( m_buttons[i] == id )
+            if ( m_buttons[i].id() == id )
             {
                 m_buttons.erase( m_buttons.begin()+i );
                 break;
             }
         }
     }
+#endif
 
     /**************************
      *
@@ -189,15 +177,21 @@ protected:
     {
         m_shall_leave = false;
 
+        for(size_t idx=0;idx<m_buttons.size();idx++)
+        {
+            ACTIVE_INPUT.add_button( m_buttons[idx] );
+        }
         ACTIVE_INPUT.listen( this );
 
         ACTIVE_WINDOW.set_bg( get_bg_img() );
 
+#if 0
         ACTIVE_WINDOW.clr();
 
         show_self();
 
         ACTIVE_WINDOW.update();
+#endif
     }
 
     /**************************
@@ -211,7 +205,6 @@ protected:
         {
             ACTIVE_INPUT.remove_button( m_buttons[i] );
         }
-        m_buttons.clear();
 
         menu_left();
     }
@@ -237,9 +230,30 @@ protected:
     }
 
 private:
+    /**************************
+     *
+     *************************/
+    std::string get_bg_img()
+    {
+        return m_bg;
+    }
+
+    /**************************
+     *
+     *************************/
+    void show_self()
+    {
+        for(size_t idx=0;idx<m_buttons.size();idx++)
+        {
+            ACTIVE_WINDOW.draw_button( m_buttons[idx] );
+        }
+    }
+
+private:
     uint16_t                                m_menu_id;
     bool                                    m_shall_leave;
-    std::vector<uint16_t>                   m_buttons;
+    std::string                             m_bg;
+    std::vector<WtButton>                   m_buttons;
     std::vector<WtSettingsChangeObserver*>  m_change_listener;
 };
 

@@ -60,7 +60,19 @@ private:
         m_game_over( false ),
         m_shall_quit( false ),
         m_pause( false ),
-        m_pause_menu( NULL )
+        m_pause_menu( NULL ),
+        m_left_btn( 0xF1, 
+                                  WtCoord(0,100),
+                                  WtDim( ACTIVE_WINDOW_WIDTH / 2, ACTIVE_WINDOW_HEIGHT/2+ACTIVE_WINDOW_HEIGHT/4 ), ""), 
+        m_right_btn( 0xF2, 
+                                 WtCoord(ACTIVE_WINDOW_WIDTH / 2, 100),
+                                 WtDim( ACTIVE_WINDOW_WIDTH / 2, ACTIVE_WINDOW_HEIGHT/2+ACTIVE_WINDOW_HEIGHT/4 ), ""),
+        m_drop_btn( 0xF3, 
+                                 WtCoord( 0, ACTIVE_WINDOW_HEIGHT/2+ACTIVE_WINDOW_HEIGHT/4 ),
+                                 WtDim( ACTIVE_WINDOW_WIDTH, ACTIVE_WINDOW_HEIGHT-(ACTIVE_WINDOW_HEIGHT/2+ACTIVE_WINDOW_HEIGHT/4)  ), ""),
+        m_pause_btn( 0xF4, 
+                                 WtCoord( 0, 0 ),
+                                 WtDim( ACTIVE_WINDOW_WIDTH, 100 ), "")
     {
         if ( STORAGE.load() )
         {
@@ -200,19 +212,10 @@ private:
      *************************/
     void set_buttons()
     {
-        uint8_t fake_board_offset = 100;
-        ACTIVE_INPUT.add_button( 0xF1, 
-                                  WtCoord(0,fake_board_offset),
-                                  WtDim( ACTIVE_WINDOW_WIDTH / 2, ACTIVE_WINDOW_HEIGHT/2+ACTIVE_WINDOW_HEIGHT/4 ) );
-        ACTIVE_INPUT.add_button( 0xF2, 
-                                 WtCoord(ACTIVE_WINDOW_WIDTH / 2, fake_board_offset),
-                                 WtDim( ACTIVE_WINDOW_WIDTH / 2, ACTIVE_WINDOW_HEIGHT/2+ACTIVE_WINDOW_HEIGHT/4 ) );
-        ACTIVE_INPUT.add_button( 0xF3, 
-                                 WtCoord( 0, ACTIVE_WINDOW_HEIGHT/2+ACTIVE_WINDOW_HEIGHT/4 ),
-                                 WtDim( ACTIVE_WINDOW_WIDTH, ACTIVE_WINDOW_HEIGHT-(ACTIVE_WINDOW_HEIGHT/2+ACTIVE_WINDOW_HEIGHT/4)  ) );
-        ACTIVE_INPUT.add_button( 0xF4, 
-                                 WtCoord( 0, 0 ),
-                                 WtDim( ACTIVE_WINDOW_WIDTH, fake_board_offset ) );
+        ACTIVE_INPUT.add_button( m_left_btn );
+        ACTIVE_INPUT.add_button( m_right_btn );
+        ACTIVE_INPUT.add_button( m_drop_btn );
+        ACTIVE_INPUT.add_button( m_pause_btn );
 
         ACTIVE_INPUT.listen( this );
     }
@@ -222,9 +225,11 @@ private:
     void unset_buttons()
     {
         ACTIVE_INPUT.ignore( this );
-        ACTIVE_INPUT.remove_button( 0xF1 );
-        ACTIVE_INPUT.remove_button( 0xF2 );
-        ACTIVE_INPUT.remove_button( 0xF3 );
+
+        ACTIVE_INPUT.remove_button( m_left_btn );
+        ACTIVE_INPUT.remove_button( m_right_btn );
+        ACTIVE_INPUT.remove_button( m_drop_btn );
+        ACTIVE_INPUT.remove_button( m_pause_btn );
     }
 
     /**************************
@@ -374,6 +379,12 @@ private:
     bool                        m_shall_quit;
     bool                        m_pause;
     WtMenuIf*                   m_pause_menu;
+
+
+    WtButton                    m_left_btn;
+    WtButton                    m_right_btn;
+    WtButton                    m_drop_btn;
+    WtButton                    m_pause_btn;
 };
 
 

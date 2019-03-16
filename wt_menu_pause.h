@@ -21,13 +21,17 @@
 
 class WtMenuPause : public WtMenuIf
 {
-private:
-    static constexpr const char* background_image = "bg.bmp";
 public:
     WtMenuPause() :
-        WtMenuIf( 0x200 )
+        WtMenuIf( 0x200, "bg.bmp" )
     {
+        size_t offset_x = (ACTIVE_WINDOW_WIDTH) / 2;
+        size_t offset_y = (ACTIVE_WINDOW_HEIGHT / 2);
+
+        add_button( WtButton( 1, WtCoord(offset_x - 158, offset_y-66), WtDim(58, 66), "redo_btn.bmp" ) );
+        add_button( WtButton( 2, WtCoord(offset_x + 80, offset_y-73), WtDim(80, 73), "quit_btn.bmp" ) );
     }
+
     ~WtMenuPause()
     {
     }
@@ -53,25 +57,6 @@ private: // no copy allowed
         }
     }
 
-    /**************************
-     *
-     *************************/
-    virtual void show_self()
-    {
-        size_t offset_x = (ACTIVE_WINDOW_WIDTH - 500) / 2;
-        size_t offset_y = (ACTIVE_WINDOW_HEIGHT / 2) - (ACTIVE_WINDOW_HEIGHT / 4 )+ 80;
-        add_button( 1, WtCoord(offset_x, offset_y+40), WtDim(500, 80), WtL10n::tr("resume"), false );
-        add_button( 2, WtCoord(offset_x, offset_y+40+80+40), WtDim(500, 80), WtL10n::tr("quit"), false );
-
-    }
-
-    /**************************
-     *
-     *************************/
-    virtual std::string get_bg_img()
-    {
-        return WtMenuPause::background_image;
-    }
 };
 
 #endif /* _WT_MENU_GAME_MODE_SELECT_H_ */

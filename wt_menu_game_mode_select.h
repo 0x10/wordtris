@@ -21,13 +21,31 @@
 
 class WtMenuSelectMode : public WtMenuIf
 {
-private:
-    static constexpr const char* background_image = "bg_menu.bmp";
 public:
     WtMenuSelectMode() :
-        WtMenuIf( 0x200 )
+        WtMenuIf( 0x200, "bg_menu_settings.bmp" )
     {
+        size_t offset_x = (ACTIVE_WINDOW_WIDTH - 328) / 2;
+        size_t offset_y = (ACTIVE_WINDOW_HEIGHT / 2) - (ACTIVE_WINDOW_HEIGHT / 4 );
+
+        std::vector<WtGameModeIf*>& available_modes = GAME_MODE_CTR.get_available_modes();
+
+        size_t idx = 0;
+        std::vector<std::string> modes;
+
+        for( idx = 0; idx < available_modes.size(); idx++ )
+        {
+            modes.push_back( available_modes[idx]->get_title() );
+        }
+
+        add_list( WtCoord( offset_x, offset_y ),
+                  WtDim( 328, 69 ),
+                  "menu_btn.bmp",
+                  modes );
+
+        add_button( WtButton( idx, WtCoord( 105, 800 ), WtDim(100, 100), "back_btn.bmp" ) );
     }
+
     ~WtMenuSelectMode()
     {
     }
@@ -54,38 +72,6 @@ private: // no copy allowed
         }
 
         leave();
-    }
-
-    /**************************
-     *
-     *************************/
-    virtual void show_self()
-    {
-        size_t offset_x = (ACTIVE_WINDOW_WIDTH - 500) / 2;
-        size_t offset_y = (ACTIVE_WINDOW_HEIGHT / 2) - (ACTIVE_WINDOW_HEIGHT / 4 );
-
-        std::vector<WtGameModeIf*>& available_modes = GAME_MODE_CTR.get_available_modes();
-
-        size_t idx = 0;
-        std::vector<std::string> modes;
-
-        for( idx = 0; idx < available_modes.size(); idx++ )
-        {
-            modes.push_back( available_modes[idx]->get_title() );
-        }
-
-        add_list( WtCoord( offset_x, offset_y ), modes );
-
-        add_button( idx, WtCoord(offset_x, ACTIVE_WINDOW_HEIGHT-(80+40)), WtDim(500, 80), WtL10n::tr("back"), false );
-    }
-
-
-    /**************************
-     *
-     *************************/
-    virtual std::string get_bg_img()
-    {
-        return WtMenuSelectMode::background_image;
     }
 };
 

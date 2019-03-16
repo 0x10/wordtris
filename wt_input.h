@@ -24,6 +24,7 @@
 #include "wt_player.h"
 #include "wt_board.h"
 #include "wt_active_letter.h"
+#include "wt_button.h"
 
 
 class WtInputObserver
@@ -37,13 +38,6 @@ public:
     virtual void notify_button_pressed( uint16_t id ) {}
     virtual void notify_motion( WtCoord pos, WtCoord d_pos ) {}
 };
-
-typedef struct
-{
-    uint16_t id;
-    WtCoord  pos;
-    WtDim    size;
-} WtButton;
 
 
 #define INPUT( Policy )  WtInput<Policy>::instance()
@@ -95,25 +89,20 @@ public:
     /**************************
      *
      *************************/
-    void add_button( const uint16_t id,
-                     const WtCoord& pos,
-                     const WtDim&   size )
+    void add_button( WtButton& button )
     {
-        WtButton newButton = { .id   = id,
-                               .pos  = pos,
-                               .size = size };
-        m_active_buttons.push_back( newButton );
+        m_active_buttons.push_back( button );
         //std::cout << "new button("<<id<<") @ ("<<pos.x<<","<<pos.y<<") with ("<<size.w<<","<<size.h<<")"<<std::endl;
     }
 
     /**************************
      *
      *************************/
-    void remove_button( const uint16_t id )
+    void remove_button( WtButton& button )
     {
         for ( size_t i = 0; i < m_active_buttons.size(); i++ )
         {
-            if ( m_active_buttons[i].id == id )
+            if ( m_active_buttons[i].id() == button.id() )
             {
                 //std::cout << "del button("<<id<<")"<<std::endl;
                 m_active_buttons.erase( m_active_buttons.begin()+i );
@@ -164,14 +153,14 @@ public:
                 // eval button
                 for ( size_t i = 0; i < m_active_buttons.size(); i++ )
                 {
-                    if ( ( ev.pos.x >= m_active_buttons[i].pos.x )
-                      && ( ev.pos.x < (m_active_buttons[i].pos.x + m_active_buttons[i].size.w) )
-                      && ( ev.pos.y >= m_active_buttons[i].pos.y )
-                      && ( ev.pos.y < (m_active_buttons[i].pos.y + m_active_buttons[i].size.h) ) )
+                    if ( ( ev.pos.x >= m_active_buttons[i].position().x )
+                      && ( ev.pos.x < (m_active_buttons[i].position().x + m_active_buttons[i].width()) )
+                      && ( ev.pos.y >= m_active_buttons[i].position().y )
+                      && ( ev.pos.y < (m_active_buttons[i].position().y + m_active_buttons[i].height()) ) )
                     {
                         for (size_t list_idx = 0; list_idx < m_input_listener.size(); list_idx++)
                         {
-                            m_input_listener[list_idx]->notify_button_pressed( m_active_buttons[i].id );
+                            m_input_listener[list_idx]->notify_button_pressed( m_active_buttons[i].id() );
                         }
 
                         break;// no button stacking..

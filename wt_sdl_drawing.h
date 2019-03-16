@@ -155,8 +155,8 @@ protected:
     void draw_message( const std::string msg )
     {
 //        puts_fb( 2, 23, msg.c_str(), m_text_font );
-        draw_button( WtCoord( (SDL_WIDTH-500)/2, SDL_HEIGHT/2-80/2 ),
-                     msg );
+//        draw_button( WtCoord( (SDL_WIDTH-500)/2, SDL_HEIGHT/2-80/2 ),
+  //                   msg );
     }
 
     /**************************
@@ -193,36 +193,27 @@ protected:
     /**************************
       *
       *************************/   
-    void draw_button( const WtCoord&    pos,
+    void draw_button( const size_t& x, const size_t& y,
+                      const size_t& w, const size_t& h,
+                      const std::string img,
                       const std::string text )
     {
-        SDL_Texture*  button_img = get_texture( "menu_btn.bmp" );
+        SDL_Texture*  button_img = get_texture( img );
         SDL_Rect Message_rect;
-        Message_rect.x = pos.x;
-        Message_rect.y = pos.y;
-        Message_rect.w = 500;
-        Message_rect.h = 80;
+        Message_rect.x = x;
+        Message_rect.y = y;
+        Message_rect.w = w;
+        Message_rect.h = h;
         SDL_RenderCopy(m_renderer, button_img, NULL, &Message_rect);
 
-        size_t text_center_w = ( text.length() / 2 ) * m_text_font->width();
-        size_t button_center_x = ( 500 / 2 + pos.x );
-        size_t button_center_y = ( 80 / 2 + pos.y );
-        size_t text_center_h = m_text_font->height();
-
-        puts_fb( button_center_x - text_center_w, button_center_y - text_center_h, text.c_str(), m_text_font );
-    }
-
-    /**************************
-      *
-      *************************/   
-    void draw_button_list( const WtCoord&                  pos,
-                           const std::vector<std::string>& texts )
-    {
-        WtCoord working_pos = pos;
-        for ( size_t idx = 0; idx < texts.size(); idx++ )
+        if ( ! text.empty() )
         {
-            draw_button( working_pos, texts[idx] );
-            working_pos.x += (80 + 20);
+            size_t text_center_w = ( text.length() / 2 ) * m_text_font->width();
+            size_t button_center_x = ( w / 2 + x );
+            size_t button_center_y = ( h / 2 + y );
+            size_t text_center_h = m_text_font->height();
+
+            puts_fb( button_center_x - text_center_w, button_center_y - text_center_h, text.c_str(), m_text_font );
         }
     }
 
