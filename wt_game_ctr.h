@@ -71,8 +71,8 @@ private:
                                  WtCoord( 0, ACTIVE_WINDOW_HEIGHT/2+ACTIVE_WINDOW_HEIGHT/4 ),
                                  WtDim( ACTIVE_WINDOW_WIDTH, ACTIVE_WINDOW_HEIGHT-(ACTIVE_WINDOW_HEIGHT/2+ACTIVE_WINDOW_HEIGHT/4)  ), ""),
         m_pause_btn( 0xF4, 
-                                 WtCoord( 0, 0 ),
-                                 WtDim( ACTIVE_WINDOW_WIDTH, 100 ), "")
+                     WtCoord( 393, 32 ),
+                     WtDim( 64, 64 ), "pause_btn.bmp" )
     {
         if ( STORAGE.load() )
         {
@@ -105,7 +105,7 @@ private:
         ACTIVE_WINDOW.draw_player_stat( m_player );
         ACTIVE_WINDOW.draw_active_letter( m_active );
         ACTIVE_WINDOW.draw_hint( m_active_mode->get_hint() );
-        ACTIVE_WINDOW.draw_pause_button( WtCoord( ACTIVE_WINDOW_WIDTH - 42 - 50, 17 ) );
+        ACTIVE_WINDOW.draw_button( m_pause_btn );
         ACTIVE_WINDOW.update();
     }
 
@@ -362,7 +362,7 @@ public:
             ACTIVE_WINDOW.draw_player_stat( m_player );
             ACTIVE_WINDOW.draw_active_letter( m_active );
             ACTIVE_WINDOW.draw_hint( m_active_mode->get_hint() );
-            ACTIVE_WINDOW.draw_pause_button( WtCoord( ACTIVE_WINDOW_WIDTH - 42 - 50, 17 ) );
+            ACTIVE_WINDOW.draw_button( m_pause_btn );
 
 
             ACTIVE_WINDOW.draw_message(WtL10n::tr("you lost! :P"));

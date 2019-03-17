@@ -20,7 +20,7 @@
 
 #include "global.h"
 
-#define ROW_COUNT            (15)
+#define ROW_COUNT            (20)
 #define COL_COUNT            (10)
 
 #define BOARD  WtBoard::instance()

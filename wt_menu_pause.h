@@ -23,7 +23,7 @@ class WtMenuPause : public WtMenuIf
 {
 public:
     WtMenuPause() :
-        WtMenuIf( 0x200, "bg.bmp" )
+        WtMenuIf( 0x200, "bg_menu_pause.bmp" )
     {
         size_t offset_x = (ACTIVE_WINDOW_WIDTH) / 2;
         size_t offset_y = (ACTIVE_WINDOW_HEIGHT / 2);

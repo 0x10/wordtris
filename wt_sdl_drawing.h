@@ -41,9 +41,9 @@ class WtDrawingPolicySdl : public WtDrawingPolicyIf
 {
 private:
     static const uint8_t TEXT_FONT_SIZE = 12;
-    static const uint8_t GRID_FONT_SIZE = 46;
-    static const uint8_t GRID_OFFSET_X = 33;
-    static const uint8_t GRID_OFFSET_Y = 35;
+    static const uint8_t GRID_FONT_SIZE = 37;
+    static const uint8_t GRID_OFFSET_X = 78;
+    static const uint8_t GRID_OFFSET_Y = 127-GRID_FONT_SIZE;
 
     typedef std::map<std::string, SDL_Texture*> SDL_TextureCache;
 // policy use only
@@ -66,9 +66,8 @@ protected:
         SDL_SetRenderDrawBlendMode(m_renderer, SDL_BLENDMODE_BLEND);
         /*
         TTF_Init();
-        sans = TTF_OpenFont("assets/DejaVuSansMono.ttf", 24);
+        m_font = TTF_OpenFont("assets/DejaVuSansMono.ttf", 30);
         */
-
         set_bg("bg.bmp");
 
         m_grid_font = new WtSdlFont( "grid", GRID_FONT_SIZE, GRID_FONT_SIZE, "grid_font.bmp", m_renderer );
@@ -112,10 +111,18 @@ protected:
      *************************/
     void draw_player_stat( const WtPlayer& player )
     {
-        std::string s_player = WtL10n::tr("player");
-        puts_fb( 25, 20, s_player.c_str(), m_text_font );
+        SDL_Texture*  button_img = get_texture( "label_bg.bmp" );
+        SDL_Rect Message_rect;
+        Message_rect.x = 79;
+        Message_rect.y = 32;
+        Message_rect.w = 256;
+        Message_rect.h = 65;
+        SDL_RenderCopy(m_renderer, button_img, NULL, &Message_rect);
+
+        std::string s_player = WtL10n::tr("Score: ");
+        puts_fb( 90, 50, s_player.c_str(), m_text_font );
 //        putUint_fb( 25+strlen("player ")*GRID_FONT_SIZE, 20, player.get_current_level() );
-        putUint_fb( 25+s_player.length()*m_text_font->width(), 20, player.get_points(), m_text_font );
+        putUint_fb( 90+s_player.length()*m_text_font->width(), 50, player.get_points(), m_text_font );
         //putUint_fb( 23, 0, player.get_solved_word_count() );
     }
 
@@ -146,7 +153,7 @@ protected:
      *************************/
     void draw_hint( const std::string hint )
     {
-        puts_fb( 23, SDL_HEIGHT-(m_text_font->width()*10), hint.c_str(), m_text_font );
+        puts_fb( 79, 890,  hint.c_str(), m_text_font );
     }
 
      /**************************
@@ -290,8 +297,8 @@ private:
      *************************/
     void put_cell( size_t col, size_t row, const char ch )
     {
-        size_t x = ((col*m_grid_font->width())+col)+GRID_OFFSET_X;
-        size_t y = ((row*m_grid_font->width())+row)+GRID_OFFSET_Y;
+        size_t x = (col*m_grid_font->width())+col+GRID_OFFSET_X;
+        size_t y = ((row*m_grid_font->height())+row)+GRID_OFFSET_Y;
 
         putc( WtCoord(x, y), ch, m_grid_font );
     }
@@ -366,7 +373,7 @@ private:
 private:
     SDL_Window*   m_window;
     SDL_Renderer* m_renderer;
-//    TTF_Font*     sans;
+    //TTF_Font*     m_font;
 
     std::string   m_bg_img_path;
 
