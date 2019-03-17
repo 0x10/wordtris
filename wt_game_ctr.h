@@ -79,6 +79,7 @@ private:
             WtSettings settings = STORAGE.get_settings();
             set_mode( GAME_MODE_CTR.mode_from_string( settings.game_mode ) );
             WtL10n::set_language( settings.language );
+            m_active_mode->set_difficulty( settings.difficulty );
         }
 
         ACTIVE_WINDOW.init();
@@ -266,6 +267,7 @@ private:
     {
         if ( INVALID_GAME_MODE != m_active_mode )
         {
+            std::cout << "new diff selected = "<< diffi << std::endl;
             m_active_mode->set_difficulty( diffi );
 
             WtSettings settings = STORAGE.get_settings();

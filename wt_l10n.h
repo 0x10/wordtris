@@ -96,27 +96,40 @@ public:
     }
 
     /**************************
-     *
+     * this function is only used to identify hard coded
+     * localizable strings; wrap a string around and
+     * the macro will find it
      *************************/
     static std::string tr( const std::string s )
     {
-        std::string result = s;
-        LocaleMap& translations = WtL10n::instance().get_translations();
-        LocaleMap::const_iterator it = translations.find(s);
+        return s;
+    }
 
-        if ( it != translations.end() )
+    /**************************
+     * this function does the translation
+     *************************/
+    static std::string translate( const std::string s )
+    {
+        std::string result = s;
+        if ( ! s.empty() )
         {
-            result = (*it).second[WtL10n::instance().active_language_idx()];
-            if ( result.empty() )
+            LocaleMap& translations = WtL10n::instance().get_translations();
+            LocaleMap::const_iterator it = translations.find(s);
+
+            if ( it != translations.end() )
+            {
+                result = (*it).second[WtL10n::instance().active_language_idx()];
+                if ( result.empty() )
+                {
+                    result = s;
+                }
+            }
+            else
             {
                 result = s;
             }
-        }
-        else
-        {
-            result = s;
-        }
 
+        }
         return result;
     }
 
@@ -130,9 +143,9 @@ private:
     WtL10n() :
         m_active_language_idx(0)
     {
-        m_languages.push_back("en");
-        m_languages.push_back("de");
-        m_languages.push_back("fr");
+        m_languages.push_back(WtL10n::tr("en"));
+        m_languages.push_back(WtL10n::tr("de"));
+        m_languages.push_back(WtL10n::tr("fr"));
 
         read_translations( m_translations );
     }

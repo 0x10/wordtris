@@ -340,10 +340,25 @@ private:
         {
             // load from file
             // insert into cache
-            std::cout << "load from file.. " << fname << std::endl;
-            m_texture_cache[fname] = WtSdlUtils::loadAssetToTexture( fname, m_renderer );
+            if ( fname.empty() )
+            {
+                tex = SDL_CreateTexture( m_renderer,
+                                   SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 1, 1);
+                SDL_SetRenderTarget( m_renderer, tex );
+                SDL_SetRenderDrawBlendMode( m_renderer, SDL_BLENDMODE_NONE );
+                SDL_SetRenderDrawColor( m_renderer, 255, 0, 255, 0 );
+                SDL_RenderFillRect( m_renderer, NULL );
+                SDL_SetRenderTarget( m_renderer, NULL );
 
-            tex = m_texture_cache[fname];
+                m_texture_cache[fname] = tex;
+            }
+            else
+            {
+                std::cout << "load from file.. " << fname << std::endl;
+                m_texture_cache[fname] = WtSdlUtils::loadAssetToTexture( fname, m_renderer );
+
+                tex = m_texture_cache[fname];
+            }
         }
         return tex;
     }

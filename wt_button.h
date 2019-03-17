@@ -16,6 +16,8 @@
 #ifndef _WT_BUTTON_H_
 #define _WT_BUTTON_H_
 
+#include "wt_l10n.h"
+
 class WtButton
 {
 public:
@@ -54,7 +56,7 @@ public:
      *************************/
     std::string label()
     {
-        return m_label;
+        return WtL10n::translate(m_label);
     }
 
     /**************************
@@ -63,6 +65,14 @@ public:
     std::string image()
     {
         return m_img;
+    }
+
+    /**************************
+     *
+     *************************/
+    void set_image( std::string img )
+    {
+        m_img = img;
     }
 
     /**************************

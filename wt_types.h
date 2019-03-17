@@ -34,6 +34,23 @@ typedef enum wt_controls_tag
     wt_control_INVALID
 } wt_control;
 
+/**************************
+ *
+ *************************/
+class WtDim
+{
+public:
+    WtDim() :
+        w(0),
+        h(0) {}
+    WtDim( size_t iW, size_t iH ) :
+        w(iW),
+        h(iH) {}
+
+    size_t w;
+    size_t h;
+};
+
 
 /**************************
  *
@@ -61,25 +78,13 @@ public:
         return ( x == rhs.x ) && ( y == rhs.y );
     }
 
+    void moveX( const WtDim& dim )
+    {
+        x = x + dim.w;
+    }
+
     size_t x;
     size_t y;
-};
-
-/**************************
- *
- *************************/
-class WtDim
-{
-public:
-    WtDim() :
-        w(0),
-        h(0) {}
-    WtDim( size_t iW, size_t iH ) :
-        w(iW),
-        h(iH) {}
-
-    size_t w;
-    size_t h;
 };
 
 /**************************

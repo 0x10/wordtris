@@ -23,9 +23,9 @@
  *****************************************************************************/
 int main( int argc, char** argv )
 {
-    MENU_CTR.listen( &GAME_CTR );
-
     GAME_CTR.set_pause_menu( MENU_CTR.get_pause_menu() );
+
+    MENU_CTR.listen( &GAME_CTR );
 
     while( 1 )
     {

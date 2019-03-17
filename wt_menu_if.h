@@ -21,11 +21,16 @@
 #include "wt_input.h"
 #include "wt_button.h"
 
-#define MENU_BUTTON_ID( id ) (this->get_id() + id)
-#define TO_BUTTON_ID( id ) (id - this->get_id())
+#define MENU_BUTTON_ID( id )    (this->get_id() | id)
+#define TO_BUTTON_ID( id )      (0x00FF & id)
+#define INVALID_BUTTON_ID       (0xFF)
 
 class WtMenuIf : WtInputObserver
 {
+private:
+    const std::string m_tri_state_frame = "tri_state_btn.bmp";
+    const std::string m_tri_state_selected_img[3] = { "tri_state_btn_select0.bmp", "tri_state_btn_select1.bmp", "tri_state_btn_select2.bmp" };
+    const std::string m_tri_state_unselected_img = "tri_state_btn_select_none.bmp";
 public:
     WtMenuIf( std::string bg_img="bg_menu.bmp" ) :
         m_menu_id(0xFF00),
@@ -136,6 +141,63 @@ protected:
     }
 
     /**************************
+     *
+     *************************/
+    void add_tri_state_button( const uint16_t    ids[3], 
+                               const std::string label[3],
+                               const WtCoord&    frame_pos,
+                               const WtDim&      frame_size,
+                               const WtCoord&    state_pos,
+                               const WtDim&      state_size,
+                               const size_t      selected )
+    {
+        // Add frame which isnt a button at all but can be set
+        // using invalid id...
+        m_buttons.push_back( WtButton( INVALID_BUTTON_ID,
+                                       frame_pos, frame_size,
+                                       m_tri_state_frame ) );
+
+        WtCoord working_state_pos = state_pos;
+
+        m_buttons.push_back( WtButton( MENU_BUTTON_ID( ids[0] ),
+                                       working_state_pos, state_size,
+                                       (selected == ids[0] ? m_tri_state_selected_img[0] : m_tri_state_unselected_img ),
+                                       label[0] ) );
+        working_state_pos.moveX( state_size );
+
+        m_buttons.push_back( WtButton( MENU_BUTTON_ID( ids[1] ),
+                                       working_state_pos, state_size,
+                                       (selected == ids[1] ? m_tri_state_selected_img[1] : m_tri_state_unselected_img ),
+                                       label[1] ) );
+        working_state_pos.moveX( state_size );
+
+        m_buttons.push_back( WtButton( MENU_BUTTON_ID( ids[2] ),
+                                       working_state_pos, state_size,
+                                       (selected == ids[2] ? m_tri_state_selected_img[2] : m_tri_state_unselected_img ),
+                                       label[2] ) );
+        working_state_pos.moveX( state_size );                                      
+    }
+
+    /**************************
+      *
+      *************************/
+    void modify_tri_state_button( const uint16_t first_id, 
+                                  const size_t selected )
+    {
+        for(size_t idx=0;idx<m_buttons.size();idx++)
+        {
+            if( m_buttons[idx].id() == MENU_BUTTON_ID( first_id ) )
+            {
+                m_buttons[idx].set_image(   (selected == first_id ? m_tri_state_selected_img[0] : m_tri_state_unselected_img ) );
+                m_buttons[idx+1].set_image( (selected == first_id+1u ? m_tri_state_selected_img[1] : m_tri_state_unselected_img ) );
+                m_buttons[idx+2].set_image( (selected == first_id+2u ? m_tri_state_selected_img[2] : m_tri_state_unselected_img ) );
+
+                break;
+            }
+        }
+    }
+
+    /**************************
       *
       *************************/   
     void add_list( const WtCoord&                  pos,
@@ -151,25 +213,6 @@ protected:
         }
     }
 
-#if 0
-    /**************************
-     *
-     *************************/
-    void remove_button( const uint8_t id )
-    {
-        ACTIVE_INPUT.remove_button( MENU_BUTTON_ID( id ) );
-
-        for (size_t i=0;i<m_buttons.size();i++)
-        {
-            if ( m_buttons[i].id() == id )
-            {
-                m_buttons.erase( m_buttons.begin()+i );
-                break;
-            }
-        }
-    }
-#endif
-
     /**************************
      *
      *************************/
@@ -179,19 +222,14 @@ protected:
 
         for(size_t idx=0;idx<m_buttons.size();idx++)
         {
-            ACTIVE_INPUT.add_button( m_buttons[idx] );
+            if ( m_buttons[idx].id() != INVALID_BUTTON_ID )
+            {
+                ACTIVE_INPUT.add_button( m_buttons[idx] );
+            }
         }
         ACTIVE_INPUT.listen( this );
 
         ACTIVE_WINDOW.set_bg( get_bg_img() );
-
-#if 0
-        ACTIVE_WINDOW.clr();
-
-        show_self();
-
-        ACTIVE_WINDOW.update();
-#endif
     }
 
     /**************************
