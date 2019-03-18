@@ -16,6 +16,8 @@
 #ifndef _WT_TYPES_H_
 #define _WT_TYPES_H_
 
+#include <cstring> //for strlen
+
 typedef enum wt_mode_difficulty_tag
 {
     wt_difficulty_EASY,

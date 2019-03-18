@@ -167,9 +167,12 @@ protected:
     /**************************
      *
      *************************/
-    void draw_button( const WtCoord&    pos,
+    void draw_button( const size_t& x, const size_t& y,
+                      const size_t& w, const size_t& h,
+                      const std::string img,
                       const std::string text )
     {
+        WtCoord pos(x, y);
         uint8_t idx = active_buttons;
         for ( uint8_t i = 0; i < active_buttons; i++ )
             if ( buttons[i] == pos )
