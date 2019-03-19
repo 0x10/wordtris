@@ -1,0 +1,40 @@
+#!/bin/cat
+# TODOs are not inorder but are randomly noted -> prorities may be assigned
+#
+# Update 19.03.19
+# ===============
+# - Highscores shall be updated:
+#       - function hook available but update strategy not quite clear
+#       - ideas:
+#           - EITHER: store highscores per game mode (e.g. first 5 of each mode)
+#           - OR: store highscores overall (e.g. first 15 of all modes)
+# - Tri-State Button Animation (may be more complex and may be dropped due to that)
+# - Change Game Mode Button with proper "Button" like display; currently it feels more like a label than a button
+# - Logo Design and Naming
+# - Game Modes need a help and intro menu
+#       - intro menu may be not game mode specific
+# - SDL Drawing:
+#       - message box to not use hard coded images and positions/dimensions
+#       - reduction of api functions for more basic handling (draw text vs draw message vs draw hint)
+#       - high level drawing functions like draw_player_stat shall be implemented in wt_drawing.h using basic policy functions and not in wt_sdl_drawing directly
+# - SDL Input:
+#       - Touch motion detection for swiping
+# - UI Themes (esp. a dark theme) and a theme switcher
+# - release build for apk incl. signed certificates
+# - more proper balanced game modes
+#       - some are noted at whiteboard but need to be evaluated
+#       - AND: others are need to be made
+# - android:
+#       - storage of game data
+#       - eval income model: either ad based or by app store payment
+# - get an ui design review
+# - get rid of some early made singletons like WtPlayer, WtActive, WtBoard in game_ctr.h 
+#       - they should be child members of wt_game_ctr
+# - WtInput Architecture not consistent:
+#       - Buttons are directly evaluated by observer-call to key-specific function ('a' -> notify_left for sdl e.g.) but touch areas are evaluated at listener function in general eval button
+#       - ideas:
+#           - EITHER: instead of button id use a wt_control enum
+#           - OR: drop wt_control enum and eval keypress at listener too
+#       - get rid of button_id in users class like game_ctr (maybe) or menu_ctr (must be) but hide this within parent class which wraps id to notify_left/_xxx function
+#           - more like all common gui framework: onClicked()
+#
