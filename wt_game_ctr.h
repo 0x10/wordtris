@@ -277,6 +277,17 @@ private:
         }
     }
 
+    /**************************
+     *
+     *************************/
+    WtHighscores& update_highscores( WtPlayer& player, WtGameModeIf* mode, WtHighscores& scores )
+    {
+        // eval if player stat is within first 3 of game mode
+        // if true add player at correct position
+
+        return scores;
+    }
+
 public:
     /**************************
      *
@@ -358,15 +369,18 @@ public:
 
             usleep(12500);
         }
+
+        STORAGE.store_highscores( update_highscores( m_player, m_active_mode, STORAGE.get_scores() ) );
+
         if ( m_game_over )
         {
+            ACTIVE_WINDOW.set_bg( "bg_menu_pause.bmp" );
             ACTIVE_WINDOW.clr();
-            ACTIVE_WINDOW.draw_board( m_board );
             ACTIVE_WINDOW.draw_player_stat( m_player );
-            ACTIVE_WINDOW.draw_active_letter( m_active );
-            ACTIVE_WINDOW.draw_hint( m_active_mode->get_hint() );
-            ACTIVE_WINDOW.draw_button( m_pause_btn );
-
+//            ACTIVE_WINDOW.draw_board( m_board );
+//            ACTIVE_WINDOW.draw_active_letter( m_active );
+//            ACTIVE_WINDOW.draw_hint( m_active_mode->get_hint() );
+ //           ACTIVE_WINDOW.draw_button( m_pause_btn );
 
             ACTIVE_WINDOW.draw_message(WtL10n::tr("you lost! :P"));
             ACTIVE_WINDOW.update();

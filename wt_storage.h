@@ -120,9 +120,17 @@ public:
     /**************************
      *
      *************************/
-    WtSettings get_settings()
+    WtSettings& get_settings()
     {
         return m_storage_copy.data.settings;
+    }
+
+    /**************************
+     *
+     *************************/
+    WtHighscores& get_scores()
+    {
+        return m_storage_copy.data.highscores;
     }
 private:
 

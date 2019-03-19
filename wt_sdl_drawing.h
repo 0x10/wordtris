@@ -161,9 +161,12 @@ protected:
       *************************/   
     void draw_message( const std::string msg )
     {
-//        puts_fb( 2, 23, msg.c_str(), m_text_font );
-//        draw_button( WtCoord( (SDL_WIDTH-500)/2, SDL_HEIGHT/2-80/2 ),
-  //                   msg );
+        //todo replace with proper message box
+        draw_button( (SDL_WIDTH - 328) / 2,
+                     (SDL_HEIGHT / 2) - (69/2),
+                      328, 69,
+                      "menu_btn.bmp",
+                      msg );
     }
 
     /**************************
