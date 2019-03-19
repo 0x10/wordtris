@@ -32,16 +32,18 @@ private:
     const std::string m_tri_state_selected_img[3] = { "tri_state_btn_select0.bmp", "tri_state_btn_select1.bmp", "tri_state_btn_select2.bmp" };
     const std::string m_tri_state_unselected_img = "tri_state_btn_select_none.bmp";
 public:
-    WtMenuIf( std::string bg_img="bg_menu.bmp" ) :
+    WtMenuIf() :
         m_menu_id(0xFF00),
         m_shall_leave( false ),
-        m_bg( bg_img )
+        m_bg( "bg_menu.bmp" ),
+        m_fade( true )
     {
     }
-    WtMenuIf( uint16_t menu_id, std::string bg_img="bg_menu.bmp") :
+    WtMenuIf( uint16_t menu_id, std::string bg_img="bg_menu.bmp", bool fade=true ) :
         m_menu_id( menu_id ),
         m_shall_leave( false ),
-        m_bg( bg_img )
+        m_bg( bg_img ),
+        m_fade( fade )
     {
     }
     ~WtMenuIf()
@@ -219,6 +221,9 @@ protected:
     void open_menu()
     {
         m_shall_leave = false;
+        ACTIVE_WINDOW.set_bg( get_bg_img() );
+
+        fade_in();
 
         for(size_t idx=0;idx<m_buttons.size();idx++)
         {
@@ -227,9 +232,8 @@ protected:
                 ACTIVE_INPUT.add_button( m_buttons[idx] );
             }
         }
-        ACTIVE_INPUT.listen( this );
 
-        ACTIVE_WINDOW.set_bg( get_bg_img() );
+        ACTIVE_INPUT.listen( this );
     }
 
     /**************************
@@ -243,6 +247,8 @@ protected:
         {
             ACTIVE_INPUT.remove_button( m_buttons[i] );
         }
+
+        fade_out();
 
         menu_left();
     }
@@ -279,6 +285,73 @@ private:
     /**************************
      *
      *************************/
+    void fade_in()
+    {
+        bool done = !m_fade;
+        std::vector<WtButton> button_fading = m_buttons;
+
+        for(size_t idx=0;idx<button_fading.size();idx++)
+        {
+            button_fading[idx].set_x( button_fading[idx].x()-800 );
+        }
+        
+        while( !done )
+        {
+            ACTIVE_WINDOW.clr();
+
+            for(size_t idx=0;idx<button_fading.size();idx++)
+            {
+                ACTIVE_WINDOW.draw_button( button_fading[idx] );
+            }
+
+            ACTIVE_WINDOW.update();
+
+            usleep(12500);
+
+            done = true;
+            for(size_t idx=0;idx<button_fading.size();idx++)
+            {
+                button_fading[idx].set_x( button_fading[idx].x() + 80);
+                if ( button_fading[idx].x() != m_buttons[idx].x() )
+                    done = false;
+            }
+        }
+    }
+
+    /**************************
+     *
+     *************************/
+    void fade_out()
+    {
+        bool done = !m_fade;
+        std::vector<WtButton> button_fading = m_buttons;
+
+        while( !done )
+        {
+            ACTIVE_WINDOW.clr();
+
+            for(size_t idx=0;idx<button_fading.size();idx++)
+            {
+                ACTIVE_WINDOW.draw_button( button_fading[idx] );
+            }
+
+            ACTIVE_WINDOW.update();
+
+            usleep(12500);
+
+            done = true;
+            for(size_t idx=0;idx<button_fading.size();idx++)
+            {
+                button_fading[idx].set_x( button_fading[idx].x() - 80);
+                if ( button_fading[idx].x() != m_buttons[idx].x()-800 )
+                    done = false;
+            }
+        }
+    }
+
+    /**************************
+     *
+     *************************/
     void show_self()
     {
         for(size_t idx=0;idx<m_buttons.size();idx++)
@@ -293,6 +366,7 @@ private:
     std::string                             m_bg;
     std::vector<WtButton>                   m_buttons;
     std::vector<WtSettingsChangeObserver*>  m_change_listener;
+    bool                                    m_fade;
 };
 
 

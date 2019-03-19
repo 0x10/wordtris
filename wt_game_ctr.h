@@ -320,11 +320,13 @@ public:
         m_player.reset();
         m_board.init();
 
-        m_active_mode->init_game( m_board, m_player );
         if ( INVALID_GAME_MODE == m_active_mode )
             m_game_over = true;
         else
+        {
+            m_active_mode->init_game( m_board, m_player );
             m_active.init( m_active_mode->next_letter() );
+        }
 
         while ( !m_game_over && !m_shall_quit )
         {
