@@ -67,6 +67,7 @@ public:
                     case wt_difficulty_MEDIUM: selected_id = 1; break;
                     case wt_difficulty_HARD: selected_id = 2; break;
                 }
+                m_current_diff = selected_id;
 
                 const std::string label[3] = { WtGameModeIf::get_available_difficulties()[0].second,
                                                WtGameModeIf::get_available_difficulties()[1].second,
