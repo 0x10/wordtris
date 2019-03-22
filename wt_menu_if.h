@@ -76,8 +76,6 @@ public:
             menu_update();
 
             ACTIVE_WINDOW.update();
-
-            usleep(12500);
         }
 
         close_menu();
