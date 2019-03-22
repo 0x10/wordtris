@@ -121,26 +121,6 @@ public:
         }
     }
 
-    /**************************
-      *
-      *************************/   
-    void draw_pause_button( const WtCoord& pos )
-    {
-        DrawingPolicy::draw_image( pos,
-                                   WtDim( 42, 42 ),
-                                   "pause.bmp" );
-    }
-
-    /**************************
-      *
-      *************************/   
-    void draw_icon( const WtCoord&    pos,
-                    const std::string fname )
-    {
-        DrawingPolicy::draw_image( pos,
-                                   WtDim( 500, 80 ),//todo get_texture_size( buttom_img );
-                                   fname );
-    }
 private:
 };
 
