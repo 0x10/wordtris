@@ -13,10 +13,9 @@
 # - Logo Design and Naming
 # - Game Modes need a help and intro menu
 #       - intro menu may be not game mode specific
-# - SDL Drawing:
+# - Drawing:
 #       - message box to not use hard coded images and positions/dimensions
-#       - reduction of api functions for more basic handling (draw text vs draw message vs draw hint)
-#       - high level drawing functions like draw_player_stat shall be implemented in wt_drawing.h using basic policy functions and not in wt_sdl_drawing directly
+#       - do not use hard coded absolute pixel values which depend on SDL_WIDHT=540/SDL_HEIGHT=960 but relative values
 # - SDL Input:
 #       - Touch motion detection for swiping
 # - UI Themes (esp. a dark theme) and a theme switcher
