@@ -17,7 +17,15 @@
 #define _WT_STORAGE_H_
 
 #include <fstream>
+#include <unistd.h>
 #include "wt_types.h"
+#include "SDL.h"
+
+#ifdef __ANDROID__
+#include <android/log.h>
+
+#define APPNAME "wordtris"
+#endif
 
 #define STORAGE  WtStorageCtr::instance()
 class WtStorageCtr 
@@ -63,6 +71,16 @@ private:
         m_storage_copy.header.magic = m_header_magic;
         m_storage_copy.data.settings = WtSettings();
         m_storage_copy.data.highscores.clear();
+
+#ifndef __ANDROID__
+        std::cout << "cwd = "<<getcwd(m_cwd_buf, 512)<<std::endl;
+        m_cwd = m_cwd_buf;
+        std::cout << "cwd = " << std::string(m_cwd) << std::endl;
+#else
+        m_cwd = SDL_AndroidGetInternalStoragePath();
+        std::cout << "a cwd = " << m_cwd << std::endl; 
+        __android_log_print(ANDROID_LOG_VERBOSE, APPNAME, "%s", m_cwd );
+#endif
     }
     WtStorageCtr( const WtStorageCtr& ); 
     WtStorageCtr & operator = (const WtStorageCtr &);
@@ -141,7 +159,14 @@ private:
     {
         bool success = false;
 
-        std::ofstream output_file( m_fname, std::ios::binary );
+        std::string fname = std::string( m_cwd );
+        fname.append( "/" );
+        fname.append( m_fname );
+
+#ifdef __ANDROID__
+        __android_log_print(ANDROID_LOG_VERBOSE, APPNAME, "write to: %s", fname.c_str() );
+#endif
+        std::ofstream output_file( fname, std::ios::binary );
         if ( output_file.is_open() )
         {
             m_storage_copy.header.magic = m_header_magic;
@@ -169,7 +194,14 @@ private:
     {
         bool success = false;
 
-        std::ifstream input_file( m_fname, std::ios::binary );
+        std::string fname = std::string( m_cwd );
+        fname.append( "/" );
+        fname.append( m_fname );
+
+#ifdef __ANDROID__
+        __android_log_print(ANDROID_LOG_VERBOSE, APPNAME, "read from: %s", fname.c_str() );
+#endif
+        std::ifstream input_file( fname, std::ios::binary );
         if ( input_file.is_open() )
         {
             input_file.read( (char*)&m_storage_copy.header, sizeof(m_storage_copy.header) );
@@ -206,6 +238,8 @@ private:
 
 private:
    _PersistentFileStructure m_storage_copy;
+   char                     m_cwd_buf[512];
+   const char*              m_cwd;
 };
 
 
