@@ -19,24 +19,16 @@
 #include "global.h"
 #include "wt_board.h"
 
-#define ACTIVE  WtLetter::instance()
-
 class WtLetter
 {
-// singleton definition
 public:
-    static WtLetter& instance()
-    {
-        static WtLetter _instance;
-        return _instance;
-    }
-    ~WtLetter() {}
-private:
     WtLetter() :
         m_col( 5 ),
         m_row( WtBoard::row_count - 1 ),
         m_value( '\0' )
     {}
+    ~WtLetter() {}
+private: // no copy allowed
     WtLetter( const WtLetter& ); 
     WtLetter & operator = (const WtLetter &);
 

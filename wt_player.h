@@ -20,24 +20,16 @@
 
 #define PTS_P_WORD           (1000)
 
-#define PLAYER  WtPlayer::instance()
-
 class WtPlayer
 {
-// singleton definition
 public:
-    static WtPlayer& instance()
-    {
-        static WtPlayer _instance;
-        return _instance;
-    }
-    ~WtPlayer() {}
-private:
     WtPlayer() :
         m_points( 0 ),
         m_words( 0 ),
         m_level( 1 )
     {}
+    ~WtPlayer() {}
+private: // no copy allowed
     WtPlayer( const WtPlayer& ); 
     WtPlayer & operator = (const WtPlayer &);
 

@@ -19,15 +19,13 @@
 # - SDL Input:
 #       - Touch motion detection for swiping
 # - UI Themes (esp. a dark theme) and a theme switcher
-# - release build for apk incl. signed certificates
 # - more proper balanced game modes
 #       - some are noted at whiteboard but need to be evaluated
 #       - AND: others are need to be made
 # - android:
+#       - release build for apk incl. signed certificates
 #       - eval income model: either ad based or by app store payment
 # - get an ui design review
-# - get rid of some early made singletons like WtPlayer, WtActive, WtBoard in game_ctr.h 
-#       - they should be child members of wt_game_ctr
 # - WtInput Architecture not consistent:
 #       - Buttons are directly evaluated by observer-call to key-specific function ('a' -> notify_left for sdl e.g.) but touch areas are evaluated at listener function in general eval button
 #       - ideas:

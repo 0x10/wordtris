@@ -48,28 +48,23 @@ public:
     }
 private:
     WtGameCtr() :
-        // we store references of SINGLETON objects
-        // as we make sure that migration from SINGLETON pattern
-        // is as easy as possible; but for now we stay
-        // with SINGLETON as we make sure that no objects
-        // are mistakenly created/deleted
-        m_player( PLAYER ),
-        m_active( ACTIVE ),
-        m_board( BOARD ),
+        m_player(),
+        m_active(),
+        m_board(),
         m_active_mode( GAME_MODE_CTR.default_mode() ),
         m_game_over( false ),
         m_shall_quit( false ),
         m_pause( false ),
         m_pause_menu( NULL ),
         m_left_btn( 0xF1, 
-                                  WtCoord(0,100),
-                                  WtDim( ACTIVE_WINDOW_WIDTH / 2, ACTIVE_WINDOW_HEIGHT/2+ACTIVE_WINDOW_HEIGHT/4 ), ""), 
+                    WtCoord(0,100),
+                    WtDim( ACTIVE_WINDOW_WIDTH / 2, ACTIVE_WINDOW_HEIGHT/2+ACTIVE_WINDOW_HEIGHT/4 ), ""), 
         m_right_btn( 0xF2, 
-                                 WtCoord(ACTIVE_WINDOW_WIDTH / 2, 100),
-                                 WtDim( ACTIVE_WINDOW_WIDTH / 2, ACTIVE_WINDOW_HEIGHT/2+ACTIVE_WINDOW_HEIGHT/4 ), ""),
+                     WtCoord(ACTIVE_WINDOW_WIDTH / 2, 100),
+                     WtDim( ACTIVE_WINDOW_WIDTH / 2, ACTIVE_WINDOW_HEIGHT/2+ACTIVE_WINDOW_HEIGHT/4 ), ""),
         m_drop_btn( 0xF3, 
-                                 WtCoord( 0, ACTIVE_WINDOW_HEIGHT/2+ACTIVE_WINDOW_HEIGHT/4 ),
-                                 WtDim( ACTIVE_WINDOW_WIDTH, ACTIVE_WINDOW_HEIGHT-(ACTIVE_WINDOW_HEIGHT/2+ACTIVE_WINDOW_HEIGHT/4)  ), ""),
+                    WtCoord( 0, ACTIVE_WINDOW_HEIGHT/2+ACTIVE_WINDOW_HEIGHT/4 ),
+                    WtDim( ACTIVE_WINDOW_WIDTH, ACTIVE_WINDOW_HEIGHT-(ACTIVE_WINDOW_HEIGHT/2+ACTIVE_WINDOW_HEIGHT/4)  ), ""),
         m_pause_btn( 0xF4, 
                      WtCoord( 393, 32 ),
                      WtDim( 64, 64 ), "pause_btn.bmp" )
@@ -390,9 +385,9 @@ public:
     }
 
 private:
-    WtPlayer&                   m_player;
-    WtLetter&                   m_active;
-    WtBoard&                    m_board;
+    WtPlayer                    m_player;
+    WtLetter                    m_active;
+    WtBoard                     m_board;
     WtGameModeIf*               m_active_mode;
     bool                        m_game_over;
     bool                        m_shall_quit;

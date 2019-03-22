@@ -16,34 +16,24 @@
 #ifndef _WT_BOARD_H_
 #define _WT_BOARD_H_
 
-#include <array>
-
 #include "global.h"
 
 #define ROW_COUNT            (20)
 #define COL_COUNT            (10)
 
-#define BOARD  WtBoard::instance()
-
 class WtBoard
 {
-// singleton definition
 public:
     static const uint8_t row_count = ROW_COUNT;
     static const uint8_t col_count = COL_COUNT;
     typedef char RowSequence[WtBoard::col_count];
 
-    static WtBoard& instance()
-    {
-        static WtBoard _instance;
-        return _instance;
-    }
-    ~WtBoard() {}
-private:
     WtBoard()
     {
 
     }
+    ~WtBoard() {}
+private:
     WtBoard( const WtBoard& ); 
     WtBoard & operator = (const WtBoard &);
 
