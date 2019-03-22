@@ -1,7 +1,7 @@
 #!/bin/cat
 # TODOs are not inorder but are randomly noted -> prorities may be assigned
 #
-# Update 19.03.19
+# Update 22.03.19
 # ===============
 # - Highscores shall be updated:
 #       - function hook available but update strategy not quite clear
@@ -25,7 +25,6 @@
 #       - some are noted at whiteboard but need to be evaluated
 #       - AND: others are need to be made
 # - android:
-#       - storage of game data
 #       - eval income model: either ad based or by app store payment
 # - get an ui design review
 # - get rid of some early made singletons like WtPlayer, WtActive, WtBoard in game_ctr.h 
