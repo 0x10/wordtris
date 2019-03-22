@@ -25,7 +25,7 @@
 #define WINDOW( Policy )  WtDrawing<Policy>::instance()
 
 template<typename DrawingPolicy>
-class WtDrawing : private DrawingPolicy
+class WtDrawing : public DrawingPolicy
 {
 // singleton definition
 public:
@@ -53,14 +53,6 @@ public:
     /**************************
      *
      *************************/
-    void clr()
-    {
-        DrawingPolicy::clr();
-    }
-
-    /**************************
-     *
-     *************************/
     void draw_player_stat( const WtPlayer& player )
     {
         std::string player_stat = "Score: ";
@@ -76,14 +68,6 @@ public:
     /**************************
      *
      *************************/
-    void draw_board( const WtBoard& board )
-    {
-        DrawingPolicy::draw_board( board );
-    }
-
-    /**************************
-     *
-     *************************/
     void draw_hint( const std::string hint )
     {
         DrawingPolicy::draw_text( WtCoord( 79, 890 ),
@@ -92,15 +76,7 @@ public:
 
     /**************************
      *
-     *************************/
-    void draw_active_letter( const WtLetter& active )
-    {
-        DrawingPolicy::draw_active_letter( active );
-    }
-
-     /**************************
-      *
-      *************************/   
+     *************************/   
     void draw_message( const std::string msg )
     {
         //todo replace with proper message box
@@ -121,30 +97,6 @@ public:
                                   msg );
     }
 
-    /**************************
-     *
-     *************************/
-    void update()
-    {
-        DrawingPolicy::update( );
-    }
-
-    /**************************
-     *
-     *************************/
-    void set_bg( const std::string bg_file )
-    {
-        DrawingPolicy::set_bg( bg_file );
-    }
-
-    /**************************
-      *
-      *************************/   
-    void draw_text( const WtCoord&    pos,
-                    const std::string text )
-    {
-        DrawingPolicy::draw_text( pos, text );
-    }
 
     /**************************
       *
@@ -163,9 +115,9 @@ public:
             size_t button_center_x = ( button.width() / 2 + button.x() );
             size_t button_center_y = ( button.height() / 2 + button.y() );
 
-            draw_text( WtCoord( button_center_x - text_center_w,
-                                button_center_y - font_sz.h ),
-                                button.label() );
+            DrawingPolicy::draw_text( WtCoord( button_center_x - text_center_w,
+                                               button_center_y - font_sz.h ),
+                                      button.label() );
         }
     }
 

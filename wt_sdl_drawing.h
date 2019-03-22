@@ -92,6 +92,7 @@ protected:
         SDL_Quit();
     }
 
+public:
     /**************************
      *
      *************************/
@@ -146,10 +147,21 @@ protected:
         m_bg_img_path = bg_img;
     }
 
+
+protected:
     /**************************
       *
       *************************/   
-    virtual WtDim get_font_size()
+    void draw_text( const WtCoord     pos,
+                    const std::string text )
+    {
+        puts_fb( pos.x, pos.y, text.c_str(), m_text_font );
+    }
+
+    /**************************
+      *
+      *************************/   
+    WtDim get_font_size()
     {
         return WtDim( m_text_font->width(), m_text_font->height() );
     }
@@ -170,14 +182,6 @@ protected:
         SDL_RenderCopy(m_renderer, button_img, NULL, &rect);
     }
 
-    /**************************
-      *
-      *************************/   
-    void draw_text( const WtCoord     pos,
-                    const std::string text )
-    {
-        puts_fb( pos.x, pos.y, text.c_str(), m_text_font );
-    }
 private:
     WtDrawingPolicySdl( const WtDrawingPolicySdl& ); 
     WtDrawingPolicySdl & operator = ( const WtDrawingPolicySdl& );
