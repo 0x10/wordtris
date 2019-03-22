@@ -4,7 +4,7 @@ ANDROID_DIR=org.libsdl.wordtris/
 all: clean sdl
 
 sdl:
-	$(CXX) -g -Wall wordtris.cpp -lSDL2 -o wordtris_sdl
+	$(CXX) -Os -Wall wordtris.cpp -lSDL2 -o wordtris_sdl
 
 ncurses:
 	$(CXX) -g -Wall -DRENDER_NCURSES wordtris.cpp -lncurses -o wordtris_ncurses

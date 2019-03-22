@@ -23,6 +23,7 @@
 #include "wt_menu_if.h"
 #include "wt_drawing.h"
 #include "wt_menu_settings.h"
+#include "wt_menu_highscores.h"
 #include "wt_menu_pause.h"
 
 #define MENU_CTR  WtMenuCtr::instance()
@@ -78,7 +79,7 @@ private:
                 leave();
                 break;
             case 2:
-                //leave();
+                enter_child_menu( m_scores );
                 break;
             case 3:
                 enter_child_menu( m_settings );
@@ -114,6 +115,7 @@ private:
 private:
     WtMenuSettings   m_settings;
     WtMenuPause      m_pause_menu;
+    WtMenuHighscores m_scores;
 };
 
 #endif /* _WT_MENU_CTR_H_ */

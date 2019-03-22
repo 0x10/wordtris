@@ -18,7 +18,6 @@
 
 #include <string>
 
-#include "wt_player.h"
 #include "wt_board.h"
 #include "wt_active_letter.h"
 #include "wt_types.h"
@@ -27,19 +26,17 @@ class WtDrawingPolicyIf
 {
 public:
     virtual void clr() =0;
-    virtual void draw_player_stat( const WtPlayer& player ) =0;
+    virtual WtDim get_font_size() =0;
     virtual void draw_board( const WtBoard& board ) =0;
     virtual void draw_active_letter( const WtLetter& active ) =0;
-    virtual void draw_hint( const std::string hint ) =0;
-    virtual void draw_message( const std::string msg ) =0;
-    virtual void update() =0;
     virtual void set_bg( const std::string bg_img ) =0;
-    virtual void draw_button( const size_t& x, const size_t& y,
-                      const size_t& w, const size_t& h,
-                      const std::string img,
-                      const std::string text ) =0;
-    virtual void draw_text( const WtCoord&    pos,
-                       const std::string text ) =0;
+    virtual void draw_text( const WtCoord     pos,
+                            const std::string text ) =0;
+
+    virtual void draw_image( const WtCoord     pos,
+                             const WtDim       size,
+                             const std::string image ) =0;
+    virtual void update() =0;
 };
 
 class WtInputPolicyIf

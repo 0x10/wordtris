@@ -28,10 +28,6 @@
 #include "wt_sdl_font.h"
 #include "wt_sdl_config.h"
 
-#include "wt_types.h"
-#include "wt_player.h"
-#include "wt_board.h"
-#include "wt_active_letter.h"
 #include "wt_backend_policy_if.h"
 
 #define SDL_WINDOW WINDOW( WtDrawingPolicySdl )
@@ -103,27 +99,11 @@ protected:
     {
         // clear canvas and init with background image
         SDL_RenderClear(m_renderer);
-        draw_bg();
-    }
 
-    /**************************
-     *
-     *************************/
-    void draw_player_stat( const WtPlayer& player )
-    {
-        SDL_Texture*  button_img = get_texture( "label_bg.bmp" );
-        SDL_Rect Message_rect;
-        Message_rect.x = 79;
-        Message_rect.y = 32;
-        Message_rect.w = 256;
-        Message_rect.h = 65;
-        SDL_RenderCopy(m_renderer, button_img, NULL, &Message_rect);
-
-        std::string s_player = WtL10n::tr("Score: ");
-        puts_fb( 90, 50, s_player.c_str(), m_text_font );
-//        putUint_fb( 25+strlen("player ")*GRID_FONT_SIZE, 20, player.get_current_level() );
-        putUint_fb( 90+s_player.length()*m_text_font->width(), 50, player.get_points(), m_text_font );
-        //putUint_fb( 23, 0, player.get_solved_word_count() );
+        // draw bg
+        draw_image( WtCoord( 0, 0 ),
+                    WtDim( SDL_WIDTH, SDL_HEIGHT ),
+                    m_bg_img_path );
     }
 
     /**************************
@@ -145,28 +125,9 @@ protected:
      *************************/
     void draw_active_letter( const WtLetter& active )
     {
-        put_cell( active.current_column(), WtBoard::row_count - active.current_row(), active.current_value() );
-    }
-
-    /**************************
-     *
-     *************************/
-    void draw_hint( const std::string hint )
-    {
-        puts_fb( 79, 890,  hint.c_str(), m_text_font );
-    }
-
-     /**************************
-      *
-      *************************/   
-    void draw_message( const std::string msg )
-    {
-        //todo replace with proper message box
-        draw_button( (SDL_WIDTH - 328) / 2,
-                     (SDL_HEIGHT / 2) - (69/2),
-                      328, 69,
-                      "menu_btn.bmp",
-                      msg );
+        put_cell( active.current_column(), 
+                  WtBoard::row_count - active.current_row(), 
+                  active.current_value() );
     }
 
     /**************************
@@ -177,9 +138,9 @@ protected:
         SDL_RenderPresent(m_renderer);
     }
 
-     /**************************
-      *
-      *************************/   
+    /**************************
+     *
+     *************************/   
     void set_bg( const std::string bg_img )
     {
         m_bg_img_path = bg_img;
@@ -188,63 +149,31 @@ protected:
     /**************************
       *
       *************************/   
-    void draw_icon( const WtCoord&    pos,
-                    const std::string fname )
+    virtual WtDim get_font_size()
     {
-        SDL_Texture* button_img = get_texture( fname );
-        SDL_Rect Message_rect;
-        Message_rect.x = pos.x;
-        Message_rect.y = pos.y;
-        Message_rect.w = 500;//todo get_texture_size( buttom_img );
-        Message_rect.h = 80;
-        SDL_RenderCopy(m_renderer, button_img, NULL, &Message_rect);
+        return WtDim( m_text_font->width(), m_text_font->height() );
     }
 
     /**************************
       *
       *************************/   
-    void draw_button( const size_t& x, const size_t& y,
-                      const size_t& w, const size_t& h,
-                      const std::string img,
-                      const std::string text )
+    void draw_image( const WtCoord     pos,
+                     const WtDim       size,
+                     const std::string fname )
     {
-        SDL_Texture*  button_img = get_texture( img );
-        SDL_Rect Message_rect;
-        Message_rect.x = x;
-        Message_rect.y = y;
-        Message_rect.w = w;
-        Message_rect.h = h;
-        SDL_RenderCopy(m_renderer, button_img, NULL, &Message_rect);
-
-        if ( ! text.empty() )
-        {
-            size_t text_center_w = ( text.length() / 2 ) * m_text_font->width();
-            size_t button_center_x = ( w / 2 + x );
-            size_t button_center_y = ( h / 2 + y );
-            size_t text_center_h = m_text_font->height();
-
-            puts_fb( button_center_x - text_center_w, button_center_y - text_center_h, text.c_str(), m_text_font );
-        }
+        SDL_Texture*  button_img = get_texture( fname );
+        SDL_Rect rect;
+        rect.x = pos.x;
+        rect.y = pos.y;
+        rect.w = size.w;
+        rect.h = size.h;
+        SDL_RenderCopy(m_renderer, button_img, NULL, &rect);
     }
 
     /**************************
       *
       *************************/   
-    void draw_pause_button( const WtCoord& pos )
-    {
-        SDL_Texture*  pause_button_img = get_texture( "pause.bmp" );
-        SDL_Rect Message_rect;
-        Message_rect.x = pos.x;
-        Message_rect.y = pos.y;
-        Message_rect.w = 42;
-        Message_rect.h = 42;
-        SDL_RenderCopy(m_renderer, pause_button_img, NULL, &Message_rect);
-    }
-
-    /**************************
-      *
-      *************************/   
-    void draw_text( const WtCoord&    pos,
+    void draw_text( const WtCoord     pos,
                     const std::string text )
     {
         puts_fb( pos.x, pos.y, text.c_str(), m_text_font );
@@ -252,20 +181,6 @@ protected:
 private:
     WtDrawingPolicySdl( const WtDrawingPolicySdl& ); 
     WtDrawingPolicySdl & operator = ( const WtDrawingPolicySdl& );
-
-    /**************************
-     *
-     *************************/
-    void draw_bg()
-    {
-        SDL_Texture* bg_img = get_texture( m_bg_img_path );
-        SDL_Rect Message_rect;
-        Message_rect.x = 0;
-        Message_rect.y = 0;
-        Message_rect.w = SDL_WIDTH;
-        Message_rect.h = SDL_HEIGHT;
-        SDL_RenderCopy(m_renderer, bg_img, NULL, &Message_rect);
-    }
 
     /**************************
      *
@@ -288,10 +203,10 @@ private:
                 }
                 else
                 {
-                    putc( pos, str[i], font );
+                    font->write( pos, str[i], m_renderer );
                     x_i++;
                 }
-            } // end "for i"
+            }
         }
     }
 
@@ -303,35 +218,7 @@ private:
         size_t x = (col*m_grid_font->width())+col+GRID_OFFSET_X;
         size_t y = ((row*m_grid_font->height())+row)+GRID_OFFSET_Y;
 
-        putc( WtCoord(x, y), ch, m_grid_font );
-    }
-   
-    /**************************
-     *
-     *************************/
-    void putc( WtCoord pos, const char ch, WtSdlFont* font )
-    {
-        if ( NULL != font )
-            font->write( pos, ch, m_renderer );
-    }
-
-    /**************************
-     *
-     *************************/
-    void putUint_fb( size_t x, size_t y, uint32_t i, WtSdlFont* font )
-    {
-        if ( NULL != font )
-        {
-            size_t idx = (size_t) log10(i) + 1;
-            if (i == 0)
-                putc( WtCoord( x, y ), '0', font );
-
-            while (i != 0) {
-                putc( WtCoord( x+(idx*font->width()), y), (0x30 + (i % 10)), font );
-                i /= 10;
-                idx-- ;
-            }
-        }
+        m_grid_font->write( WtCoord(x, y), ch, m_renderer );
     }
 
     /**************************
@@ -353,7 +240,9 @@ private:
             if ( fname.empty() )
             {
                 tex = SDL_CreateTexture( m_renderer,
-                                   SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 1, 1);
+                                         SDL_PIXELFORMAT_RGBA8888, 
+                                         SDL_TEXTUREACCESS_TARGET, 
+                                         1, 1 );
                 SDL_SetRenderTarget( m_renderer, tex );
                 SDL_SetRenderDrawBlendMode( m_renderer, SDL_BLENDMODE_NONE );
                 SDL_SetRenderDrawColor( m_renderer, 255, 0, 255, 0 );
