@@ -16,8 +16,6 @@
 #ifndef _WT_PLAYER_H_
 #define _WT_PLAYER_H_
 
-#include "global.h"
-
 #define PTS_P_WORD           (1000)
 
 class WtPlayer

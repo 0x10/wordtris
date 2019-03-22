@@ -16,8 +16,6 @@
 #ifndef _WT_BUTTON_H_
 #define _WT_BUTTON_H_
 
-#include "wt_l10n.h"
-
 class WtButton
 {
 public:

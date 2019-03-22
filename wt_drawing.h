@@ -16,8 +16,8 @@
 #ifndef _WT_DRAWING_H_
 #define _WT_DRAWING_H_
 
-#include "global.h"
 #include "wt_button.h"
+
 #include "wt_player.h"
 #include "wt_board.h"
 #include "wt_active_letter.h"

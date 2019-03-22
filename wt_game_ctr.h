@@ -16,19 +16,17 @@
 #ifndef _WT_GAME_CTR_H_
 #define _WT_GAME_CTR_H_
 
-#include <vector>
 #include <unistd.h>
 
-#include "global.h"
+#include "wt_input.h"
 
 #include "wt_player.h"
 #include "wt_board.h"
 #include "wt_active_letter.h"
 #include "wt_drawing.h"
-#include "wt_input.h"
 #include "wt_game_mode_if.h"
+#include "wt_game_mode_ctr.h"
 #include "wt_menu_if.h"
-#include "wt_menu_settings.h"
 #include "wt_storage.h"
 
 #define GAME_CTR  WtGameCtr::instance()

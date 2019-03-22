@@ -16,10 +16,10 @@
 #ifndef _WT_MENU_IF_H_
 #define _WT_MENU_IF_H_
 
-#include "wt_backend_select.h"
+#include "wt_button.h"
+
 #include "wt_settings_observer_if.h"
 #include "wt_input.h"
-#include "wt_button.h"
 
 #define MENU_BUTTON_ID( id )    (this->get_id() | id)
 #define TO_BUTTON_ID( id )      (0x00FF & id)

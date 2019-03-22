@@ -22,8 +22,6 @@
 #include <iostream>
 #include <cmath>
 
-#include "global.h"
-
 #include "wt_sdl_utils.h"
 #include "wt_sdl_font.h"
 #include "wt_sdl_config.h"

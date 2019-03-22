@@ -16,11 +16,8 @@
 #ifndef _WT_BACKEND_POLICY_IF_H_
 #define _WT_BACKEND_POLICY_IF_H_
 
-#include <string>
-
 #include "wt_board.h"
 #include "wt_active_letter.h"
-#include "wt_types.h"
 
 class WtDrawingPolicyIf
 {

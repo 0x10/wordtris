@@ -16,7 +16,6 @@
 #ifndef _WT_SETTINGS_H_
 #define _WT_SETTINGS_H_
 
-#include "global.h"
 #include "wt_game_mode_if.h"
 
 class WtSettingsChangeObserver

@@ -16,17 +16,15 @@
 #ifndef _WT_INPUT_H_
 #define _WT_INPUT_H_
 
-#include <vector>
-
-#include "global.h"
-#include "wt_types.h"
+#include "wt_button.h"
 
 #include "wt_player.h"
 #include "wt_board.h"
 #include "wt_active_letter.h"
-#include "wt_button.h"
 
-
+/**************************************
+ * base class for each input observer
+ **************************************/
 class WtInputObserver
 {
 public:
@@ -39,7 +37,9 @@ public:
     virtual void notify_motion( WtCoord pos, WtCoord d_pos ) {}
 };
 
-
+/**************************************
+ * input handling class
+ **************************************/
 #define INPUT( Policy )  WtInput<Policy>::instance()
 template<typename InputPolicy>
 class WtInput : private InputPolicy

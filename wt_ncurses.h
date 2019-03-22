@@ -18,13 +18,11 @@
 
 #include <ncurses.h> //for getkey
 
-#include "global.h"
 
 #include "wt_player.h"
 #include "wt_board.h"
 #include "wt_active_letter.h"
 #include "wt_backend_policy_if.h"
-
 
 #define ARROW_D (0x42)
 #define ARROW_R (0x43)

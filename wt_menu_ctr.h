@@ -16,12 +16,7 @@
 #ifndef _WT_MENU_CTR_H_
 #define _WT_MENU_CTR_H_
 
-#include <vector>
-#include <unistd.h>
-
-#include "global.h"
 #include "wt_menu_if.h"
-#include "wt_drawing.h"
 #include "wt_menu_settings.h"
 #include "wt_menu_highscores.h"
 #include "wt_menu_pause.h"
@@ -94,24 +89,6 @@ private:
     {
     }
 
-    /**************************
-     *
-     *************************/
-    virtual void menu_update()
-    {
-#if 0
-        std::string text[] = { "Team:","=====", "Coding / Artwork", "C. Kranz", "Idea / Android Support", "W. Krzeslowski" };
-        static uint8_t text_id = 0;
-        static float lastpos = 0.0;
-        ACTIVE_WINDOW.draw_text( WtCoord(((ACTIVE_WINDOW_WIDTH) / 2)- (text[text_id].length()/2 * 12), ACTIVE_WINDOW_HEIGHT-lastpos), text[text_id]  );
-        ACTIVE_WINDOW.draw_text( WtCoord(((ACTIVE_WINDOW_WIDTH) / 2)- (text[text_id+1].length()/2 * 12), ACTIVE_WINDOW_HEIGHT-lastpos+24), text[text_id+1]  );
-        lastpos = (lastpos+0.5);
-        if (lastpos >= 200.) lastpos = 0;
-        
-        if (lastpos == 0)
-            text_id = (text_id+2)%6;
-#endif
-    }
 private:
     WtMenuSettings   m_settings;
     WtMenuPause      m_pause_menu;

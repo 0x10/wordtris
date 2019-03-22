@@ -14,7 +14,8 @@
  *
  ******************************************************************************/
 
-#include "wt_game_mode_ctr.h"
+#include "global.h"
+
 #include "wt_game_ctr.h"
 #include "wt_menu_ctr.h"
 

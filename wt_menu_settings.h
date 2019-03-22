@@ -16,8 +16,6 @@
 #ifndef _WT_MENU_SETTINGS_H_
 #define _WT_MENU_SETTINGS_H_
 
-#include "wt_l10n.h"
-#include "wt_game_mode_if.h"
 #include "wt_menu_if.h"
 #include "wt_storage.h"
 #include "wt_menu_game_mode_select.h"
@@ -161,4 +159,4 @@ private:
     WtMenuSelectMode m_select_mode;
 };
 
-#endif /* _WT_MENU_GAME_MODE_SELECT_H_ */
+#endif /* _WT_MENU_SETTINGS_H_ */

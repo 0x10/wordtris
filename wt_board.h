@@ -16,8 +16,6 @@
 #ifndef _WT_BOARD_H_
 #define _WT_BOARD_H_
 
-#include "global.h"
-
 #define ROW_COUNT            (20)
 #define COL_COUNT            (10)
 

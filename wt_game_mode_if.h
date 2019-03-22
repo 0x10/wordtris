@@ -16,19 +16,14 @@
 #ifndef _WT_GAME_MODE_IF_H_
 #define _WT_GAME_MODE_IF_H_
 
-#include <string>
-#include <vector>
 #include <utility>
-
-#include "global.h"
 
 #include "wt_random.h"
 #include "wt_player.h"
 #include "wt_board.h"
 
+
 #define INVALID_GAME_MODE (WtGameModeIf*)(0)
-
-
 
 class WtGameModeIf
 {
@@ -103,6 +98,9 @@ private:
     wt_difficulty m_current_diff;
 };
 
+/*****************************************
+ * demo implementation of game mode if
+ *****************************************/
 class WtGameModeDemo : public WtGameModeIf
 {
 public:

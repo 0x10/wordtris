@@ -18,10 +18,10 @@
 
 #include <cstdint>
 #include <string>
+#include <vector>
 
 #include "wt_l10n.h"
+#include "wt_types.h"
 #include "wt_backend_select.h"
-
-
 
 #endif /* _WT_GLOBAL_H_ */

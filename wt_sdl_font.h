@@ -18,9 +18,7 @@
 
 
 #include "SDL.h"
-#include <vector>
 
-#include "wt_types.h"
 #include "wt_sdl_utils.h"
 
 class WtSdlFont

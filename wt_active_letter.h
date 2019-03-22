@@ -16,7 +16,6 @@
 #ifndef _WT_LETTER_H_
 #define _WT_LETTER_H_
 
-#include "global.h"
 #include "wt_board.h"
 
 class WtLetter
