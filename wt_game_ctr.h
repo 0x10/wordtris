@@ -109,13 +109,15 @@ private:
     bool update_game()
     {
         bool game_over = false;
-        if ( m_board.cell_occupied( m_active.current_row() - 1,
-                                    m_active.current_column() ) )
+        if ( m_active_mode->stone_blocked( m_board,
+                                           m_active.current_row() - 1,
+                                           m_active.current_column() ) )
         {
             /* commit ACTIVE to board */
-            m_board.set_cell( m_active.current_row(), 
-                              m_active.current_column(), 
-                              m_active.current_value() );
+            m_active_mode->insert_stone_at( m_board, 
+                                            m_active.current_row(), 
+                                            m_active.current_column(), 
+                                            m_active.current_value() );
 
             if ( m_active_mode->eval_board( m_board,
                                             m_player ) )
@@ -123,8 +125,9 @@ private:
                 /* generate next stone */
                 m_active.get_next( m_active_mode->next_letter() );
 
-                game_over = m_board.cell_occupied( m_active.current_row(),
-                                                   m_active.current_column() );
+                game_over = m_active_mode->stone_blocked( m_board,
+                                                          m_active.current_row(),
+                                                          m_active.current_column() );
             }
             else
             {
@@ -144,7 +147,9 @@ private:
     virtual void notify_drop()
     {
         uint8_t new_row = m_active.current_row() - 1;
-        while ( ! m_board.cell_occupied( new_row, m_active.current_column() ) )
+        while ( ! m_active_mode->stone_blocked( m_board,
+                                                new_row,
+                                                m_active.current_column() ) )
         {
             new_row --;
         }
@@ -160,8 +165,9 @@ private:
      *************************/
     virtual void notify_left()
     {
-        if ( ! m_board.cell_occupied( m_active.current_row(),
-                                      m_active.current_column() - 1 ) )
+        if ( ! m_active_mode->stone_blocked( m_board,
+                                             m_active.current_row(),
+                                             m_active.current_column() - 1 ) )
         {
             m_active.move_left();
         }
@@ -172,8 +178,9 @@ private:
      *************************/
     virtual void notify_right()
     {
-        if ( ! m_board.cell_occupied( m_active.current_row(),
-                                      m_active.current_column() + 1 ) )
+        if ( ! m_active_mode->stone_blocked( m_board,
+                                             m_active.current_row(),
+                                             m_active.current_column() + 1 ) )
         {
             m_active.move_right(); 
         }

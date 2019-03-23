@@ -44,8 +44,8 @@ public:
      *************************/
     void init()
     {
-        for( size_t r = 0; r<ROW_COUNT; r++ )
-            for( size_t c = 0; c<COL_COUNT; c++ )
+        for( uint8_t r = 0; r<ROW_COUNT; r++ )
+            for( uint8_t c = 0; c<COL_COUNT; c++ )
                 set_cell( r, c, empty_cell );
     }
     

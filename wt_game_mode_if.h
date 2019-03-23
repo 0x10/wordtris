@@ -94,6 +94,28 @@ public:
         return m_current_diff;
     }
 
+    /**************************
+     *
+     *************************/
+    virtual bool stone_blocked( WtBoard& board,
+                                uint8_t  row,
+                                uint8_t  col )
+    {
+        return board.cell_occupied( row, col );
+    }
+    
+    /**************************
+     *
+     *************************/
+    virtual void insert_stone_at( WtBoard& board,
+                                  uint8_t  row,
+                                  uint8_t  col,
+                                  char     value )
+    {
+        board.set_cell( row, col, value );
+    }
+
+
 private:
     wt_difficulty m_current_diff;
 };
