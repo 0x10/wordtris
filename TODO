@@ -22,6 +22,7 @@
 # - more proper balanced game modes
 #       - some are noted at whiteboard but need to be evaluated
 #       - AND: others are need to be made
+#       - classic wordtris mode
 # - android:
 #       - release build for apk incl. signed certificates
 #       - eval income model: either ad based or by app store payment
