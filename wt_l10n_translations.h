@@ -30,30 +30,10 @@ const std::vector<WtTranslationTexts> wt_translations = {
          "ABC?E"/* de */,
          "ABC?E"/* fr */ }
     },
-    { "back",
-       { "Back"/* en */,
-         "Zurueck"/* de */,
-         "Retour"/* fr */ }
-    },
-    { "build rows.\nthe more equal symbols, more points.",
-       { "Build rows!\nThe more equal gems, more points!"/* en */,
-         "Fuelle Zeilen!\nSammle gleiche Steine pro Zeile"/* de */,
-         "Construire lignes!"/* fr */ }
-    },
     { "Complete the sequence!",
        { "Fill the gaps in the sequence!"/* en */,
          "Setze die fallenden Steine in die Sequenz!"/* de */,
          "Mettez les pierres dans les bons trous!"/* fr */ }
-    },
-    { "difficulty: ",
-       { "Difficulty: "/* en */,
-         "Schwierigkeit: "/* de */,
-         "Difficulte: "/* fr */ }
-    },
-    { "easy",
-       { "Easy"/* en */,
-         "Leicht"/* de */,
-         "Simple"/* fr */ }
     },
     { "Fill Rows",
        { "Fill Rows"/* en */,
@@ -70,15 +50,40 @@ const std::vector<WtTranslationTexts> wt_translations = {
          "Rate das Wort!"/* de */,
          "Devinez le mot!"/* fr */ }
     },
+    { "Try to place the falling letters at the correct position of the given sequence.",
+       { "Try to place the falling letters at the correct position of the given sequence."/* en */,
+         "Platziere die fallenden Buchstaben in die richtigen Felder."/* de */,
+         "Placez les lettres qui tombent dans les bons champs."/* fr */ }
+    },
+    { "build rows.\nthe more equal symbols, more points.",
+       { "Build rows!\nThe more equal gems, more points!"/* en */,
+         "Fuelle Zeilen!\nSammle gleiche Steine pro Zeile"/* de */,
+         "Construire lignes!"/* fr */ }
+    },
+    { "de",
+       { "German"/* en */,
+         "Deutsch"/* de */,
+         "Allemand"/* fr */ }
+    },
+    { "easy",
+       { "Easy"/* en */,
+         "Leicht"/* de */,
+         "Simple"/* fr */ }
+    },
+    { "en",
+       { "English"/* en */,
+         "Englisch"/* de */,
+         "Anglais"/* fr */ }
+    },
+    { "fr",
+       { "French"/* en */,
+         "Franz."/* de */,
+         "Francais"/* fr */ }
+    },
     { "hard",
        { "Hard"/* en */,
          "Schwer"/* de */,
          "Difficile"/* fr */ }
-    },
-    { "language: ",
-       { "Language: "/* en */,
-         "Sprache: "/* de */,
-         "Lingue: "/* fr */ }
     },
     { "no help provided",
        { "No help provided."/* en */,
@@ -90,40 +95,10 @@ const std::vector<WtTranslationTexts> wt_translations = {
          "Mittel"/* de */,
          "Classique"/* fr */ }
     },
-    { "options",
-       { "Settings"/* en */,
-         "Einstellungen"/* de */,
-         "Parametres"/* fr */ }
-    },
-    { "player",
-       { "Player "/* en */,
-         "Spieler "/* de */,
-         "Joueur"/* fr */ }
-    },
-    { "quit",
-       { "Quit"/* en */,
-         "Beenden"/* de */,
-         "Finir"/* fr */ }
-    },
-    { "resume",
-       { "Resume"/* en */,
-         "Fortsetzen"/* de */,
-         "Continuer"/* fr */ }
-    },
     { "select game mode",
        { "Select Game"/* en */,
          "Spiel auswaehlen"/* de */,
          "Selectionner un jeu"/* fr */ }
-    },
-    { "start game",
-       { "Start!"/* en */,
-         "Los!"/* de */,
-         "Lance!"/* fr */ }
-    },
-    { "Try to place the falling letters at the correct position of the given sequence.",
-       { "Try to place the falling letters at the correct position of the given sequence."/* en */,
-         "Platziere die fallenden Buchstaben in die richtigen Felder."/* de */,
-         "Placez les lettres qui tombent dans les bons champs."/* fr */ }
     },
     { "you lost! :P",
        { "You lost!"/* en */,
