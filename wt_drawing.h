@@ -70,9 +70,32 @@ public:
      *************************/
     void draw_hint( const std::string hint )
     {
-        DrawingPolicy::draw_text( WtCoord( 79, 890 ),
-                                  hint );
+        const size_t line_length = 30;
+        size_t line_count = (hint.length() / line_length) + ( hint.length() % line_length > 0 ? 1 : 0 );
+        for(size_t l_idx = 0; l_idx < line_count; l_idx++ )
+        {
+            std::string line = hint.substr( l_idx*line_length, line_length );
+            DrawingPolicy::draw_text( WtCoord( 79, 890+(l_idx * DrawingPolicy::get_font_size().h *2) ),
+                                      line );
+        }
     }
+
+    /**************************
+     *
+     *************************/
+    void draw_help_box( const std::string help )
+    {
+        const size_t line_length = 30;
+        size_t line_count = (help.length() / line_length) + ( help.length() % line_length > 0 ? 1 : 0 );
+        for(size_t l_idx = 0; l_idx < line_count; l_idx++ )
+        {
+            std::string line = help.substr( l_idx*line_length, line_length );
+            DrawingPolicy::draw_text( WtCoord( (ACTIVE_WINDOW_WIDTH / 2)-((line.length()*DrawingPolicy::get_font_size().w)/2), 
+                                               (ACTIVE_WINDOW_HEIGHT / 4)+(l_idx * DrawingPolicy::get_font_size().h *2) ),
+                                      line );
+        }
+    }
+
 
     /**************************
      *

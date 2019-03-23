@@ -41,6 +41,8 @@ private:
         add_button( WtButton( 1, WtCoord( 170, 493 ), WtDim( 200, 200 ), "start_btn.bmp" ) );
         add_button( WtButton( 2, WtCoord( 105, 800 ), WtDim( 100, 100 ), "score_btn.bmp" ) );
         add_button( WtButton( 3, WtCoord( 332, 800 ), WtDim( 100, 100 ), "settings_btn.bmp" ) );
+
+        m_settings.listen( &m_pause_menu );
     }
     WtMenuCtr( const WtMenuCtr& ); 
     WtMenuCtr & operator = (const WtMenuCtr &);

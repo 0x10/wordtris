@@ -11,11 +11,12 @@
 # - Tri-State Button Animation (may be more complex and may be dropped due to that)
 # - Change Game Mode Button with proper "Button" like display; currently it feels more like a label than a button
 # - Logo Design and Naming
-# - Game Modes need a help and intro menu
+# - Game Modes need a intro menu
 #       - intro menu may be not game mode specific
 # - Drawing:
 #       - message box to not use hard coded images and positions/dimensions
 #       - do not use hard coded absolute pixel values which depend on SDL_WIDHT=540/SDL_HEIGHT=960 but relative values
+#       - add word wrap on text boxes instead of char wrap
 # - SDL Input:
 #       - Touch motion detection for swiping
 # - UI Themes (esp. a dark theme) and a theme switcher

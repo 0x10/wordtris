@@ -17,9 +17,11 @@
 #define _WT_MENU_PAUSE_H_
 
 #include "wt_menu_if.h"
+#include "wt_menu_help.h"
+#include "wt_game_mode_if.h"
 #include "wt_game_ctr.h"
 
-class WtMenuPause : public WtMenuIf
+class WtMenuPause : public WtMenuIf, public WtSettingsChangeObserver
 {
 public:
     WtMenuPause() :
@@ -30,6 +32,7 @@ public:
 
         add_button( WtButton( 1, WtCoord(offset_x - 158, offset_y-66), WtDim(58, 66), "redo_btn.bmp" ) );
         add_button( WtButton( 2, WtCoord(offset_x + 80, offset_y-73), WtDim(80, 73), "quit_btn.bmp" ) );
+        add_button( WtButton( 3, WtCoord(offset_x - 45, offset_y+100), WtDim(100, 100), "help_btn.bmp" ) );
     }
 
     ~WtMenuPause()
@@ -45,18 +48,44 @@ private: // no copy allowed
      *************************/
     virtual void notify_button_pressed( uint16_t id )
     {
-        if ( TO_BUTTON_ID( id ) == 1 )
+        switch( TO_BUTTON_ID( id ) )
         {
-            leave();
-        }
-
-        if ( TO_BUTTON_ID( id ) == 2 )
-        {
-            GAME_CTR.quit();
-            leave();
+            case 1:
+                leave();
+                break;
+            case 2:
+                GAME_CTR.quit();
+                leave();
+                break;
+            case 3:
+                enter_child_menu( m_help );
+                break;
+            default: break;
         }
     }
 
+    /**************************
+     *
+     *************************/
+    void notify_language_changed( std::string lang_code )
+    {
+    }
+    /**************************
+     *
+     *************************/
+    virtual void notify_difficulty_changed( wt_difficulty diffi )
+    {
+    }
+    /**************************
+     *
+     *************************/
+    virtual void notify_game_mode_changed( WtGameModeIf* mode )
+    {
+        m_help.set_game_mode( mode );
+    }
+
+private:
+    WtMenuHelp m_help;
 };
 
 #endif /* _WT_MENU_GAME_MODE_SELECT_H_ */
