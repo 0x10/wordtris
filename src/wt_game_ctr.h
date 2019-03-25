@@ -52,6 +52,7 @@ private:
         m_active_mode( GAME_MODE_CTR.default_mode() ),
         m_game_over( false ),
         m_shall_quit( false ),
+        m_shall_restart( false ),
         m_pause( false ),
         m_pause_menu( NULL ),
         m_left_btn( 0xF1, 
@@ -320,55 +321,70 @@ public:
     /**************************
      *
      *************************/
+    void restart()
+    {
+        m_shall_quit = true;
+        m_shall_restart = true;
+    }
+
+    /**************************
+     *
+     *************************/
     void run()
     {
-        uint8_t countdown = 48 - (m_player.get_current_level()*4);
-        m_game_over = false;
-        m_shall_quit = false;
-
         ACTIVE_WINDOW.set_bg( WtGameCtr::background_image );
         set_buttons();
-        m_player.reset();
-        m_board.init();
 
-        if ( INVALID_GAME_MODE == m_active_mode )
-            m_game_over = true;
-        else
+        do
         {
-            m_active_mode->init_game( m_board, m_player );
-            m_active.init( m_active_mode->next_letter() );
-        }
+            m_shall_restart = false;
+            m_game_over = false;
+            m_shall_quit = false;
 
-        while ( !m_game_over && !m_shall_quit )
-        {
-            ACTIVE_INPUT.read();
+            m_player.reset();
+            m_board.init();
 
-            if ( !m_pause )
-            {
-                if ( countdown == 0 )
-                {
-                    m_game_over = update_game();
-
-                    countdown = 48 - (m_player.get_current_level()*4);
-                }         
-
-                update_window();
-                countdown--;
-            }
+            if ( INVALID_GAME_MODE == m_active_mode )
+                m_game_over = true;
             else
             {
-                if ( NULL != m_pause_menu )
-                {
-                    m_pause = false;
-                    unset_buttons();
-                    m_pause_menu->show();
-                    ACTIVE_WINDOW.set_bg( WtGameCtr::background_image );
-                    set_buttons();
-                }
+                m_active_mode->init_game( m_board, m_player );
+                m_active.init( m_active_mode->next_letter() );
             }
 
-            usleep(12500);
+            uint8_t countdown = 48 - (m_player.get_current_level()*4);
+            while ( !m_game_over && !m_shall_quit )
+            {
+                ACTIVE_INPUT.read();
+
+                if ( !m_pause )
+                {
+                    if ( countdown == 0 )
+                    {
+                        m_game_over = update_game();
+
+                        countdown = 48 - (m_player.get_current_level()*4);
+                    }         
+
+                    update_window();
+                    countdown--;
+                }
+                else
+                {
+                    if ( NULL != m_pause_menu )
+                    {
+                        m_pause = false;
+                        unset_buttons();
+                        m_pause_menu->show();
+                        ACTIVE_WINDOW.set_bg( WtGameCtr::background_image );
+                        set_buttons();
+                    }
+                }
+
+                usleep(12500);
+            }
         }
+        while ( m_shall_restart );
 
         STORAGE.store_highscores( update_highscores( m_player, m_active_mode, STORAGE.get_scores() ) );
 
@@ -396,6 +412,7 @@ private:
     WtGameModeIf*               m_active_mode;
     bool                        m_game_over;
     bool                        m_shall_quit;
+    bool                        m_shall_restart;
     bool                        m_pause;
     WtMenuIf*                   m_pause_menu;
 

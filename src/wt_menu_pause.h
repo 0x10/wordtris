@@ -55,6 +55,8 @@ private: // no copy allowed
                 leave();
                 break;
             case 2:
+                GAME_CTR.restart();
+                leave();
                 break;
             case 3:
                 GAME_CTR.quit();
