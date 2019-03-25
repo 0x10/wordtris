@@ -1,7 +1,7 @@
 #!/bin/cat
 # TODOs are not inorder but are randomly noted -> prorities may be assigned
 #
-# Update 22.03.19
+# Update 25.03.19
 # ===============
 # - Highscores shall be updated:
 #       - function hook available but update strategy not quite clear
@@ -35,4 +35,8 @@
 #           - OR: drop wt_control enum and eval keypress at listener too
 #       - get rid of button_id in users class like game_ctr (maybe) or menu_ctr (must be) but hide this within parent class which wraps id to notify_left/_xxx function
 #           - more like all common gui framework: onClicked()
-#
+# - Support Non-Ascii characters in Translations
+# - Audio-Support
+#       - background music
+#       - on stone 2 board commit sound
+#       - on row/word clear sound
