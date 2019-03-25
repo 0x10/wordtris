@@ -134,7 +134,22 @@ public:
                                   uint8_t  col,
                                   char     value )
     {
-        board.set_cell( row, col, value );
+        // if we stack up, we push the other rows downward until they reach
+        // the end of the board and then we stack up
+        if ( ( board.get_cell( row-1, col ) != WtBoard::empty_cell )
+             &&
+             ( board.get_cell( 0, col ) == WtBoard::empty_cell ) )
+        {
+            for ( uint8_t idx = 0; idx < row-1; idx++ )
+            {
+                board.set_cell( idx, col, board.get_cell( idx+1, col ) );
+            }
+            board.set_cell( row - 1, col, value );
+        }
+        else
+        {
+            board.set_cell( row, col, value );
+        }
     }
 
 
