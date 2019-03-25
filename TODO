@@ -3,8 +3,6 @@
 #   -> prorities may be assigned
 #   -> categories are not strictly assigned but at first glimpse
 #
-# Update 25.03.19
-# ===============
 # (features)
 # - Highscores shall be updated:
 #       - function hook available but update strategy not quite clear
@@ -18,7 +16,8 @@
 # - more proper balanced game modes
 #       - some are noted at whiteboard but need to be evaluated
 #       - AND: others are need to be made
-#       - classic wordtris mode
+# - classic wordtris mode
+#       - word finding algorithm
 # - SDL Input:
 #       - Touch motion detection for swiping
 # - Audio-Support
