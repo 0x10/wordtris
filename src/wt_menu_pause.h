@@ -30,9 +30,10 @@ public:
         size_t offset_x = (ACTIVE_WINDOW_WIDTH) / 2;
         size_t offset_y = (ACTIVE_WINDOW_HEIGHT / 2);
 
-        add_button( WtButton( 1, WtCoord(offset_x - 158, offset_y-66), WtDim(58, 66), "redo_btn.bmp" ) );
-        add_button( WtButton( 2, WtCoord(offset_x + 80, offset_y-73), WtDim(80, 73), "quit_btn.bmp" ) );
-        add_button( WtButton( 3, WtCoord(offset_x - 45, offset_y+100), WtDim(100, 100), "help_btn.bmp" ) );
+        add_button( WtButton( 1, WtCoord(offset_x - 158, offset_y-100), WtDim(100, 100), "back_btn.bmp" ) );
+        add_button( WtButton( 2, WtCoord(offset_x + 58, offset_y-100), WtDim(100, 100), "redo_btn.bmp" ) );
+        add_button( WtButton( 3, WtCoord(offset_x + 58, offset_y+100), WtDim(100, 100), "quit_btn.bmp" ) );
+        add_button( WtButton( 4, WtCoord(offset_x - 158, offset_y+100), WtDim(100, 100), "help_btn.bmp" ) );
     }
 
     ~WtMenuPause()
@@ -54,10 +55,12 @@ private: // no copy allowed
                 leave();
                 break;
             case 2:
+                break;
+            case 3:
                 GAME_CTR.quit();
                 leave();
                 break;
-            case 3:
+            case 4:
                 enter_child_menu( m_help );
                 break;
             default: break;
