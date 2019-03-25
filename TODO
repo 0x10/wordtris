@@ -1,33 +1,43 @@
 #!/bin/cat
-# TODOs are not inorder but are randomly noted -> prorities may be assigned
+# TODOs are not inorder but are randomly noted 
+#   -> prorities may be assigned
+#   -> categories are not strictly assigned but at first glimpse
 #
 # Update 25.03.19
 # ===============
+# (features)
 # - Highscores shall be updated:
 #       - function hook available but update strategy not quite clear
 #       - ideas:
 #           - EITHER: store highscores per game mode (e.g. first 5 of each mode)
 #           - OR: store highscores overall (e.g. first 15 of all modes)
 # - Tri-State Button Animation (may be more complex and may be dropped due to that)
-# - Change Game Mode Button with proper "Button" like display; currently it feels more like a label than a button
-# - Logo Design and Naming
 # - Game Modes need a intro menu
 #       - intro menu may be not game mode specific
-# - Drawing:
-#       - message box to not use hard coded images and positions/dimensions
-#       - do not use hard coded absolute pixel values which depend on SDL_WIDHT=540/SDL_HEIGHT=960 but relative values
-#       - add word wrap on text boxes instead of char wrap
-# - SDL Input:
-#       - Touch motion detection for swiping
 # - UI Themes (esp. a dark theme) and a theme switcher
 # - more proper balanced game modes
 #       - some are noted at whiteboard but need to be evaluated
 #       - AND: others are need to be made
 #       - classic wordtris mode
-# - android:
-#       - release build for apk incl. signed certificates
-#       - eval income model: either ad based or by app store payment
+# - SDL Input:
+#       - Touch motion detection for swiping
+# - Audio-Support
+#       - background music
+#       - on stone 2 board commit sound
+#       - on row/word clear sound
+#
+#
+# (design)
+# - Change Game Mode Button with proper "Button" like display; currently it feels more like a label than a button
+# - Logo Design and Naming
 # - get an ui design review
+#
+#
+# (bugs)
+# - Drawing:
+#       - message box to not use hard coded images and positions/dimensions
+#       - do not use hard coded absolute pixel values which depend on SDL_WIDHT=540/SDL_HEIGHT=960 but relative values
+#       - add word wrap on text boxes instead of char wrap
 # - WtInput Architecture not consistent:
 #       - Buttons are directly evaluated by observer-call to key-specific function ('a' -> notify_left for sdl e.g.) but touch areas are evaluated at listener function in general eval button
 #       - ideas:
@@ -36,7 +46,9 @@
 #       - get rid of button_id in users class like game_ctr (maybe) or menu_ctr (must be) but hide this within parent class which wraps id to notify_left/_xxx function
 #           - more like all common gui framework: onClicked()
 # - Support Non-Ascii characters in Translations
-# - Audio-Support
-#       - background music
-#       - on stone 2 board commit sound
-#       - on row/word clear sound
+#
+#
+# (others)
+# - android:
+#       - (config management) release build for apk incl. signed certificates
+#       - (business) eval income model: either ad based or by app store payment
