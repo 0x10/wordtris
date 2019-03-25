@@ -20,7 +20,11 @@
  * to include PC SDL instead of builded
  */
 
+#ifdef USE_SYSTEM_SDL
 #include <SDL2/SDL.h>
+#else
+#include "SDL2-2.0.9/include/SDL.h"
+#endif /* USE_SYSTEM_SDL */
 //#include <SDL2/SDL_ttf.h>
 
 #define SDL_ASSETS "assets/"

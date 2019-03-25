@@ -4,3 +4,14 @@ org.libsdl.wordtris/.gradle
 *.dat
 wordtris_sdl
 wordtris_ncurses
+SDL2-2.0.9/build
+SDL2-2.0.9/Makefile
+SDL2-2.0.9/Makefile.rules
+SDL2-2.0.9/config.log
+SDL2-2.0.9/config.status
+SDL2-2.0.9/libtool
+SDL2-2.0.9/sdl2-config
+SDL2-2.0.9/sdl2-config.cmake
+SDL2-2.0.9/sdl2.pc
+
+
