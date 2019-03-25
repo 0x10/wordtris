@@ -24,6 +24,7 @@ class WtGameModeGuessing : public WtGameModeIf
 {
 public:
     WtGameModeGuessing() :
+        WtGameModeIf( "Guess it" ),
         m_active_word( "BlAcK" )
     {
         m_active_word_guessed   = m_active_word;
@@ -39,15 +40,6 @@ public:
     virtual std::string get_title()
     {
         return WtL10n::tr("Guess it!");
-    }
-
-    /**************************
-     *
-     *************************/
-    virtual std::string get_id_string()
-    {
-        //shall not be translated
-        return "Guess it";
     }
 
     /**************************

@@ -24,6 +24,7 @@ class WtGameModeAbc : public WtGameModeIf
 {
 public:
     WtGameModeAbc() :
+      WtGameModeIf( "ABC?E" ),
       m_working_letters(""),
       m_active_row(0) 
     {
@@ -48,15 +49,6 @@ public:
     virtual std::string get_title()
     {
         return WtL10n::tr("ABC?E");
-    }
-
-    /**************************
-     *
-     *************************/
-    virtual std::string get_id_string()
-    {
-        //shall not be translated
-        return "ABC?E";
     }
 
     /**************************

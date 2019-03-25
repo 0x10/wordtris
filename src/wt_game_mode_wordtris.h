@@ -23,7 +23,8 @@ class WtGameModeWordtris : public WtGameModeIf
 {
 public:
     WtGameModeWordtris() :
-        m_letters( "ABCDEFGHIJKLMNOPQRSTUVWXYZ#" )
+        WtGameModeIf( "WordtrisClassic" ),
+        m_letters( "ABCDEFGHIJKLMNOPQRSTUVWXYZ" )
     {
     }
     ~WtGameModeWordtris()
@@ -39,12 +40,15 @@ public:
     }
 
     /**************************
-     *
+     * 
      *************************/
-    virtual std::string get_id_string()
+    virtual void init_game( WtBoard& board, WtPlayer& player )
     {
-        //shall not be translated
-        return "WordtrisClassic";
+        for( size_t r_idx = 0; r_idx < WtBoard::row_count/2; r_idx++ )
+            for( size_t c_idx = 0; c_idx < WtBoard::col_count; c_idx++ )
+            {
+                board.set_cell( r_idx, c_idx, ' ' );
+            }
     }
 
     /**************************
@@ -104,7 +108,7 @@ public:
      *************************/
     virtual char next_letter()
     {
-        return WtRandom::get_random_letter_of_word( m_letters ); 
+        return WtRandom::get_random_letter_of_word( std::string(m_letters).append("*??*") ); 
     }
 
     /**************************
@@ -134,21 +138,65 @@ public:
                                   uint8_t  col,
                                   char     value )
     {
-        // if we stack up, we push the other rows downward until they reach
-        // the end of the board and then we stack up
-        if ( ( board.get_cell( row-1, col ) != WtBoard::empty_cell )
-             &&
-             ( board.get_cell( 0, col ) == WtBoard::empty_cell ) )
+        if ( value == '*' )
         {
-            for ( uint8_t idx = 0; idx < row-1; idx++ )
+            // a bomb has been dropped!
+            if ( 
+                 ( ( board.get_cell( row-1, col ) != WtBoard::empty_cell )
+                   &&
+                   ( board.get_cell( row-1, col ) != ' ' )
+                 )
+               )
             {
-                board.set_cell( idx, col, board.get_cell( idx+1, col ) );
+                if ( row <= (WtBoard::row_count/2+1) )
+                {
+                    for ( uint8_t idx = row-1; idx > 0; idx-- )
+                    {
+                        char next = board.get_cell( idx-1, col );
+                        if ( ( next == ' ' ) && ( idx == row-1 ) )
+                            next = WtBoard::empty_cell;
+
+                        board.set_cell( idx, col, next );
+
+                        if ( ( next == ' ' ) || ( next == WtBoard::empty_cell ) )
+                            break;
+                    }
+                    board.set_cell( 0, col, ' ' );
+                }
+                else
+                {
+                    board.set_cell( row-1, col, WtBoard::empty_cell );
+                }
             }
-            board.set_cell( row - 1, col, value );
         }
         else
         {
-            board.set_cell( row, col, value );
+            if ( value == '?' )
+            {
+                value = WtRandom::get_random_letter_of_word( m_letters );
+            }
+
+            // if we stack up, we push the other rows downward until they reach
+            // the end of the board and then we stack up
+            if ( 
+                 ( ( board.get_cell( row-1, col ) != WtBoard::empty_cell )
+                   &&
+                   ( board.get_cell( row-1, col ) != ' ' )
+                 )
+                 &&
+                 ( board.get_cell( 0, col ) == ' ' )
+               )
+            {
+                for ( uint8_t idx = 0; idx < row-1; idx++ )
+                {
+                    board.set_cell( idx, col, board.get_cell( idx+1, col ) );
+                }
+                board.set_cell( row - 1, col, value );
+            }
+            else
+            {
+                board.set_cell( row, col, value );
+            }
         }
     }
 
@@ -162,7 +210,7 @@ private:
 
 
 private:
-    std::string m_letters;
+   const std::string m_letters;
 };
 
 #endif /* _WT_GAME_MODE_WORDTRIS_H_ */

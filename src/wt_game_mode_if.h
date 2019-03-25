@@ -28,6 +28,11 @@
 class WtGameModeIf
 {
 public:
+    WtGameModeIf( std::string id_string ) :
+        m_current_diff( wt_difficulty_EASY ),
+        m_id_string( id_string )
+        {}
+
     /**************************
      * 
      *************************/
@@ -41,6 +46,15 @@ public:
     }
 
     /**************************
+     *
+     *************************/
+    const std::string get_id_string()
+    {
+        //shall not be translated
+        return m_id_string;
+    }
+
+    /**************************
      * 
      *************************/
     virtual void init_game( WtBoard& board, WtPlayer& player ) {}
@@ -49,11 +63,6 @@ public:
      *
      *************************/
     virtual std::string get_title()=0;
-
-    /**************************
-     *
-     *************************/
-    virtual std::string get_id_string()=0;
 
     /**************************
      * return false if game over
@@ -117,7 +126,8 @@ public:
 
 
 private:
-    wt_difficulty m_current_diff;
+    wt_difficulty     m_current_diff;
+    const std::string m_id_string;
 };
 
 /*****************************************
@@ -127,6 +137,7 @@ class WtGameModeDemo : public WtGameModeIf
 {
 public:
     WtGameModeDemo() :
+        WtGameModeIf( "Demo" ),
         m_active_wordbase( "12340()()()()#@abcdEFGK" )
     {
     }
@@ -155,15 +166,6 @@ public:
      *************************/
     virtual std::string get_title()
     {
-        return "Demo";
-    }
-
-    /**************************
-     *
-     *************************/
-    virtual std::string get_id_string()
-    {
-        //shall not be translated
         return "Demo";
     }
 

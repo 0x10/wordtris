@@ -23,6 +23,7 @@ class WtGameModeTetris : public WtGameModeIf
 {
 public:
     WtGameModeTetris() :
+        WtGameModeIf( "Fill Rows" ),
         m_active_wordbase( "()+&" )
     {
     }
@@ -36,15 +37,6 @@ public:
     virtual std::string get_title()
     {
         return WtL10n::tr("Fill Rows");
-    }
-
-    /**************************
-     *
-     *************************/
-    virtual std::string get_id_string()
-    {
-        //shall not be translated
-        return "Fill Rows";
     }
 
     /**************************
