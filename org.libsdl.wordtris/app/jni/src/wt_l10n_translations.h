@@ -1,1 +1,0 @@
-../../../../wt_l10n_translations.h

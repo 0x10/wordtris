@@ -1,19 +1,24 @@
 CXX=g++
 ANDROID_DIR=org.libsdl.wordtris/
+SRC_DIR=./src
+BUILD_DIR=./build
 
 all: clean sdl
 
-sdl:
-	$(CXX) -Os -Wall wordtris.cpp -lSDL2 -o wordtris_sdl
+prepare:
+	mkdir -p $(BUILD_DIR)
 
-ncurses:
-	$(CXX) -g -Wall -DRENDER_NCURSES wordtris.cpp -lncurses -o wordtris_ncurses
+sdl: prepare
+	$(CXX) -Os -Wall -I. $(SRC_DIR)/wordtris.cpp -lSDL2 -o $(BUILD_DIR)/wordtris_sdl
+
+ncurses: prepare
+	$(CXX) -g -Wall -DRENDER_NCURSES $(SRC_DIR)/wordtris.cpp -lncurses -o $(BUILD_DIR)/wordtris_ncurses
 
 android-dbg:
-	cd $(ANDROID_DIR) && ./gradlew bundleDebug
+	cd $(ANDROID_DIR) && ./gradlew assembleDebug
 	cd -
 
 clean:
-	rm -f wordtris_sdl wordtris_ncurses
+	rm -f $(BUILD_DIR)
 	cd $(ANDROID_DIR) && ./gradlew clean
 	cd -
