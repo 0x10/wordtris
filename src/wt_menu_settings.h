@@ -20,6 +20,8 @@
 #include "wt_storage.h"
 #include "wt_menu_game_mode_select.h"
 
+#include <utility>
+
 class WtMenuSettings : public WtMenuIf
 {
 public:
@@ -30,59 +32,74 @@ public:
         size_t offset_x = (ACTIVE_WINDOW_WIDTH - 328) / 2;
         size_t offset_y = (ACTIVE_WINDOW_HEIGHT / 2) - (ACTIVE_WINDOW_HEIGHT / 4);
 
+        add_button( WtButton( 1, WtCoord( offset_x, offset_y ), WtDim(328, 69), "menu_btn.bmp", WtL10n::tr("select game mode") ) );
+        add_button( WtButton( 2, WtCoord( 105, 800 ), WtDim(100, 100), "back_btn.bmp" ) );
 
         {
-                const uint16_t button_ids[3] = { 1,2,3 };
+                std::vector< std::pair<uint16_t, std::string> > labeled_ids = {
+                        std::make_pair( 3, WtL10n::available_languages()[0] ),
+                        std::make_pair( 4, WtL10n::available_languages()[1] ),
+                        std::make_pair( 5, WtL10n::available_languages()[2] ),
+                };
+
                 size_t selected_id = 0;
                 for ( size_t idx = 0; idx < WtL10n::available_languages().size(); idx++ )
                 {
-                    if ( WtL10n::available_languages()[idx] == WtL10n::get_language_code() )
+                    if ( labeled_ids[idx].second == WtL10n::get_language_code() )
                     {
-                        selected_id = button_ids[idx];
+                        selected_id = labeled_ids[idx].first;
                         break;
                     }
                 }
-                
-                const std::string label[3] = { WtL10n::available_languages()[0],
-                                               WtL10n::available_languages()[1],
-                                               WtL10n::available_languages()[2] };
 
-                add_tri_state_button( button_ids, label,
-                                      WtCoord( offset_x, offset_y + 69 + 20 ),
-                                      WtDim( 328, 69 ),
-                                      WtCoord( offset_x+1, offset_y+69+20+1 ),
-                                      WtDim( 109, 67 ),
-                                      selected_id );
+                add_radio_group_button( labeled_ids,
+                                        WtCoord( offset_x, offset_y + 69 + 20 ),
+                                        WtDim( 328, 69 ),
+                                        selected_id );
         }
 
         {
-                wt_difficulty diff = STORAGE.get_settings().difficulty;
+                std::vector< std::pair<uint16_t, std::string> > labeled_ids = {
+                        std::make_pair( 6, WtGameModeIf::get_available_difficulties()[0].second ),
+                        std::make_pair( 7, WtGameModeIf::get_available_difficulties()[1].second ),
+                        std::make_pair( 8, WtGameModeIf::get_available_difficulties()[2].second ),
+                };
+
                 size_t selected_id = 0;
-                switch( diff )
+                switch( STORAGE.get_settings().difficulty )
                 {
                     default: break;
-                    case wt_difficulty_EASY: selected_id = 0; break;
+                    case wt_difficulty_EASY:   selected_id = 0; break;
                     case wt_difficulty_MEDIUM: selected_id = 1; break;
-                    case wt_difficulty_HARD: selected_id = 2; break;
+                    case wt_difficulty_HARD:   selected_id = 2; break;
                 }
                 m_current_diff = selected_id;
 
-                const std::string label[3] = { WtGameModeIf::get_available_difficulties()[0].second,
-                                               WtGameModeIf::get_available_difficulties()[1].second,
-                                               WtGameModeIf::get_available_difficulties()[2].second };
-                const uint16_t button_ids[3] = { 4,5,6 };
-
-                add_tri_state_button( button_ids, label,
-                                      WtCoord( offset_x, offset_y + (69 + 20)*2 ),
-                                      WtDim( 328, 69 ),
-                                      WtCoord( offset_x+1, offset_y+(69+20)*2+1 ),
-                                      WtDim( 109, 67 ),
-                                      button_ids[selected_id] );
+                add_radio_group_button( labeled_ids,
+                                        WtCoord( offset_x, offset_y + (69 + 20)*2 ),
+                                        WtDim( 328, 69 ),
+                                        labeled_ids[selected_id].first );
         }
 
+        {
+                size_t selected_id = 0;
+                m_themes = {
+                        std::make_pair( 9, "light" ),
+                        std::make_pair( 10, "dark" ),
+                };
+                for ( size_t l_idx = 0; l_idx < m_themes.size(); l_idx++ )
+                {
+                    if ( m_themes[l_idx].second == STORAGE.get_settings().active_theme )
+                    {
+                        selected_id = m_themes[l_idx].first;
+                    }
+                }
+                add_radio_group_button( m_themes,
+                                        WtCoord( offset_x, offset_y + (69 + 20)*3 ),
+                                        WtDim( 328, 69 ),
+                                        selected_id );
+        }
 
-        add_button( WtButton( 7, WtCoord( offset_x, offset_y ), WtDim(328, 69), "menu_btn.bmp", WtL10n::tr("select game mode") ) );
-        add_button( WtButton( 8, WtCoord( 105, 800 ), WtDim(100, 100), "back_btn.bmp" ) );
     }
 
     ~WtMenuSettings()
@@ -111,35 +128,55 @@ private:
     {
         size_t old_diff = m_current_diff;
         bool language_changed = false;
+        bool theme_changed = false;
+        size_t theme_idx = 0;
 
         std::cout << "button pressed = " << id << std::endl;
 
         switch( TO_BUTTON_ID( id ) )
         {
-            case 1:
-            case 2:
             case 3:
-                if ( WtL10n::get_language_code() != WtL10n::available_languages()[TO_BUTTON_ID(id) - 1] )
-                {
-                    WtL10n::set_language( WtL10n::available_languages()[TO_BUTTON_ID(id) - 1] );
-                    language_changed = true;
-
-                    modify_tri_state_button( 1, TO_BUTTON_ID(id) );
-                }
-                break;
             case 4:
             case 5:
-            case 6:
-                if ( STORAGE.get_settings().difficulty != WtGameModeIf::get_available_difficulties()[TO_BUTTON_ID(id) - 4].first )
                 {
-                    m_current_diff = TO_BUTTON_ID(id) - 4;
-                    modify_tri_state_button( 4, TO_BUTTON_ID(id) );
+                    size_t lang_idx = TO_BUTTON_ID(id)-3;
+                    if ( WtL10n::get_language_code() != WtL10n::available_languages()[lang_idx] )
+                    {
+                        WtL10n::set_language( WtL10n::available_languages()[lang_idx] );
+                        language_changed = true;
+
+                        modify_radio_group_button( 3, 3, TO_BUTTON_ID(id) );
+                    }
                 }
                 break;
+            case 6:
             case 7:
+            case 8:
+                {
+                    size_t diff_idx = TO_BUTTON_ID(id)-6;
+                    if ( STORAGE.get_settings().difficulty != WtGameModeIf::get_available_difficulties()[diff_idx].first )
+                    {
+                        m_current_diff = diff_idx;
+                        modify_radio_group_button( 6, 3, TO_BUTTON_ID(id) );
+                    }
+                }
+                break;
+            case 9:
+            case 10:
+                {
+                    theme_idx = TO_BUTTON_ID(id)-9;
+                    
+                    if ( STORAGE.get_settings().active_theme != m_themes[theme_idx].second )
+                        theme_changed = true;
+
+                    modify_radio_group_button( 9, 2, TO_BUTTON_ID(id) );
+                }
+                break;
+                break;
+            case 1:
                 enter_child_menu( m_select_mode );
                 break;
-            case 8:
+            case 2:
                 leave();
                 break;
             default: /*ignore*/ break;
@@ -151,12 +188,15 @@ private:
                 get_listener()[idx]->notify_difficulty_changed( WtGameModeIf::get_available_difficulties()[m_current_diff].first );
             if ( language_changed )
                 get_listener()[idx]->notify_language_changed( WtL10n::get_language_code() );
+            if ( theme_changed )
+                get_listener()[idx]->notify_theme_changed( m_themes[theme_idx].second );
         }
     }
 
 private:
-    size_t m_current_diff;
-    WtMenuSelectMode m_select_mode;
+    size_t                                          m_current_diff;
+    WtMenuSelectMode                                m_select_mode;
+    std::vector< std::pair<uint16_t, std::string> > m_themes;
 };
 
 #endif /* _WT_MENU_SETTINGS_H_ */

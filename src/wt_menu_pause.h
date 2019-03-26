@@ -21,7 +21,7 @@
 #include "wt_game_mode_if.h"
 #include "wt_game_ctr.h"
 
-class WtMenuPause : public WtMenuIf, public WtSettingsChangeObserver
+class WtMenuPause : public WtMenuIf
 {
 public:
     WtMenuPause() :
@@ -69,24 +69,13 @@ private: // no copy allowed
         }
     }
 
+public:
     /**************************
      *
      *************************/
-    void notify_language_changed( std::string lang_code )
+    virtual WtSettingsChangeObserver* get_help_listener()
     {
-    }
-    /**************************
-     *
-     *************************/
-    virtual void notify_difficulty_changed( wt_difficulty diffi )
-    {
-    }
-    /**************************
-     *
-     *************************/
-    virtual void notify_game_mode_changed( WtGameModeIf* mode )
-    {
-        m_help.set_game_mode( mode );
+        return &m_help;
     }
 
 private:

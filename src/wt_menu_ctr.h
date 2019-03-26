@@ -42,7 +42,7 @@ private:
         add_button( WtButton( 2, WtCoord( 105, 800 ), WtDim( 100, 100 ), "score_btn.bmp" ) );
         add_button( WtButton( 3, WtCoord( 332, 800 ), WtDim( 100, 100 ), "settings_btn.bmp" ) );
 
-        m_settings.listen( &m_pause_menu );
+        m_settings.listen( m_pause_menu.get_help_listener() );
     }
     WtMenuCtr( const WtMenuCtr& ); 
     WtMenuCtr & operator = (const WtMenuCtr &);

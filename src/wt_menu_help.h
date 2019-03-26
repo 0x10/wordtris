@@ -21,7 +21,7 @@
 #include "wt_game_mode_ctr.h"
 #include "wt_storage.h"
 
-class WtMenuHelp : public WtMenuIf
+class WtMenuHelp : public WtMenuIf, public WtSettingsChangeObserver
 {
 public:
     WtMenuHelp() :
@@ -54,6 +54,33 @@ private: // no copy allowed
     }
 
     /**************************
+     *
+     *************************/
+    void notify_language_changed( std::string lang_code )
+    {
+    }
+    /**************************
+     *
+     *************************/
+    virtual void notify_difficulty_changed( wt_difficulty diffi )
+    {
+    }
+    /**************************
+     *
+     *************************/
+    virtual void notify_theme_changed( std::string name )
+    {
+    }
+
+    /**************************
+     *
+     *************************/
+    virtual void notify_game_mode_changed( WtGameModeIf* mode )
+    {
+        m_selected_mode = mode;
+    }
+
+    /**************************
      * 
      *************************/
     void menu_update()
@@ -62,14 +89,6 @@ private: // no copy allowed
         {
             ACTIVE_WINDOW.draw_help_box( m_selected_mode->get_help() );
         }
-    }
-public:
-    /**************************
-     *
-     *************************/
-    void set_game_mode( WtGameModeIf* mode )
-    {
-        m_selected_mode = mode;
     }
 
 private:

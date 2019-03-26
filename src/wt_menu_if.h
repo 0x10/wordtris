@@ -143,54 +143,74 @@ protected:
     /**************************
      *
      *************************/
-    void add_tri_state_button( const uint16_t    ids[3], 
-                               const std::string label[3],
-                               const WtCoord&    frame_pos,
-                               const WtDim&      frame_size,
-                               const WtCoord&    state_pos,
-                               const WtDim&      state_size,
-                               const size_t      selected )
+    void add_radio_group_button( const std::vector< std::pair<uint16_t, std::string> >& labeled_ids,
+                                 const WtCoord&    frame_pos,
+                                 const WtDim&      frame_size,
+                                 const size_t      selected )
     {
-        // Add frame which isnt a button at all but can be set
-        // using invalid id...
-        m_buttons.push_back( WtButton( INVALID_BUTTON_ID,
-                                       frame_pos, frame_size,
-                                       m_tri_state_frame ) );
+        if ( labeled_ids.size() > 1 )
+        {
+            WtCoord working_state_pos  = WtCoord( frame_pos.x + 1, frame_pos.y + 1 );
+            WtDim   working_state_size = WtDim(   (frame_size.w - 1) / labeled_ids.size(),
+                                                  (frame_size.h - 2) );
 
-        WtCoord working_state_pos = state_pos;
+            // Add frame which isnt a button at all but can be set
+            // using invalid id...
+            m_buttons.push_back( WtButton( INVALID_BUTTON_ID,
+                                           frame_pos, frame_size,
+                                           m_tri_state_frame ) );
 
-        m_buttons.push_back( WtButton( MENU_BUTTON_ID( ids[0] ),
-                                       working_state_pos, state_size,
-                                       (selected == ids[0] ? m_tri_state_selected_img[0] : m_tri_state_unselected_img ),
-                                       label[0] ) );
-        working_state_pos.moveX( state_size );
+            m_buttons.push_back( WtButton( MENU_BUTTON_ID( labeled_ids.front().first ),
+                                           working_state_pos, working_state_size,
+                                           (selected == labeled_ids.front().first ? 
+                                                    m_tri_state_selected_img[0] : 
+                                                    m_tri_state_unselected_img ),
+                                           labeled_ids.front().second ) );
+            working_state_pos.moveX( working_state_size );           
 
-        m_buttons.push_back( WtButton( MENU_BUTTON_ID( ids[1] ),
-                                       working_state_pos, state_size,
-                                       (selected == ids[1] ? m_tri_state_selected_img[1] : m_tri_state_unselected_img ),
-                                       label[1] ) );
-        working_state_pos.moveX( state_size );
+            for( size_t i_Idx = 1; i_Idx < labeled_ids.size() - 1; i_Idx++ )
+            {
+                m_buttons.push_back( WtButton( MENU_BUTTON_ID( labeled_ids[i_Idx].first ),
+                                     working_state_pos, working_state_size,
+                                     (selected == labeled_ids[i_Idx].first ? 
+                                                m_tri_state_selected_img[1] : 
+                                                m_tri_state_unselected_img ),
+                                     labeled_ids[i_Idx].second ) );
+                working_state_pos.moveX( working_state_size );
+            }
 
-        m_buttons.push_back( WtButton( MENU_BUTTON_ID( ids[2] ),
-                                       working_state_pos, state_size,
-                                       (selected == ids[2] ? m_tri_state_selected_img[2] : m_tri_state_unselected_img ),
-                                       label[2] ) );
-        working_state_pos.moveX( state_size );                                      
+            m_buttons.push_back( WtButton( MENU_BUTTON_ID( labeled_ids.back().first ),
+                                           working_state_pos, working_state_size,
+                                           (selected == labeled_ids.back().first ? 
+                                                    m_tri_state_selected_img[2] : 
+                                                    m_tri_state_unselected_img ),
+                                           labeled_ids.back().second ) );
+            working_state_pos.moveX( working_state_size );
+        }
+        else
+        {
+            WtButton newButton = WtButton( labeled_ids.front().first,
+                                           frame_pos, frame_size,
+                                           m_tri_state_frame );
+            add_button( newButton );
+        }
     }
 
     /**************************
       *
       *************************/
-    void modify_tri_state_button( const uint16_t first_id, 
-                                  const size_t selected )
+    void modify_radio_group_button( const uint16_t first_id,
+                                    const size_t   count, 
+                                    const size_t   selected )
     {
         for(size_t idx=0;idx<m_buttons.size();idx++)
         {
             if( m_buttons[idx].id() == MENU_BUTTON_ID( first_id ) )
             {
                 m_buttons[idx].set_image(   (selected == first_id ? m_tri_state_selected_img[0] : m_tri_state_unselected_img ) );
-                m_buttons[idx+1].set_image( (selected == first_id+1u ? m_tri_state_selected_img[1] : m_tri_state_unselected_img ) );
-                m_buttons[idx+2].set_image( (selected == first_id+2u ? m_tri_state_selected_img[2] : m_tri_state_unselected_img ) );
+                for ( size_t i_idx = 1; i_idx < count-1; i_idx++ )
+                    m_buttons[idx+i_idx].set_image( (selected == first_id+i_idx ? m_tri_state_selected_img[1] : m_tri_state_unselected_img ) );
+                m_buttons[idx+count-1].set_image( (selected == first_id+(count-1) ? m_tri_state_selected_img[2] : m_tri_state_unselected_img ) );
 
                 break;
             }

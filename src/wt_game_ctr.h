@@ -68,16 +68,14 @@ private:
                      WtCoord( 393, 32 ),
                      WtDim( 64, 64 ), "pause_btn.bmp" )
     {
-        if ( STORAGE.load() )
-        {
-            WtSettings settings = STORAGE.get_settings();
-            set_mode( GAME_MODE_CTR.mode_from_string( settings.game_mode ) );
-            WtL10n::set_language( settings.language );
-            if ( INVALID_GAME_MODE != m_active_mode )
-                m_active_mode->set_difficulty( settings.difficulty );
-        }
+        WtSettings settings = STORAGE.get_settings();
+        set_mode( GAME_MODE_CTR.mode_from_string( settings.game_mode ) );
+        WtL10n::set_language( settings.language );
+        if ( INVALID_GAME_MODE != m_active_mode )
+           m_active_mode->set_difficulty( settings.difficulty );
 
         ACTIVE_WINDOW.init();
+        ACTIVE_WINDOW.set_theme( settings.active_theme );
     }
     WtGameCtr( const WtGameCtr& ); 
     WtGameCtr & operator = (const WtGameCtr &);
@@ -276,6 +274,20 @@ private:
             settings.difficulty = diffi;
             STORAGE.store_settings( settings );
         }
+    }
+
+
+    /**************************
+     *
+     *************************/
+    virtual void notify_theme_changed( std::string name )
+    {
+        ACTIVE_WINDOW.set_theme( name );
+
+        std::cout << "new theme selected = "<< name << std::endl;
+        WtSettings settings = STORAGE.get_settings();
+        settings.active_theme = name;
+        STORAGE.store_settings( settings );
     }
 
     /**************************

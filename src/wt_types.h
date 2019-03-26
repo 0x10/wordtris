@@ -118,6 +118,7 @@ public:
     std::string   language;
     std::string   game_mode;
     wt_difficulty difficulty;
+    std::string   active_theme;
 
     /**************************
      *
@@ -132,6 +133,9 @@ public:
 
         uint8_t diff = difficulty;
         of.write( (char*)&diff, 1 );
+
+        str = active_theme.c_str();
+        of.write( str, strlen(str)+1 );// incl. NULL
     }
 
     /**************************
@@ -149,6 +153,9 @@ public:
         uint8_t diff;
         inf.read( (char*)&diff, 1 );
         difficulty = (wt_difficulty)diff;
+
+        inf.getline( input, 0xFF, '\0' );
+        active_theme= std::string(input);
     }    
 };
 

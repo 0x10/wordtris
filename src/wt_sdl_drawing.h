@@ -44,7 +44,8 @@ private:
 protected:
     WtDrawingPolicySdl() :
         m_window( 0 ),
-        m_renderer( 0 )
+        m_renderer( 0 ),
+        m_theme("default")
     {
         if (SDL_Init(SDL_INIT_VIDEO)) {
             std::cerr << "Failed to initialize SDL: " << SDL_GetError() << std::endl;
@@ -64,8 +65,8 @@ protected:
         */
         set_bg("bg.bmp");
 
-        m_grid_font = new WtSdlFont( "grid", GRID_FONT_SIZE, GRID_FONT_SIZE, "grid_font.bmp", m_renderer );
-        m_text_font = new WtSdlFont( "text", TEXT_FONT_SIZE, TEXT_FONT_SIZE*2, "text_font.bmp", m_renderer );
+        m_grid_font = new WtSdlFont( "grid", GRID_FONT_SIZE, GRID_FONT_SIZE, "grid_font.bmp", m_theme, m_renderer );
+        m_text_font = new WtSdlFont( "text", TEXT_FONT_SIZE, TEXT_FONT_SIZE*2, "text_font.bmp", m_theme, m_renderer );
 
     }
 
@@ -74,16 +75,7 @@ protected:
         delete m_grid_font;
         delete m_text_font;
 
-        SDL_TextureCache::iterator it;
-        for ( it = m_texture_cache.begin(); it != m_texture_cache.end(); it++ )
-        {
-            if ( NULL != it->second ) {
-                SDL_DestroyTexture( it->second );
-                it->second = NULL;
-            }
-        }
-        m_texture_cache.clear();
-
+        clear_texture_cache();
 
         SDL_DestroyRenderer(m_renderer);
         SDL_DestroyWindow(m_window);
@@ -103,6 +95,20 @@ public:
         draw_image( WtCoord( 0, 0 ),
                     WtDim( SDL_WIDTH, SDL_HEIGHT ),
                     m_bg_img_path );
+    }
+
+    /**************************
+     *
+     *************************/
+    virtual void set_theme( std::string name )
+    {
+        // todo base class themeable
+        m_grid_font->set_theme( name, m_renderer );
+        m_text_font->set_theme( name, m_renderer );
+        m_theme = name;
+        // TODO check if available and if not keep old
+        
+        clear_texture_cache();
     }
 
     /**************************
@@ -256,7 +262,7 @@ private:
             else
             {
                 std::cout << "load from file.. " << fname << std::endl;
-                m_texture_cache[fname] = WtSdlUtils::loadAssetToTexture( fname, m_renderer );
+                m_texture_cache[fname] = WtSdlUtils::loadAssetToTexture( m_renderer, fname, m_theme );
 
                 tex = m_texture_cache[fname];
             }
@@ -264,12 +270,30 @@ private:
         return tex;
     }
 
+    /**************************
+     *
+     *************************/
+    void clear_texture_cache()
+    {
+        SDL_TextureCache::iterator it;
+        for ( it = m_texture_cache.begin(); it != m_texture_cache.end(); it++ )
+        {
+            if ( NULL != it->second ) {
+                SDL_DestroyTexture( it->second );
+                it->second = NULL;
+            }
+        }
+        m_texture_cache.clear();
+    }
+
+
 private:
     SDL_Window*   m_window;
     SDL_Renderer* m_renderer;
     //TTF_Font*     m_font;
 
     std::string   m_bg_img_path;
+    std::string   m_theme;
 
     WtSdlFont*    m_grid_font;
     WtSdlFont*    m_text_font;

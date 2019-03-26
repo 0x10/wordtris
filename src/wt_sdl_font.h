@@ -35,12 +35,14 @@ public:
                size_t w,
                size_t h,
                std::string filename, 
+               std::string theme,
                SDL_Renderer* renderer ) :
         m_name( name ),
         m_font_w( w ),
-        m_font_h( h )
+        m_font_h( h ),
+        m_fname( filename )
     {
-        load_font_data( filename, renderer );
+        load_font_data( filename, theme, renderer );
     }
     ~WtSdlFont()
     {
@@ -51,8 +53,9 @@ public:
     /**************************
      *
      *************************/
-    void load_font_data( std::string filename, SDL_Renderer* renderer )
+    void load_font_data( std::string filename, std::string theme, SDL_Renderer* renderer )
     {
+        std::cout << "load font data = "<<filename<<std::endl;
         if ( m_font_data.size() > 0 )
         {
             for(size_t i = 0; i < m_font_data.size(); i++)
@@ -60,13 +63,21 @@ public:
             m_font_data.clear();
         }
 
-        SDL_Texture* font_complete = WtSdlUtils::loadAssetToTexture( filename, renderer );
+        SDL_Texture* font_complete = WtSdlUtils::loadAssetToTexture( renderer, filename, theme );
         // fonts are organized by ascii code...
         for(char i = ' '; i < '~'; i++ )
         {
             m_font_data.push_back( get_letter_texture( font_complete, i, renderer ) );
         }
         SDL_DestroyTexture(font_complete);
+    }
+
+    /**************************
+     *
+     *************************/
+    void set_theme( std::string name, SDL_Renderer* renderer )
+    {
+        load_font_data( m_fname, name, renderer );
     }
 
     /**************************
@@ -134,6 +145,7 @@ private:
     std::string                 m_name;
     size_t                      m_font_w;
     size_t                      m_font_h;
+    std::string                 m_fname;
     std::vector<SDL_Texture*>   m_font_data;
 };
 

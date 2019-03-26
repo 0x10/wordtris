@@ -16,6 +16,8 @@
 
 #include "global.h"
 
+#include "wt_storage.h"
+
 #include "wt_game_ctr.h"
 #include "wt_menu_ctr.h"
 
@@ -24,6 +26,11 @@
  *****************************************************************************/
 int main( int argc, char** argv )
 {
+    if ( ! STORAGE.load() )
+    {
+        // defaults should be used...
+    }
+
     GAME_CTR.set_pause_menu( MENU_CTR.get_pause_menu() );
 
     MENU_CTR.listen( &GAME_CTR );

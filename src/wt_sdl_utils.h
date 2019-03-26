@@ -27,10 +27,12 @@ public:
     /**************************
      *
      *************************/
-    static SDL_Texture* loadAssetToTexture( std::string fname, SDL_Renderer* renderer )
+    static SDL_Texture* loadAssetToTexture( SDL_Renderer* renderer,
+                                            std::string   fname,
+                                            std::string   theme="default" )
     {
         SDL_Texture* result_texture = NULL;
-        std::string path = std::string(SDL_ASSETS).append(fname);
+        std::string path = std::string(SDL_ASSETS).append(theme).append("/").append(fname);
         SDL_Surface* surface = SDL_LoadBMP(path.c_str());
         if (surface != 0)
         {

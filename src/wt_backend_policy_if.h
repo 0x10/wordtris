@@ -23,6 +23,7 @@ class WtDrawingPolicyIf
 {
 public:
     virtual void clr() =0;
+    virtual void set_theme( std::string name )=0;
     virtual WtDim get_font_size() =0;
     virtual void draw_board( const WtBoard& board ) =0;
     virtual void draw_active_letter( const WtLetter& active ) =0;

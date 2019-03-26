@@ -12,7 +12,6 @@
 # - Tri-State Button Animation (may be more complex and may be dropped due to that)
 # - Game Modes need a intro menu
 #       - intro menu may be not game mode specific
-# - UI Themes (esp. a dark theme) and a theme switcher
 # - more proper balanced game modes
 #       - some are noted at whiteboard but need to be evaluated
 #       - AND: others are need to be made
@@ -30,6 +29,7 @@
 # - Change Game Mode Button with proper "Button" like display; currently it feels more like a label than a button
 # - Logo Design and Naming
 # - get an ui design review
+# - dark theme assets
 #
 #
 # (bugs)
@@ -45,6 +45,8 @@
 #       - get rid of button_id in users class like game_ctr (maybe) or menu_ctr (must be) but hide this within parent class which wraps id to notify_left/_xxx function
 #           - more like all common gui framework: onClicked()
 # - Support Non-Ascii characters in Translations
+# - Settings/Storage Architectures seems pretty weird
+#       - review or documentation!
 #
 #
 # (others)
