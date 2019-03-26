@@ -115,6 +115,14 @@ public:
 class WtSettings
 {
 public:
+    WtSettings() :
+        language( "en" ),
+        game_mode( "demo" ),
+        difficulty( wt_difficulty_EASY ),
+        active_theme( "default" )
+    {
+    }
+    ~WtSettings() {}
     std::string   language;
     std::string   game_mode;
     wt_difficulty difficulty;
