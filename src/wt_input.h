@@ -33,8 +33,8 @@ public:
     virtual void notify_right(){}
     virtual void notify_pause(){}
     virtual void notify_quit(){ exit(0); }
-    virtual void notify_button_pressed( uint16_t id ) {}
-    virtual void notify_motion( WtCoord pos, WtCoord d_pos ) {}
+    virtual void notify_button_pressed( uint16_t ) {}
+    virtual void notify_motion( WtCoord, WtCoord ) {}
 };
 
 /**************************************

@@ -56,21 +56,15 @@ private: // no copy allowed
     /**************************
      *
      *************************/
-    void notify_language_changed( std::string lang_code )
-    {
-    }
+    void notify_language_changed( std::string ) {}
     /**************************
      *
      *************************/
-    virtual void notify_difficulty_changed( wt_difficulty diffi )
-    {
-    }
+    virtual void notify_difficulty_changed( wt_difficulty ) {}
     /**************************
      *
      *************************/
-    virtual void notify_theme_changed( std::string name )
-    {
-    }
+    virtual void notify_theme_changed( std::string ) {}
 
     /**************************
      *

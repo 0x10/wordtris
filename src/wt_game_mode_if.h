@@ -57,7 +57,7 @@ public:
     /**************************
      * 
      *************************/
-    virtual void init_game( WtBoard& board, WtPlayer& player ) {}
+    virtual void init_game( WtBoard&, WtPlayer& ) {}
 
     /**************************
      *
@@ -172,7 +172,7 @@ public:
     /**************************
      * return false if game over
      *************************/
-    virtual bool eval_board( WtBoard& board, WtPlayer& player )
+    virtual bool eval_board( WtBoard&, WtPlayer& )
     {
         return true;
     }

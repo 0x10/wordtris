@@ -38,6 +38,8 @@ public:
      *************************/
     virtual void init_game( WtBoard& board, WtPlayer& player ) 
     {
+        (void)player; // currently unused
+
         m_active_row = 0;
         setup_sequences();
         show_sequence( board );

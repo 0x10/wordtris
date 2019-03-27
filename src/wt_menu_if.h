@@ -111,7 +111,7 @@ protected:
     /**************************
      *
      *************************/
-    const uint16_t get_id() const
+    uint16_t get_id() const
     {
         return m_menu_id;
     }
@@ -379,7 +379,7 @@ private:
     }
 
 private:
-    uint16_t                                m_menu_id;
+    const uint16_t                          m_menu_id;
     bool                                    m_shall_leave;
     std::string                             m_bg;
     std::vector<WtButton>                   m_buttons;
