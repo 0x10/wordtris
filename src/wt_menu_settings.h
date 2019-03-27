@@ -86,12 +86,14 @@ public:
                 m_themes = {
                         std::make_pair( 9, "light" ),
                         std::make_pair( 10, "dark" ),
+                        std::make_pair( 11, "mono" ),
                 };
                 for ( size_t l_idx = 0; l_idx < m_themes.size(); l_idx++ )
                 {
                     if ( m_themes[l_idx].second == STORAGE.get_settings().active_theme )
                     {
                         selected_id = m_themes[l_idx].first;
+                        break;
                     }
                 }
                 add_radio_group_button( m_themes,
@@ -163,13 +165,14 @@ private:
                 break;
             case 9:
             case 10:
+            case 11:
                 {
                     theme_idx = TO_BUTTON_ID(id)-9;
                     
                     if ( STORAGE.get_settings().active_theme != m_themes[theme_idx].second )
                         theme_changed = true;
 
-                    modify_radio_group_button( 9, 2, TO_BUTTON_ID(id) );
+                    modify_radio_group_button( 9, m_themes.size(), TO_BUTTON_ID(id) );
                 }
                 break;
                 break;
