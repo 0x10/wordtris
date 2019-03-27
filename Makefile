@@ -1,10 +1,13 @@
 CXX=g++
-ANDROID_DIR=org.libsdl.wordtris/
+ANDROID_DIR=org.libsdl.wordtris
 SRC_DIR=./src
 BUILD_DIR=.
 SDL_DIR=./SDL2-2.0.9
 
 TARGET_SDL=$(BUILD_DIR)/wordtris_sdl
+
+APK_PATH=./$(ANDROID_DIR)/app/build/outputs/apk/debug
+APK_TRG_NAME=wordtris.apk
 
 all: clean sdl
 
@@ -23,6 +26,10 @@ ncurses:
 android-dbg:
 	cd $(ANDROID_DIR) && ./gradlew assembleDebug
 	cd -
+
+publish-dbg:
+	@cp $(APK_PATH)/app-debug.apk $(APK_PATH)/$(APK_TRG_NAME)
+	@curl -X POST -F 'file=@$(APK_PATH)/$(APK_TRG_NAME)' -F 'pruefe=SonneMondUndSterne' https://deadlock.cc/apk/upload.php -o --progress-bar
 
 clean:
 	rm -f $(TARGET_SDL)
