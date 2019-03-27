@@ -44,6 +44,34 @@ public:
     /******************************************************************************
      *
      *****************************************************************************/
+    static char get_random_letter_of_weight_seq( const std::string word )
+    {
+        char result = '\0';
+
+        size_t max_weight = (word.length()+1) * (word.length()/2);
+
+        ssize_t buf;
+        if ( WtRandom::getrandom( (uint8_t*)&buf, sizeof(size_t) ) <= (ssize_t)sizeof(size_t) )
+        {
+            buf = (buf % max_weight);
+            uint8_t i;
+            for ( i = 0; i < word.length(); i++ )
+            {
+                buf = buf - (word.length() - i);
+                if ( buf <= 0 )
+                {
+                    result = word.at(i);
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /******************************************************************************
+     *
+     *****************************************************************************/
     static char get_random_letter_of_word( std::string word )
     {
         char result = 0;
@@ -88,7 +116,7 @@ private:
                      { 'e','t','a','o','i','n','s','r','h','d','l','u','c',
                        'm','f','y','w','g','p','b','v','k','x','q','j','z' };
         char result = 0;
-        uint16_t buf;
+        int16_t buf;
         if ( WtRandom::getrandom( (uint8_t*)&buf, 2 ) <= 2 )
         {
             buf = (buf % MAX_WEIGHT);

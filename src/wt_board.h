@@ -83,6 +83,60 @@ public:
     /**************************
      *
      *************************/
+    const RowSequence& get_row_sequence( uint8_t r ) const
+    {
+        if ( r >= ROW_COUNT )
+            return m_board[0];
+
+        return m_board[r];
+    }
+
+    /**************************
+     *
+     *************************/
+    std::string get_row_string( uint8_t r ) const
+    {
+        if ( r >= ROW_COUNT )
+            return "";
+
+        return std::string( get_row_sequence( r ) );
+    }
+
+    /**************************
+     *
+     *************************/
+    std::string get_col_string( uint8_t c ) const
+    {
+        if ( c >= COL_COUNT )
+            return "";
+
+        std::string col("");
+
+        for( uint8_t r_idx = 0; r_idx < WtBoard::row_count; r_idx++ )
+        {
+            //col.push_back( m_board[r_idx][c] );
+            col.insert( col.begin(), m_board[r_idx][c] );
+        }
+
+        return col;
+    }
+
+    /**************************
+     *
+     *************************/
+    void collapse_above( uint8_t r, uint8_t c )
+    {
+        /* drop remaining stones afterwards */
+        for( uint8_t row=r; row < WtBoard::row_count-1; row++ )
+        {
+            set_cell( row, c,
+                      get_cell( row+1, c ) );
+        }
+    }
+
+    /**************************
+     *
+     *************************/
     void collapse_above( uint8_t r )
     {
         /* drop remaining stones afterwards */
@@ -91,7 +145,7 @@ public:
             {
                 set_cell( row, c,
                           get_cell( row+1, c ) );
-            }       
+            }
     }
 
 private:

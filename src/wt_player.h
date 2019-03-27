@@ -36,10 +36,10 @@ public:
     /**************************
      *
      *************************/
-    void word_solved()
+    void word_solved( size_t length=1 )
     {
         m_words ++;
-        m_points += 1 * (m_level * PTS_P_WORD);
+        m_points += length * (m_level * PTS_P_WORD);
         m_level = 1 + (uint8_t)((m_words - 1) / 10);       
     }
 

@@ -24,7 +24,7 @@ class WtGameModeWordtris : public WtGameModeIf
 public:
     WtGameModeWordtris() :
         WtGameModeIf( "WordtrisClassic" ),
-        m_letters( "ABCDEFGHIJKLMNOPQRSTUVWXYZ" )
+        m_letters( "ETAOINSRHDLUCMFYWGPBVKXQJZ" )
     {
     }
     ~WtGameModeWordtris()
@@ -44,6 +44,8 @@ public:
      *************************/
     virtual void init_game( WtBoard& board, WtPlayer& player )
     {
+        (void)player; //currently not used
+
         for( size_t r_idx = 0; r_idx < WtBoard::row_count/2; r_idx++ )
             for( size_t c_idx = 0; c_idx < WtBoard::col_count; c_idx++ )
             {
@@ -57,49 +59,36 @@ public:
     virtual bool eval_board( WtBoard& board, WtPlayer& player )
     {
         bool game_continue = true;
-#if 0
-        if ( m_active_word_guessed.empty() )
+        
+        for ( uint8_t r_idx = 0; r_idx < WtBoard::row_count; r_idx++ )
         {
-            bool found_word = false;
+            std::string row_str = board.get_row_string( r_idx );
 
-            // search rows for word
-            //TODO: use DEA instead of string construction
-            for ( uint8_t r_idx = 0; r_idx < WtBoard::row_count; r_idx++ )
+            std::string word = contains_word( row_str );
+            if ( !word.empty() ) 
             {
-                std::string row = std::string("");
-                for ( uint8_t c_idx = 0; c_idx < WtBoard::col_count; c_idx++ )
-                {
-                    char cell = board.get_cell( r_idx, c_idx );
-                    if ( cell != WtBoard::empty_cell )
-                        row.push_back( cell );
-                    else
-                        row.push_back( ' ' );
-                }
-              
-                size_t found_idx = row.find( m_active_word );
-                if ( found_idx != std::string::npos )
-                {
-                    for ( size_t c_idx = found_idx; c_idx < (m_active_word.length()+found_idx); c_idx++ )
-                        board.set_cell( r_idx, (uint8_t)(c_idx), WtBoard::empty_cell );
-                    //TODO gravity bitch!
-                    found_word = true;
-                    break;
-                }
-            }
-
-            if ( found_word )
-            {
-                player.word_solved();
-                get_next_word();
-                game_continue = true;
-            }
-            else
-            {
-                get_next_word();
-                game_continue = true;
+                player.word_solved( word.length() );
+                erase_from_row( r_idx, row_str, word, board );
+                
+                break;
             }
         }
-#endif
+
+        for ( uint8_t c_idx = 0; c_idx < WtBoard::col_count; c_idx++ )
+        {
+            std::string col_str = board.get_col_string( c_idx );
+
+            std::string word = contains_word( col_str );
+            if ( !word.empty() ) 
+            {
+                player.word_solved( word.length() );
+                erase_from_col( c_idx, col_str, word, board );
+
+                break;
+            }
+        }
+
+
         return game_continue;
     }
 
@@ -108,7 +97,7 @@ public:
      *************************/
     virtual char next_letter()
     {
-        return WtRandom::get_random_letter_of_word( std::string(m_letters).append("*??*") ); 
+        return WtRandom::get_random_letter_of_weight_seq( std::string(m_letters).append("???***") ); 
     }
 
     /**************************
@@ -205,9 +194,90 @@ private:
     WtGameModeWordtris( const WtGameModeWordtris& ); 
     WtGameModeWordtris & operator = (const WtGameModeWordtris &);
 
+    /**************************
+     *
+     *************************/
+    void column_gravity( uint8_t c_idx, WtBoard& board )
+    {
+        //   two iterations: (1) from middle to ceil and (2) from middle to floor
+        //                   (1) pull down towards middle
+        //                   (2) push up towards middle
+        uint8_t r_idx = WtBoard::row_count/2+1;
+        while ( board.get_cell( r_idx, c_idx ) == WtBoard::empty_cell )
+        {
+            // pull necessary
+            board.collapse_above( r_idx, c_idx );
+        }
+        
+        r_idx = WtBoard::row_count/2;
+        if ( board.get_cell( r_idx, c_idx ) == ' ' )
+        {
+            // push necessary
+        }
+    }
 
 
+    /**************************
+     *
+     *************************/
+    void erase_from_row( uint8_t r_idx, std::string row_str, std::string word, WtBoard& board )
+    {
+        //1. locate beginning
+        size_t pos = row_str.find( word );
+        if ( pos != std::string::npos )
+        {
+            char replace_char = WtBoard::empty_cell;
+            if ( r_idx <= WtBoard::row_count/2 )
+                replace_char = ' ';
+            
+            //2. replace acc.
+            for( size_t c_idx = pos; c_idx < (pos + word.length()); c_idx++ )
+            {
+                board.set_cell( r_idx, (uint8_t)c_idx, replace_char );
 
+                //3. push up or pull down if necessary
+                column_gravity( c_idx, board );            
+            }
+        }
+    }
+
+    /**************************
+     *
+     *************************/
+    void erase_from_col( uint8_t c_idx, std::string col_str, std::string word, WtBoard& board )
+    {
+        //1. locate beginning
+        size_t pos = col_str.find( word );
+        if ( pos != std::string::npos )
+        {
+            // iterate over rows
+            for( ssize_t r_idx = pos; r_idx >= 0; r_idx-- )
+            {
+                //2. if row <= row_count/2 replace with ' '
+                //   else replace with empty_cell
+                char replace_char = WtBoard::empty_cell;
+                if ( r_idx <= WtBoard::row_count/2 )
+                    replace_char = ' ';
+
+                board.set_cell( (uint8_t)r_idx, c_idx, replace_char );
+            }
+
+            //3. push up or pull down if necessary
+            column_gravity( c_idx, board );            
+        }
+    }
+
+    /**************************
+     *
+     *************************/
+    std::string contains_word( std::string sequence )
+    {
+        std::string result = "";
+
+        // use dea with preprocessed contains logic to eval word
+
+        return result;
+    }
 
 private:
    const std::string m_letters;
