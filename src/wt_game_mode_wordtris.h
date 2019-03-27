@@ -276,6 +276,18 @@ private:
 
         // use dea with preprocessed contains logic to eval word
 
+        // preprocessor of word list need to create a dea for each word
+        // and the contains logic needs to take a list argment 
+        // and process as logical OR dea which means parallel symbol
+        // processing
+        // dea list preprocessor sorts string list by length
+        // and gets the max length as parameter for more efficient
+        // searching
+        // something like this:
+        // WtWordList::search_for_word( sequence );
+        // length is taken by sequence.length() within search
+        // also language selection 
+
         return result;
     }
 
