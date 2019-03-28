@@ -321,7 +321,6 @@ private:
         std::transform(sl.begin(), sl.end(), sl.begin(), ::tolower);  
         // use dea with preprocessed contains logic to eval word
 
-        std::cout << "check contains = \"" << sl << "\"" << std::endl;
         // preprocessor of word list need to create a dea for each word
         // and the contains logic needs to take a list argment 
         // and process as logical OR dea which means parallel symbol
@@ -337,8 +336,18 @@ private:
 
         if ( found_words.size() > 0 )
         {
+            struct compare {
+                bool operator()(const std::string& first, const std::string& second) {
+                    return first.size() > second.size();
+                }
+            } c;
+
+            std::sort(found_words.begin(), found_words.end(), c);
+
             for( size_t i = 0; i < found_words.size(); i++ )
-                std::cout << "(" << i << ")" << found_words[i] << std::endl;
+                std::cout << "(" << i << ") " << found_words[i] << std::endl;
+
+            result = found_words[0];
         }
 
         return result;

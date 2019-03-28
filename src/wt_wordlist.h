@@ -18,7 +18,7 @@
 
 #include "global.h"
 
-#include "dea_wrapper.h"
+#include "dea.h"
 
 
 /**************************************
@@ -28,19 +28,14 @@ class WtWord
 {
 public:
     WtWord( std::string w ) :
-        m_word( w )
+        m_word( w ),
+        m_dea( w )
     {
-        m_dea = DeaWrapper::construct_contains( w );
-        
-        std::cout << "=====" <<std::endl << "WtWord = " << w << std::endl;
-        DeaWrapper::print( m_dea );
+        //std::cout << "=====" <<std::endl << "WtWord = " << w << std::endl;
+       // m_dea.print();
     }
     ~WtWord()
     {
-        if ( NULL != m_dea )
-        {
-            DeaWrapper::free( m_dea );
-        }
     }
 
 public:
@@ -49,11 +44,7 @@ public:
      *************************************/
     void search_update( const char symbol )
     {
-        if ( ( NULL != m_dea )
-            && ( NULL != m_dea->current_state ) )
-        {
-            DeaWrapper::process( m_dea, symbol );
-        }
+        m_dea.process_symbol( symbol );
     }
 
     /**************************************
@@ -61,7 +52,7 @@ public:
      *************************************/
     bool search_found()
     {
-        return ( ACCEPTING == m_dea->current_state->is_accepting );
+        return m_dea.is_current_state_accepting();
     }
 
     /**************************************
@@ -69,8 +60,7 @@ public:
      *************************************/
     void search_reset()
     {
-        if ( NULL != m_dea )
-            DeaWrapper::init( m_dea );
+        m_dea.init();
     }
 
     /**************************************
@@ -83,7 +73,7 @@ public:
 
 private:
     std::string m_word;
-    dea_t*      m_dea;
+    TDea        m_dea;
 };
 
 /**************************************
@@ -145,7 +135,7 @@ public:
         {
             for( size_t w_idx = 0; w_idx < m_words.size(); w_idx++ )
             {
-                std::cout << idx << " update on " << m_words[w_idx]->as_string() << std::endl;
+//                std::cout << idx << " update on " << m_words[w_idx]->as_string() << std::endl;
                 m_words[w_idx]->search_update( sequence[idx] );
             }
         }
