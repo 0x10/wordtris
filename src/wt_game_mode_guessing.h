@@ -18,7 +18,7 @@
 
 #include "wt_game_mode_if.h"
 #include "wt_random.h"
-#include "wt_game_mode_guessing_strings.h"
+#include "wt_wordlist_strings_en.h"
 
 class WtGameModeGuessing : public WtGameModeIf
 {
@@ -133,9 +133,9 @@ private:
         uint8_t buf;
         if ( WtRandom::getrandom( &buf, 1 ) <= 1 )
         {
-            idx = (buf % (72-20));
+            idx = (buf % guess_list.size());
         }
-        m_active_word = std::string(guess_list[idx]);
+        m_active_word = guess_list[idx];
         m_active_word_guessed = m_active_word;
         m_active_word_scrambled = scramble( m_active_word );
     }

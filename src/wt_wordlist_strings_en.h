@@ -1,5 +1,5 @@
 /*!*****************************************************************************
- * @file wt_game_mode_guessing_strings.h
+ * @file wt_wordlist_Strings_en.h
  * @brief guess list
  *
  * This file was developed as part of wordtris
@@ -13,10 +13,10 @@
  *            without written approval of Christian Kranz
  *
  ******************************************************************************/
-#ifndef _WT_GAME_MODE_GUESSING_STRINGS_H_
-#define _WT_GAME_MODE_GUESSING_STRINGS_H_
+#ifndef _WT_WORDLIST_STRINGS_EN_H_
+#define _WT_WORDLIST_STRINGS_EN_H_
 
-const char* guess_list[] = {
+const std::vector<std::string> guess_list = {
 "black",
 "white",
 "red",
@@ -72,4 +72,4 @@ const char* guess_list[] = {
 "year"
 };
 
-#endif /* _WT_GAME_MODE_GUESSING_STRINGS_H_ */
+#endif /* _WT_WORDLIST_STRINGS_EN_H_ */

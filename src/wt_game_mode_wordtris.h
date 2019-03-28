@@ -19,14 +19,45 @@
 #include "wt_game_mode_if.h"
 #include "wt_random.h"
 #include "wt_wordlist.h"
+#include "wt_wordlist_strings_en.h"
+#include <locale>         // std::locale, std::tolower
+#include <algorithm>
+#include <sstream>
+#include <iterator>
+
+// trim from start (in place)
+static inline void ltrim(std::string &s) {
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](int ch) {
+        return !std::isspace(ch);
+    }));
+}
+
+// trim from end (in place)
+static inline void rtrim(std::string &s) {
+    s.erase(std::find_if(s.rbegin(), s.rend(), [](int ch) {
+        return !std::isspace(ch);
+    }).base(), s.end());
+}
+
+// trim from both ends (in place)
+static inline void trim(std::string &s) {
+    ltrim(s);
+    rtrim(s);
+}
+
 
 class WtGameModeWordtris : public WtGameModeIf
 {
+private:
+    static const size_t min_word_length = 3;
 public:
     WtGameModeWordtris() :
         WtGameModeIf( "WordtrisClassic" ),
-        m_letters( "ETAOINSRHDLUCMFYWGPBVKXQJZ" )
+        m_letters( "ETAOINSRHDLUCMFYWGPBVKXQJZ" ),
+        m_wordlist()
     {
+        m_wordlist.load_from_list( guess_list );
+        std::cout << "words = " << m_wordlist.size() << std::endl;
     }
     ~WtGameModeWordtris()
     {
@@ -64,28 +95,39 @@ public:
         for ( uint8_t r_idx = 0; r_idx < WtBoard::row_count; r_idx++ )
         {
             std::string row_str = board.get_row_string( r_idx );
-
-            std::string word = contains_word( row_str );
-            if ( !word.empty() ) 
+            std::vector<std::string> sequences = split( row_str );
+            for( size_t s_idx = 0; s_idx < sequences.size(); s_idx++ )
             {
-                player.word_solved( word.length() );
-                erase_from_row( r_idx, row_str, word, board );
-                
-                break;
+                if ( sequences[s_idx].length() >= min_word_length )
+                {
+                    std::string word = contains_word( sequences[s_idx] );
+                    if ( !word.empty() ) 
+                    {
+                        player.word_solved( word.length() );
+                        erase_from_row( r_idx, row_str, word, board );
+                        
+                        break;
+                    }
+                }
             }
         }
 
         for ( uint8_t c_idx = 0; c_idx < WtBoard::col_count; c_idx++ )
         {
             std::string col_str = board.get_col_string( c_idx );
+            std::string trimmed = col_str;
+            trim( trimmed );
 
-            std::string word = contains_word( col_str );
-            if ( !word.empty() ) 
+            if ( trimmed.length() >= min_word_length )
             {
-                player.word_solved( word.length() );
-                erase_from_col( c_idx, col_str, word, board );
+                std::string word = contains_word( trimmed );
+                if ( !word.empty() ) 
+                {
+                    player.word_solved( word.length() );
+                    erase_from_col( c_idx, col_str, word, board );
 
-                break;
+                    break;
+                }
             }
         }
 
@@ -274,9 +316,12 @@ private:
     std::string contains_word( std::string sequence )
     {
         std::string result = "";
-
+        std::locale loc;
+        std::string sl = sequence;
+        std::transform(sl.begin(), sl.end(), sl.begin(), ::tolower);  
         // use dea with preprocessed contains logic to eval word
 
+        std::cout << "check contains = \"" << sl << "\"" << std::endl;
         // preprocessor of word list need to create a dea for each word
         // and the contains logic needs to take a list argment 
         // and process as logical OR dea which means parallel symbol
@@ -288,9 +333,27 @@ private:
         // WtWordList::search_for_word( sequence );
         // length is taken by sequence.length() within search
         // also language selection
-        std::vector<std::string> found_words = m_wordlist.get_contained_words( sequence );
+        std::vector<std::string> found_words = m_wordlist.get_contained_words( sl );
+
+        if ( found_words.size() > 0 )
+        {
+            for( size_t i = 0; i < found_words.size(); i++ )
+                std::cout << "(" << i << ")" << found_words[i] << std::endl;
+        }
 
         return result;
+    }
+
+
+    /**************************
+     *
+     *************************/
+    std::vector<std::string> split( std::string board_str )
+    {
+        std::istringstream iss(board_str);
+        std::vector<std::string> result_list(std::istream_iterator<std::string>{iss},
+                                         std::istream_iterator<std::string>());
+        return result_list;
     }
 
 private:

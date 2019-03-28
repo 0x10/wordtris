@@ -99,7 +99,18 @@ public:
         if ( r >= ROW_COUNT )
             return "";
 
-        return std::string( get_row_sequence( r ) );
+        std::string row("");
+
+        for( uint8_t c_idx = 0; c_idx < WtBoard::col_count; c_idx++ )
+        {
+            row.push_back( ( m_board[r][c_idx] == WtBoard::empty_cell ? 
+                                    ' ' :
+                                    m_board[r][c_idx] ) );
+        }
+
+        return row;
+
+//        return std::string( get_row_sequence( r ) );
     }
 
     /**************************
@@ -115,7 +126,8 @@ public:
         for( uint8_t r_idx = 0; r_idx < WtBoard::row_count; r_idx++ )
         {
             //col.push_back( m_board[r_idx][c] );
-            col.insert( col.begin(), m_board[r_idx][c] );
+            col.insert( col.begin(), ( m_board[r_idx][c] == WtBoard::empty_cell ? 
+                                            ' ' : m_board[r_idx][c] ) );
         }
 
         return col;

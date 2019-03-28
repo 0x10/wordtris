@@ -66,5 +66,8 @@ DEA_API void process_symbol( dea_t* d, char symbol, unsigned char verbose );
  ******************************************************************************/
 DEA_API dea_decision_t verify_input( dea_t* d, const char* input );
 
-
+/*******************************************************************************
+ *
+ ******************************************************************************/
+DEA_API dea_t* new_contains( const char* argv, size_t l );
 #endif /* __DEA_H_ */
