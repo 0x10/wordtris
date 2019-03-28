@@ -11,6 +11,10 @@
  *            copied, redistributed or used in any other way
  *            without written approval of Christian Kranz.
  ******************************************************************************/
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -346,3 +350,7 @@ DEA_API dea_decision_t verify_input( dea_t* d, const char* input )
     }
     return result;
 }
+
+#ifdef __cplusplus
+}
+#endif

@@ -13,7 +13,8 @@
 #ifndef __DEA_COMMON_H_
 #define __DEA_COMMON_H_
 
-#define DEA_API         extern
+#include <stddef.h>
+
 #define MAX_STR_LEN     (65535)
 
 typedef enum {
@@ -41,5 +42,23 @@ typedef struct {
     char            symbol;
     dea_char_type_t type;
 } dea_input_symbol_t;
+
+typedef struct dea_state_tag dea_state_t;
+typedef struct {
+    dea_input_symbol_t  input_symbol;
+    dea_state_t*        next_state;
+} dea_transition_t;
+
+typedef struct dea_state_tag {
+    dea_decision_t    is_accepting;
+    dea_transition_t* transitions;
+    size_t            transition_count;
+} dea_state_t;
+
+typedef struct {
+    dea_state_t* states;
+    size_t       state_count;
+    dea_state_t* current_state;
+} dea_t;
 
 #endif /* __DEA_COMMON_H_ */

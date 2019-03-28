@@ -16,23 +16,8 @@
 #include <stdlib.h>
 #include "dea_common.h"
 
-typedef struct dea_state_tag dea_state_t;
-typedef struct {
-    dea_input_symbol_t  input_symbol;
-    dea_state_t*        next_state;
-} dea_transition_t;
 
-typedef struct dea_state_tag {
-    dea_decision_t    is_accepting;
-    dea_transition_t* transitions;
-    size_t            transition_count;
-} dea_state_t;
-
-typedef struct {
-    dea_state_t* states;
-    size_t       state_count;
-    dea_state_t* current_state;
-} dea_t;
+#define DEA_API         extern
 
 /*******************************************************************************
  *

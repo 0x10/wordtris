@@ -1,7 +1,0 @@
-to verify a regex term like 
-[ra]+##(\d+#.#\d+##)*
-we need to implement a stack automata first, as this verification strips down
-to the word problem for language L = { a^nb^n } which isnt decidable with a
-dea.
-a proofing regex for stack automata would be:
-(((abc)+def)+ghi)*
