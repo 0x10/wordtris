@@ -1,35 +1,38 @@
-/*******************************************************************************
- * @file contains.c
- * @brief application of dea unit which implements a contains search logic
- *        using the dea lib
+/*!*****************************************************************************
+ * @file wt_wordlist.h
+ * @brief implementation of word list helper
+ *
+ * This file was developed as part of wordtris
  *
  * @author Christian Kranz
- *
- * @copyright Copyright 2018 by Christian Kranz
+ * 
+ * @copyright Copyright 2019 by Christian Kranz
  *            All rights reserved.
  *            None of this file or parts of it may be
  *            copied, redistributed or used in any other way
- *            without written approval of Christian Kranz.
+ *            without written approval of Christian Kranz
+ *
  ******************************************************************************/
+#ifndef _WT_WORDLIST_H_
+#define _WT_WORDLIST_H_
+
+#include "global.h"
 
 #include "dea_wrapper.h"
-#include <string>
-#include <vector>
-#include <iostream>
 
 
 /**************************************
  *
  *************************************/
-class Word
+class WtWord
 {
 public:
-    Word( std::string w ) :
+    WtWord( std::string w ) :
         m_word( w )
     {
         m_dea = DeaWrapper::construct_contains( w );
     }
-    ~Word()
+    ~WtWord()
     {
         if ( NULL != m_dea )
         {
@@ -83,18 +86,21 @@ private:
 /**************************************
  *
  *************************************/
-class WordList
+class WtWordList
 {
 public:
-    WordList( std::vector<std::string>& input_list )
+    WtWordList()
+    {
+    }
+    WtWordList( std::vector<std::string>& input_list )
     {
         for( size_t i = 0; i < input_list.size(); i++ )
         {
-            Word* w = new Word( input_list[i] );
+            WtWord* w = new WtWord( input_list[i] );
             m_words.push_back(w);
         }
     }
-    ~WordList()
+    ~WtWordList()
     {
         for( size_t w_idx = 0; w_idx < m_words.size(); w_idx++ )
             delete m_words[w_idx];
@@ -102,6 +108,21 @@ public:
     }
 
 public:
+    /**************************************
+     *
+     *************************************/
+    void load_from_list( std::vector<std::string>& input_list )
+    {
+        for( size_t w_idx = 0; w_idx < m_words.size(); w_idx++ )
+            delete m_words[w_idx];
+        m_words.clear();
+
+        for( size_t i = 0; i < input_list.size(); i++ )
+        {
+            WtWord* w = new WtWord( input_list[i] );
+            m_words.push_back(w);
+        }
+    }
 
     /**************************************
      *
@@ -128,26 +149,8 @@ public:
     }
 
 private:
-    std::vector<Word*> m_words;
+    std::vector<WtWord*> m_words;
 };
 
 
-int main( int argc, const char* argv[] )
-{
-
-    if ( argc > 1 )
-    {
-        std::vector<std::string> list = { "hallo", "traum",
-                                          "tot", "baum",
-                                          "heu", "heute" };
-    
-        WordList myList = WordList( list );
-        std::vector<std::string> found_list = myList.get_contained_words( argv[ 1 ] );
-        for( size_t i = 0; i < found_list.size(); i++ )
-            std::cout << "("<<i<<") "<< found_list[i] << std::endl;
-
-    }
-
-
-    return 0;
-}
+#endif /* _WT_WORDLIST_H_ */

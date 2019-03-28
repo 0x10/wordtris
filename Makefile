@@ -12,7 +12,7 @@ APK_TRG_NAME=wordtris.apk
 all: clean sdl
 
 sdl:
-	$(CXX) -Os -Wpedantic -pedantic-errors -Wextra -Wall -I./pc_include -I. $(SRC_DIR)/wordtris.cpp -L$(SDL_DIR)/build/.libs -lSDL2 -o $(TARGET_SDL)
+	$(CXX) -Os -Wpedantic -pedantic-errors -Wextra -Wall -I./pc_include -I. $(SRC_DIR)/*.c $(SRC_DIR)/*.cpp -L$(SDL_DIR)/build/.libs -lSDL2 -o $(TARGET_SDL)
 
 sdl-system:
 	$(CXX) -Os -Wall -DUSE_SYSTEM_SDL -I./pc_include $(SRC_DIR)/wordtris.cpp -lSDL2 -o $(TARGET_SDL)

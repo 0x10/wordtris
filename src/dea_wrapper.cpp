@@ -89,7 +89,9 @@ dea_t* DeaWrapper::construct_contains( const std::string w )
                     }
                 }
 
-                dea_input_symbol_t new_symbol = { .symbol = argv[i], .type = symbol_type };
+                dea_input_symbol_t new_symbol;
+                new_symbol.symbol = argv[i];
+                new_symbol.type = symbol_type;
                 new_transition( new_s,
                                 NULL,
                                 new_symbol );

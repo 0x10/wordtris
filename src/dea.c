@@ -55,9 +55,9 @@ static void print_transition( dea_transition_t* t )
     if ( NULL != t )
     {
         if ( CHAR == t->input_symbol.type )
-            printf("              |--> \"%c\" ==> %p\n", t->input_symbol.symbol, t->next_state );
+            printf("              |--> \"%c\" ==> %p\n", t->input_symbol.symbol, (void*)t->next_state );
         else
-            printf("              |--> [%c] ==> %p\n", t->input_symbol.symbol, t->next_state );
+            printf("              |--> [%c] ==> %p\n", t->input_symbol.symbol, (void*)t->next_state );
     }
 }
 
@@ -68,7 +68,7 @@ static void print_state( size_t idx, dea_state_t* s, unsigned char is_current )
 {
     if ( NULL != s )
     {
-        printf("     |--> [%lu @ %p] is_accepting == %d", idx, s, s->is_accepting );
+        printf("     |--> [%zd @ %p] is_accepting == %d", idx, (void*)s, s->is_accepting );
         if ( 0 != is_current ) printf(" {*}\n");
         else printf("\n");
 
@@ -255,8 +255,8 @@ DEA_API void print_dea( dea_t* d )
 {
     if ( NULL != d )
     {
-        printf("dea %p\n", d);
-        printf(" |--> states => %lu @ %p\n", d->state_count, d->states );
+        printf("dea %p\n", (void*)d);
+        printf(" |--> states => %zd @ %p\n", d->state_count, (void*)d->states );
         size_t s_idx;
         for ( s_idx=0; s_idx < d->state_count ; s_idx++ )
         {
@@ -291,7 +291,7 @@ DEA_API void process_symbol( dea_t* d, char symbol, unsigned char verbose )
                 {
                     case SPECIAL:
                         if ( 0 != verbose ) 
-                            printf(" (%p -> %p)",d->current_state, t->next_state);
+                            printf(" (%p -> %p)",(void*)d->current_state, (void*)t->next_state);
 
                         found = process_special( d, t, symbol );
                         if ( NOT_ACCEPTING == found )
@@ -306,7 +306,7 @@ DEA_API void process_symbol( dea_t* d, char symbol, unsigned char verbose )
                         if ( symbol == t->input_symbol.symbol )
                         {
                             if ( 0 != verbose ) 
-                                printf(" (%p -> %p)\n",d->current_state, t->next_state);
+                                printf(" (%p -> %p)\n",(void*)d->current_state, (void*)t->next_state);
                             d->current_state = t->next_state;
                             found = ACCEPTING;
                         }
@@ -339,7 +339,7 @@ DEA_API dea_decision_t verify_input( dea_t* d, const char* input )
         {
             size_t input_len = strnlen( input, MAX_STR_LEN );
             size_t input_idx;
-            printf("input(%lu) = %s\n", input_len, input );
+            printf("input(%zd) = %s\n", input_len, input );
             for (input_idx = 0; input_idx < input_len; input_idx++ )
             {
                 process_symbol( d, input[input_idx], 1 );

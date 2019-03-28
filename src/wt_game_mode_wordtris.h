@@ -18,6 +18,7 @@
 
 #include "wt_game_mode_if.h"
 #include "wt_random.h"
+#include "wt_wordlist.h"
 
 class WtGameModeWordtris : public WtGameModeIf
 {
@@ -286,13 +287,15 @@ private:
         // something like this:
         // WtWordList::search_for_word( sequence );
         // length is taken by sequence.length() within search
-        // also language selection 
+        // also language selection
+        std::vector<std::string> found_words = m_wordlist.get_contained_words( sequence );
 
         return result;
     }
 
 private:
    const std::string m_letters;
+   WtWordList        m_wordlist;
 };
 
 #endif /* _WT_GAME_MODE_WORDTRIS_H_ */
