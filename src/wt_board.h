@@ -136,7 +136,7 @@ public:
     /**************************
      *
      *************************/
-    void collapse_above( uint8_t r, uint8_t c )
+    void collapse_above( uint8_t r, uint8_t c, char carry=WtBoard::empty_cell )
     {
         /* drop remaining stones afterwards */
         for( uint8_t row=r; row < WtBoard::row_count-1; row++ )
@@ -144,20 +144,41 @@ public:
             set_cell( row, c,
                       get_cell( row+1, c ) );
         }
+        set_cell( WtBoard::row_count-1, c, carry );
     }
 
     /**************************
      *
      *************************/
-    void collapse_above( uint8_t r )
+    void collapse_below( uint8_t r, uint8_t c, char carry=WtBoard::empty_cell )
+    {
+        /* drop remaining stones afterwards */
+        for( uint8_t row=r; row > 0; row-- )
+        {
+            set_cell( row, c,
+                      get_cell( row-1, c ) );
+        }
+        set_cell( 0, c, carry );
+    }
+
+    /**************************
+     *
+     *************************/
+    void collapse_above( uint8_t r, char carry=WtBoard::empty_cell )
     {
         /* drop remaining stones afterwards */
         for( uint8_t row=r; row < WtBoard::row_count-1; row++ )
+        {
             for( uint8_t c=0; c < WtBoard::col_count; c++ )
             {
                 set_cell( row, c,
                           get_cell( row+1, c ) );
             }
+        }
+        for( uint8_t c=0; c < WtBoard::col_count; c++ )
+        {
+           set_cell( WtBoard::row_count-1, c, carry );
+        }
     }
 
 private:

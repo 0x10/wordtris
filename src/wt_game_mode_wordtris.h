@@ -56,7 +56,7 @@ public:
         m_letters( "ETAOINSRHDLUCMFYWGPBVKXQJZ" ),
         m_wordlist()
     {
-        m_wordlist.load_from_list( guess_list );
+        m_wordlist.load_from_list( guess_list, WtWordList::eToUpper );
         std::cout << "words = " << m_wordlist.size() << std::endl;
     }
     ~WtGameModeWordtris()
@@ -95,7 +95,7 @@ public:
         for ( uint8_t r_idx = 0; r_idx < WtBoard::row_count; r_idx++ )
         {
             std::string row_str = board.get_row_string( r_idx );
-            std::vector<std::string> sequences = split( row_str );
+            std::vector<std::string> sequences = split( std::string(row_str) );
             for( size_t s_idx = 0; s_idx < sequences.size(); s_idx++ )
             {
                 if ( sequences[s_idx].length() >= min_word_length )
@@ -245,17 +245,31 @@ private:
         //   two iterations: (1) from middle to ceil and (2) from middle to floor
         //                   (1) pull down towards middle
         //                   (2) push up towards middle
-        uint8_t r_idx = WtBoard::row_count/2+1;
-        while ( board.get_cell( r_idx, c_idx ) == WtBoard::empty_cell )
+        uint8_t r_idx = WtBoard::row_count/2;
+        uint8_t r_count = r_idx;
+        while ( ( board.get_cell( r_idx+1, c_idx ) == WtBoard::empty_cell )
+                && ( r_count < WtBoard::row_count ) )
         {
             // pull necessary
             board.collapse_above( r_idx, c_idx );
+            r_count++;
         }
         
-        r_idx = WtBoard::row_count/2;
-        if ( board.get_cell( r_idx, c_idx ) == ' ' )
+        r_idx = WtBoard::row_count/2-1;
+        r_count = r_idx;
+        while ( ( board.get_cell( r_idx, c_idx ) == ' ' )
+                && ( r_count < WtBoard::row_count ) )
         {
             // push necessary
+            board.collapse_below( r_idx, c_idx, ' ' );
+            r_count++;
+        }
+
+        if (( board.get_cell( WtBoard::row_count/2, c_idx ) == WtBoard::empty_cell )
+            &&
+            ( board.get_cell( WtBoard::row_count/2-1, c_idx ) != ' ' ) )
+        {
+            board.collapse_below( WtBoard::row_count/2, c_idx, ' ' );
         }
     }
 
@@ -267,10 +281,11 @@ private:
     {
         //1. locate beginning
         size_t pos = row_str.find( word );
+        std::cout << "erase '" << word << "' from '" << row_str << "'";
         if ( pos != std::string::npos )
         {
             char replace_char = WtBoard::empty_cell;
-            if ( r_idx <= WtBoard::row_count/2 )
+            if ( r_idx < WtBoard::row_count/2 )
                 replace_char = ' ';
             
             //2. replace acc.
@@ -299,7 +314,7 @@ private:
                 //2. if row <= row_count/2 replace with ' '
                 //   else replace with empty_cell
                 char replace_char = WtBoard::empty_cell;
-                if ( r_idx <= WtBoard::row_count/2 )
+                if ( r_idx < WtBoard::row_count/2 )
                     replace_char = ' ';
 
                 board.set_cell( (uint8_t)r_idx, c_idx, replace_char );
@@ -316,9 +331,7 @@ private:
     std::string contains_word( std::string sequence )
     {
         std::string result = "";
-        std::locale loc;
-        std::string sl = sequence;
-        std::transform(sl.begin(), sl.end(), sl.begin(), ::tolower);  
+
         // use dea with preprocessed contains logic to eval word
 
         // preprocessor of word list need to create a dea for each word
@@ -332,7 +345,7 @@ private:
         // WtWordList::search_for_word( sequence );
         // length is taken by sequence.length() within search
         // also language selection
-        std::vector<std::string> found_words = m_wordlist.get_contained_words( sl );
+        std::vector<std::string> found_words = m_wordlist.get_contained_words( sequence );
 
         if ( found_words.size() > 0 )
         {

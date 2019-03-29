@@ -82,14 +82,28 @@ private:
 class WtWordList
 {
 public:
+    typedef enum {
+        eToLower,
+        eToUpper,
+        eNone,
+    } EConvertChars;
+public:
     WtWordList()
     {
     }
-    WtWordList( const std::vector<std::string>& input_list )
+    WtWordList( const std::vector<std::string>& input_list, EConvertChars conv=eNone )
     {
         for( size_t i = 0; i < input_list.size(); i++ )
         {
-            WtWord* w = new WtWord( input_list[i] );
+            std::string input = input_list[i];
+            switch( conv )
+            {
+                case eToLower: std::transform(input.begin(), input.end(), input.begin(), ::tolower); break;
+                case eToUpper: std::transform(input.begin(), input.end(), input.begin(), ::toupper); break;
+                default: break;
+            }
+
+            WtWord* w = new WtWord( input );
             m_words.push_back(w);
         }
     }
@@ -112,7 +126,7 @@ public:
     /**************************************
      *
      *************************************/
-    void load_from_list( const std::vector<std::string>& input_list )
+    void load_from_list( const std::vector<std::string>& input_list, EConvertChars conv=eNone )
     {
         for( size_t w_idx = 0; w_idx < m_words.size(); w_idx++ )
             delete m_words[w_idx];
@@ -120,7 +134,15 @@ public:
 
         for( size_t i = 0; i < input_list.size(); i++ )
         {
-            WtWord* w = new WtWord( input_list[i] );
+            std::string input = input_list[i];
+            switch( conv )
+            {
+                case eToLower: std::transform(input.begin(), input.end(), input.begin(), ::tolower); break;
+                case eToUpper: std::transform(input.begin(), input.end(), input.begin(), ::toupper); break;
+                default: break;
+            }
+
+            WtWord* w = new WtWord( input );
             m_words.push_back(w);
         }
     }
