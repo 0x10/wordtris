@@ -15,14 +15,15 @@
 # - more proper balanced game modes
 #       - some are noted at whiteboard but need to be evaluated
 #       - AND: others are need to be made
-# - classic wordtris mode
-#       - word finding algorithm
 # - SDL Input:
 #       - Touch motion detection for swiping
 # - Audio-Support
 #       - background music
 #       - on stone 2 board commit sound
 #       - on row/word clear sound
+# - animations:
+#       - word cleared animation: highlight word and remove slower
+#       - bomb animation
 #
 #
 # (design)
@@ -31,7 +32,7 @@
 # - get an ui design review
 #
 #
-# (bugs)
+# (architecture bugs)
 # - Drawing:
 #       - message box to not use hard coded images and positions/dimensions
 #       - do not use hard coded absolute pixel values which depend on SDL_WIDHT=540/SDL_HEIGHT=960 but relative values

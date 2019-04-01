@@ -1,0 +1,10 @@
+#!/bin/cat
+# BUGSs are not inorder but are randomly noted 
+#   -> prorities may be assigned
+#   -> try not to reuse numbers, always take a new.
+#
+# (1) wordtris mode: if a word is found in a column, the whole column is cleared
+# (2) wordtris mode: if a word is found in a row different to the top row, the row above is cleared too
+# (3) themeing: if no theme was ever set (fresh install), no option is selected in settings menu
+# (4) themeing: bomb image in theme mono is not visible
+# (5)
