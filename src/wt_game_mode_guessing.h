@@ -18,7 +18,7 @@
 
 #include "wt_game_mode_if.h"
 #include "wt_random.h"
-#include "wt_wordlist_strings_en.h"
+#include "wt_wordlist.h"
 
 class WtGameModeGuessing : public WtGameModeIf
 {
@@ -131,6 +131,7 @@ private:
     {
         size_t idx = 0;
         uint8_t buf;
+        const std::vector<std::string>& guess_list = WtWordList::get_wordlist_by_name("short list");
         if ( WtRandom::getrandom( &buf, 1 ) <= 1 )
         {
             idx = (buf % guess_list.size());

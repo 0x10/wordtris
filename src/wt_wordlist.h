@@ -20,12 +20,16 @@
 
 #include "dea.h"
 
+#include "wt_wordlist_strings_en.h"
+#include "wt_wordlist_strings_en_1k.h"
 
 /**************************************
  *
  *************************************/
 class WtWord
 {
+
+
 public:
     WtWord( std::string w ) :
         m_word( w ),
@@ -87,6 +91,16 @@ public:
         eToUpper,
         eNone,
     } EConvertChars;
+
+    static const std::vector<std::string>& get_wordlist_by_name( const std::string name )
+    {
+        if ( name == "short list" )
+            return short_list;
+        if ( name == "1k list" )
+            return long_list;
+        else
+            return short_list;
+    }
 public:
     WtWordList()
     {

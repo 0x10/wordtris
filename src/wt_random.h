@@ -18,7 +18,8 @@
 
 #include <time.h>
 #include <cstdlib>
-
+#include <chrono>
+#include <random>
 #include <string>
 
 #define LETTER_COUNT  (26)
@@ -44,10 +45,16 @@ public:
     /******************************************************************************
      *
      *****************************************************************************/
-    static char get_random_letter_of_weight_seq( const std::string word )
+    static char get_random_letter_of_weight_seq( const std::string word, std::discrete_distribution<int> dist  )
     {
         char result = '\0';
+        unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+        std::default_random_engine generator(seed);
+        int random = dist( generator );
 
+        result = word[(random % word.length())];
+
+/*
         size_t max_weight = (word.length()+1) * (word.length()/2);
 
         ssize_t buf;
@@ -65,7 +72,7 @@ public:
                 }
             }
         }
-
+*/
         return result;
     }
 

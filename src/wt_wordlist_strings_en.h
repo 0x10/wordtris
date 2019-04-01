@@ -15,8 +15,8 @@
  ******************************************************************************/
 #ifndef _WT_WORDLIST_STRINGS_EN_H_
 #define _WT_WORDLIST_STRINGS_EN_H_
-
-const std::vector<std::string> guess_list = {
+//const std::string list_name = "short list";
+const std::vector<std::string> short_list = {
 "black",
 "white",
 "red",

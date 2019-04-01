@@ -19,7 +19,6 @@
 #include "wt_game_mode_if.h"
 #include "wt_random.h"
 #include "wt_wordlist.h"
-#include "wt_wordlist_strings_en.h"
 #include <locale>         // std::locale, std::tolower
 #include <algorithm>
 #include <sstream>
@@ -56,7 +55,7 @@ public:
         m_letters( "ETAOINSRHDLUCMFYWGPBVKXQJZ" ),
         m_wordlist()
     {
-        m_wordlist.load_from_list( guess_list, WtWordList::eToUpper );
+        m_wordlist.load_from_list( WtWordList::get_wordlist_by_name("1k list"), WtWordList::eToUpper );
         std::cout << "words = " << m_wordlist.size() << std::endl;
     }
     ~WtGameModeWordtris()
@@ -140,7 +139,10 @@ public:
      *************************/
     virtual char next_letter()
     {
-        return WtRandom::get_random_letter_of_weight_seq( std::string(m_letters).append("???***") ); 
+                                                   // E  T A O I N S R H D L U C M F Y W G P B V K X Q J Z,?,*
+        std::discrete_distribution<int> distribution {12,9,8,8,7,7,6,6,6,4,4,3,3,2,2,2,2,2,2,1,1,1,1,1,1,1,5,5 };
+        return WtRandom::get_random_letter_of_weight_seq( std::string(m_letters).append("?*"),
+                                                          distribution ); 
     }
 
     /**************************
