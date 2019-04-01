@@ -55,7 +55,7 @@ public:
         m_letters( "ETAOINSRHDLUCMFYWGPBVKXQJZ" ),
         m_wordlist()
     {
-        m_wordlist.load_from_list( WtWordList::get_wordlist_by_name("1k list"), WtWordList::eToUpper );
+        m_wordlist.load_from_list( WtWordList::get_wordlist_by_name("5k list"), WtWordList::eToUpper );
         std::cout << "words = " << m_wordlist.size() << std::endl;
     }
     ~WtGameModeWordtris()

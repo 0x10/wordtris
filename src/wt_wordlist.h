@@ -22,6 +22,7 @@
 
 #include "wt_wordlist_strings_en.h"
 #include "wt_wordlist_strings_en_1k.h"
+#include "wt_wordlist_strings_en_5k.h"
 
 /**************************************
  *
@@ -98,6 +99,8 @@ public:
             return short_list;
         if ( name == "1k list" )
             return long_list;
+        if ( name == "5k list" )
+            return xl_list;
         else
             return short_list;
     }

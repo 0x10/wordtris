@@ -15,7 +15,7 @@
  ******************************************************************************/
 #ifndef _WT_WORDLIST_STRINGS_EN_1K_H_
 #define _WT_WORDLIST_STRINGS_EN_1K_H_
-//const std::string list_name = "1k list";
+
 const std::vector<std::string> long_list = {
 "ability",
 "able",
