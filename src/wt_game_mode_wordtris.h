@@ -244,34 +244,62 @@ private:
      *************************/
     void column_gravity( uint8_t c_idx, WtBoard& board )
     {
-        //   two iterations: (1) from middle to ceil and (2) from middle to floor
-        //                   (1) pull down towards middle
-        //                   (2) push up towards middle
-        uint8_t r_idx = WtBoard::row_count/2;
-        uint8_t r_count = r_idx;
-        while ( ( board.get_cell( r_idx+1, c_idx ) == WtBoard::empty_cell )
-                && ( r_count < WtBoard::row_count ) )
+        std::string col_str = board.get_col_string( c_idx );
+        if ( col_str.find_first_not_of( " " ) != std::string::npos )
         {
-            // pull necessary
-            board.collapse_above( r_idx, c_idx );
-            r_count++;
-        }
-        
-        r_idx = WtBoard::row_count/2-1;
-        r_count = r_idx;
-        while ( ( board.get_cell( r_idx, c_idx ) == ' ' )
-                && ( r_count < WtBoard::row_count ) )
-        {
-            // push necessary
-            board.collapse_below( r_idx, c_idx, ' ' );
-            r_count++;
-        }
+            std::string lower = col_str.substr( WtBoard::row_count/2 );
+            std::string upper = col_str.substr( 0, WtBoard::row_count/2 );
 
-        if (( board.get_cell( WtBoard::row_count/2, c_idx ) == WtBoard::empty_cell )
-            &&
-            ( board.get_cell( WtBoard::row_count/2-1, c_idx ) != ' ' ) )
-        {
-            board.collapse_below( WtBoard::row_count/2, c_idx, ' ' );
+            std::cout << "col_str before = \"" << col_str << "\""<< std::endl;
+            std::cout << "upper before = \""<< upper << "\""<< std::endl;
+            std::cout << "lower before = \""<< lower << "\""<< std::endl;
+
+            upper.erase(std::remove(upper.begin(), upper.end(), ' '), upper.end());
+            lower.erase(std::remove(lower.begin(), lower.end(), ' '), lower.end());
+
+            std::cout << "upper after = \""<< upper << "\""<< std::endl;
+            std::cout << "lower after = \""<< lower << "\""<< std::endl;
+           
+            std::string new_col_str;
+            if ( ! upper.empty() )
+            {
+                std::string upper_col_str(WtBoard::row_count/2-upper.length(), ' ' );
+                upper_col_str.append( upper );
+                std::string lower_col_str(WtBoard::row_count/2-lower.length(), ' ' );
+                lower.append( lower_col_str );
+                new_col_str = upper_col_str;           
+                new_col_str.append( lower );
+            }
+            else
+            {
+                std::string upper_col_str(WtBoard::row_count/2-1, ' ' );
+                std::string lower_col_str(WtBoard::row_count/2+1-lower.length(), ' ' );
+                lower.append( lower_col_str );
+                new_col_str = upper_col_str;           
+                new_col_str.append( lower );
+            }
+
+            std::cout << "new_col_str after = \"" << new_col_str << "\""<< std::endl;
+
+            for ( uint8_t r_idx = 0; r_idx < WtBoard::row_count; r_idx++ )
+            {
+                char cell = new_col_str[ (WtBoard::row_count-1) - r_idx ];
+                if ( cell == ' ' )
+                {
+                    if ( r_idx < WtBoard::row_count / 2 )
+                    {
+                        cell = ' ';
+                    }
+                    else
+                    {
+                        cell = WtBoard::empty_cell;
+                    }
+                }
+
+                board.set_cell( r_idx, c_idx, cell );
+            }
+
+            std::cout << "col_str after = \"" << board.get_col_string( c_idx ) << "\""<< std::endl;
         }
     }
 
@@ -283,7 +311,7 @@ private:
     {
         //1. locate beginning
         size_t pos = row_str.find( word );
-        std::cout << "erase '" << word << "' from '" << row_str << "'";
+        std::cout << "erase '" << word << "' from '" << row_str << "'" <<std::endl;
         if ( pos != std::string::npos )
         {
             char replace_char = WtBoard::empty_cell;
@@ -310,16 +338,20 @@ private:
         size_t pos = col_str.find( word );
         if ( pos != std::string::npos )
         {
+            std::cout << "colstr = \"" << col_str << "\"; word found at = "<<pos<<"w len = "<<word.length()<<std::endl;
+            pos = (WtBoard::row_count - pos) - 1;
             // iterate over rows
-            for( ssize_t r_idx = pos; r_idx >= 0; r_idx-- )
+            for( size_t w_idx = 0; w_idx < word.length(); w_idx++ )
             {
+                uint8_t r_idx = pos - w_idx;
+
                 //2. if row <= row_count/2 replace with ' '
                 //   else replace with empty_cell
                 char replace_char = WtBoard::empty_cell;
                 if ( r_idx < WtBoard::row_count/2 )
                     replace_char = ' ';
 
-                board.set_cell( (uint8_t)r_idx, c_idx, replace_char );
+                board.set_cell( r_idx, c_idx, replace_char );
             }
 
             //3. push up or pull down if necessary
