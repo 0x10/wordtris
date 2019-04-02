@@ -117,7 +117,7 @@ class WtSettings
 public:
     WtSettings() :
         language( "en" ),
-        game_mode( "demo" ),
+        game_mode( "" ),
         difficulty( wt_difficulty_EASY ),
         active_theme( "default" )
     {

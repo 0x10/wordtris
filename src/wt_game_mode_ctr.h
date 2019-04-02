@@ -47,13 +47,16 @@ public:
      *************************/
     WtGameModeIf* mode_from_string( std::string mode_id )
     {
-        WtGameModeIf* result = NULL;
-        for( size_t idx = 0; idx < m_available_modes.size(); idx++ )
+        WtGameModeIf* result = default_mode();
+        if ( ! mode_id.empty() )
         {
-            if ( m_available_modes[idx]->get_id_string() == mode_id )
+            for( size_t idx = 0; idx < m_available_modes.size(); idx++ )
             {
-                result = m_available_modes[idx];
-                break;
+                if ( m_available_modes[idx]->get_id_string() == mode_id )
+                {
+                    result = m_available_modes[idx];
+                    break;
+                }
             }
         }
         return result;

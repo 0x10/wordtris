@@ -357,7 +357,10 @@ public:
             m_board.init();
 
             if ( INVALID_GAME_MODE == m_active_mode )
+            {
+                std::cout << "invalid game mode\n";
                 m_game_over = true;
+            }
             else
             {
                 m_active_mode->init_game( m_board, m_player );
