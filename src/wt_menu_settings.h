@@ -82,18 +82,21 @@ public:
         }
 
         {
-                size_t selected_id = 0;
+                size_t selected_id = 9;
                 m_themes = {
                         std::make_pair( 9, "light" ),
                         std::make_pair( 10, "dark" ),
                         std::make_pair( 11, "mono" ),
                 };
-                for ( size_t l_idx = 0; l_idx < m_themes.size(); l_idx++ )
+                if ( STORAGE.get_settings().active_theme != "default" )
                 {
-                    if ( m_themes[l_idx].second == STORAGE.get_settings().active_theme )
+                    for ( size_t l_idx = 0; l_idx < m_themes.size(); l_idx++ )
                     {
-                        selected_id = m_themes[l_idx].first;
-                        break;
+                        if ( m_themes[l_idx].second == STORAGE.get_settings().active_theme )
+                        {
+                            selected_id = m_themes[l_idx].first;
+                            break;
+                        }
                     }
                 }
                 add_radio_group_button( m_themes,
