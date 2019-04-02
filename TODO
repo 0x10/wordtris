@@ -47,7 +47,7 @@
 # - Support Non-Ascii characters in Translations
 # - Settings/Storage Architectures seems pretty weird
 #       - review or documentation!
-#
+# - Remove word lists from source code and move to assets
 #
 # (others)
 # - android:
