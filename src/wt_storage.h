@@ -76,7 +76,7 @@ private:
         m_storage_copy.data.highscores.clear();
 
         char cwd_buf[512];
-        char* cwd;
+        const char* cwd;
 #ifndef __ANDROID__
         std::cout << "cwd = "<<getcwd(cwd_buf, 512)<<std::endl;
         cwd = cwd_buf;
