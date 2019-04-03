@@ -66,6 +66,7 @@ protected:
         set_bg("bg.bmp");
 
         m_grid_font = new WtSdlFont( "grid", GRID_FONT_SIZE, GRID_FONT_SIZE, "grid_font.bmp", m_theme, m_renderer );
+        m_grid_font_inverse = new WtSdlFont( "grid_inverse", GRID_FONT_SIZE, GRID_FONT_SIZE, "grid_font_inverse.bmp", m_theme, m_renderer );
         m_text_font = new WtSdlFont( "text", TEXT_FONT_SIZE, TEXT_FONT_SIZE*2, "text_font.bmp", m_theme, m_renderer );
 
     }
@@ -109,6 +110,30 @@ public:
         // TODO check if available and if not keep old
         
         clear_texture_cache();
+    }
+
+    /**************************
+     *
+     *************************/
+    void draw_at_grid( uint8_t row,
+                       uint8_t column,
+                       bool horizontal,
+                       std::string text,
+                       std::string font )
+    {
+        for ( size_t i = 0; i < text.size(); i++ )
+        {
+            if ( horizontal )
+                put_cell_custom( (column+i)%WtBoard::col_count,
+                                 row,
+                                 text[i], 
+                                 ( font == "grid_inverse" ? m_grid_font_inverse : m_grid_font ) );
+            else
+                put_cell_custom( column,
+                                 (row-i)%WtBoard::row_count, 
+                                 text[(text.length()-1)-i], 
+                                 ( font == "grid_inverse" ? m_grid_font_inverse : m_grid_font ) );
+        }
     }
 
     /**************************
@@ -221,12 +246,20 @@ private:
     /**************************
      *
      *************************/
+    void put_cell_custom( size_t col, size_t row, const char ch, WtSdlFont* font )
+    {
+        size_t x = (col*font->width())+col+GRID_OFFSET_X;
+        size_t y = ((row*font->height())+row)+GRID_OFFSET_Y;
+
+        font->write( WtCoord(x, y), ch, m_renderer );
+    }
+
+    /**************************
+     *
+     *************************/
     void put_cell( size_t col, size_t row, const char ch )
     {
-        size_t x = (col*m_grid_font->width())+col+GRID_OFFSET_X;
-        size_t y = ((row*m_grid_font->height())+row)+GRID_OFFSET_Y;
-
-        m_grid_font->write( WtCoord(x, y), ch, m_renderer );
+        put_cell_custom( col, row, ch, m_grid_font );
     }
 
     /**************************
@@ -296,6 +329,7 @@ private:
     std::string   m_theme;
 
     WtSdlFont*    m_grid_font;
+    WtSdlFont*    m_grid_font_inverse;
     WtSdlFont*    m_text_font;
 
     SDL_TextureCache m_texture_cache;

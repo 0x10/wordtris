@@ -25,7 +25,7 @@ template<typename animation_content>
 class WtAnimationStep
 {
 public:
-    WtAnimationStep( animation_content& c, const size_t duration  ) :
+    WtAnimationStep( animation_content c, const size_t duration  ) :
         content( c ),
         step_duration( duration )
     {}
@@ -43,10 +43,14 @@ public:
 class WtGridAnimation 
 {
 public:
-    typedef struct {
-        std::vector<char> text;
-        std::string       font; 
-    } GridText;
+    struct GridText {
+        GridText( std::string t, std::string f ) :
+            text( t ),
+            font( f )
+            {}
+        std::string text;
+        std::string font; 
+    };
     typedef WtAnimationStep<GridText> GridAnimationStep;
 
     /**************************
@@ -78,7 +82,7 @@ public:
     /**************************
      *
      *************************/
-    GridAnimationStep& operator[]( const size_t idx)
+    const GridAnimationStep& operator[]( const size_t idx) const
     {
         return m_animation_steps[idx];
     }
@@ -95,7 +99,7 @@ public:
     /**************************
      *
      *************************/
-    uint8_t get_row() const
+    uint8_t row() const
     {
         return m_row;
     }
@@ -103,9 +107,25 @@ public:
     /**************************
      *
      *************************/
-    uint8_t get_column() const
+    uint8_t column() const
     {
         return m_col;
+    }
+
+    /**************************
+     *
+     *************************/
+    void set_horizontal()
+    {
+        m_horizontal = true;
+    }
+
+    /**************************
+     *
+     *************************/
+    void set_vertical()
+    {
+        m_horizontal = false;
     }
 
     /**************************
@@ -122,6 +142,14 @@ public:
     bool empty() const
     {
         return m_animation_steps.empty();
+    }
+
+    /**************************
+     *
+     *************************/
+    size_t size() const
+    {
+        return m_animation_steps.size();
     }
 
 private:

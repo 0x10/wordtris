@@ -83,7 +83,17 @@ private:
 
 // api defintion
 private:
-
+    /**************************
+     *
+     *************************/
+    void draw()
+    {
+        ACTIVE_WINDOW.draw_board( m_board );
+        ACTIVE_WINDOW.draw_player_stat( m_player );
+        ACTIVE_WINDOW.draw_active_letter( m_active );
+        ACTIVE_WINDOW.draw_hint( m_active_mode->get_hint() );
+        ACTIVE_WINDOW.draw_button( m_pause_btn );
+    }
 
     /**************************
      *
@@ -95,11 +105,7 @@ private:
          */
 
         ACTIVE_WINDOW.clr();
-        ACTIVE_WINDOW.draw_board( m_board );
-        ACTIVE_WINDOW.draw_player_stat( m_player );
-        ACTIVE_WINDOW.draw_active_letter( m_active );
-        ACTIVE_WINDOW.draw_hint( m_active_mode->get_hint() );
-        ACTIVE_WINDOW.draw_button( m_pause_btn );
+        draw();
         ACTIVE_WINDOW.update();
     }
 
@@ -108,6 +114,21 @@ private:
      *************************/
     void play_animation( const WtGridAnimation& animation )
     {
+        for ( size_t a_idx = 0; a_idx < animation.size(); a_idx++ )
+        {
+            ACTIVE_WINDOW.clr();
+            draw();
+
+            ACTIVE_WINDOW.draw_at_grid( animation.row(),
+                                        animation.column(),
+                                        animation.is_horizontal(),
+                                        animation[a_idx].content.text,
+                                        animation[a_idx].content.font );
+
+            ACTIVE_WINDOW.update();
+
+            usleep( animation[a_idx].step_duration );
+        }
     }
 
     /**************************

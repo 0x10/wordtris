@@ -69,6 +69,7 @@ public:
      *************************/
     virtual WtGameModeState eval_board( WtBoard& board, WtPlayer& player )
     {
+        WtGridAnimation blink( 0, 0 );
         WtGameModeState gs( false,
                             WtGridAnimation::no_animation() );
         for ( uint8_t r_idx = 0; r_idx < WtBoard::row_count; r_idx++ )
@@ -82,6 +83,20 @@ public:
                     std::string word = contains_word( sequences[s_idx] );
                     if ( !word.empty() ) 
                     {
+                        blink.move( WtBoard::row_count-r_idx, row_str.find( word ) );
+                        {
+                            WtGridAnimation::GridAnimationStep step( WtGridAnimation::GridText(word, "grid_inverse" ), 200000 );
+                            blink.push_back( step );
+                        }
+                        {
+                            WtGridAnimation::GridAnimationStep step( WtGridAnimation::GridText(word, "grid" ), 200000 );
+                            blink.push_back( step );
+                        }
+                        {
+                            WtGridAnimation::GridAnimationStep step( WtGridAnimation::GridText(word, "grid_inverse" ), 200000 );
+                            blink.push_back( step );
+                        }
+                        gs.animation = blink;
                         player.word_solved( word.length() );
                         erase_from_row( r_idx, row_str, word, board );
                         
@@ -102,6 +117,21 @@ public:
                 std::string word = contains_word( trimmed );
                 if ( !word.empty() ) 
                 {
+                        blink.set_vertical();
+                        blink.move( WtBoard::row_count-col_str.find( word ), c_idx );
+                        {
+                            WtGridAnimation::GridAnimationStep step( WtGridAnimation::GridText(word, "grid_inverse" ), 200000 );
+                            blink.push_back( step );
+                        }
+                        {
+                            WtGridAnimation::GridAnimationStep step( WtGridAnimation::GridText(word, "grid" ), 200000 );
+                            blink.push_back( step );
+                        }
+                        {
+                            WtGridAnimation::GridAnimationStep step( WtGridAnimation::GridText(word, "grid_inverse" ), 200000 );
+                            blink.push_back( step );
+                        }
+                    gs.animation = blink;
                     player.word_solved( word.length() );
                     erase_from_col( c_idx, col_str, word, board );
 
