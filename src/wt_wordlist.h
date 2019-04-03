@@ -27,11 +27,11 @@
 class WtWord
 {
 public:
-    WtWord( std::string w ) :
+    WtWord( const std::string w ) :
         m_word( w ),
         m_dea( w )
     {
-        //std::cout << "=====" <<std::endl << "WtWord = " << w << std::endl;
+      //  std::cout << "=====" <<std::endl << "WtWord = " << w << std::endl;
        // m_dea.print();
     }
     ~WtWord()
@@ -103,15 +103,18 @@ public:
         for( size_t i = 0; i < input_list.size(); i++ )
         {
             std::string input = input_list[i];
-            switch( conv )
+            if ( !input.empty() )
             {
-                case eToLower: std::transform(input.begin(), input.end(), input.begin(), ::tolower); break;
-                case eToUpper: std::transform(input.begin(), input.end(), input.begin(), ::toupper); break;
-                default: break;
-            }
+                switch( conv )
+                {
+                    case eToLower: std::transform(input.begin(), input.end(), input.begin(), ::tolower); break;
+                    case eToUpper: std::transform(input.begin(), input.end(), input.begin(), ::toupper); break;
+                    default: break;
+                }
 
-            WtWord* w = new WtWord( input );
-            m_words.push_back(w);
+                WtWord* w = new WtWord( input );
+                m_words.push_back(w);
+            }
         }
     }
     ~WtWordList()
@@ -144,15 +147,18 @@ public:
         for( size_t i = 0; i < input_list.size(); i++ )
         {
             std::string input = input_list[i];
-            switch( conv )
+            if ( !input.empty() )
             {
-                case eToLower: std::transform(input.begin(), input.end(), input.begin(), ::tolower); break;
-                case eToUpper: std::transform(input.begin(), input.end(), input.begin(), ::toupper); break;
-                default: break;
-            }
+                switch( conv )
+                {
+                    case eToLower: std::transform(input.begin(), input.end(), input.begin(), ::tolower); break;
+                    case eToUpper: std::transform(input.begin(), input.end(), input.begin(), ::toupper); break;
+                    default: break;
+                }
 
-            WtWord* w = new WtWord( input );
-            m_words.push_back(w);
+                WtWord* w = new WtWord( input );
+                m_words.push_back(w);
+            }
         }
     }
 

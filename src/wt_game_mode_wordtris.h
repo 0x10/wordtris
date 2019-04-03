@@ -65,12 +65,12 @@ public:
     }
 
     /**************************
-     * return false if game over
+     *
      *************************/
-    virtual bool eval_board( WtBoard& board, WtPlayer& player )
+    virtual WtGameModeState eval_board( WtBoard& board, WtPlayer& player )
     {
-        bool game_continue = true;
-        
+        WtGameModeState gs( false,
+                            WtGridAnimation::no_animation() );
         for ( uint8_t r_idx = 0; r_idx < WtBoard::row_count; r_idx++ )
         {
             std::string row_str = board.get_row_string( r_idx );
@@ -111,7 +111,7 @@ public:
         }
 
 
-        return game_continue;
+        return gs;
     }
 
     /**************************

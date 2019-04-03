@@ -28,6 +28,7 @@
 #include "wt_game_mode_ctr.h"
 #include "wt_menu_if.h"
 #include "wt_storage.h"
+#include "wt_animations.h"
 
 #define GAME_CTR  WtGameCtr::instance()
 class WtGameCtr : WtInputObserver, public WtSettingsChangeObserver
@@ -87,8 +88,8 @@ private:
     /**************************
      *
      *************************/
-     void update_window()
-     {
+    void update_window()
+    {
         /*
          * redraw board 
          */
@@ -100,6 +101,13 @@ private:
         ACTIVE_WINDOW.draw_hint( m_active_mode->get_hint() );
         ACTIVE_WINDOW.draw_button( m_pause_btn );
         ACTIVE_WINDOW.update();
+    }
+
+    /**************************
+     *
+     *************************/
+    void play_animation( const WtGridAnimation& animation )
+    {
     }
 
     /**************************
@@ -118,8 +126,15 @@ private:
                                             m_active.current_column(), 
                                             m_active.current_value() );
 
-            if ( m_active_mode->eval_board( m_board,
-                                            m_player ) )
+            WtGameModeState eval_result = m_active_mode->eval_board( m_board,
+                                                                     m_player );
+
+            if ( !eval_result.animation.empty() )
+            {
+                play_animation( eval_result.animation );
+            }
+
+            if ( !eval_result.game_over )
             {
                 /* generate next stone */
                 m_active.get_next( m_active_mode->next_letter() );

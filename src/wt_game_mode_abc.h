@@ -54,10 +54,12 @@ public:
     }
 
     /**************************
-     * return false if game over
+     *
      *************************/
-    virtual bool eval_board( WtBoard& board, WtPlayer& player )
+    virtual WtGameModeState eval_board( WtBoard& board, WtPlayer& player )
     {
+        WtGameModeState gs( false,
+                            WtGridAnimation::no_animation() );
         if ( m_working_letters.empty() )
         {
             bool correct = true;
@@ -84,7 +86,7 @@ public:
             setup_sequences();
             show_sequence( board );
         }
-        return true;
+        return gs;
     }
 
     /**************************

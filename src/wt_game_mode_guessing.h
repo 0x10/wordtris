@@ -54,11 +54,12 @@ public:
     }
 
     /**************************
-     * return false if game over
+     *
      *************************/
-    virtual bool eval_board( WtBoard& board, WtPlayer& player )
+    virtual WtGameModeState eval_board( WtBoard& board, WtPlayer& player )
     {
-        bool game_continue = true;
+        WtGameModeState gs( false,
+                            WtGridAnimation::no_animation() );
 
         if ( m_active_word_guessed.empty() )
         {
@@ -93,16 +94,14 @@ public:
             {
                 player.word_solved();
                 get_next_word();
-                game_continue = true;
             }
             else
             {
                 get_next_word();
-                game_continue = true;
             }
         }
 
-        return game_continue;
+        return gs;
     }
 
     /**************************

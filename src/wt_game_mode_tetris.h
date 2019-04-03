@@ -40,12 +40,12 @@ public:
     }
 
     /**************************
-     * return false if game over
+     *
      *************************/
-    virtual bool eval_board( WtBoard& board, WtPlayer& player )
+    virtual WtGameModeState eval_board( WtBoard& board, WtPlayer& player )
     {
-        bool game_continue = true;
-
+        WtGameModeState gs( false,
+                            WtGridAnimation::no_animation() );
         // search rows for word
         for ( uint8_t r_idx = 0; r_idx < WtBoard::row_count; r_idx++ )
         {
@@ -84,7 +84,7 @@ public:
             }
         }
 
-        return game_continue;
+        return gs;
     }
 
     /**************************

@@ -269,6 +269,7 @@ public:
     TDea( std::string contains_word )
     {
         new_contains( contains_word );
+        m_current_state = 0;
     }
     ~TDea()
     {

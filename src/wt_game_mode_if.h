@@ -21,10 +21,26 @@
 #include "wt_random.h"
 #include "wt_player.h"
 #include "wt_board.h"
-
+#include "wt_animations.h"
 
 #define INVALID_GAME_MODE (WtGameModeIf*)(0)
 
+/**************************
+ *
+ *************************/
+struct WtGameModeState
+{
+    WtGameModeState( bool go, const WtGridAnimation& a ) :
+        game_over( go ),
+        animation( a ) {}
+
+    bool                   game_over;
+    const WtGridAnimation& animation;
+};
+
+/**************************
+ *
+ *************************/
 class WtGameModeIf
 {
 public:
@@ -65,9 +81,9 @@ public:
     virtual std::string get_title()=0;
 
     /**************************
-     * return false if game over
+     *
      *************************/
-    virtual bool eval_board( WtBoard& board, WtPlayer& player )=0;
+    virtual WtGameModeState eval_board( WtBoard& board, WtPlayer& player )=0;
 
     /**************************
      *
@@ -170,11 +186,13 @@ public:
     }
 
     /**************************
-     * return false if game over
+     *
      *************************/
-    virtual bool eval_board( WtBoard&, WtPlayer& )
+    virtual WtGameModeState eval_board( WtBoard&, WtPlayer& )
     {
-        return true;
+        WtGameModeState gs( false,
+                            WtGridAnimation::no_animation() );
+        return gs;
     }
 
     /**************************
