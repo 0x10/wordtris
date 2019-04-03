@@ -25,7 +25,8 @@ class WtGameModeGuessing : public WtGameModeIf
 public:
     WtGameModeGuessing() :
         WtGameModeIf( "Guess it" ),
-        m_active_word( "BlAcK" )
+        m_active_word( "BlAcK" ),
+        m_wordlist()
     {
         m_active_word_guessed   = m_active_word;
         m_active_word_scrambled = scramble( m_active_word );
@@ -131,7 +132,7 @@ private:
     {
         size_t idx = 0;
         uint8_t buf;
-        const std::vector<std::string>& guess_list = WtWordList::get_wordlist_by_name("short list");
+        const std::vector<std::string>& guess_list = m_wordlist.get_wordlist_by_name("short list");
         if ( WtRandom::getrandom( &buf, 1 ) <= 1 )
         {
             idx = (buf % guess_list.size());
@@ -175,6 +176,7 @@ private:
     std::string m_active_word;
     std::string m_active_word_guessed;
     std::string m_active_word_scrambled;
+    WtWordList  m_wordlist;
 };
 
 #endif /* _WT_GAME_MODE_GUESSING_H_ */

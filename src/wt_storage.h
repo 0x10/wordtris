@@ -50,6 +50,7 @@ private:
         _FileData    data;
     } _PersistentFileStructure;
 
+    typedef std::map< std::string, std::vector<uint8_t> > SimpleFileCache;
     // least significant word is fixed magic and most sig. word
     // may represent file structure
     static           const uint32_t m_header_magic = 0x0001ADDE;
@@ -151,6 +152,27 @@ public:
     {
         return m_storage_copy.data.highscores;
     }
+
+
+    /**************************
+     *
+     *************************/
+    std::vector<uint8_t>& get_asset_file_buf( const std::string fname )
+    {
+        SimpleFileCache::iterator it = m_asset_cache.find(fname);
+        if ( it != m_asset_cache.end() )
+        {
+            // load from cache
+            return (*it).second;
+        }
+        else
+        {
+            std::cout << "read from assets folder: " << fname << std::endl;
+            internal_load_from_assets( fname, m_asset_cache[fname] );
+            return m_asset_cache[fname];
+        }
+    }
+
 private:
 
     /**************************
@@ -187,6 +209,7 @@ private:
 
         return success;
     }
+
 
     /**************************
      *
@@ -237,10 +260,46 @@ private:
         return success;
     }
 
+    /**************************
+     *
+     *************************/
+    void internal_load_from_assets( const std::string fname, std::vector<uint8_t>& buffer )
+#ifdef __ANDROID__
+    {
+        // Open your file
+        AAsset* file = AAssetManager_open(assetManager, fname, AASSET_MODE_BUFFER);
+        // Get the file length
+        size_t fileLength = AAsset_getLength(file);
+
+        // Allocate memory to read your file
+        buffer.resize(fileLength+1);
+
+        // Read your file
+        AAsset_read(file, buffer.data(), fileLength);
+        // For safety you can add a 0 terminating character at the end of your file ...
+        buffer[fileLength] = '\0';
+    }
+#else
+    {
+        std::ifstream file( std::string("assets/").append(fname), std::ios::binary | std::ios::ate);
+        std::streamsize size = file.tellg();
+        file.seekg(0, std::ios::beg);
+
+        buffer.resize(size);
+        if (!file.read((char*)buffer.data(), size))
+        {
+            std::cout << "error read file " << fname << std::endl;
+        }
+    }
+#endif /* __ANDROID__ */
+
+
 private:
-   _PersistentFileStructure m_storage_copy;
-   char                     m_cwd_buf[512];
-   const char*              m_cwd;
+    _PersistentFileStructure m_storage_copy;
+    char                     m_cwd_buf[512];
+    const char*              m_cwd;
+
+    SimpleFileCache          m_asset_cache;
 };
 
 

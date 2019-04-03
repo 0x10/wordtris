@@ -18,19 +18,14 @@
 
 #include "global.h"
 
+#include "wt_l10n.h"
 #include "dea.h"
-
-#include "wt_wordlist_strings_en.h"
-#include "wt_wordlist_strings_en_1k.h"
-#include "wt_wordlist_strings_en_5k.h"
 
 /**************************************
  *
  *************************************/
 class WtWord
 {
-
-
 public:
     WtWord( std::string w ) :
         m_word( w ),
@@ -93,23 +88,18 @@ public:
         eNone,
     } EConvertChars;
 
-    static const std::vector<std::string>& get_wordlist_by_name( const std::string name )
-    {
-        if ( name == "short list" )
-            return short_list;
-        if ( name == "1k list" )
-            return long_list;
-        if ( name == "5k list" )
-            return xl_list;
-        else
-            return short_list;
-    }
+
 public:
     WtWordList()
     {
+        load_lists();
     }
-    WtWordList( const std::vector<std::string>& input_list, EConvertChars conv=eNone )
+    WtWordList( const std::string input_list_name, EConvertChars conv=eNone )
     {
+        load_lists();
+
+
+        const std::vector<std::string>& input_list = get_wordlist_by_name( input_list_name );
         for( size_t i = 0; i < input_list.size(); i++ )
         {
             std::string input = input_list[i];
@@ -143,8 +133,10 @@ public:
     /**************************************
      *
      *************************************/
-    void load_from_list( const std::vector<std::string>& input_list, EConvertChars conv=eNone )
+    void load_from_list( const std::string input_list_name, EConvertChars conv=eNone )
     {
+        const std::vector<std::string>& input_list = get_wordlist_by_name( input_list_name );
+
         for( size_t w_idx = 0; w_idx < m_words.size(); w_idx++ )
             delete m_words[w_idx];
         m_words.clear();
@@ -189,8 +181,54 @@ public:
         return found_words;
     }
 
+    /**************************************
+     *
+     *************************************/
+    const std::vector<std::string>& get_wordlist_by_name( const std::string name )
+    {
+        if ( name == "short list" )
+            return m_list_short;
+        if ( name == "1k list" )
+            return m_list_medium;
+        if ( name == "5k list" )
+            return m_list_large;
+        else
+            return m_list_short;
+    }
+
 private:
-    std::vector<WtWord*> m_words;
+    /**************************************
+     *
+     *************************************/
+    void load_lists()
+    {
+        load_list_from_file( "short.txt", WtL10n::get_language_code(), m_list_short );
+        load_list_from_file( "medium.txt", WtL10n::get_language_code(), m_list_medium );
+        load_list_from_file( "large.txt", WtL10n::get_language_code(), m_list_large );
+    }
+
+    /**************************************
+     *
+     *************************************/
+    void load_list_from_file( const std::string list_name, 
+                              const std::string language, 
+                              std::vector<std::string>& list )
+    {
+        std::string fname( "wordlists/" );
+        fname.append(language).append("/").append(list_name);
+        std::cout << "try to load wordlist at \"" << fname << "\"" << std::endl;
+        std::vector<uint8_t>& file_content = STORAGE.get_asset_file_buf( fname );
+        // process....
+        std::string str(file_content.begin(), file_content.end());
+        std::stringstream ss(str);
+        for (std::string each; std::getline(ss, each, '\n'); list.push_back(each));
+    }
+
+private:
+    std::vector<WtWord*>     m_words;
+    std::vector<std::string> m_list_short;
+    std::vector<std::string> m_list_medium;
+    std::vector<std::string> m_list_large;
 };
 
 
