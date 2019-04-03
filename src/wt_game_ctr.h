@@ -119,9 +119,9 @@ private:
             ACTIVE_WINDOW.clr();
             draw();
 
-            ACTIVE_WINDOW.draw_at_grid( animation.row(),
-                                        animation.column(),
-                                        animation.is_horizontal(),
+            ACTIVE_WINDOW.draw_at_grid( animation[a_idx].content.row,
+                                        animation[a_idx].content.col,
+                                        animation[a_idx].content.horizontal,
                                         animation[a_idx].content.text,
                                         animation[a_idx].content.font );
 

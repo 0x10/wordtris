@@ -22,7 +22,6 @@
 #       - on stone 2 board commit sound
 #       - on row/word clear sound
 # - animations:
-#       - word cleared animation: highlight word and remove slower
 #       - bomb animation
 #
 #

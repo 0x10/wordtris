@@ -69,77 +69,85 @@ public:
      *************************/
     virtual WtGameModeState eval_board( WtBoard& board, WtPlayer& player )
     {
-        WtGridAnimation blink( 0, 0 );
+        WtGridAnimation blink;
         WtGameModeState gs( false,
                             WtGridAnimation::no_animation() );
-        for ( uint8_t r_idx = 0; r_idx < WtBoard::row_count; r_idx++ )
+        bool something_found = false;
+
+        do
         {
-            std::string row_str = board.get_row_string( r_idx );
-            std::vector<std::string> sequences = split( std::string(row_str) );
-            for( size_t s_idx = 0; s_idx < sequences.size(); s_idx++ )
+            something_found = false;
+            for ( uint8_t r_idx = 0; r_idx < WtBoard::row_count; r_idx++ )
             {
-                if ( sequences[s_idx].length() >= min_word_length )
+                std::string row_str = board.get_row_string( r_idx );
+                std::vector<std::string> sequences = split( std::string(row_str) );
+                for( size_t s_idx = 0; s_idx < sequences.size(); s_idx++ )
                 {
-                    std::string word = contains_word( sequences[s_idx] );
+                    if ( sequences[s_idx].length() >= min_word_length )
+                    {
+                        std::string word = contains_word( sequences[s_idx] );
+                        if ( !word.empty() ) 
+                        {
+                            {
+                                WtGridAnimation::GridAnimationStep step( WtGridAnimation::GridText( WtBoard::row_count-r_idx,
+                                                                                                    row_str.find( word ),
+                                                                                                    true,
+                                                                                                    word, 
+                                                                                                    "grid_inverse" ),
+                                                                           200000 );
+                                blink.push_back( step );
+                                step.content.font = "grid";
+                                blink.push_back( step );
+                                step.content.font = "grid_inverse";
+                                blink.push_back( step );
+                            }
+                            gs.animation = blink;
+                            player.word_solved( word.length() );
+                            erase_from_row( r_idx, row_str, word, board );
+                            something_found = true;
+                            
+                            break;
+                        }
+                    }
+                }
+            }
+
+
+            for ( uint8_t c_idx = 0; c_idx < WtBoard::col_count; c_idx++ )
+            {
+                std::string col_str = board.get_col_string( c_idx );
+                std::string trimmed = col_str;
+                trim( trimmed );
+
+                if ( trimmed.length() >= min_word_length )
+                {
+                    std::string word = contains_word( trimmed );
                     if ( !word.empty() ) 
                     {
-                        blink.move( WtBoard::row_count-r_idx, row_str.find( word ) );
                         {
-                            WtGridAnimation::GridAnimationStep step( WtGridAnimation::GridText(word, "grid_inverse" ), 200000 );
+                            WtGridAnimation::GridAnimationStep step( WtGridAnimation::GridText( WtBoard::row_count-col_str.find( word ),
+                                                                                                c_idx,
+                                                                                                false,
+                                                                                                word, 
+                                                                                                "grid_inverse" ),
+                                                                       200000 );
                             blink.push_back( step );
-                        }
-                        {
-                            WtGridAnimation::GridAnimationStep step( WtGridAnimation::GridText(word, "grid" ), 200000 );
+                            step.content.font = "grid";
                             blink.push_back( step );
-                        }
-                        {
-                            WtGridAnimation::GridAnimationStep step( WtGridAnimation::GridText(word, "grid_inverse" ), 200000 );
+                            step.content.font = "grid_inverse";
                             blink.push_back( step );
                         }
                         gs.animation = blink;
                         player.word_solved( word.length() );
-                        erase_from_row( r_idx, row_str, word, board );
-                        
+                        erase_from_col( c_idx, col_str, word, board );
+                        something_found = true;
+
                         break;
                     }
                 }
             }
         }
-
-        for ( uint8_t c_idx = 0; c_idx < WtBoard::col_count; c_idx++ )
-        {
-            std::string col_str = board.get_col_string( c_idx );
-            std::string trimmed = col_str;
-            trim( trimmed );
-
-            if ( trimmed.length() >= min_word_length )
-            {
-                std::string word = contains_word( trimmed );
-                if ( !word.empty() ) 
-                {
-                        blink.set_vertical();
-                        blink.move( WtBoard::row_count-col_str.find( word ), c_idx );
-                        {
-                            WtGridAnimation::GridAnimationStep step( WtGridAnimation::GridText(word, "grid_inverse" ), 200000 );
-                            blink.push_back( step );
-                        }
-                        {
-                            WtGridAnimation::GridAnimationStep step( WtGridAnimation::GridText(word, "grid" ), 200000 );
-                            blink.push_back( step );
-                        }
-                        {
-                            WtGridAnimation::GridAnimationStep step( WtGridAnimation::GridText(word, "grid_inverse" ), 200000 );
-                            blink.push_back( step );
-                        }
-                    gs.animation = blink;
-                    player.word_solved( word.length() );
-                    erase_from_col( c_idx, col_str, word, board );
-
-                    break;
-                }
-            }
-        }
-
+        while( something_found );
 
         return gs;
     }
@@ -259,17 +267,17 @@ private:
         {
             std::string lower = col_str.substr( WtBoard::row_count/2 );
             std::string upper = col_str.substr( 0, WtBoard::row_count/2 );
-
+/*
             std::cout << "col_str before = \"" << col_str << "\""<< std::endl;
             std::cout << "upper before = \""<< upper << "\""<< std::endl;
             std::cout << "lower before = \""<< lower << "\""<< std::endl;
-
+*/
             upper.erase(std::remove(upper.begin(), upper.end(), ' '), upper.end());
             lower.erase(std::remove(lower.begin(), lower.end(), ' '), lower.end());
-
+/*
             std::cout << "upper after = \""<< upper << "\""<< std::endl;
             std::cout << "lower after = \""<< lower << "\""<< std::endl;
-           
+  */         
             std::string new_col_str;
             if ( ! upper.empty() )
             {
@@ -289,7 +297,7 @@ private:
                 new_col_str.append( lower );
             }
 
-            std::cout << "new_col_str after = \"" << new_col_str << "\""<< std::endl;
+            //std::cout << "new_col_str after = \"" << new_col_str << "\""<< std::endl;
 
             for ( uint8_t r_idx = 0; r_idx < WtBoard::row_count; r_idx++ )
             {
@@ -309,7 +317,7 @@ private:
                 board.set_cell( r_idx, c_idx, cell );
             }
 
-            std::cout << "col_str after = \"" << board.get_col_string( c_idx ) << "\""<< std::endl;
+          //  std::cout << "col_str after = \"" << board.get_col_string( c_idx ) << "\""<< std::endl;
         }
     }
 
@@ -348,7 +356,7 @@ private:
         size_t pos = col_str.find( word );
         if ( pos != std::string::npos )
         {
-            std::cout << "colstr = \"" << col_str << "\"; word found at = "<<pos<<"w len = "<<word.length()<<std::endl;
+          //  std::cout << "colstr = \"" << col_str << "\"; word found at = "<<pos<<"w len = "<<word.length()<<std::endl;
             pos = (WtBoard::row_count - pos) - 1;
             // iterate over rows
             for( size_t w_idx = 0; w_idx < word.length(); w_idx++ )

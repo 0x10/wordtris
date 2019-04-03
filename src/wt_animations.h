@@ -44,12 +44,22 @@ class WtGridAnimation
 {
 public:
     struct GridText {
-        GridText( std::string t, std::string f ) :
+        GridText( uint8_t r,
+                  uint8_t c,
+                  bool    horiz,
+                  std::string t,
+                  std::string f ) :
             text( t ),
-            font( f )
+            font( f ),
+            row ( r ),
+            col ( c ),
+            horizontal( horiz )
             {}
         std::string text;
-        std::string font; 
+        std::string font;
+        uint8_t row;
+        uint8_t col;
+        bool    horizontal;
     };
     typedef WtAnimationStep<GridText> GridAnimationStep;
 
@@ -58,15 +68,12 @@ public:
      *************************/
     static const WtGridAnimation& no_animation()
     {
-        static const WtGridAnimation empty(0,0);
+        static const WtGridAnimation empty;
         return empty;
     }
 
 public:
-    WtGridAnimation( uint8_t r, uint8_t c, bool horizontal=true ) :
-        m_row(r),
-        m_col(c),
-        m_horizontal( horizontal )
+    WtGridAnimation()
      {
      }
     ~WtGridAnimation() {}
@@ -90,55 +97,6 @@ public:
     /**************************
      *
      *************************/
-    void move( uint8_t r, uint8_t c )
-    {
-        m_row = r;
-        m_col = c;
-    }
-
-    /**************************
-     *
-     *************************/
-    uint8_t row() const
-    {
-        return m_row;
-    }
-
-    /**************************
-     *
-     *************************/
-    uint8_t column() const
-    {
-        return m_col;
-    }
-
-    /**************************
-     *
-     *************************/
-    void set_horizontal()
-    {
-        m_horizontal = true;
-    }
-
-    /**************************
-     *
-     *************************/
-    void set_vertical()
-    {
-        m_horizontal = false;
-    }
-
-    /**************************
-     *
-     *************************/
-    bool is_horizontal() const
-    {
-        return m_horizontal;
-    }
-
-    /**************************
-     *
-     *************************/
     bool empty() const
     {
         return m_animation_steps.empty();
@@ -153,10 +111,6 @@ public:
     }
 
 private:
-    uint8_t m_row;
-    uint8_t m_col;
-    bool    m_horizontal;
-
     std::vector< GridAnimationStep > m_animation_steps;
 };
 

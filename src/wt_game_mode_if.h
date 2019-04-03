@@ -190,20 +190,8 @@ public:
      *************************/
     virtual WtGameModeState eval_board( WtBoard&, WtPlayer& )
     {
-        WtGridAnimation blink( 1, 4 );
-
-        {
-            WtGridAnimation::GridAnimationStep step( WtGridAnimation::GridText("Hallo", "grid_inverse" ), 500000 );
-            blink.push_back( step );
-        }
-
-        {
-            WtGridAnimation::GridAnimationStep step( WtGridAnimation::GridText("Welt", "grid_inverse" ), 500000 );
-            blink.push_back( step );
-        }
-
         WtGameModeState gs( false,
-                            blink );
+                             WtGridAnimation::no_animation() );
         return gs;
     }
 
