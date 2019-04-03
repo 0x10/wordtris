@@ -22,6 +22,8 @@
 #include "SDL.h"
 
 #ifdef __ANDROID__
+#include <android/asset_manager.h>
+#include <android/asset_manager_jni.h> 
 #include <android/log.h>
 
 #define APPNAME "wordtris"
@@ -73,15 +75,19 @@ private:
         m_storage_copy.data.settings = WtSettings();
         m_storage_copy.data.highscores.clear();
 
+        char cwd_buf[512];
+        char* cwd;
 #ifndef __ANDROID__
-        std::cout << "cwd = "<<getcwd(m_cwd_buf, 512)<<std::endl;
-        m_cwd = m_cwd_buf;
-        std::cout << "cwd = " << std::string(m_cwd) << std::endl;
+        std::cout << "cwd = "<<getcwd(cwd_buf, 512)<<std::endl;
+        cwd = cwd_buf;
+        std::cout << "cwd = " << std::string(cwd) << std::endl;
 #else
-        m_cwd = SDL_AndroidGetInternalStoragePath();
-        std::cout << "a cwd = " << m_cwd << std::endl; 
-        __android_log_print(ANDROID_LOG_VERBOSE, APPNAME, "%s", m_cwd );
+        m_assetManager = getAssetManager();
+        cwd = SDL_AndroidGetInternalStoragePath();
+        std::cout << "a cwd = " << cwd << std::endl; 
+        __android_log_print(ANDROID_LOG_VERBOSE, APPNAME, "%s", cwd );
 #endif
+        m_cwd = std::string( cwd );
     }
     WtStorageCtr( const WtStorageCtr& ); 
     WtStorageCtr & operator = (const WtStorageCtr &);
@@ -182,7 +188,7 @@ private:
     {
         bool success = false;
 
-        std::string fname = std::string( m_cwd );
+        std::string fname = m_cwd;
         fname.append( "/" );
         fname.append( m_fname );
 
@@ -218,7 +224,7 @@ private:
     {
         bool success = false;
 
-        std::string fname = std::string( m_cwd );
+        std::string fname = m_cwd;
         fname.append( "/" );
         fname.append( m_fname );
 
@@ -267,7 +273,8 @@ private:
 #ifdef __ANDROID__
     {
         // Open your file
-        AAsset* file = AAssetManager_open(assetManager, fname, AASSET_MODE_BUFFER);
+        AAsset* file = AAssetManager_open(m_assetManager, fname.c_str(), AASSET_MODE_BUFFER);
+
         // Get the file length
         size_t fileLength = AAsset_getLength(file);
 
@@ -294,12 +301,35 @@ private:
 #endif /* __ANDROID__ */
 
 
+#ifdef __ANDROID__
+    /**************************
+     *
+     *************************/
+    AAssetManager* getAssetManager()
+    {
+        JNIEnv* env = (JNIEnv*)SDL_AndroidGetJNIEnv();
+
+        jobject activity = (jobject)SDL_AndroidGetActivity();
+
+        jclass activity_class = env->GetObjectClass(activity);
+
+        jmethodID activity_class_getAssets = env->GetMethodID(activity_class, "getAssets", "()Landroid/content/res/AssetManager;");
+        jobject asset_manager = env->CallObjectMethod(activity, activity_class_getAssets); // activity.getAssets();
+        _global_asset_manager = env->NewGlobalRef(asset_manager);
+
+        return AAssetManager_fromJava(env, _global_asset_manager);
+    }
+#endif /* __ANDROID__ */
+
 private:
     _PersistentFileStructure m_storage_copy;
-    char                     m_cwd_buf[512];
-    const char*              m_cwd;
+    std::string              m_cwd;
 
     SimpleFileCache          m_asset_cache;
+#ifdef __ANDROID__
+    AAssetManager*           m_assetManager;
+    jobject                  _global_asset_manager;
+#endif /* __ANDROID__ */
 };
 
 
