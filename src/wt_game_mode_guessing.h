@@ -44,6 +44,16 @@ public:
     }
 
     /**************************
+     * 
+     *************************/
+    virtual void init_game( WtBoard&, WtPlayer& )
+    {
+        m_active_word           = "BlAcK";
+        m_active_word_guessed   = m_active_word;
+        m_active_word_scrambled = scramble( m_active_word );
+    }
+
+    /**************************
      * return false if game over
      *************************/
     virtual bool eval_board( WtBoard& board, WtPlayer& player )
