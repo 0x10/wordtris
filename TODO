@@ -23,12 +23,17 @@
 #       - on row/word clear sound
 # - animations:
 #       - bomb animation
+# - multiplayer? coop vs pubg
+# - option: supporting (grid-)guidelines
+# - supporting story
+# - ios support
 #
 #
 # (design)
 # - Change Game Mode Button with proper "Button" like display; currently it feels more like a label than a button
 # - Logo Design and Naming
 # - get an ui design review
+# - game mode selection at main screen
 #
 #
 # (architecture bugs)
@@ -50,4 +55,5 @@
 # (others)
 # - android:
 #       - (config management) release build for apk incl. signed certificates
-#       - (business) eval income model: either ad based or by app store payment
+#       - (business) eval income model: either ad based vs by app store payment vs freemium
+# - version tracking
