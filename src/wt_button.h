@@ -36,7 +36,7 @@ public:
     /**************************
      *
      *************************/
-    uint16_t id()
+    uint16_t id() const
     {
         return m_id;
     }
@@ -92,7 +92,7 @@ public:
     /**************************
      *
      *************************/
-    WtDim size()
+    WtDim size() const
     {
         return m_size;
     }
@@ -100,7 +100,7 @@ public:
     /**************************
      *
      *************************/
-    WtCoord position()
+    WtCoord position() const
     {
         return m_pos;
     }

@@ -119,14 +119,14 @@ protected:
     /**************************
      *
      *************************/
-    WtButton& get_button( size_t id )
+    WtButton* get_button( size_t id )
     {
-        WtButton& result = m_buttons[0];
+        WtButton* result = NULL;
         for(size_t idx=0;idx<m_buttons.size();idx++)
         {
-            if ( id == m_buttons[idx].id() )
+            if ( MENU_BUTTON_ID( id ) == m_buttons[idx].id() )
             {
-                result = m_buttons[idx];
+                result = &m_buttons[idx];
                 break;
             }
         }

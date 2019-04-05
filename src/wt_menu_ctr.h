@@ -41,10 +41,11 @@ private:
         m_was_drag(false),
         m_drag_button_id(0)
     {
-        add_button( WtButton( 1, WtCoord( 170, 493 ), WtDim( 200, 200 ), "start_btn.bmp" ) );
+        add_button( WtButton( 1, WtCoord( 170, 193/*493*/ ), WtDim( 200, 200 ), "start_btn.bmp" ) );
         add_button( WtButton( 2, WtCoord( 105, 800 ), WtDim( 100, 100 ), "score_btn.bmp" ) );
         add_button( WtButton( 3, WtCoord( 332, 800 ), WtDim( 100, 100 ), "settings_btn.bmp" ) );
 
+        add_button( WtButton( 4, WtCoord( 105, 493 ), WtDim( 328, 200 ), "list_item_active.bmp" ) );
         m_settings.listen( m_pause_menu.get_help_listener() );
 
     }
@@ -101,21 +102,21 @@ private:
             {
                // drag started 
                m_drag_start_pos = pos;
-               WtButton& start_btn = get_button(1);
-               if ( m_drag_start_pos.in_region( start_btn.position(), start_btn.size() )  )
+               WtButton* list = get_button(4);
+               if ( m_drag_start_pos.in_region( list->position(), list->size() )  )
                {
-                   m_drag_button_id = TO_BUTTON_ID( start_btn.id() );
-                  // std::cout << "start btn drag" << std::endl;
+                   m_drag_button_id = TO_BUTTON_ID(list->id());
+                   std::cout << "start btn drag = " << m_drag_button_id << std::endl;
                }
             }
 
 
-            if ( m_drag_button_id == 1 )
+            if ( m_drag_button_id != 0 )
             {
-                WtButton& drag_btn = get_button(m_drag_button_id);
-                drag_btn.set_position( drag_btn.position() + d_pos );
+                WtButton* drag_btn = get_button(m_drag_button_id);
+                drag_btn->set_x( drag_btn->x() + d_pos.x );
 
-              //  std::cout << "continue btn drag: " << drag_btn.x() << std::endl;
+                std::cout << "continue btn drag: "<< m_drag_button_id<< "@" << drag_btn->x() << std::endl;
             }
 
             m_was_drag = true;
