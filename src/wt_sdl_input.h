@@ -26,7 +26,8 @@ class WtInputPolicySdl : public WtInputPolicyIf
 {
 protected:
 
-    WtInputPolicySdl()
+    WtInputPolicySdl() :
+        m_press_detected( false )
     {
     }
 
@@ -57,26 +58,48 @@ protected:
                     if (SDLK_AC_BACK == sdl_event.key.keysym.sym) event.key = wt_control_QUIT;
                     break;
                 case SDL_FINGERDOWN:
+                    m_press_detected = true;
+                    break;
+                case SDL_FINGERUP:
+                    m_press_detected = false;
+
                     event.is_key_event = false;
                     event.pos.x = sdl_event.tfinger.x;
                     event.pos.y = sdl_event.tfinger.y;
                     break;
+                case SDL_MOUSEBUTTONUP:
+                    m_press_detected = false;
+
+                    event.is_key_event = false;
+                    event.pos.x = sdl_event.button.x;
+                    event.pos.y = sdl_event.button.y;
+                    break;
+                case SDL_MOUSEMOTION:
+                    event.is_key_event = false;
+                    event.is_motion_event = true;
+                    event.is_drag_event = m_press_detected;
+                    event.pos.x = sdl_event.motion.x;
+                    event.pos.y = sdl_event.motion.y;
+                    event.d_pos.x = sdl_event.motion.xrel;
+                    event.d_pos.y = sdl_event.motion.yrel;
+                    break;
                 case SDL_FINGERMOTION:
                     event.is_key_event = false;
                     event.is_motion_event = true;
+                    event.is_drag_event = m_press_detected;
                     event.pos.x = sdl_event.tfinger.x;
                     event.pos.y = sdl_event.tfinger.y;
                     event.d_pos.x = sdl_event.tfinger.dx;
                     event.d_pos.y = sdl_event.tfinger.dy;
                     break;
                 case SDL_MOUSEBUTTONDOWN:
-                    event.is_key_event = false;
-                    event.pos.x = sdl_event.button.x;
-                    event.pos.y = sdl_event.button.y;
+                    m_press_detected = true;
                     break;
                 default: 
                     SDL_PumpEvents();
-                    SDL_FlushEvent(SDL_FINGERDOWN);
+                    SDL_FlushEvent( SDL_FINGERDOWN );
+                    SDL_FlushEvent( SDL_FINGERUP );
+                    SDL_FlushEvent( SDL_FINGERMOTION );
                     break;
             }
         }
@@ -95,6 +118,8 @@ protected:
 private:
     WtInputPolicySdl( const WtInputPolicySdl& ); 
     WtInputPolicySdl & operator = ( const WtInputPolicySdl& );
+private:
+    bool m_press_detected;
 };
 
 

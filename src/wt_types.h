@@ -45,12 +45,12 @@ public:
     WtDim() :
         w(0),
         h(0) {}
-    WtDim( size_t iW, size_t iH ) :
+    WtDim( ssize_t iW, ssize_t iH ) :
         w(iW),
         h(iH) {}
 
-    size_t w;
-    size_t h;
+    ssize_t w;
+    ssize_t h;
 };
 
 
@@ -63,7 +63,7 @@ public:
     WtCoord() :
         x(0),
         y(0) {}
-    WtCoord( size_t iX, size_t iY ) :
+    WtCoord( ssize_t iX, ssize_t iY ) :
         x(iX),
         y(iY) {}
     WtCoord( const WtCoord& c ) :
@@ -80,13 +80,26 @@ public:
         return ( x == rhs.x ) && ( y == rhs.y );
     }
 
+    WtCoord& operator+( const WtCoord& rhs )
+    {
+        x = x + rhs.x;
+        y = y + rhs.y;
+        return (*this);
+    }
+
+    bool in_region( WtCoord start_pos, WtDim size )
+    {
+        return (  ( x >= start_pos.x ) && ( x < start_pos.x+size.w )
+               && ( y >= start_pos.y ) && ( y < start_pos.y+size.h ) );
+    }
+
     void moveX( const WtDim& dim )
     {
         x = x + dim.w;
     }
 
-    size_t x;
-    size_t y;
+    ssize_t x;
+    ssize_t y;
 };
 
 /**************************
@@ -104,6 +117,7 @@ public:
 
     bool       is_key_event;
     bool       is_motion_event;
+    bool       is_drag_event;
     wt_control key;
     WtCoord    pos;
     WtCoord    d_pos;

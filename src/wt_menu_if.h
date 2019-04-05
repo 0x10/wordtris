@@ -119,6 +119,23 @@ protected:
     /**************************
      *
      *************************/
+    WtButton& get_button( size_t id )
+    {
+        WtButton& result = m_buttons[0];
+        for(size_t idx=0;idx<m_buttons.size();idx++)
+        {
+            if ( id == m_buttons[idx].id() )
+            {
+                result = m_buttons[idx];
+                break;
+            }
+        }
+        return result;
+    }
+
+    /**************************
+     *
+     *************************/
     void add_button( WtButton button )
     {
         bool already_exists = false;

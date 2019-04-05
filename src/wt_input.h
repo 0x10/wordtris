@@ -34,7 +34,7 @@ public:
     virtual void notify_pause(){}
     virtual void notify_quit(){ exit(0); }
     virtual void notify_button_pressed( uint16_t ) {}
-    virtual void notify_motion( WtCoord, WtCoord ) {}
+    virtual void notify_motion( WtCoord, WtCoord, bool ) {}
 };
 
 /**************************************
@@ -171,7 +171,7 @@ public:
             {
                 for (size_t list_idx = 0; list_idx < m_input_listener.size(); list_idx++)
                 {
-                    m_input_listener[list_idx]->notify_motion( ev.pos, ev.d_pos );
+                    m_input_listener[list_idx]->notify_motion( ev.pos, ev.d_pos, ev.is_drag_event );
                 }
             }
         }

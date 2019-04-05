@@ -36,13 +36,17 @@ public:
     }
 private:
     WtMenuCtr() :
-        WtMenuIf( 0x100, "bg_menu_settings.bmp" )
+        WtMenuIf( 0x100, "bg_menu_settings.bmp" ),
+        m_drag_start_pos(0,0),
+        m_was_drag(false),
+        m_drag_button_id(0)
     {
         add_button( WtButton( 1, WtCoord( 170, 493 ), WtDim( 200, 200 ), "start_btn.bmp" ) );
         add_button( WtButton( 2, WtCoord( 105, 800 ), WtDim( 100, 100 ), "score_btn.bmp" ) );
         add_button( WtButton( 3, WtCoord( 332, 800 ), WtDim( 100, 100 ), "settings_btn.bmp" ) );
 
         m_settings.listen( m_pause_menu.get_help_listener() );
+
     }
     WtMenuCtr( const WtMenuCtr& ); 
     WtMenuCtr & operator = (const WtMenuCtr &);
@@ -87,11 +91,57 @@ private:
     /**************************
      *
      *************************/
-    virtual void notify_motion( WtCoord pos, WtCoord d_pos )
+    virtual void notify_motion( WtCoord pos, 
+                                WtCoord d_pos, 
+                                bool is_drag )
     {
+        if ( is_drag )
+        {
+            if ( !m_was_drag )
+            {
+               // drag started 
+               m_drag_start_pos = pos;
+               WtButton& start_btn = get_button(1);
+               if ( m_drag_start_pos.in_region( start_btn.position(), start_btn.size() )  )
+               {
+                   m_drag_button_id = TO_BUTTON_ID( start_btn.id() );
+                  // std::cout << "start btn drag" << std::endl;
+               }
+            }
+
+
+            if ( m_drag_button_id == 1 )
+            {
+                WtButton& drag_btn = get_button(m_drag_button_id);
+                drag_btn.set_position( drag_btn.position() + d_pos );
+
+              //  std::cout << "continue btn drag: " << drag_btn.x() << std::endl;
+            }
+
+            m_was_drag = true;
+        }
+        else
+        {
+            if ( m_was_drag )
+            {
+               // drag stopped
+                
+            }
+            m_was_drag = false;
+            m_drag_button_id = 0;
+        }
+
+     /*   std::cout << (is_drag ? "drag" : "motion") << " at: " << 
+                        "(" << (int)pos.x << "," << (int)pos.y << ");"
+                        "(" << (int)d_pos.x << "," << (int)d_pos.y << ");"
+                    << std::endl;*/
     }
 
 private:
+    WtCoord          m_drag_start_pos;
+    bool             m_was_drag;
+    uint16_t         m_drag_button_id;
+
     WtMenuSettings   m_settings;
     WtMenuPause      m_pause_menu;
     WtMenuHighscores m_scores;
