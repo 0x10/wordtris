@@ -45,7 +45,20 @@ private:
         add_button( WtButton( 2, WtCoord( 105, 800 ), WtDim( 100, 100 ), "score_btn.bmp" ) );
         add_button( WtButton( 3, WtCoord( 332, 800 ), WtDim( 100, 100 ), "settings_btn.bmp" ) );
 
-        add_button( WtButton( 4, WtCoord( 105, 493 ), WtDim( 328, 200 ), "list_item_active.bmp" ) );
+        //add_button( WtButton( 4, WtCoord( 105, 493 ), WtDim( 328, 200 ), "list_item_active.bmp" ) );
+        
+        std::vector<WtGameModeIf*>& available_modes = GAME_MODE_CTR.get_available_modes();
+        std::vector< std::pair<uint16_t, std::string> > labeled_ids;
+        
+        for( size_t idx = 0; idx < available_modes.size(); idx++ )
+        {
+            labeled_ids.push_back( std::make_pair( (uint16_t)(4+idx), available_modes[idx]->get_title() ) );
+        }
+
+        add_horizontal_carousel( labeled_ids,
+                                 WtCoord( 0, 493), WtDim( ACTIVE_WINDOW_WIDTH, 200 ),
+                                 4 );
+
         m_settings.listen( m_pause_menu.get_help_listener() );
 
     }
@@ -86,7 +99,10 @@ private:
             case 3:
                 enter_child_menu( m_settings );
                 break;
-            default: /*ignore*/ break;
+            default: 
+                /*ignore*/ 
+                std::cout << "unknown button: " << TO_BUTTON_ID( id ) << std::endl;
+                break;
         }
     }
     /**************************
@@ -102,10 +118,9 @@ private:
             {
                // drag started 
                m_drag_start_pos = pos;
-               WtButton* list = get_button(4);
-               if ( m_drag_start_pos.in_region( list->position(), list->size() )  )
+               if ( m_drag_start_pos.in_region( WtCoord(0,493), WtDim( ACTIVE_WINDOW_WIDTH, 200 ) )  )
                {
-                   m_drag_button_id = TO_BUTTON_ID(list->id());
+                   m_drag_button_id = 4;
                    std::cout << "start btn drag = " << m_drag_button_id << std::endl;
                }
             }
@@ -113,10 +128,24 @@ private:
 
             if ( m_drag_button_id != 0 )
             {
-                WtButton* drag_btn = get_button(m_drag_button_id);
-                drag_btn->set_x( drag_btn->x() + d_pos.x );
+                // move to modify_carousel routine...
+                size_t mode_count = GAME_MODE_CTR.get_available_modes().size();
+                for (size_t m = 0; m<mode_count; m++)
+                {
+                    WtButton* drag_btn = get_button(m_drag_button_id+m);
+                    if ( drag_btn != NULL )
+                    {
+                        drag_btn->set_x( drag_btn->x() + d_pos.x );
+                        if ( ( drag_btn->x() < 0 ) || ( drag_btn->x()+drag_btn->width() > ACTIVE_WINDOW_WIDTH ) )
+                           drag_btn->set_image("list_item_inactive.bmp"); 
+                        else
+                           drag_btn->set_image("list_item_active.bmp"); 
+                    }
 
-                std::cout << "continue btn drag: "<< m_drag_button_id<< "@" << drag_btn->x() << std::endl;
+//                    std::cout << "continue btn drag: "<< m_drag_button_id<< "@" << drag_btn->x() << std::endl;
+                }
+
+
             }
 
             m_was_drag = true;

@@ -157,6 +157,45 @@ protected:
         }
     }
 
+
+    /**************************
+     *
+     *************************/
+    void add_horizontal_carousel( const std::vector< std::pair<uint16_t, std::string> >& labeled_ids,
+                                  const WtCoord&    frame_pos,
+                                  const WtDim&      frame_size,
+                                  const size_t      selected )
+    {
+        size_t idx = 0;
+
+        for ( size_t i=0; i < labeled_ids.size(); i++ )
+        {
+            if ( labeled_ids[i].first == selected )
+            {
+                idx = i;
+                break;
+            }
+        }
+
+        WtCoord working_pos = frame_pos;
+        WtDim   list_item_size( 328, 200 );
+        working_pos.x += 105; // todo replace with proper calculation of list item image size
+        do
+        {
+            m_buttons.push_back( WtButton( MENU_BUTTON_ID( labeled_ids[idx].first ),
+                                           working_pos, list_item_size,
+                                           (selected == labeled_ids[idx].first ? 
+                                                    "list_item_active.bmp" : 
+                                                    "list_item_inactive.bmp" ),
+                                           labeled_ids[idx].second ) );
+
+            working_pos.x += ( 6 + 328 );
+
+            idx = (idx + 1) % labeled_ids.size();
+        }
+        while( idx != selected );
+    }
+
     /**************************
      *
      *************************/
