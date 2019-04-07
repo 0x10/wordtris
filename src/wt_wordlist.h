@@ -198,6 +198,8 @@ public:
             return m_list_medium;
         if ( name == "5k list" )
             return m_list_large;
+        if ( name == "20k list" )
+            return m_list_xlarge;
         else
             return m_list_short;
     }
@@ -211,6 +213,7 @@ private:
         load_list_from_file( "short.txt", WtL10n::get_language_code(), m_list_short );
         load_list_from_file( "medium.txt", WtL10n::get_language_code(), m_list_medium );
         load_list_from_file( "large.txt", WtL10n::get_language_code(), m_list_large );
+        load_list_from_file( "xlarge.txt", WtL10n::get_language_code(), m_list_xlarge );
     }
 
     /**************************************
@@ -235,6 +238,7 @@ private:
     std::vector<std::string> m_list_short;
     std::vector<std::string> m_list_medium;
     std::vector<std::string> m_list_large;
+    std::vector<std::string> m_list_xlarge;
 };
 
 
