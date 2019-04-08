@@ -24,6 +24,9 @@
 
 class WtMenuSettings : public WtMenuIf
 {
+private:
+    static const size_t offset_x = (ACTIVE_WINDOW_WIDTH - 328) / 2;
+    static const size_t offset_y = (ACTIVE_WINDOW_HEIGHT / 2) - (ACTIVE_WINDOW_HEIGHT / 4);
 public:
     WtMenuSettings() :
         WtMenuIf( 0x300, "bg_menu_settings.bmp" ),
@@ -31,14 +34,15 @@ public:
         m_leave_btn( WtCoord( 105, 800 ), 
                      WtDim(100, 100), 
                      "back_btn.bmp",
-                     std::bind ( &WtMenuSettings::leave, this ) )
+                     std::bind ( &WtMenuSettings::leave, this ) ),
+        m_select_mode_btn( WtCoord( offset_x, offset_y ), 
+                           WtDim(328, 69), 
+                           "menu_btn.bmp", 
+                           std::bind ( &WtMenuSettings::select_pressed, this ),
+                           WtL10n::tr("select game mode") )
     {
-       /* add_button( WtButton( WtCoord( offset_x, offset_y ), 
-                              WtDim(328, 69), 
-                              "menu_btn.bmp", 
-                              std::bind ( &WtMenuSettings::select_pressed, this ),
-                              WtL10n::tr("select game mode") ) );*/
         add_button( m_leave_btn );
+        add_button( m_select_mode_btn );
 #if 0
         {
                 std::vector< std::pair<uint16_t, std::string> > labeled_ids = {
@@ -215,7 +219,8 @@ private:
     size_t                                          m_current_diff;
     WtMenuSelectMode                                m_select_mode;
     std::vector< std::pair<uint16_t, std::string> > m_themes;
-    WtButton m_leave_btn;
+    WtButton                                        m_leave_btn;
+    WtButton                                        m_select_mode_btn;
 };
 
 #endif /* _WT_MENU_SETTINGS_H_ */
