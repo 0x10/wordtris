@@ -1,0 +1,9 @@
+format 221
+
+artifactcanvas 128023 artifact_ref 132375 // main
+  xyz 54 309 2000
+end
+artifactcanvas 128151 artifact_ref 128919 // wt_game_ctr
+  xyz 353 426 2000
+end
+end

@@ -1,0 +1,52 @@
+format 221
+
+classcanvas 128023 class_ref 132759 // WtInput
+  classdiagramsettings member_max_width 0 end
+  xyz 280 331 2005
+end
+classcanvas 128151 class_ref 130327 // WtButton
+  classdiagramsettings member_max_width 0 end
+  xyz 146 282 3005
+end
+classcanvas 128407 class_ref 130967 // WtInputObserver
+  classdiagramsettings member_max_width 0 end
+  xyz 431 372 2011
+end
+classcanvas 128663 class_ref 129815 // WtCoord
+  classdiagramsettings member_max_width 0 end
+  xyz 144 42 3011
+end
+classcanvas 128919 class_ref 129559 // WtDim
+  classdiagramsettings member_max_width 0 end
+  xyz 41 401 3011
+end
+classcanvas 129175 class_ref 132887 // typedef2
+  classdiagramsettings member_max_width 0 end
+  xyz 287 239 2011
+end
+relationcanvas 128279 relation_ref 133015 // <directional composition>
+  from ref 128023 z 3006 stereotype "<<:vector>>" xyz 217 447 3006 to ref 128151
+  role_a_pos 248 428 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 128535 relation_ref 132887 // <unidirectional association>
+  from ref 128023 z 2012 stereotype "<<:vector>>" xyz 369 447 2012 to ref 128407
+  role_a_pos 321 428 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 128791 relation_ref 128791 // <directional composition>
+  from ref 128151 z 3012 to ref 128663
+  role_a_pos 202 245 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129047 relation_ref 128919 // <directional composition>
+  from ref 128151 z 3012 to ref 128919
+  role_a_pos 113 428 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129303 relation_ref 132759 // <generalisation>
+  from ref 128023 z 2012 to ref 129175
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+end

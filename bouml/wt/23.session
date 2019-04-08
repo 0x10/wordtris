@@ -1,0 +1,35 @@
+window_sizes 1600 857 375 1219 753 52
+cleanlooks_style
+diagrams
+  classdiagram_ref 128151 // menu
+    1219 753 63 C 144 0
+  active  classdiagram_ref 128279 // gamectr
+    1219 753 60 C 48 0
+  classdiagram_ref 128407 // input
+    120 98 100 A4 0 0
+  classdiagram_ref 128535 // drawing
+    120 98 100 A4 0 0
+  classdiagram_ref 128663 // storage
+    120 98 100 A4 0 0
+  classdiagram_ref 128791 // l10n
+    120 98 100 A4 0 0
+  classdiagram_ref 128919 // wordlist
+    120 98 100 A4 0 0
+  classdiagram_ref 129047 // gamemode
+    1219 753 50 C 0 0
+  classdiagram_ref 129175 // random
+    120 98 100 A4 0 0
+  classdiagram_ref 129303 // sdl input
+    120 98 100 A4 0 0
+  classdiagram_ref 129431 // sdl drawing
+    120 98 100 A4 336 0
+  classdiagram_ref 129559 // animation
+    120 98 100 A4 0 0
+end
+show_stereotypes
+selected classdiagram_ref 128279 // gamectr
+open
+  classview_ref 128023 // src
+  deploymentview_ref 128023 // src
+end
+end

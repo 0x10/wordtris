@@ -1,0 +1,16 @@
+format 221
+
+classcanvas 128023 class_ref 130455 // WtDrawing
+  classdiagramsettings member_max_width 0 end
+  xyz 42 135 2005
+end
+classcanvas 128151 class_ref 130583 // typedef1
+  classdiagramsettings member_max_width 0 end
+  xyz 55 39 2011
+end
+relationcanvas 128279 relation_ref 129047 // <generalisation>
+  from ref 128023 z 2012 to ref 128151
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+end

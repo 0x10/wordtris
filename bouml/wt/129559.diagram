@@ -1,0 +1,34 @@
+format 221
+
+classcanvas 128023 class_ref 129047 // WtGridAnimation
+  classdiagramsettings member_max_width 0 end
+  xyz 89 40 2000
+end
+classcanvas 128151 class_ref 129175 // GridText
+  classdiagramsettings member_max_width 0 end
+  xyz 217 234 2006
+end
+classcanvas 128407 class_ref 129303 // GridAnimationStep
+  classdiagramsettings member_max_width 0 end
+  xyz 38 279 3005
+end
+line 128279 ---+ geometry VH unfixed decenter_begin 540 decenter_end 522
+  from ref 128151 z 2007 to point 261 117
+  line 128919 z 2007 to ref 128023
+relationcanvas 128535 relation_ref 128535 // <dependency>
+  decenter_begin 423
+  decenter_end 469
+  from ref 128407 z 3006 to ref 128151
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+line 128663 ---+ decenter_begin 865 decenter_end 525
+  from ref 128407 z 3006 to ref 128023
+relationcanvas 128791 relation_ref 128663 // <directional composition>
+  decenter_begin 111
+  decenter_end 468
+  from ref 128023 z 3006 stereotype "<<:vector>>" xyz 62 234 3006 to ref 128407
+  role_a_pos 113 258 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+end
