@@ -22,27 +22,21 @@ class WtMenuHighscores : public WtMenuIf
 {
 public:
     WtMenuHighscores() :
-        WtMenuIf( 0x400, "bg_menu_settings.bmp" )
+        WtMenuIf( 0x400, "bg_menu_settings.bmp" ),
+        m_leave_btn( WtCoord( 105, 800 ), 
+                     WtDim(100, 100), 
+                     "back_btn.bmp",
+                     std::bind ( &WtMenuHighscores::leave, this ) )
     {
-        add_button( WtButton( 1, WtCoord( 105, 800 ), WtDim(100, 100), "back_btn.bmp" ) );
+        add_button( m_leave_btn );
     }
     ~WtMenuHighscores() {}
 private: // no copy allowed
     WtMenuHighscores( const WtMenuHighscores& ); 
     WtMenuHighscores & operator = (const WtMenuHighscores &);
 
-private:    
-    /**************************
-     *
-     *************************/
-    virtual void notify_button_pressed( uint16_t id )
-    {
-        switch( TO_BUTTON_ID( id ) )
-        {
-            case 1: leave(); break;
-            default: break;
-        }
-    }
+private:
+    WtButton m_leave_btn;
 };
 
 #endif /* _WT_MENU_HIGHSCORES_H_ */

@@ -23,8 +23,13 @@ class WtMenuSelectMode : public WtMenuIf
 {
 public:
     WtMenuSelectMode() :
-        WtMenuIf( 0x200, "bg_menu_settings.bmp" )
+        WtMenuIf( 0x200, "bg_menu_settings.bmp" ),
+        m_leave_btn( WtCoord( 105, 800 ), 
+                     WtDim(100, 100), 
+                     "back_btn.bmp",
+                     std::bind ( &WtMenuSelectMode::leave, this ) )
     {
+    #if 0
         size_t offset_x = (ACTIVE_WINDOW_WIDTH - 328) / 2;
         size_t offset_y = (ACTIVE_WINDOW_HEIGHT / 2) - (ACTIVE_WINDOW_HEIGHT / 4 );
 
@@ -42,8 +47,8 @@ public:
                   WtDim( 328, 69 ),
                   "menu_btn.bmp",
                   modes );
-
-        add_button( WtButton( idx, WtCoord( 105, 800 ), WtDim(100, 100), "back_btn.bmp" ) );
+#endif
+        add_button( m_leave_btn );
     }
 
     ~WtMenuSelectMode()
@@ -71,8 +76,9 @@ private: // no copy allowed
             }
         }
 
-        leave();
     }
+private:
+    WtButton m_leave_btn;
 };
 
 #endif /* _WT_MENU_GAME_MODE_SELECT_H_ */

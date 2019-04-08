@@ -27,14 +27,19 @@ class WtMenuSettings : public WtMenuIf
 public:
     WtMenuSettings() :
         WtMenuIf( 0x300, "bg_menu_settings.bmp" ),
-        m_current_diff(0)
+        m_current_diff(0),
+        m_leave_btn( WtCoord( 105, 800 ), 
+                     WtDim(100, 100), 
+                     "back_btn.bmp",
+                     std::bind ( &WtMenuSettings::leave, this ) )
     {
-        size_t offset_x = (ACTIVE_WINDOW_WIDTH - 328) / 2;
-        size_t offset_y = (ACTIVE_WINDOW_HEIGHT / 2) - (ACTIVE_WINDOW_HEIGHT / 4);
-
-        add_button( WtButton( 1, WtCoord( offset_x, offset_y ), WtDim(328, 69), "menu_btn.bmp", WtL10n::tr("select game mode") ) );
-        add_button( WtButton( 2, WtCoord( 105, 800 ), WtDim(100, 100), "back_btn.bmp" ) );
-
+       /* add_button( WtButton( WtCoord( offset_x, offset_y ), 
+                              WtDim(328, 69), 
+                              "menu_btn.bmp", 
+                              std::bind ( &WtMenuSettings::select_pressed, this ),
+                              WtL10n::tr("select game mode") ) );*/
+        add_button( m_leave_btn );
+#if 0
         {
                 std::vector< std::pair<uint16_t, std::string> > labeled_ids = {
                         std::make_pair( 3, WtL10n::available_languages()[0] ),
@@ -104,7 +109,7 @@ public:
                                         WtDim( 328, 69 ),
                                         selected_id );
         }
-
+#endif
     }
 
     ~WtMenuSettings()
@@ -125,7 +130,15 @@ public:
         m_select_mode.listen( listener );
     }
 
-private:    
+private:
+    /**************************
+     *
+     *************************/
+    void select_pressed()
+    {
+        enter_child_menu( m_select_mode );
+    }
+    #if 0
     /**************************
      *
      *************************/
@@ -180,7 +193,6 @@ private:
                 break;
                 break;
             case 1:
-                enter_child_menu( m_select_mode );
                 break;
             case 2:
                 leave();
@@ -198,11 +210,12 @@ private:
                 get_listener()[idx]->notify_theme_changed( m_themes[theme_idx].second );
         }
     }
-
+#endif
 private:
     size_t                                          m_current_diff;
     WtMenuSelectMode                                m_select_mode;
     std::vector< std::pair<uint16_t, std::string> > m_themes;
+    WtButton m_leave_btn;
 };
 
 #endif /* _WT_MENU_SETTINGS_H_ */

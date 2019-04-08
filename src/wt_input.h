@@ -16,27 +16,13 @@
 #ifndef _WT_INPUT_H_
 #define _WT_INPUT_H_
 
-#include "wt_button.h"
-
+#include "wt_clickable_if.h"
 #include "wt_player.h"
 #include "wt_board.h"
 #include "wt_active_letter.h"
+#include "wt_button.h"
 
-/**************************************
- * base class for each input observer
- **************************************/
-class WtInputObserver
-{
-public:
-    virtual void notify_drop() {}
-    virtual void notify_left() {}
-    virtual void notify_right(){}
-    virtual void notify_pause(){}
-    virtual void notify_quit(){ exit(0); }
-    virtual void notify_button_pressed( uint16_t ) {}
-    virtual void notify_motion( WtCoord, WtCoord, bool ) {}
-};
-
+#include <iterator>
 /**************************************
  * input handling class
  **************************************/
@@ -56,34 +42,20 @@ private:
     WtInput() :
         InputPolicy()
     {
-        m_active_buttons.clear();
     }
     WtInput( const WtInput& ); 
     WtInput & operator = (const WtInput &);
 
 // api defintion
 public:
-    /**************************
-     *
-     *************************/
-    void listen( WtInputObserver* observer )
-    {
-        m_input_listener.push_back( observer );
-    }
+    using OnKeyPressDelegate = std::function<void(wt_control)>;
 
     /**************************
      *
      *************************/
-    void ignore( WtInputObserver* observer )
+    void register_key_press_delegate( const OnKeyPressDelegate& on_key_press  )
     {
-        for (size_t i=0;i<m_input_listener.size();i++)
-        {
-            if ( m_input_listener[i] == observer )
-            {
-                m_input_listener.erase( m_input_listener.begin()+i );
-                break;
-            }
-        }
+        m_on_key_press = on_key_press;
     }
 
     /**************************
@@ -91,8 +63,9 @@ public:
      *************************/
     void add_button( WtButton& button )
     {
-        m_active_buttons.push_back( button );
-        //std::cout << "new button("<<id<<") @ ("<<pos.x<<","<<pos.y<<") with ("<<size.w<<","<<size.h<<")"<<std::endl;
+        WtClickableIf& clickable_region = button.get_observable();
+        clickable_region.set_id ( m_active_regions.size() );
+        m_active_regions.push_back( clickable_region );
     }
 
     /**************************
@@ -100,12 +73,14 @@ public:
      *************************/
     void remove_button( WtButton& button )
     {
-        for ( size_t i = 0; i < m_active_buttons.size(); i++ )
+        WtClickableIf& clickable_region = button.get_observable();
+        for ( size_t idx = 0; idx < m_active_regions.size(); idx++ )
         {
-            if ( m_active_buttons[i].id() == button.id() )
+            if ( std::remove_reference<WtClickableIf>::type(m_active_regions[idx]).id() == clickable_region.id() )
             {
-                //std::cout << "del button("<<id<<")"<<std::endl;
-                m_active_buttons.erase( m_active_buttons.begin()+i );
+                m_active_regions.erase( m_active_regions.begin() + idx );
+                clickable_region.set_id( -1 );
+                break;
             }
         }
     }
@@ -120,59 +95,20 @@ public:
         if ( ev.is_key_event )
         {
             wt_control ch = ev.key;
-            switch (ch)
-            {
-                case wt_control_DROP:
-                    for (size_t i = 0; i < m_input_listener.size(); i++)
-                        m_input_listener[i]->notify_drop();
-                    break;
-                case wt_control_LEFT: 
-                    for (size_t i = 0; i < m_input_listener.size(); i++)
-                        m_input_listener[i]->notify_left();
-                    break;
-                case wt_control_RIGHT:
-                    for (size_t i = 0; i < m_input_listener.size(); i++)
-                        m_input_listener[i]->notify_right();
-                    break;
-                case wt_control_QUIT:
-                    for (size_t i = 0; i < m_input_listener.size(); i++)
-                        m_input_listener[i]->notify_quit();
-                    break;
-                case wt_control_PAUSE:
-                    for (size_t i = 0; i < m_input_listener.size(); i++)
-                        m_input_listener[i]->notify_pause();
-                    break;
-                default:
-                    break;
-            }
+            if ( m_on_key_press ) m_on_key_press( ch );
         }
         else
         {
-            if ( !ev.is_motion_event )
+            // eval button
+            for ( size_t i = 0; i < m_active_regions.size(); i++ )
             {
-                // eval button
-                for ( size_t i = 0; i < m_active_buttons.size(); i++ )
+                if ( !ev.is_motion_event )
                 {
-                    if ( ( ev.pos.x >= m_active_buttons[i].position().x )
-                      && ( ev.pos.x < (m_active_buttons[i].position().x + m_active_buttons[i].width()) )
-                      && ( ev.pos.y >= m_active_buttons[i].position().y )
-                      && ( ev.pos.y < (m_active_buttons[i].position().y + m_active_buttons[i].height()) ) )
-                    {
-                        for (size_t list_idx = 0; list_idx < m_input_listener.size(); list_idx++)
-                        {
-                            m_input_listener[list_idx]->notify_button_pressed( m_active_buttons[i].id() );
-                        }
+                    std::remove_reference<WtClickableIf>::type(m_active_regions[i]).trigger_release( ev.pos ); // todo distinguish between press release
+                }
+                else
+                    std::remove_reference<WtClickableIf>::type(m_active_regions[i]).trigger_motion( ev.pos, ev.d_pos );
 
-                        break;// no button stacking..
-                    }
-                }
-            }
-            else
-            {
-                for (size_t list_idx = 0; list_idx < m_input_listener.size(); list_idx++)
-                {
-                    m_input_listener[list_idx]->notify_motion( ev.pos, ev.d_pos, ev.is_drag_event );
-                }
             }
         }
     }
@@ -186,8 +122,8 @@ public:
     }
 
 private:
-    std::vector<WtInputObserver*> m_input_listener;
-    std::vector<WtButton>         m_active_buttons;
+    std::vector< std::reference_wrapper<WtClickableIf> > m_active_regions;
+    OnKeyPressDelegate         m_on_key_press;
 };
 
 

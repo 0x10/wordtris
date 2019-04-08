@@ -87,7 +87,7 @@ public:
         return (*this);
     }
 
-    bool in_region( WtCoord start_pos, WtDim size )
+    bool in_region( WtCoord start_pos, WtDim size ) const
     {
         return (  ( x >= start_pos.x ) && ( x < start_pos.x+size.w )
                && ( y >= start_pos.y ) && ( y < start_pos.y+size.h ) );

@@ -25,7 +25,7 @@
 #define TO_BUTTON_ID( id )      (0x00FF & id)
 #define INVALID_BUTTON_ID       (0xFF)
 
-class WtMenuIf : WtInputObserver
+class WtMenuIf
 {
 private:
     const std::string m_tri_state_frame = "tri_state_btn.bmp";
@@ -116,6 +116,7 @@ protected:
         return m_menu_id;
     }
 
+        #if 0
     /**************************
      *
      *************************/
@@ -132,32 +133,17 @@ protected:
         }
         return result;
     }
+        #endif 
 
     /**************************
      *
      *************************/
-    void add_button( WtButton button )
+    void add_button( WtButton& button )
     {
-        bool already_exists = false;
-
-        button.set_id( MENU_BUTTON_ID( button.id() ) );
-
-        for(size_t idx=0;idx<m_buttons.size();idx++)
-        {
-            if ( button.id() == m_buttons[idx].id() )
-            {
-                already_exists = true;
-                break;
-            }
-        }
-
-        if (! already_exists)
-        {
-            m_buttons.push_back( button );
-        }
+        m_buttons.push_back( button );
     }
 
-
+#if 0
     /**************************
      *
      *************************/
@@ -195,7 +181,6 @@ protected:
         }
         while( idx != selected );
     }
-
     /**************************
      *
      *************************/
@@ -288,6 +273,7 @@ protected:
             working_pos.y += (size.h + 20);
         }
     }
+#endif
 
     /**************************
      *
@@ -301,13 +287,8 @@ protected:
 
         for(size_t idx=0;idx<m_buttons.size();idx++)
         {
-            if ( m_buttons[idx].id() != INVALID_BUTTON_ID )
-            {
-                ACTIVE_INPUT.add_button( m_buttons[idx] );
-            }
+            ACTIVE_INPUT.add_button( m_buttons[idx] );
         }
-
-        ACTIVE_INPUT.listen( this );
     }
 
     /**************************
@@ -315,11 +296,9 @@ protected:
      *************************/
     void close_menu()
     {
-        ACTIVE_INPUT.ignore( this );
-
-        for (size_t i=0;i<m_buttons.size();i++)
+        for (size_t idx=0;idx<m_buttons.size();idx++)
         {
-            ACTIVE_INPUT.remove_button( m_buttons[i] );
+            ACTIVE_INPUT.remove_button( m_buttons[idx] );
         }
 
         fade_out();
@@ -362,7 +341,13 @@ private:
     void fade_in()
     {
         bool done = !m_fade;
-        std::vector<WtButton> button_fading = m_buttons;
+        
+        std::vector<WtButton> button_fading;
+
+        for (size_t idx=0;idx<m_buttons.size();idx++)
+        {
+            button_fading.push_back( m_buttons[idx] );
+        }
 
         for(size_t idx=0;idx<button_fading.size();idx++)
         {
@@ -385,8 +370,10 @@ private:
             done = true;
             for(size_t idx=0;idx<button_fading.size();idx++)
             {
+                ssize_t dest_x = std::remove_reference<WtButton&>::type(m_buttons[idx]).x();
+
                 button_fading[idx].set_x( button_fading[idx].x() + 80);
-                if ( button_fading[idx].x() != m_buttons[idx].x() )
+                if ( button_fading[idx].x() != dest_x )
                     done = false;
             }
         }
@@ -398,7 +385,12 @@ private:
     void fade_out()
     {
         bool done = !m_fade;
-        std::vector<WtButton> button_fading = m_buttons;
+        std::vector<WtButton> button_fading;
+
+        for (size_t idx=0;idx<m_buttons.size();idx++)
+        {
+            button_fading.push_back( m_buttons[idx] );
+        }
 
         while( !done )
         {
@@ -416,8 +408,10 @@ private:
             done = true;
             for(size_t idx=0;idx<button_fading.size();idx++)
             {
+                ssize_t dest_x = std::remove_reference<WtButton&>::type(m_buttons[idx]).x() - 800;
+
                 button_fading[idx].set_x( button_fading[idx].x() - 80);
-                if ( button_fading[idx].x() != m_buttons[idx].x()-800 )
+                if ( button_fading[idx].x() != dest_x )
                     done = false;
             }
         }
@@ -438,7 +432,7 @@ private:
     const uint16_t                          m_menu_id;
     bool                                    m_shall_leave;
     std::string                             m_bg;
-    std::vector<WtButton>                   m_buttons;
+    std::vector< std::reference_wrapper<WtButton> > m_buttons;
     std::vector<WtSettingsChangeObserver*>  m_change_listener;
     bool                                    m_fade;
 };

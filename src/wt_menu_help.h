@@ -26,9 +26,13 @@ class WtMenuHelp : public WtMenuIf, public WtSettingsChangeObserver
 public:
     WtMenuHelp() :
         WtMenuIf( 0x500, "bg_menu_pause.bmp", false ),
-        m_selected_mode( GAME_MODE_CTR.mode_from_string( STORAGE.get_settings().game_mode ) )
+        m_selected_mode( GAME_MODE_CTR.mode_from_string( STORAGE.get_settings().game_mode ) ),
+        m_leave_btn( WtCoord( 105, 800 ), 
+                     WtDim(100, 100), 
+                     "back_btn.bmp",
+                     std::bind ( &WtMenuHelp::leave, this ) )
     {
-        add_button( WtButton( 1, WtCoord( 105, 800 ), WtDim(100, 100), "back_btn.bmp" ) );
+        add_button( m_leave_btn );
     }
 
     ~WtMenuHelp()
@@ -37,21 +41,6 @@ public:
 private: // no copy allowed
     WtMenuHelp( const WtMenuHelp& ); 
     WtMenuHelp & operator = (const WtMenuHelp &);
-
-
-    /**************************
-     *
-     *************************/
-    virtual void notify_button_pressed( uint16_t id )
-    {
-        switch( TO_BUTTON_ID( id ) )
-        {
-            case 1:
-                leave();
-                break;
-                default: break;
-        }
-    }
 
     /**************************
      *
@@ -87,6 +76,8 @@ private: // no copy allowed
 
 private:
     WtGameModeIf* m_selected_mode;
+
+    WtButton      m_leave_btn;
 };
 
 #endif /* _WT_MENU_GAME_MODE_SELECT_H_ */

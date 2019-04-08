@@ -39,14 +39,26 @@ private:
         WtMenuIf( 0x100, "bg_menu_settings.bmp" ),
         m_drag_start_pos(0,0),
         m_was_drag(false),
-        m_drag_button_id(0)
+        m_drag_button_id(0),
+        m_start_btn( WtCoord( 170, 193/*493*/ ), 
+                     WtDim( 200, 200 ),
+                     "start_btn.bmp",
+                     std::bind ( &WtMenuCtr::leave, this ) ),
+        m_score_btn( WtCoord( 105, 800 ), 
+                     WtDim( 100, 100 ), 
+                     "score_btn.bmp",
+                     std::bind ( &WtMenuCtr::enter_score_menu, this ) ),
+        m_setting_btn( WtCoord( 332, 800 ),
+                       WtDim( 100, 100 ),
+                       "settings_btn.bmp",
+                       std::bind ( &WtMenuCtr::enter_settings_menu, this ) )
     {
-        add_button( WtButton( 1, WtCoord( 170, 193/*493*/ ), WtDim( 200, 200 ), "start_btn.bmp" ) );
-        add_button( WtButton( 2, WtCoord( 105, 800 ), WtDim( 100, 100 ), "score_btn.bmp" ) );
-        add_button( WtButton( 3, WtCoord( 332, 800 ), WtDim( 100, 100 ), "settings_btn.bmp" ) );
+        add_button( m_start_btn );
+        add_button( m_score_btn );
+        add_button( m_setting_btn );
 
         //add_button( WtButton( 4, WtCoord( 105, 493 ), WtDim( 328, 200 ), "list_item_active.bmp" ) );
-        
+       #if 0 
         std::vector<WtGameModeIf*>& available_modes = GAME_MODE_CTR.get_available_modes();
         std::vector< std::pair<uint16_t, std::string> > labeled_ids;
         
@@ -58,7 +70,7 @@ private:
         add_horizontal_carousel( labeled_ids,
                                  WtCoord( 0, 493), WtDim( ACTIVE_WINDOW_WIDTH, 200 ),
                                  4 );
-
+#endif
         m_settings.listen( m_pause_menu.get_help_listener() );
 
     }
@@ -86,25 +98,21 @@ private:
     /**************************
      *
      *************************/
-    virtual void notify_button_pressed( uint16_t id )
+    void enter_score_menu()
     {
-        switch( TO_BUTTON_ID( id ) )
-        {
-            case 1:
-                leave();
-                break;
-            case 2:
-                enter_child_menu( m_scores );
-                break;
-            case 3:
-                enter_child_menu( m_settings );
-                break;
-            default: 
-                /*ignore*/ 
-                std::cout << "unknown button: " << TO_BUTTON_ID( id ) << std::endl;
-                break;
-        }
+        std::cout << "enter score menu\n";
+        enter_child_menu( m_scores );
     }
+
+    /**************************
+     *
+     *************************/
+    void enter_settings_menu()
+    {
+        enter_child_menu( m_settings );
+    }
+
+#if 0
     /**************************
      *
      *************************/
@@ -166,7 +174,7 @@ private:
                         "(" << (int)d_pos.x << "," << (int)d_pos.y << ");"
                     << std::endl;*/
     }
-
+#endif
 private:
     WtCoord          m_drag_start_pos;
     bool             m_was_drag;
@@ -175,6 +183,10 @@ private:
     WtMenuSettings   m_settings;
     WtMenuPause      m_pause_menu;
     WtMenuHighscores m_scores;
+
+    WtButton         m_start_btn;
+    WtButton         m_score_btn;
+    WtButton         m_setting_btn;
 };
 
 #endif /* _WT_MENU_CTR_H_ */

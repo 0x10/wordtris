@@ -23,17 +23,35 @@
 
 class WtMenuPause : public WtMenuIf
 {
+private:
+    static const size_t offset_x = (ACTIVE_WINDOW_WIDTH) / 2;
+    static const size_t offset_y = (ACTIVE_WINDOW_HEIGHT / 2);
 public:
     WtMenuPause() :
-        WtMenuIf( 0x200, "bg_menu_pause.bmp", false )
+        WtMenuIf( 0x200, "bg_menu_pause.bmp", false ),
+        m_leave_btn( WtCoord(offset_x - 158, offset_y-100), 
+                     WtDim(100, 100),
+                     "back_btn.bmp",
+                     std::bind ( &WtMenuPause::leave, this ) ),
+        m_redo_btn( WtCoord(offset_x + 58, offset_y-100), 
+                    WtDim(100, 100),
+                    "redo_btn.bmp",
+                    std::bind ( &WtMenuPause::restart_pressed, this ) ),
+        m_quit_btn( WtCoord(offset_x + 58, offset_y+100),
+                    WtDim(100, 100),
+                    "quit_btn.bmp",
+                    std::bind ( &WtMenuPause::quit_pressed, this ) ),
+        m_help_btn( WtCoord(offset_x - 158, offset_y+100),
+                    WtDim(100, 100),
+                    "help_btn.bmp",
+                    std::bind ( &WtMenuPause::help_pressed, this ) )
     {
-        size_t offset_x = (ACTIVE_WINDOW_WIDTH) / 2;
-        size_t offset_y = (ACTIVE_WINDOW_HEIGHT / 2);
 
-        add_button( WtButton( 1, WtCoord(offset_x - 158, offset_y-100), WtDim(100, 100), "back_btn.bmp" ) );
-        add_button( WtButton( 2, WtCoord(offset_x + 58, offset_y-100), WtDim(100, 100), "redo_btn.bmp" ) );
-        add_button( WtButton( 3, WtCoord(offset_x + 58, offset_y+100), WtDim(100, 100), "quit_btn.bmp" ) );
-        add_button( WtButton( 4, WtCoord(offset_x - 158, offset_y+100), WtDim(100, 100), "help_btn.bmp" ) );
+
+        add_button( m_leave_btn );
+        add_button( m_redo_btn );
+        add_button( m_quit_btn );
+        add_button( m_help_btn );
     }
 
     ~WtMenuPause()
@@ -47,27 +65,29 @@ private: // no copy allowed
     /**************************
      *
      *************************/
-    virtual void notify_button_pressed( uint16_t id )
+    void restart_pressed()
     {
-        switch( TO_BUTTON_ID( id ) )
-        {
-            case 1:
-                leave();
-                break;
-            case 2:
-                GAME_CTR.restart();
-                leave();
-                break;
-            case 3:
-                GAME_CTR.quit();
-                leave();
-                break;
-            case 4:
-                enter_child_menu( m_help );
-                break;
-            default: break;
-        }
+        GAME_CTR.restart();
+        leave();
     }
+
+    /**************************
+     *
+     *************************/
+    void quit_pressed()
+    {
+        GAME_CTR.quit();
+        leave();
+    }
+
+    /**************************
+     *
+     *************************/
+    void help_pressed()
+    {
+        enter_child_menu( m_help );
+    }
+
 
 public:
     /**************************
@@ -80,6 +100,11 @@ public:
 
 private:
     WtMenuHelp m_help;
+
+    WtButton m_leave_btn;
+    WtButton m_redo_btn;
+    WtButton m_quit_btn;
+    WtButton m_help_btn;
 };
 
 #endif /* _WT_MENU_GAME_MODE_SELECT_H_ */

@@ -16,18 +16,29 @@
 #ifndef _WT_BUTTON_H_
 #define _WT_BUTTON_H_
 
-class WtButton
+
+#include "wt_clickable_if.h"
+
+
+class WtButton 
 {
 public:
-    WtButton( uint16_t id,
-              WtCoord pos, WtDim size,
+    using OnTapDelegate = std::function<void(void)>;
+
+    WtButton( WtCoord pos, WtDim size,
               std::string button_image,
+              OnTapDelegate on_tap,
               std::string label="" ) :
-        m_id( id ),
+
+        m_clickable( std::bind ( &WtButton::on_press, this, std::placeholders::_1 ),
+                     std::bind ( &WtButton::on_release, this, std::placeholders::_1 ),
+                     std::bind ( &WtButton::on_motion, this, std::placeholders::_1, std::placeholders::_2 ) ),
+
         m_pos( pos ),
         m_size( size ),
         m_img( button_image ),
-        m_label( label )
+        m_label( label ),
+        m_on_tap( on_tap )
     {
     }
     
@@ -36,17 +47,9 @@ public:
     /**************************
      *
      *************************/
-    uint16_t id() const
+    WtClickableIf& get_observable()
     {
-        return m_id;
-    }
-
-    /**************************
-     *
-     *************************/
-    void set_id( uint16_t id )
-    {
-        m_id = id;
+        return m_clickable;
     }
 
     /**************************
@@ -136,12 +139,42 @@ public:
     {
         return m_pos.y;
     }
+
 private:
-    uint16_t m_id;
+    /**************************
+     *
+     *************************/
+    void on_press( WtCoord& pos )
+    {
+    }
+
+    /**************************
+     *
+     *************************/
+    void on_release( WtCoord& pos )
+    {
+        if ( pos.in_region( m_pos, m_size ) )
+        {
+            if ( m_on_tap ) m_on_tap();
+        }
+    }
+
+    /**************************
+     *
+     *************************/
+    void on_motion( WtCoord& pos, WtCoord& d_pos )
+    {
+    }
+
+private:
+    WtClickableIf m_clickable;
+
     WtCoord m_pos;
     WtDim m_size;
     std::string m_img;
     std::string m_label;
+
+    OnTapDelegate m_on_tap;
 };
 
 #endif /* _WT_BUTTON_H_ */

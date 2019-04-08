@@ -31,7 +31,7 @@
 #include "wt_animations.h"
 
 #define GAME_CTR  WtGameCtr::instance()
-class WtGameCtr : WtInputObserver, public WtSettingsChangeObserver
+class WtGameCtr : public WtSettingsChangeObserver
 {
 private:
     static constexpr const char* background_image = "bg.bmp";
@@ -56,18 +56,22 @@ private:
         m_shall_restart( false ),
         m_pause( false ),
         m_pause_menu( NULL ),
-        m_left_btn( 0xF1, 
-                    WtCoord(0,100),
-                    WtDim( ACTIVE_WINDOW_WIDTH / 2, ACTIVE_WINDOW_HEIGHT/2+ACTIVE_WINDOW_HEIGHT/4 ), ""), 
-        m_right_btn( 0xF2, 
-                     WtCoord(ACTIVE_WINDOW_WIDTH / 2, 100),
-                     WtDim( ACTIVE_WINDOW_WIDTH / 2, ACTIVE_WINDOW_HEIGHT/2+ACTIVE_WINDOW_HEIGHT/4 ), ""),
-        m_drop_btn( 0xF3, 
-                    WtCoord( 0, ACTIVE_WINDOW_HEIGHT/2+ACTIVE_WINDOW_HEIGHT/4 ),
-                    WtDim( ACTIVE_WINDOW_WIDTH, ACTIVE_WINDOW_HEIGHT-(ACTIVE_WINDOW_HEIGHT/2+ACTIVE_WINDOW_HEIGHT/4)  ), ""),
-        m_pause_btn( 0xF4, 
-                     WtCoord( 393, 32 ),
-                     WtDim( 64, 64 ), "pause_btn.bmp" )
+        m_left_btn( WtCoord(0,100),
+                    WtDim( ACTIVE_WINDOW_WIDTH / 2, ACTIVE_WINDOW_HEIGHT/2+ACTIVE_WINDOW_HEIGHT/4 ), 
+                    "", 
+                    std::bind ( &WtGameCtr::notify_left, this ) ),
+        m_right_btn( WtCoord(ACTIVE_WINDOW_WIDTH / 2, 100),
+                     WtDim( ACTIVE_WINDOW_WIDTH / 2, ACTIVE_WINDOW_HEIGHT/2+ACTIVE_WINDOW_HEIGHT/4 ),
+                     "",
+                     std::bind ( &WtGameCtr::notify_right, this ) ),
+        m_drop_btn( WtCoord( 0, ACTIVE_WINDOW_HEIGHT/2+ACTIVE_WINDOW_HEIGHT/4 ),
+                    WtDim( ACTIVE_WINDOW_WIDTH, ACTIVE_WINDOW_HEIGHT-(ACTIVE_WINDOW_HEIGHT/2+ACTIVE_WINDOW_HEIGHT/4)  ),
+                    "",
+                    std::bind ( &WtGameCtr::notify_drop, this ) ),
+        m_pause_btn( WtCoord( 393, 32 ),
+                     WtDim( 64, 64 ),
+                     "pause_btn.bmp",
+                     std::bind ( &WtGameCtr::notify_pause, this ) )
     {
         WtSettings settings = STORAGE.get_settings();
         set_mode( GAME_MODE_CTR.mode_from_string( settings.game_mode ) );
@@ -77,6 +81,8 @@ private:
 
         ACTIVE_WINDOW.init();
         ACTIVE_WINDOW.set_theme( settings.active_theme );
+
+        ACTIVE_INPUT.register_key_press_delegate( std::bind( &WtGameCtr::on_key_press, this, std::placeholders::_1 ) );
     }
     WtGameCtr( const WtGameCtr& ); 
     WtGameCtr & operator = (const WtGameCtr &);
@@ -176,6 +182,38 @@ private:
         return game_over;
     }
 
+
+    /**************************
+     *
+     *************************/
+    virtual void on_key_press( wt_control key )
+    {
+        switch( key )
+        {
+            default:
+            case wt_control_INVALID:
+                break;
+
+
+            case wt_control_DROP:
+                notify_drop();
+                break;
+            case wt_control_LEFT:
+                notify_left();
+                break;
+            case wt_control_RIGHT:
+                notify_right();
+                break;
+            case wt_control_QUIT:
+                exit(1);
+                break;
+            case wt_control_PAUSE:
+                notify_pause();
+                break;
+        }
+    }
+
+
     /**************************
      *
      *************************/
@@ -232,37 +270,18 @@ private:
     /**************************
      *
      *************************/
-    virtual void notify_button_pressed( uint16_t id )
-    {
-        switch( id )
-        {
-            case 0xF1: notify_left(); break;
-            case 0xF2: notify_right(); break;
-            case 0xF3: notify_drop(); break;
-            case 0xF4: notify_pause(); break;
-            default: break;
-        }
-    }
-
-    /**************************
-     *
-     *************************/
     void set_buttons()
     {
         ACTIVE_INPUT.add_button( m_left_btn );
         ACTIVE_INPUT.add_button( m_right_btn );
         ACTIVE_INPUT.add_button( m_drop_btn );
         ACTIVE_INPUT.add_button( m_pause_btn );
-
-        ACTIVE_INPUT.listen( this );
     }
     /**************************
      *
      *************************/
     void unset_buttons()
     {
-        ACTIVE_INPUT.ignore( this );
-
         ACTIVE_INPUT.remove_button( m_left_btn );
         ACTIVE_INPUT.remove_button( m_right_btn );
         ACTIVE_INPUT.remove_button( m_drop_btn );
