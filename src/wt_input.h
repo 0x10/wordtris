@@ -61,22 +61,20 @@ public:
     /**************************
      *
      *************************/
-    void add_button( WtButton& button )
+    void add_active_region( WtClickableIf& clickable_region )
     {
-        WtClickableIf& clickable_region = button.get_observable();
         clickable_region.set_id ( m_active_regions.size() );
-        m_active_regions.push_back( clickable_region );
+        m_active_regions.push_back( &clickable_region );
     }
 
     /**************************
      *
      *************************/
-    void remove_button( WtButton& button )
+    void remove_active_region( WtClickableIf& clickable_region )
     {
-        WtClickableIf& clickable_region = button.get_observable();
         for ( size_t idx = 0; idx < m_active_regions.size(); idx++ )
         {
-            if ( std::remove_reference<WtClickableIf>::type(m_active_regions[idx]).id() == clickable_region.id() )
+            if ( m_active_regions[idx]->id() == clickable_region.id() )
             {
                 m_active_regions.erase( m_active_regions.begin() + idx );
                 clickable_region.set_id( -1 );
@@ -104,10 +102,10 @@ public:
             {
                 if ( !ev.is_motion_event )
                 {
-                    std::remove_reference<WtClickableIf>::type(m_active_regions[i]).trigger_release( ev.pos ); // todo distinguish between press release
+                    m_active_regions[i]->trigger_release( ev.pos ); // todo distinguish between press release
                 }
                 else
-                    std::remove_reference<WtClickableIf>::type(m_active_regions[i]).trigger_motion( ev.pos, ev.d_pos );
+                    m_active_regions[i]->trigger_motion( ev.pos, ev.d_pos );
 
             }
         }
@@ -122,7 +120,7 @@ public:
     }
 
 private:
-    std::vector< std::reference_wrapper<WtClickableIf> > m_active_regions;
+    std::vector< WtClickableIf* > m_active_regions;
     OnKeyPressDelegate         m_on_key_press;
 };
 

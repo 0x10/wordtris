@@ -34,7 +34,7 @@ public:
 
     WtTriStateButton( WtCoord pos, 
                       WtDim size,
-                      std::string label[3],
+                      std::vector<std::string>& label, //how to check if > 0 and < 3?
                       uint8_t selected,
                       OnItemTapDelegate on_item_tap ) :
 
@@ -53,6 +53,14 @@ public:
     
     ~WtTriStateButton() {}
 
+
+    /**************************
+     *
+     *************************/
+    operator WtClickableIf&()
+    {
+        return get_observable();
+    }
     /**************************
      *
      *************************/
@@ -92,6 +100,27 @@ public:
             return m_tri_state_selected_img[idx];
         else
             return m_tri_state_unselected_img;
+    }
+
+    /**************************
+     *
+     *************************/
+    template<uint8_t const idx>
+    WtButton item()
+    {
+        static_assert( idx < 3, "tri_state_button has only 3 items" );
+        WtCoord item_pos( m_pos.x + 1, m_pos.y + 1 );
+        if ( idx > 0 )
+            item_pos.moveX( m_item_size );
+        if ( idx > 1 )
+            item_pos.moveX( m_item_size );
+
+        return WtButton( item_pos,
+                         m_item_size,
+                         item_image<idx>(),
+                         [](){},
+                         item_label<idx>() );
+
     }
 
     /**************************
@@ -156,6 +185,21 @@ public:
     ssize_t y()
     {
         return m_pos.y;
+    }
+
+    /**************************
+     *
+     *************************/
+    void select( uint8_t id )
+    {
+        if ( id < 3 )
+        {
+            m_selected = id;
+        }
+        else
+        {
+            std::cout << "id out of range\n";
+        }
     }
 
 public:

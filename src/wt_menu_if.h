@@ -17,6 +17,7 @@
 #define _WT_MENU_IF_H_
 
 #include "wt_button.h"
+#include "wt_tristate_button.h"
 
 #include "wt_settings_observer_if.h"
 #include "wt_input.h"
@@ -27,10 +28,6 @@
 
 class WtMenuIf
 {
-private:
-    const std::string m_tri_state_frame = "tri_state_btn.bmp";
-    const std::string m_tri_state_selected_img[3] = { "tri_state_btn_select0.bmp", "tri_state_btn_select1.bmp", "tri_state_btn_select2.bmp" };
-    const std::string m_tri_state_unselected_img = "tri_state_btn_select_none.bmp";
 public:
     WtMenuIf() :
         m_menu_id(0xFF00),
@@ -116,31 +113,20 @@ protected:
         return m_menu_id;
     }
 
-        #if 0
-    /**************************
-     *
-     *************************/
-    WtButton* get_button( size_t id )
-    {
-        WtButton* result = NULL;
-        for(size_t idx=0;idx<m_buttons.size();idx++)
-        {
-            if ( MENU_BUTTON_ID( id ) == m_buttons[idx].id() )
-            {
-                result = &m_buttons[idx];
-                break;
-            }
-        }
-        return result;
-    }
-        #endif 
-
     /**************************
      *
      *************************/
     void add_button( WtButton& button )
     {
-        m_buttons.push_back( button );
+        m_buttons.push_back( &button );
+    }
+
+    /**************************
+     *
+     *************************/
+    void add_tristate_button( WtTriStateButton& button )
+    {
+        m_tristate_buttons.push_back( &button );
     }
 
 #if 0
@@ -181,82 +167,6 @@ protected:
         }
         while( idx != selected );
     }
-    /**************************
-     *
-     *************************/
-    void add_radio_group_button( const std::vector< std::pair<uint16_t, std::string> >& labeled_ids,
-                                 const WtCoord&    frame_pos,
-                                 const WtDim&      frame_size,
-                                 const size_t      selected )
-    {
-        if ( labeled_ids.size() > 1 )
-        {
-            WtCoord working_state_pos  = WtCoord( frame_pos.x + 1, frame_pos.y + 1 );
-            WtDim   working_state_size = WtDim(   (frame_size.w - 1) / labeled_ids.size(),
-                                                  (frame_size.h - 2) );
-
-            // Add frame which isnt a button at all but can be set
-            // using invalid id...
-            m_buttons.push_back( WtButton( INVALID_BUTTON_ID,
-                                           frame_pos, frame_size,
-                                           m_tri_state_frame ) );
-
-            m_buttons.push_back( WtButton( MENU_BUTTON_ID( labeled_ids.front().first ),
-                                           working_state_pos, working_state_size,
-                                           (selected == labeled_ids.front().first ? 
-                                                    m_tri_state_selected_img[0] : 
-                                                    m_tri_state_unselected_img ),
-                                           labeled_ids.front().second ) );
-            working_state_pos.moveX( working_state_size );           
-
-            for( size_t i_Idx = 1; i_Idx < labeled_ids.size() - 1; i_Idx++ )
-            {
-                m_buttons.push_back( WtButton( MENU_BUTTON_ID( labeled_ids[i_Idx].first ),
-                                     working_state_pos, working_state_size,
-                                     (selected == labeled_ids[i_Idx].first ? 
-                                                m_tri_state_selected_img[1] : 
-                                                m_tri_state_unselected_img ),
-                                     labeled_ids[i_Idx].second ) );
-                working_state_pos.moveX( working_state_size );
-            }
-
-            m_buttons.push_back( WtButton( MENU_BUTTON_ID( labeled_ids.back().first ),
-                                           working_state_pos, working_state_size,
-                                           (selected == labeled_ids.back().first ? 
-                                                    m_tri_state_selected_img[2] : 
-                                                    m_tri_state_unselected_img ),
-                                           labeled_ids.back().second ) );
-            working_state_pos.moveX( working_state_size );
-        }
-        else
-        {
-            WtButton newButton = WtButton( labeled_ids.front().first,
-                                           frame_pos, frame_size,
-                                           m_tri_state_frame );
-            add_button( newButton );
-        }
-    }
-
-    /**************************
-      *
-      *************************/
-    void modify_radio_group_button( const uint16_t first_id,
-                                    const size_t   count, 
-                                    const size_t   selected )
-    {
-        for(size_t idx=0;idx<m_buttons.size();idx++)
-        {
-            if( m_buttons[idx].id() == MENU_BUTTON_ID( first_id ) )
-            {
-                m_buttons[idx].set_image(   (selected == first_id ? m_tri_state_selected_img[0] : m_tri_state_unselected_img ) );
-                for ( size_t i_idx = 1; i_idx < count-1; i_idx++ )
-                    m_buttons[idx+i_idx].set_image( (selected == first_id+i_idx ? m_tri_state_selected_img[1] : m_tri_state_unselected_img ) );
-                m_buttons[idx+count-1].set_image( (selected == first_id+(count-1) ? m_tri_state_selected_img[2] : m_tri_state_unselected_img ) );
-
-                break;
-            }
-        }
-    }
 
     /**************************
       *
@@ -287,7 +197,11 @@ protected:
 
         for(size_t idx=0;idx<m_buttons.size();idx++)
         {
-            ACTIVE_INPUT.add_button( m_buttons[idx] );
+            ACTIVE_INPUT.add_active_region( *(m_buttons[idx]) );
+        }
+        for(size_t idx=0;idx<m_tristate_buttons.size();idx++)
+        {
+            ACTIVE_INPUT.add_active_region( *(m_tristate_buttons[idx]) );
         }
     }
 
@@ -298,7 +212,11 @@ protected:
     {
         for (size_t idx=0;idx<m_buttons.size();idx++)
         {
-            ACTIVE_INPUT.remove_button( m_buttons[idx] );
+            ACTIVE_INPUT.remove_active_region( *(m_buttons[idx]) );
+        }
+        for (size_t idx=0;idx<m_tristate_buttons.size();idx++)
+        {
+            ACTIVE_INPUT.remove_active_region( *(m_tristate_buttons[idx]) );
         }
 
         fade_out();
@@ -346,7 +264,7 @@ private:
 
         for (size_t idx=0;idx<m_buttons.size();idx++)
         {
-            button_fading.push_back( m_buttons[idx] );
+            button_fading.push_back( *m_buttons[idx] );
         }
 
         for(size_t idx=0;idx<button_fading.size();idx++)
@@ -370,7 +288,7 @@ private:
             done = true;
             for(size_t idx=0;idx<button_fading.size();idx++)
             {
-                ssize_t dest_x = std::remove_reference<WtButton&>::type(m_buttons[idx]).x();
+                ssize_t dest_x = m_buttons[idx]->x();
 
                 button_fading[idx].set_x( button_fading[idx].x() + 80);
                 if ( button_fading[idx].x() != dest_x )
@@ -389,7 +307,7 @@ private:
 
         for (size_t idx=0;idx<m_buttons.size();idx++)
         {
-            button_fading.push_back( m_buttons[idx] );
+            button_fading.push_back( *m_buttons[idx] );
         }
 
         while( !done )
@@ -408,7 +326,7 @@ private:
             done = true;
             for(size_t idx=0;idx<button_fading.size();idx++)
             {
-                ssize_t dest_x = std::remove_reference<WtButton&>::type(m_buttons[idx]).x() - 800;
+                ssize_t dest_x = m_buttons[idx]->x() - 800;
 
                 button_fading[idx].set_x( button_fading[idx].x() - 80);
                 if ( button_fading[idx].x() != dest_x )
@@ -424,7 +342,16 @@ private:
     {
         for(size_t idx=0;idx<m_buttons.size();idx++)
         {
-            ACTIVE_WINDOW.draw_button( m_buttons[idx] );
+            ACTIVE_WINDOW.draw_button( *(m_buttons[idx]) );
+        }
+        for(size_t idx=0;idx<m_tristate_buttons.size();idx++)
+        {
+            ACTIVE_WINDOW.draw_image( m_tristate_buttons[idx]->position(),
+                                      m_tristate_buttons[idx]->size(),
+                                      m_tristate_buttons[idx]->background_image() );
+            ACTIVE_WINDOW.draw_button( m_tristate_buttons[idx]->item<0>() );
+            ACTIVE_WINDOW.draw_button( m_tristate_buttons[idx]->item<1>() );
+            ACTIVE_WINDOW.draw_button( m_tristate_buttons[idx]->item<2>() );
         }
     }
 
@@ -432,7 +359,8 @@ private:
     const uint16_t                          m_menu_id;
     bool                                    m_shall_leave;
     std::string                             m_bg;
-    std::vector< std::reference_wrapper<WtButton> > m_buttons;
+    std::vector< WtButton* >                m_buttons;
+    std::vector< WtTriStateButton* >        m_tristate_buttons;
     std::vector<WtSettingsChangeObserver*>  m_change_listener;
     bool                                    m_fade;
 };

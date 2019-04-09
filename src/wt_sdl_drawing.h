@@ -176,7 +176,21 @@ public:
         m_bg_img_path = bg_img;
     }
 
-
+    /**************************
+      *
+      *************************/   
+    void draw_image( const WtCoord     pos,
+                     const WtDim       size,
+                     const std::string fname )
+    {
+        SDL_Texture*  button_img = get_texture( fname );
+        SDL_Rect rect;
+        rect.x = pos.x;
+        rect.y = pos.y;
+        rect.w = size.w;
+        rect.h = size.h;
+        SDL_RenderCopy(m_renderer, button_img, NULL, &rect);
+    }
 protected:
     /**************************
       *
@@ -195,21 +209,7 @@ protected:
         return WtDim( m_text_font->width(), m_text_font->height() );
     }
 
-    /**************************
-      *
-      *************************/   
-    void draw_image( const WtCoord     pos,
-                     const WtDim       size,
-                     const std::string fname )
-    {
-        SDL_Texture*  button_img = get_texture( fname );
-        SDL_Rect rect;
-        rect.x = pos.x;
-        rect.y = pos.y;
-        rect.w = size.w;
-        rect.h = size.h;
-        SDL_RenderCopy(m_renderer, button_img, NULL, &rect);
-    }
+
 
 private:
     WtDrawingPolicySdl( const WtDrawingPolicySdl& ); 

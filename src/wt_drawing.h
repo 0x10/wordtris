@@ -17,6 +17,7 @@
 #define _WT_DRAWING_H_
 
 #include "wt_button.h"
+#include "wt_tristate_button.h"
 
 #include "wt_player.h"
 #include "wt_board.h"
@@ -124,7 +125,7 @@ public:
     /**************************
       *
       *************************/   
-    void draw_button( WtButton& button )
+    void draw_button( WtButton button )
     {
         DrawingPolicy::draw_image( WtCoord( button.x(), button.y() ),
                                    WtDim( button.width(), button.height() ),

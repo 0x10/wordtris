@@ -40,33 +40,26 @@ public:
                            WtDim(328, 69), 
                            "menu_btn.bmp", 
                            std::bind ( &WtMenuSettings::select_pressed, this ),
-                           WtL10n::tr("select game mode") )
+                           WtL10n::tr("select game mode") ),
+        m_lang_select_btn( WtCoord( offset_x, offset_y + 69 + 20 ),
+                           WtDim( 328, 69 ),
+                           WtL10n::available_languages(),
+                           0,
+                           std::bind ( &WtMenuSettings::lang_changed, this, std::placeholders::_1 ) )
     {
+        for ( size_t idx = 0; idx < WtL10n::available_languages().size(); idx++ )
+        {
+            if ( WtL10n::available_languages()[idx] == WtL10n::get_language_code() )
+            {
+                m_lang_select_btn.select( (uint8_t) idx );
+                break;
+            }
+        }
+
         add_button( m_leave_btn );
         add_button( m_select_mode_btn );
+        add_tristate_button( m_lang_select_btn ); //baeh
 #if 0
-        {
-                std::vector< std::pair<uint16_t, std::string> > labeled_ids = {
-                        std::make_pair( 3, WtL10n::available_languages()[0] ),
-                        std::make_pair( 4, WtL10n::available_languages()[1] ),
-                        std::make_pair( 5, WtL10n::available_languages()[2] ),
-                };
-
-                size_t selected_id = 0;
-                for ( size_t idx = 0; idx < WtL10n::available_languages().size(); idx++ )
-                {
-                    if ( labeled_ids[idx].second == WtL10n::get_language_code() )
-                    {
-                        selected_id = labeled_ids[idx].first;
-                        break;
-                    }
-                }
-
-                add_radio_group_button( labeled_ids,
-                                        WtCoord( offset_x, offset_y + 69 + 20 ),
-                                        WtDim( 328, 69 ),
-                                        selected_id );
-        }
 
         {
                 std::vector< std::pair<uint16_t, std::string> > labeled_ids = {
@@ -143,6 +136,23 @@ private:
     {
         enter_child_menu( m_select_mode );
     }
+
+    /**************************
+     *
+     *************************/
+    void lang_changed( uint8_t id )
+    {
+        size_t lang_idx = id;
+        if ( WtL10n::get_language_code() != WtL10n::available_languages()[lang_idx] )
+        {
+            WtL10n::set_language( WtL10n::available_languages()[lang_idx] );
+            for( size_t idx = 0; idx < get_listener().size(); idx++ )
+            {
+                get_listener()[idx]->notify_language_changed( WtL10n::get_language_code() );
+            }
+        }
+    }
+
     #if 0
     /**************************
      *
@@ -222,6 +232,7 @@ private:
     std::vector< std::pair<uint16_t, std::string> > m_themes;
     WtButton                                        m_leave_btn;
     WtButton                                        m_select_mode_btn;
+    WtTriStateButton                                m_lang_select_btn;
 };
 
 #endif /* _WT_MENU_SETTINGS_H_ */

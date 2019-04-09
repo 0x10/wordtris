@@ -47,6 +47,14 @@ public:
     /**************************
      *
      *************************/
+    operator WtClickableIf&()
+    {
+        return get_observable();
+    }
+
+    /**************************
+     *
+     *************************/
     WtClickableIf& get_observable()
     {
         return m_clickable;

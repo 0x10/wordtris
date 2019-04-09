@@ -205,7 +205,7 @@ private:
                 notify_right();
                 break;
             case wt_control_QUIT:
-                exit(1);
+                exit(0);
                 break;
             case wt_control_PAUSE:
                 notify_pause();
@@ -272,20 +272,20 @@ private:
      *************************/
     void set_buttons()
     {
-        ACTIVE_INPUT.add_button( m_left_btn );
-        ACTIVE_INPUT.add_button( m_right_btn );
-        ACTIVE_INPUT.add_button( m_drop_btn );
-        ACTIVE_INPUT.add_button( m_pause_btn );
+        ACTIVE_INPUT.add_active_region( m_left_btn );
+        ACTIVE_INPUT.add_active_region( m_right_btn );
+        ACTIVE_INPUT.add_active_region( m_drop_btn );
+        ACTIVE_INPUT.add_active_region( m_pause_btn );
     }
     /**************************
      *
      *************************/
     void unset_buttons()
     {
-        ACTIVE_INPUT.remove_button( m_left_btn );
-        ACTIVE_INPUT.remove_button( m_right_btn );
-        ACTIVE_INPUT.remove_button( m_drop_btn );
-        ACTIVE_INPUT.remove_button( m_pause_btn );
+        ACTIVE_INPUT.remove_active_region( m_left_btn );
+        ACTIVE_INPUT.remove_active_region( m_right_btn );
+        ACTIVE_INPUT.remove_active_region( m_drop_btn );
+        ACTIVE_INPUT.remove_active_region( m_pause_btn );
     }
 
     /**************************
