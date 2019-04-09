@@ -45,7 +45,14 @@ public:
                            WtDim( 328, 69 ),
                            WtL10n::available_languages(),
                            0,
-                           std::bind ( &WtMenuSettings::lang_changed, this, std::placeholders::_1 ) )
+                           std::bind ( &WtMenuSettings::lang_changed, this, std::placeholders::_1 ) ),
+        m_diff_select_btn( WtCoord( offset_x, offset_y + (69 + 20)*2 ),
+                           WtDim( 328, 69 ),
+                           std::vector<std::string>({ WtGameModeIf::get_available_difficulties()[0].second,
+                             WtGameModeIf::get_available_difficulties()[1].second,
+                             WtGameModeIf::get_available_difficulties()[2].second }),
+                           0,
+                           std::bind ( &WtMenuSettings::diff_changed, this, std::placeholders::_1 ) )
     {
         for ( size_t idx = 0; idx < WtL10n::available_languages().size(); idx++ )
         {
@@ -55,10 +62,25 @@ public:
                 break;
             }
         }
+        switch( STORAGE.get_settings().difficulty )
+        {
+            default: break;
+            case wt_difficulty_EASY:
+                m_diff_select_btn.select( 0 );
+                break;
+            case wt_difficulty_MEDIUM:
+                m_diff_select_btn.select( 1 );
+                break;
+            case wt_difficulty_HARD:
+                m_diff_select_btn.select( 2 );
+                break;
+        }
+
 
         add_button( m_leave_btn );
         add_button( m_select_mode_btn );
-        add_tristate_button( m_lang_select_btn ); //baeh
+        add_tristate_button( m_lang_select_btn );
+        add_tristate_button( m_diff_select_btn );
 #if 0
 
         {
@@ -135,6 +157,21 @@ private:
     void select_pressed()
     {
         enter_child_menu( m_select_mode );
+    }
+
+    /**************************
+     *
+     *************************/
+    void diff_changed( uint8_t id )
+    {
+        size_t diff_idx = id;
+        if ( STORAGE.get_settings().difficulty != WtGameModeIf::get_available_difficulties()[diff_idx].first )
+        {
+            for( size_t idx = 0; idx < get_listener().size(); idx++ )
+            {
+                get_listener()[idx]->notify_difficulty_changed( WtGameModeIf::get_available_difficulties()[diff_idx].first );
+            }
+        }
     }
 
     /**************************
@@ -233,6 +270,7 @@ private:
     WtButton                                        m_leave_btn;
     WtButton                                        m_select_mode_btn;
     WtTriStateButton                                m_lang_select_btn;
+    WtTriStateButton                                m_diff_select_btn;
 };
 
 #endif /* _WT_MENU_SETTINGS_H_ */
