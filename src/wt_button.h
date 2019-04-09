@@ -161,6 +161,7 @@ public:
      *************************/
     void on_release( WtCoord& pos )
     {
+//        std::cout << "release detected: (" << pos.x << "," << pos.y << ") -> (" << m_pos.x << "," << m_pos.y << "):(" << m_size.w << "," << m_size.h << ") -> " << m_label << std::endl;
         if ( pos.in_region( m_pos, m_size ) )
         {
             if ( m_on_tap ) m_on_tap();

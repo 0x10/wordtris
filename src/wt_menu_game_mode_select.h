@@ -29,56 +29,48 @@ public:
                      "back_btn.bmp",
                      std::bind ( &WtMenuSelectMode::leave, this ) )
     {
-    #if 0
-        size_t offset_x = (ACTIVE_WINDOW_WIDTH - 328) / 2;
-        size_t offset_y = (ACTIVE_WINDOW_HEIGHT / 2) - (ACTIVE_WINDOW_HEIGHT / 4 );
+        ssize_t offset_x = (ACTIVE_WINDOW_WIDTH - 328) / 2;
+        ssize_t offset_y = (ACTIVE_WINDOW_HEIGHT / 2) - (ACTIVE_WINDOW_HEIGHT / 4 );
 
         std::vector<WtGameModeIf*>& available_modes = GAME_MODE_CTR.get_available_modes();
 
-        size_t idx = 0;
-        std::vector<std::string> modes;
-
-        for( idx = 0; idx < available_modes.size(); idx++ )
+        m_game_mode_list.clear();
+        for( size_t idx = 0; idx < available_modes.size(); idx++ )
         {
-            modes.push_back( available_modes[idx]->get_title() );
-        }
+            WtGameModeIf* current_mode = available_modes[idx];
 
-        add_list( WtCoord( offset_x, offset_y ),
-                  WtDim( 328, 69 ),
-                  "menu_btn.bmp",
-                  modes );
-#endif
+            std::function<void(void)> cb = [this, idx]() {
+                                                            std::cout << "button " << idx << " pressed\n";
+                                                            for( size_t l_idx = 0; l_idx < get_listener().size(); l_idx++ )
+                                                            {
+                                                                get_listener()[l_idx]->notify_game_mode_changed( GAME_MODE_CTR.get_available_modes()[idx] );
+                                                            }
+                                                            leave();
+                                                         };
+            WtButton* mode_btn = new WtButton( WtCoord(offset_x, offset_y+(idx*(69+20))),
+                                               WtDim(328, 69),
+                                               "menu_btn.bmp",
+                                               cb,
+                                               current_mode->get_title() );
+            m_game_mode_list.push_back( mode_btn );
+            add_button( *mode_btn );
+        }
         add_button( m_leave_btn );
     }
 
     ~WtMenuSelectMode()
     {
+        for ( size_t idx = 0; idx < m_game_mode_list.size(); idx++ ) 
+            delete m_game_mode_list[idx];
     }
 private: // no copy allowed
     WtMenuSelectMode( const WtMenuSelectMode& ); 
     WtMenuSelectMode & operator = (const WtMenuSelectMode &);
 
-
-    /**************************
-     *
-     *************************/
-    virtual void notify_button_pressed( uint16_t id )
-    {
-        uint8_t real_id = TO_BUTTON_ID( id );
-
-        std::vector<WtGameModeIf*>& available_modes = GAME_MODE_CTR.get_available_modes();
-        
-        if ( real_id < available_modes.size() )
-        {
-            for( size_t idx = 0; idx < get_listener().size(); idx++ )
-            {
-                get_listener()[idx]->notify_game_mode_changed( available_modes[real_id] );
-            }
-        }
-
-    }
 private:
     WtButton m_leave_btn;
+
+    std::vector<WtButton*> m_game_mode_list;
 };
 
 #endif /* _WT_MENU_GAME_MODE_SELECT_H_ */

@@ -40,7 +40,7 @@ private:
         m_drag_start_pos(0,0),
         m_was_drag(false),
         m_drag_button_id(0),
-        m_start_btn( WtCoord( 170, 193/*493*/ ), 
+        m_start_btn( WtCoord( 170, 493 ), 
                      WtDim( 200, 200 ),
                      "start_btn.bmp",
                      std::bind ( &WtMenuCtr::leave, this ) ),
@@ -57,7 +57,6 @@ private:
         add_button( m_score_btn );
         add_button( m_setting_btn );
 
-        //add_button( WtButton( 4, WtCoord( 105, 493 ), WtDim( 328, 200 ), "list_item_active.bmp" ) );
        #if 0 
         std::vector<WtGameModeIf*>& available_modes = GAME_MODE_CTR.get_available_modes();
         std::vector< std::pair<uint16_t, std::string> > labeled_ids;
