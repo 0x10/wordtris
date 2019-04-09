@@ -39,7 +39,8 @@ protected:
         WtInputEvent event;
 
         SDL_Event sdl_event;
-        if (SDL_PollEvent(&sdl_event))
+        event.call_again = SDL_PollEvent(&sdl_event);
+        if (event.call_again)
         {
             switch (sdl_event.type)
             {
@@ -107,11 +108,11 @@ protected:
 
 
 
-                default: 
-                    SDL_PumpEvents();
+                default:
+                    /*SDL_PumpEvents();
                     SDL_FlushEvent( SDL_FINGERDOWN );
                     SDL_FlushEvent( SDL_FINGERUP );
-                    SDL_FlushEvent( SDL_FINGERMOTION );
+                    SDL_FlushEvent( SDL_FINGERMOTION );*/
                     break;
             }
         }

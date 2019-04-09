@@ -88,33 +88,37 @@ public:
      *************************/
     void read()
     {
+        
         WtInputEvent ev = InputPolicy::read_input();
-
-        if ( ev.is_key_event )
+        while ( ev.call_again )
         {
-            wt_control ch = ev.key;
-            if ( m_on_key_press ) m_on_key_press( ch );
-        }
-        else
-        {
-            // eval button
-            for ( size_t i = 0; i < m_active_regions.size(); i++ )
+            if ( ev.is_key_event )
             {
-                if ( !ev.is_motion_event )
+                wt_control ch = ev.key;
+                if ( m_on_key_press ) m_on_key_press( ch );
+            }
+            else
+            {
+                // eval button
+                for ( size_t i = 0; i < m_active_regions.size(); i++ )
                 {
-                    if ( ev.is_press_event )
+                    if ( !ev.is_motion_event )
                     {
-                        m_active_regions[i]->trigger_press( ev.pos );
+                        if ( ev.is_press_event )
+                        {
+                            m_active_regions[i]->trigger_press( ev.pos );
+                        }
+                        else
+                        {
+                            m_active_regions[i]->trigger_release( ev.pos );
+                        }
                     }
                     else
-                    {
-                        m_active_regions[i]->trigger_release( ev.pos );
-                    }
-                }
-                else
-                    m_active_regions[i]->trigger_motion( ev.pos, ev.d_pos );
+                        m_active_regions[i]->trigger_motion( ev.pos, ev.d_pos );
 
+                }
             }
+            ev = InputPolicy::read_input();
         }
     }
 

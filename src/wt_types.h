@@ -127,6 +127,7 @@ public:
         is_key_event( true ),
         is_motion_event( false ),
         is_press_event( false ),
+        call_again( false ),
         key( wt_control_INVALID ),
         pos(),
         d_pos()
@@ -135,6 +136,7 @@ public:
     bool       is_key_event;
     bool       is_motion_event;
     bool       is_press_event;
+    bool       call_again;
     wt_control key;
     WtCoord    pos;
     WtCoord    d_pos;
