@@ -30,6 +30,8 @@
 #include "wt_storage.h"
 #include "wt_animations.h"
 
+#include "wt_grid_touch_overlay.h"
+
 #define GAME_CTR  WtGameCtr::instance()
 class WtGameCtr : public WtSettingsChangeObserver
 {
@@ -56,18 +58,11 @@ private:
         m_shall_restart( false ),
         m_pause( false ),
         m_pause_menu( NULL ),
-        m_left_btn( WtCoord(0,100),
-                    WtDim( ACTIVE_WINDOW_WIDTH / 2, ACTIVE_WINDOW_HEIGHT/2+ACTIVE_WINDOW_HEIGHT/4 ), 
-                    "", 
-                    std::bind ( &WtGameCtr::notify_left, this ) ),
-        m_right_btn( WtCoord(ACTIVE_WINDOW_WIDTH / 2, 100),
-                     WtDim( ACTIVE_WINDOW_WIDTH / 2, ACTIVE_WINDOW_HEIGHT/2+ACTIVE_WINDOW_HEIGHT/4 ),
-                     "",
-                     std::bind ( &WtGameCtr::notify_right, this ) ),
-        m_drop_btn( WtCoord( 0, ACTIVE_WINDOW_HEIGHT/2+ACTIVE_WINDOW_HEIGHT/4 ),
-                    WtDim( ACTIVE_WINDOW_WIDTH, ACTIVE_WINDOW_HEIGHT-(ACTIVE_WINDOW_HEIGHT/2+ACTIVE_WINDOW_HEIGHT/4)  ),
-                    "",
-                    std::bind ( &WtGameCtr::notify_drop, this ) ),
+        m_grid_touch_control( WtCoord( 0, 100 ),
+                              WtDim( ACTIVE_WINDOW_WIDTH, ACTIVE_WINDOW_HEIGHT-100 ),
+                              std::bind ( &WtGameCtr::notify_left, this ),
+                              std::bind ( &WtGameCtr::notify_right, this ),
+                              std::bind ( &WtGameCtr::notify_drop, this ) ),
         m_pause_btn( WtCoord( 393, 32 ),
                      WtDim( 64, 64 ),
                      "pause_btn.bmp",
@@ -272,9 +267,7 @@ private:
      *************************/
     void set_buttons()
     {
-        ACTIVE_INPUT.add_active_region( m_left_btn );
-        ACTIVE_INPUT.add_active_region( m_right_btn );
-        ACTIVE_INPUT.add_active_region( m_drop_btn );
+        ACTIVE_INPUT.add_active_region( m_grid_touch_control );
         ACTIVE_INPUT.add_active_region( m_pause_btn );
     }
     /**************************
@@ -282,9 +275,7 @@ private:
      *************************/
     void unset_buttons()
     {
-        ACTIVE_INPUT.remove_active_region( m_left_btn );
-        ACTIVE_INPUT.remove_active_region( m_right_btn );
-        ACTIVE_INPUT.remove_active_region( m_drop_btn );
+        ACTIVE_INPUT.remove_active_region( m_grid_touch_control );
         ACTIVE_INPUT.remove_active_region( m_pause_btn );
     }
 
@@ -487,9 +478,7 @@ private:
     WtMenuIf*                   m_pause_menu;
 
 
-    WtButton                    m_left_btn;
-    WtButton                    m_right_btn;
-    WtButton                    m_drop_btn;
+    WtGridTouchOverlay          m_grid_touch_control;
     WtButton                    m_pause_btn;
 };
 
