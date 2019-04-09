@@ -17,6 +17,7 @@
 #define _WT_TYPES_H_
 
 #include <cstring> //for strlen
+#include <iostream>
 
 typedef enum wt_mode_difficulty_tag
 {
@@ -52,7 +53,10 @@ public:
     ssize_t w;
     ssize_t h;
 };
-
+std::ostream & operator << (std::ostream &out, const WtDim &d)
+{
+    out << "(" << d.w << "," << d.h << ")";
+}
 
 /**************************
  *
@@ -79,6 +83,10 @@ public:
     {
         return ( x == rhs.x ) && ( y == rhs.y );
     }
+    bool operator!=(const WtCoord& rhs) const
+    {
+        return ( x != rhs.x ) && ( y != rhs.y );
+    }
 
     WtCoord& operator+( const WtCoord& rhs )
     {
@@ -86,6 +94,7 @@ public:
         y = y + rhs.y;
         return (*this);
     }
+
 
     bool in_region( WtCoord start_pos, WtDim size ) const
     {
@@ -101,6 +110,10 @@ public:
     ssize_t x;
     ssize_t y;
 };
+std::ostream & operator << (std::ostream &out, const WtCoord &c)
+{
+    out << "(" << c.x << "," << c.y << ")";
+}
 
 /**************************
  *
@@ -111,13 +124,15 @@ public:
     WtInputEvent() :
         is_key_event( true ),
         is_motion_event( false ),
+        is_press_event( false ),
         key( wt_control_INVALID ),
-        pos()
+        pos(),
+        d_pos()
     {}
 
     bool       is_key_event;
     bool       is_motion_event;
-    bool       is_drag_event;
+    bool       is_press_event;
     wt_control key;
     WtCoord    pos;
     WtCoord    d_pos;

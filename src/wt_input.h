@@ -102,7 +102,14 @@ public:
             {
                 if ( !ev.is_motion_event )
                 {
-                    m_active_regions[i]->trigger_release( ev.pos ); // todo distinguish between press release
+                    if ( ev.is_press_event )
+                    {
+                        m_active_regions[i]->trigger_press( ev.pos );
+                    }
+                    else
+                    {
+                        m_active_regions[i]->trigger_release( ev.pos );
+                    }
                 }
                 else
                     m_active_regions[i]->trigger_motion( ev.pos, ev.d_pos );
