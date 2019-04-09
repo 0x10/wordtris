@@ -38,9 +38,9 @@ public:
                       uint8_t selected,
                       OnItemTapDelegate on_item_tap ) :
 
-        m_clickable( std::bind ( &WtTriStateButton::on_press, this, std::placeholders::_1 ),
+        m_clickable( [](WtCoord&) {},
                      std::bind ( &WtTriStateButton::on_release, this, std::placeholders::_1 ),
-                     std::bind ( &WtTriStateButton::on_motion, this, std::placeholders::_1, std::placeholders::_2 ) ),
+                     [](WtCoord&, WtCoord&) {} ),
 
         m_pos( pos ),
         m_size( size ),
@@ -203,12 +203,6 @@ public:
     }
 
 public:
-    /**************************
-     *
-     *************************/
-    void on_press( WtCoord& pos )
-    {
-    }
 
     /**************************
      *
@@ -243,12 +237,6 @@ public:
         }
     }
 
-    /**************************
-     *
-     *************************/
-    void on_motion( WtCoord& pos, WtCoord& d_pos )
-    {
-    }
 
 private:
     WtClickableIf     m_clickable;
