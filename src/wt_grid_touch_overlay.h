@@ -110,22 +110,28 @@ public:
     /**************************
      *
      *************************/
-    void on_motion( WtCoord& pos, WtCoord& d_pos )
+    void on_motion( WtCoord& /*pos*/, WtCoord& d_pos )
     {
         if ( m_press_start_pos != WtCoord( -1, -1 ) )
         {
             m_active_motion_pos = m_active_motion_pos + d_pos;
-            if ( m_active_motion_pos.in_region( m_pos_left, m_size_left ) )
-            {
-                if ( m_on_left ) m_on_left();
-            }
-            if ( m_active_motion_pos.in_region( m_pos_right, m_size_right ) )
-            {
-                if ( m_on_right ) m_on_right();
-            }
+
             if ( m_active_motion_pos.in_region( m_pos_drop, m_size_drop ) )
             {
                 if ( m_on_drop ) m_on_drop();
+            }
+            else
+            {
+                if ( (m_active_motion_pos.x+30) < m_press_start_pos.x )
+                {
+                    m_press_start_pos = m_active_motion_pos;
+                    if ( m_on_left ) m_on_left();
+                }
+                if ( (m_active_motion_pos.x-30) > m_press_start_pos.x )
+                {
+                    m_press_start_pos = m_active_motion_pos;
+                    if ( m_on_right ) m_on_right();
+                }
             }
         }
     }
