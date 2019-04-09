@@ -125,6 +125,7 @@ private:
     WtL10n() :
         m_active_language_idx(0)
     {
+        //m_languages { 1, 2, 3, 4 }, init
         m_languages.push_back(WtL10n::tr("en"));
         m_languages.push_back(WtL10n::tr("de"));
         m_languages.push_back(WtL10n::tr("fr"));

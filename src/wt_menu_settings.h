@@ -20,7 +20,8 @@
 #include "wt_storage.h"
 #include "wt_menu_game_mode_select.h"
 
-#include <utility>
+#include "wt_tristate_button.h"
+
 
 class WtMenuSettings : public WtMenuIf
 {
