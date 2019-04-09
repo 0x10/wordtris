@@ -23,11 +23,11 @@
 class WtTriStateButton 
 {
 private:
-    static constexpr const char* m_tri_state_frame           =   "tri_state_btn.bmp";
-    static constexpr const char* m_tri_state_selected_img[3] = { "tri_state_btn_select0.bmp", 
+    const char* m_tri_state_frame           =   "tri_state_btn.bmp";
+    const char* m_tri_state_selected_img[3] = { "tri_state_btn_select0.bmp", 
                                                                  "tri_state_btn_select1.bmp", 
                                                                  "tri_state_btn_select2.bmp" };
-    static constexpr const char* m_tri_state_unselected_img  =   "tri_state_btn_select_none.bmp";
+    const char* m_tri_state_unselected_img  =   "tri_state_btn_select_none.bmp";
 
 public:
     using OnItemTapDelegate = std::function<void(uint8_t)>;

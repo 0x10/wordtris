@@ -47,9 +47,9 @@ class WtL10n
 private:
     typedef std::map< std::string, std::vector<std::string> > LocaleMap;
 
-    static constexpr const std::array<const char*, 3> available_languages{ { WtL10n_tr("en"),
-                                                                             WtL10n_tr("de"),
-                                                                             WtL10n_tr("fr") } };
+    const std::array<const char*, 3> m_available_languages{ { WtL10n_tr("en"),
+                                                              WtL10n_tr("de"),
+                                                              WtL10n_tr("fr") } };
 public:
     /**************************
      *
@@ -120,7 +120,6 @@ private:
         return locale;
     }
     WtL10n() :
-        m_available_languages( WtL10n::available_languages ),
         m_active_language_idx(0)
     {
         read_translations( m_translations );
@@ -274,7 +273,6 @@ private:
     }
 
 private:
-    const std::array<const char*, 3> m_available_languages;
     size_t                           m_active_language_idx;
     LocaleMap                        m_translations;
 };

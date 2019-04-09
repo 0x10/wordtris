@@ -30,15 +30,14 @@ private:
     static const size_t offset_y = (ACTIVE_WINDOW_HEIGHT / 2) - (ACTIVE_WINDOW_HEIGHT / 4);
 
 
-    static constexpr std::array<const char*, 3> available_themes { "light",
-                                                                   "dark",
-                                                                   "mono" };
+    const std::array<const char*, 3> m_selectable_themes { "light",
+                                                           "dark",
+                                                           "mono" };
 
 public:
     WtMenuSettings() :
         WtMenuIf( 0x300, "bg_menu_settings.bmp" ),
         m_current_diff(0),
-        m_selectable_themes( available_themes ),
         m_leave_btn( WtCoord( 105, 800 ), 
                      WtDim(100, 100), 
                      "back_btn.bmp",
@@ -185,7 +184,6 @@ private:
   private:
     size_t                                          m_current_diff;
     WtMenuSelectMode                                m_select_mode;
-    const std::array<const char*, 3>                m_selectable_themes;
     WtButton                                        m_leave_btn;
     WtButton                                        m_select_mode_btn;
     WtTriStateButton                                m_lang_select_btn;

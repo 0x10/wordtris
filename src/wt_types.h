@@ -56,6 +56,7 @@ public:
 std::ostream & operator << (std::ostream &out, const WtDim &d)
 {
     out << "(" << d.w << "," << d.h << ")";
+    return out;
 }
 
 /**************************
@@ -113,6 +114,7 @@ public:
 std::ostream & operator << (std::ostream &out, const WtCoord &c)
 {
     out << "(" << c.x << "," << c.y << ")";
+    return out;
 }
 
 /**************************
