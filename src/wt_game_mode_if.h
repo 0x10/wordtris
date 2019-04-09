@@ -52,12 +52,12 @@ public:
     /**************************
      * 
      *************************/
-    static std::vector<std::pair<wt_difficulty, std::string> > get_available_difficulties()
+    static std::vector<std::pair<wt_difficulty, const char*> > get_available_difficulties()
     {
-        std::vector<std::pair<wt_difficulty, std::string> > result =
-                         { std::make_pair( wt_difficulty_EASY,   WtL10n::tr("easy") ), 
-                           std::make_pair( wt_difficulty_MEDIUM, WtL10n::tr("normal") ),
-                           std::make_pair( wt_difficulty_HARD,   WtL10n::tr("hard") ) };
+        std::vector<std::pair<wt_difficulty, const char*> > result =
+                         { std::make_pair( wt_difficulty_EASY,   WtL10n_tr("easy") ), 
+                           std::make_pair( wt_difficulty_MEDIUM, WtL10n_tr("normal") ),
+                           std::make_pair( wt_difficulty_HARD,   WtL10n_tr("hard") ) };
         return result;
     }
 
@@ -100,7 +100,7 @@ public:
      *************************/
     virtual std::string get_help()
     {
-        return WtL10n::tr("no help provided");
+        return WtL10n_tr("no help provided");
     }
 
     /**************************

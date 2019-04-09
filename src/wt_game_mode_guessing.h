@@ -40,7 +40,7 @@ public:
      *************************/
     virtual std::string get_title()
     {
-        return WtL10n::tr("Guess it!");
+        return WtL10n_tr("Guess it!");
     }
 
     /**************************
@@ -126,7 +126,7 @@ public:
      *************************/
     virtual std::string get_hint()
     {
-        return WtL10n::tr("Guess the word: ").append(m_active_word_scrambled);
+        return std::string( WtL10n_tr("Guess the word: ") ).append(m_active_word_scrambled);
     }
 
 private:

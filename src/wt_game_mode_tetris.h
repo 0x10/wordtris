@@ -36,7 +36,7 @@ public:
      *************************/
     virtual std::string get_title()
     {
-        return WtL10n::tr("Fill Rows");
+        return WtL10n_tr("Fill Rows");
     }
 
     /**************************
@@ -100,7 +100,7 @@ public:
      *************************/
     virtual std::string get_hint()
     {
-        return WtL10n::tr("build rows.\nthe more equal symbols, more points.");
+        return WtL10n_tr("build rows.\nthe more equal symbols, more points.");
     }
 
 private:

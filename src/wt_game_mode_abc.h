@@ -50,7 +50,7 @@ public:
      *************************/
     virtual std::string get_title()
     {
-        return WtL10n::tr("ABC?E");
+        return WtL10n_tr("ABC?E");
     }
 
     /**************************
@@ -111,7 +111,7 @@ public:
      *************************/
     virtual std::string get_hint()
     {
-        return WtL10n::translate( WtL10n::tr("Complete the sequence!") );
+        return WtL10n::translate( WtL10n_tr("Complete the sequence!") );
     }
 
     /**************************
@@ -119,7 +119,7 @@ public:
      *************************/
     virtual std::string get_help()
     { 
-        return WtL10n::translate( WtL10n::tr("Try to place the falling letters at the correct position of the given sequence.") );
+        return WtL10n::translate( WtL10n_tr("Try to place the falling letters at the correct position of the given sequence.") );
     }
 
 private:

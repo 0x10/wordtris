@@ -468,7 +468,7 @@ public:
 //            ACTIVE_WINDOW.draw_hint( m_active_mode->get_hint() );
  //           ACTIVE_WINDOW.draw_button( m_pause_btn );
 
-            ACTIVE_WINDOW.draw_message(WtL10n::tr("you lost! :P"));
+            ACTIVE_WINDOW.draw_message(WtL10n_tr("you lost! :P"));
             ACTIVE_WINDOW.update();
             sleep(5);
         }

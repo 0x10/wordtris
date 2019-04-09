@@ -18,6 +18,7 @@
 
 #include "wt_string_utils.h"
 
+#include <array>
 #include <vector>
 #include <map>
 #include <fstream>
@@ -38,16 +39,22 @@
 #endif /* READ_TEXTS_FROM_HEADER */
 
 
+#define WtL10n_tr( s ) (s)
+
 
 class WtL10n
 {
 private:
     typedef std::map< std::string, std::vector<std::string> > LocaleMap;
+
+    static constexpr const std::array<const char*, 3> available_languages{ { WtL10n_tr("en"),
+                                                                             WtL10n_tr("de"),
+                                                                             WtL10n_tr("fr") } };
 public:
     /**************************
      *
      *************************/
-    static std::vector<std::string>& available_languages()
+    static const std::array<const char*, 3>& get_available_languages()
     {
         return WtL10n::instance().get_languages();
     }
@@ -65,7 +72,7 @@ public:
      *************************/
     static std::string get_language_code()
     {
-        return WtL10n::instance().available_languages()[WtL10n::instance().active_language_idx()];
+        return std::string( WtL10n::get_available_languages()[WtL10n::instance().active_language_idx()] );
     }
 
     /**************************
@@ -73,19 +80,9 @@ public:
      *************************/
     static std::string get_next_language_code()
     {
-        std::vector<std::string>& langs = WtL10n::instance().available_languages();
-        return langs[(WtL10n::instance().active_language_idx() + 1) % langs.size()];
+        return std::string( WtL10n::get_available_languages()[(WtL10n::instance().active_language_idx() + 1) % WtL10n::get_available_languages().size()] );
     }
 
-    /**************************
-     * this function is only used to identify hard coded
-     * localizable strings; wrap a string around and
-     * the macro will find it
-     *************************/
-    static std::string tr( const std::string s )
-    {
-        return s;
-    }
 
     /**************************
      * this function does the translation
@@ -123,13 +120,9 @@ private:
         return locale;
     }
     WtL10n() :
+        m_available_languages( WtL10n::available_languages ),
         m_active_language_idx(0)
     {
-        //m_languages { 1, 2, 3, 4 }, init
-        m_languages.push_back(WtL10n::tr("en"));
-        m_languages.push_back(WtL10n::tr("de"));
-        m_languages.push_back(WtL10n::tr("fr"));
-
         read_translations( m_translations );
     }
 
@@ -154,9 +147,9 @@ private:
      *************************/
     void set_lang( std::string lang_code )
     {
-        for( size_t l_idx = 0; l_idx < m_languages.size(); l_idx++ )
+        for( size_t l_idx = 0; l_idx < WtL10n::get_available_languages().size(); l_idx++ )
         {
-            if ( m_languages[l_idx] == lang_code )
+            if ( WtL10n::get_available_languages()[l_idx] == lang_code )
             {
                 m_active_language_idx = l_idx;
                 break;
@@ -167,9 +160,9 @@ private:
     /**************************
      *
      *************************/
-    std::vector<std::string>& get_languages()
+    const std::array<const char*, 3>& get_languages()
     {
-        return m_languages;
+        return m_available_languages;
     }
 
 #ifdef READ_TEXTS_FROM_XML
@@ -281,9 +274,9 @@ private:
     }
 
 private:
-    size_t                   m_active_language_idx;
-    std::vector<std::string> m_languages;
-    LocaleMap                m_translations;
+    const std::array<const char*, 3> m_available_languages;
+    size_t                           m_active_language_idx;
+    LocaleMap                        m_translations;
 };
 
 #endif /* _WT_L10N_H_ */

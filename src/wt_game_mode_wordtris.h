@@ -47,7 +47,7 @@ public:
      *************************/
     virtual std::string get_title()
     {
-        return WtL10n::tr("Classic Mode");
+        return WtL10n_tr("Classic Mode");
     }
 
     /**************************
@@ -168,7 +168,7 @@ public:
      *************************/
     virtual std::string get_hint()
     {
-        return WtL10n::tr("try to build 3+ letter words!");
+        return WtL10n_tr("try to build 3+ letter words!");
     }
 
 
