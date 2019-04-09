@@ -15,8 +15,6 @@
 # - more proper balanced game modes
 #       - some are noted at whiteboard but need to be evaluated
 #       - AND: others are need to be made
-# - SDL Input:
-#       - Touch motion detection for swiping
 # - Audio-Support
 #       - background music
 #       - on stone 2 board commit sound
@@ -41,13 +39,7 @@
 #       - message box to not use hard coded images and positions/dimensions
 #       - do not use hard coded absolute pixel values which depend on SDL_WIDHT=540/SDL_HEIGHT=960 but relative values
 #       - add word wrap on text boxes instead of char wrap
-# - WtInput Architecture not consistent:
-#       - Buttons are directly evaluated by observer-call to key-specific function ('a' -> notify_left for sdl e.g.) but touch areas are evaluated at listener function in general eval button
-#       - ideas:
-#           - EITHER: instead of button id use a wt_control enum
-#           - OR: drop wt_control enum and eval keypress at listener too
-#       - get rid of button_id in users class like game_ctr (maybe) or menu_ctr (must be) but hide this within parent class which wraps id to notify_left/_xxx function
-#           - more like all common gui framework: onClicked()
+#       - support non 16:9 devices
 # - Support Non-Ascii characters in Translations
 # - Settings/Storage Architectures seems pretty weird
 #       - review or documentation!
