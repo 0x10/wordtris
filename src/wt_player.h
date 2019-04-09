@@ -58,7 +58,8 @@ public:
      *************************/
     void letter_dropped( uint8_t row_diff )
     {
-        m_points += ( 21 + (3 * m_level) - row_diff );
+        if ( row_diff > 0 )
+            m_points += ( 21 + (3 * m_level) - row_diff );
     }
 
     /**************************
