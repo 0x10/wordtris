@@ -34,7 +34,7 @@ public:
 
     WtTriStateButton( WtCoord pos, 
                       WtDim size,
-                      std::vector<std::string>& label, //how to check if > 0 and < 3?
+                      std::vector<std::string> label, //how to check if > 0 and < 3?
                       uint8_t selected,
                       OnItemTapDelegate on_item_tap ) :
 

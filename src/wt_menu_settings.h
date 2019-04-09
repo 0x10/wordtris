@@ -48,9 +48,9 @@ public:
                            std::bind ( &WtMenuSettings::lang_changed, this, std::placeholders::_1 ) ),
         m_diff_select_btn( WtCoord( offset_x, offset_y + (69 + 20)*2 ),
                            WtDim( 328, 69 ),
-                           std::vector<std::string>({ WtGameModeIf::get_available_difficulties()[0].second,
+                           { WtGameModeIf::get_available_difficulties()[0].second,
                              WtGameModeIf::get_available_difficulties()[1].second,
-                             WtGameModeIf::get_available_difficulties()[2].second }),
+                             WtGameModeIf::get_available_difficulties()[2].second },
                            0,
                            std::bind ( &WtMenuSettings::diff_changed, this, std::placeholders::_1 ) )
     {
