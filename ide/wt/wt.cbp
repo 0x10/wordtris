@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="wt" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/wt" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="../../../wordtris" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-Wnon-virtual-dtor" />
+					<Add option="-Wshadow" />
+					<Add option="-Wredundant-decls" />
+					<Add option="-Wcast-align" />
+					<Add option="-Wundef" />
+					<Add option="-Winline" />
+					<Add option="-Wunreachable-code" />
+					<Add option="-Wmissing-declarations" />
+					<Add option="-Wswitch-enum" />
+					<Add option="-Wswitch-default" />
+					<Add option="-Weffc++" />
+					<Add option="-Wzero-as-null-pointer-constant" />
+					<Add option="-Wmain" />
+					<Add option="-pedantic" />
+					<Add option="-Wextra" />
+					<Add option="-Wall" />
+					<Add option="-std=c++11" />
+					<Add option="-m64" />
+					<Add option="-g" />
+					<Add directory="../../pc_include" />
+					<Add directory="../../../wordtris" />
+				</Compiler>
+				<Linker>
+					<Add option="-m64" />
+					<Add option="-lSDL2" />
+					<Add directory="../../SDL2-2.0.9/build/.libs" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="../../src/dea.h" />
+		<Unit filename="../../src/global.h" />
+		<Unit filename="../../src/wordtris.cpp" />
+		<Unit filename="../../src/wt_active_letter.h" />
+		<Unit filename="../../src/wt_animations.h" />
+		<Unit filename="../../src/wt_backend_policy_if.h" />
+		<Unit filename="../../src/wt_backend_select.h" />
+		<Unit filename="../../src/wt_board.h" />
+		<Unit filename="../../src/wt_button.h" />
+		<Unit filename="../../src/wt_clickable_if.h" />
+		<Unit filename="../../src/wt_drawing.h" />
+		<Unit filename="../../src/wt_game_ctr.h" />
+		<Unit filename="../../src/wt_game_mode_abc.h" />
+		<Unit filename="../../src/wt_game_mode_ctr.h" />
+		<Unit filename="../../src/wt_game_mode_guessing.h" />
+		<Unit filename="../../src/wt_game_mode_if.h" />
+		<Unit filename="../../src/wt_game_mode_tetris.h" />
+		<Unit filename="../../src/wt_game_mode_wordtris.h" />
+		<Unit filename="../../src/wt_input.h" />
+		<Unit filename="../../src/wt_l10n.h" />
+		<Unit filename="../../src/wt_l10n_translations.h" />
+		<Unit filename="../../src/wt_menu_ctr.h" />
+		<Unit filename="../../src/wt_menu_game_mode_select.h" />
+		<Unit filename="../../src/wt_menu_help.h" />
+		<Unit filename="../../src/wt_menu_highscores.h" />
+		<Unit filename="../../src/wt_menu_if.h" />
+		<Unit filename="../../src/wt_menu_pause.h" />
+		<Unit filename="../../src/wt_menu_settings.h" />
+		<Unit filename="../../src/wt_player.h" />
+		<Unit filename="../../src/wt_random.h" />
+		<Unit filename="../../src/wt_sdl.h" />
+		<Unit filename="../../src/wt_sdl_config.h" />
+		<Unit filename="../../src/wt_sdl_drawing.h" />
+		<Unit filename="../../src/wt_sdl_font.h" />
+		<Unit filename="../../src/wt_sdl_input.h" />
+		<Unit filename="../../src/wt_sdl_utils.h" />
+		<Unit filename="../../src/wt_settings_observer_if.h" />
+		<Unit filename="../../src/wt_storage.h" />
+		<Unit filename="../../src/wt_string_utils.h" />
+		<Unit filename="../../src/wt_tristate_button.h" />
+		<Unit filename="../../src/wt_types.h" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

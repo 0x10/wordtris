@@ -1,4 +1,5 @@
-*
+/*
 !.gitignore
 !browse.pro
 !cleanMake.sh
+!/wt
