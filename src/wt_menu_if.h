@@ -18,6 +18,7 @@
 
 #include "wt_button.h"
 #include "wt_tristate_button.h"
+#include "wt_horizontal_carousel.h"
 
 #include "wt_settings_observer_if.h"
 #include "wt_input.h"
@@ -129,61 +130,13 @@ protected:
         m_tristate_buttons.push_back( &button );
     }
 
-#if 0
     /**************************
      *
      *************************/
-    void add_horizontal_carousel( const std::vector< std::pair<uint16_t, std::string> >& labeled_ids,
-                                  const WtCoord&    frame_pos,
-                                  const WtDim&      frame_size,
-                                  const size_t      selected )
+    void add_horizontal_carousel( WtHorizontalCarousel& carousel )
     {
-        size_t idx = 0;
-
-        for ( size_t i=0; i < labeled_ids.size(); i++ )
-        {
-            if ( labeled_ids[i].first == selected )
-            {
-                idx = i;
-                break;
-            }
-        }
-
-        WtCoord working_pos = frame_pos;
-        WtDim   list_item_size( 328, 200 );
-        working_pos.x += 105; // todo replace with proper calculation of list item image size
-        do
-        {
-            m_buttons.push_back( WtButton( MENU_BUTTON_ID( labeled_ids[idx].first ),
-                                           working_pos, list_item_size,
-                                           (selected == labeled_ids[idx].first ? 
-                                                    "list_item_active.bmp" : 
-                                                    "list_item_inactive.bmp" ),
-                                           labeled_ids[idx].second ) );
-
-            working_pos.x += ( 6 + 328 );
-
-            idx = (idx + 1) % labeled_ids.size();
-        }
-        while( idx != selected );
+        m_carousels.push_back( &carousel );
     }
-
-    /**************************
-      *
-      *************************/   
-    void add_list( const WtCoord&                  pos,
-                   const WtDim&                    size,
-                   const std::string               btn_image,
-                   const std::vector<std::string>& texts )
-    {
-        WtCoord working_pos = pos;
-        for ( size_t idx = 0; idx < texts.size(); idx++ )
-        {
-            add_button( WtButton( idx, working_pos, size, btn_image, texts[idx] ) );
-            working_pos.y += (size.h + 20);
-        }
-    }
-#endif
 
     /**************************
      *
@@ -203,6 +156,10 @@ protected:
         {
             ACTIVE_INPUT.add_active_region( *(m_tristate_buttons[idx]) );
         }
+        for(size_t idx=0;idx<m_carousels.size();idx++)
+        {
+            ACTIVE_INPUT.add_active_region( *(m_carousels[idx]) );
+        }
     }
 
     /**************************
@@ -217,6 +174,10 @@ protected:
         for (size_t idx=0;idx<m_tristate_buttons.size();idx++)
         {
             ACTIVE_INPUT.remove_active_region( *(m_tristate_buttons[idx]) );
+        }
+        for(size_t idx=0;idx<m_carousels.size();idx++)
+        {
+            ACTIVE_INPUT.remove_active_region( *(m_carousels[idx]) );
         }
 
         fade_out();
@@ -353,6 +314,13 @@ private:
             ACTIVE_WINDOW.draw_button( m_tristate_buttons[idx]->item<1>() );
             ACTIVE_WINDOW.draw_button( m_tristate_buttons[idx]->item<2>() );
         }
+        for(size_t idx=0;idx<m_carousels.size();idx++)
+        {
+            for( size_t c_idx = 0; c_idx < m_carousels[idx]->size(); c_idx++ )
+            {
+                ACTIVE_WINDOW.draw_button( (*(m_carousels[idx]))[c_idx] );
+            }
+        }
     }
 
 private:
@@ -361,6 +329,7 @@ private:
     std::string                             m_bg;
     std::vector< WtButton* >                m_buttons;
     std::vector< WtTriStateButton* >        m_tristate_buttons;
+    std::vector< WtHorizontalCarousel* >    m_carousels;
     std::vector<WtSettingsChangeObserver*>  m_change_listener;
     bool                                    m_fade;
 };

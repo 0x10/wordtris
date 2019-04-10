@@ -69,6 +69,17 @@ public:
     {
         return m_available_modes;
     }
+
+    /**************************
+     *
+     *************************/
+    std::vector<std::string> get_available_mode_titles()
+    {
+        std::vector<std::string> result;
+        for ( size_t idx = 0; idx < m_available_modes.size(); idx++ )
+            result.push_back( m_available_modes[idx]->get_title() );
+        return result;
+    }
 private:
     WtGameModeCtr()
     {

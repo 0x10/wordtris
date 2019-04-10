@@ -20,6 +20,7 @@
 #include "wt_menu_settings.h"
 #include "wt_menu_highscores.h"
 #include "wt_menu_pause.h"
+#include "wt_horizontal_carousel.h"
 
 #define MENU_CTR  WtMenuCtr::instance()
 class WtMenuCtr : public WtMenuIf
@@ -51,25 +52,18 @@ private:
         m_setting_btn( WtCoord( 332, 800 ),
                        WtDim( 100, 100 ),
                        "settings_btn.bmp",
-                       std::bind ( &WtMenuCtr::enter_settings_menu, this ) )
+                       std::bind ( &WtMenuCtr::enter_settings_menu, this ) ),
+        m_game_selection( WtCoord( 0, 100 ),
+                          WtDim( ACTIVE_WINDOW_WIDTH, 200 ),
+                          GAME_MODE_CTR.get_available_mode_titles(),
+                          0,
+                          [](size_t){} )
     {
         add_button( m_start_btn );
         add_button( m_score_btn );
         add_button( m_setting_btn );
+        add_horizontal_carousel( m_game_selection );
 
-       #if 0 
-        std::vector<WtGameModeIf*>& available_modes = GAME_MODE_CTR.get_available_modes();
-        std::vector< std::pair<uint16_t, std::string> > labeled_ids;
-        
-        for( size_t idx = 0; idx < available_modes.size(); idx++ )
-        {
-            labeled_ids.push_back( std::make_pair( (uint16_t)(4+idx), available_modes[idx]->get_title() ) );
-        }
-
-        add_horizontal_carousel( labeled_ids,
-                                 WtCoord( 0, 493), WtDim( ACTIVE_WINDOW_WIDTH, 200 ),
-                                 4 );
-#endif
         m_settings.listen( m_pause_menu.get_help_listener() );
 
     }
@@ -111,69 +105,7 @@ private:
         enter_child_menu( m_settings );
     }
 
-#if 0
-    /**************************
-     *
-     *************************/
-    virtual void notify_motion( WtCoord pos, 
-                                WtCoord d_pos, 
-                                bool is_drag )
-    {
-        if ( is_drag )
-        {
-            if ( !m_was_drag )
-            {
-               // drag started 
-               m_drag_start_pos = pos;
-               if ( m_drag_start_pos.in_region( WtCoord(0,493), WtDim( ACTIVE_WINDOW_WIDTH, 200 ) )  )
-               {
-                   m_drag_button_id = 4;
-                   std::cout << "start btn drag = " << m_drag_button_id << std::endl;
-               }
-            }
 
-
-            if ( m_drag_button_id != 0 )
-            {
-                // move to modify_carousel routine...
-                size_t mode_count = GAME_MODE_CTR.get_available_modes().size();
-                for (size_t m = 0; m<mode_count; m++)
-                {
-                    WtButton* drag_btn = get_button(m_drag_button_id+m);
-                    if ( drag_btn != NULL )
-                    {
-                        drag_btn->set_x( drag_btn->x() + d_pos.x );
-                        if ( ( drag_btn->x() < 0 ) || ( drag_btn->x()+drag_btn->width() > ACTIVE_WINDOW_WIDTH ) )
-                           drag_btn->set_image("list_item_inactive.bmp"); 
-                        else
-                           drag_btn->set_image("list_item_active.bmp"); 
-                    }
-
-//                    std::cout << "continue btn drag: "<< m_drag_button_id<< "@" << drag_btn->x() << std::endl;
-                }
-
-
-            }
-
-            m_was_drag = true;
-        }
-        else
-        {
-            if ( m_was_drag )
-            {
-               // drag stopped
-                
-            }
-            m_was_drag = false;
-            m_drag_button_id = 0;
-        }
-
-     /*   std::cout << (is_drag ? "drag" : "motion") << " at: " << 
-                        "(" << (int)pos.x << "," << (int)pos.y << ");"
-                        "(" << (int)d_pos.x << "," << (int)d_pos.y << ");"
-                    << std::endl;*/
-    }
-#endif
 private:
     WtCoord          m_drag_start_pos;
     bool             m_was_drag;
@@ -186,6 +118,7 @@ private:
     WtButton         m_start_btn;
     WtButton         m_score_btn;
     WtButton         m_setting_btn;
+    WtHorizontalCarousel m_game_selection;
 };
 
 #endif /* _WT_MENU_CTR_H_ */
