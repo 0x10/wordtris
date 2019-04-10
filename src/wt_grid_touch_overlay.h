@@ -91,17 +91,20 @@ public:
     void on_release( WtCoord& pos )
     {
 //        std::cout << "release detected: (" << pos.x << "," << pos.y << ") -> (" << m_pos.x << "," << m_pos.y << "):(" << m_size.w << "," << m_size.h << ") -> " << m_label << std::endl;
-        if ( pos.in_region( m_pos_left, m_size_left ) )
+        if ( m_press_start_pos == WtCoord( -1, -1 ) )
         {
-            if ( m_on_left ) m_on_left();
-        }
-        if ( pos.in_region( m_pos_right, m_size_right ) )
-        {
-            if ( m_on_right ) m_on_right();
-        }
-        if ( pos.in_region( m_pos_drop, m_size_drop ) )
-        {
-            if ( m_on_drop ) m_on_drop();
+            if ( pos.in_region( m_pos_left, m_size_left ) )
+            {
+                if ( m_on_left ) m_on_left();
+            }
+            if ( pos.in_region( m_pos_right, m_size_right ) )
+            {
+                if ( m_on_right ) m_on_right();
+            }
+            if ( pos.in_region( m_pos_drop, m_size_drop ) )
+            {
+                if ( m_on_drop ) m_on_drop();
+            }
         }
         m_press_start_pos = WtCoord( -1, -1 );
         m_active_motion_pos = m_press_start_pos;
