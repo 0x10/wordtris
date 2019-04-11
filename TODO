@@ -43,6 +43,7 @@
 # - Support Non-Ascii characters in Translations
 # - Settings/Storage Architectures seems pretty weird
 #       - review or documentation!
+# - make usleep time variable and consider time elapsed since last usleep
 #
 # (others)
 # - android:
