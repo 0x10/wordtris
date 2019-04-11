@@ -1,6 +1,6 @@
 format 221
 "src" // src
-  revision 1
+  revision 2
   modified_by 23 "ckranz"
   // class settings
   
@@ -12813,7 +12813,7 @@ ${inlines}
 
     classdiagram 136215 "input"
       classdiagramsettings member_max_width 0 end
-      size A4
+      size C
     end
 
     classdiagram 136343 "gamectr"

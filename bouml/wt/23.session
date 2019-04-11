@@ -1,32 +1,8 @@
 window_sizes 1600 857 375 1219 753 52
 cleanlooks_style
 diagrams
-  classdiagram_ref 128151 // menu
-    1219 753 63 C 0 0
-  classdiagram_ref 128279 // gamectr
-    1219 753 60 C 72 0
-  classdiagram_ref 128407 // input
-    120 98 100 A4 0 0
-  classdiagram_ref 128535 // drawing
-    120 98 100 A4 0 0
-  classdiagram_ref 128663 // storage
-    120 98 100 A4 0 0
-  classdiagram_ref 128791 // l10n
-    120 98 100 A4 0 0
-  classdiagram_ref 128919 // wordlist
-    120 98 100 A4 0 0
-  classdiagram_ref 129047 // gamemode
-    1219 753 50 C 0 0
-  classdiagram_ref 129175 // random
-    120 98 100 A4 0 0
-  classdiagram_ref 129303 // sdl input
-    120 98 100 A4 0 0
-  classdiagram_ref 129431 // sdl drawing
-    120 98 100 A4 252 0
-  classdiagram_ref 129559 // animation
-    120 98 100 A4 0 0
-  classdiagram_ref 136215 // input
-    975 602 100 A4 0 0
+  active  classdiagram_ref 136215 // input
+    1219 753 70 C 240 0
   classdiagram_ref 136343 // gamectr
     120 98 60 E 0 0
   classdiagram_ref 136471 // drawing
@@ -39,8 +15,8 @@ diagrams
     120 98 100 A4 0 0
   classdiagram_ref 136983 // gamemode
     120 98 100 C 588 0
-  active  classdiagram_ref 136087 // menu
-    1219 753 90 D 416 506
+  classdiagram_ref 136087 // menu
+    1219 753 60 D 0 0
   classdiagram_ref 137111 // random
     120 98 100 A4 0 0
   classdiagram_ref 137239 // sdl input
@@ -51,7 +27,7 @@ diagrams
     120 98 100 A4 0 0
 end
 show_stereotypes
-selected classdiagram_ref 136087 // menu
+selected classdiagram_ref 136215 // input
 open
   classview_ref 134551 // src
 end
