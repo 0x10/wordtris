@@ -1,0 +1,36 @@
+format 221
+
+classcanvas 128023 class_ref 150807 // WtWordList
+  classdiagramsettings member_max_width 0 end
+  xyz 39 40 2000
+end
+classcanvas 128151 class_ref 155799 // WtWord
+  classdiagramsettings member_max_width 0 end
+  xyz 273 95 3005
+end
+classcanvas 128407 class_ref 145687 // TDea
+  classdiagramsettings member_max_width 0 end
+  xyz 233 277 3011
+end
+classcanvas 128663 class_ref 145559 // TDeaState
+  classdiagramsettings member_max_width 0 end
+  xyz 457 303 3017
+end
+relationcanvas 128279 relation_ref 166167 // <unidirectional association>
+  decenter_begin 514
+  from ref 128023 z 3006 stereotype "<<:vector>>" xyz 191.5 166.5 3006 to ref 128151
+  role_a_pos 208 147 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 128535 relation_ref 166039 // <directional composition>
+  decenter_end 519
+  from ref 128151 z 3012 to ref 128407
+  role_a_pos 337 256 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 128791 relation_ref 149527 // <directional composition>
+  from ref 128407 z 3018 stereotype "<<:vector>>" xyz 394.5 384 3018 to ref 128663
+  role_a_pos 392 364 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+end

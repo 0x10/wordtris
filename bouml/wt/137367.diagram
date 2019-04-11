@@ -1,0 +1,59 @@
+format 221
+
+classcanvas 128023 class_ref 153751 // WtDrawingPolicySdl
+  classdiagramsettings member_max_width 0 end
+  xyz 128 360 2000
+end
+classcanvas 128151 class_ref 154007 // WtSdlFont
+  classdiagramsettings member_max_width 0 end
+  xyz 60 921 2006
+end
+classcanvas 128663 class_ref 146455 // WtDrawingPolicyIf
+  classdiagramsettings member_max_width 0 end
+  xyz 135 135 2006
+end
+classcanvas 128919 class_ref 153879 // SDL_TextureCache
+  classdiagramsettings member_max_width 0 end
+  xyz 39 39 3005
+end
+relationcanvas 128279 relation_ref 163223 // <unidirectional association>
+  geometry HV unfixed
+  decenter_begin 969
+  decenter_end 232
+  from ref 128023 z 2007 to point 87 829
+  line 129303 z 2007 to ref 128151
+  role_a_pos 99 900 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 128407 relation_ref 163351 // <unidirectional association>
+  decenter_begin 331
+  decenter_end 914
+  from ref 128023 z 2007 to ref 128151
+  role_a_pos 187 900 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 128535 relation_ref 163479 // <unidirectional association>
+  decenter_begin 79
+  decenter_end 620
+  from ref 128023 z 2007 to ref 128151
+  role_a_pos 149 900 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 128791 relation_ref 163095 // <generalisation>
+  from ref 128023 z 2007 to ref 128663
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+line 129047 ---+ geometry VH unfixed decenter_begin 377 decenter_end 26
+  from ref 128919 z 3006 to point 87 370
+  line 129559 z 3006 to ref 128023
+relationcanvas 129175 relation_ref 163607 // <directional composition>
+  geometry HV unfixed
+  decenter_begin 104
+  decenter_end 96
+  from ref 128023 z 3006 to point 49 408
+  line 129431 z 3006 to ref 128919
+  role_a_pos 61 104 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+end

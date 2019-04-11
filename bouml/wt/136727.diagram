@@ -1,0 +1,20 @@
+format 221
+
+classcanvas 128023 class_ref 152343 // WtL10n
+  classdiagramsettings member_max_width 0 end
+  xyz 177 39 2000
+end
+classcanvas 128151 class_ref 152471 // LocaleMap
+  classdiagramsettings member_max_width 0 end
+  xyz 40 43 3005
+end
+line 128279 ---+ decenter_begin 830 decenter_end 167
+  from ref 128151 z 3006 to ref 128023
+relationcanvas 128407 relation_ref 158487 // <directional composition>
+  decenter_begin 44
+  decenter_end 169
+  from ref 128023 z 3006 to ref 128151
+  role_a_pos 148 32 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+end

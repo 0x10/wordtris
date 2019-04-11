@@ -1,0 +1,83 @@
+format 221
+
+classcanvas 128023 class_ref 154391 // WtStorageCtr
+  classdiagramsettings member_max_width 0 end
+  xyz 296 138 2000
+end
+classcanvas 128151 class_ref 149527 // WtHighscores
+  classdiagramsettings member_max_width 0 end
+  xyz 590 627 2000
+end
+classcanvas 128279 class_ref 154903 // _PersistentFileStructure
+  classdiagramsettings member_max_width 0 end
+  xyz 79 446 2006
+end
+classcanvas 128663 class_ref 155031 // SimpleFileCache
+  classdiagramsettings member_max_width 0 end
+  xyz 349 40 3005
+end
+classcanvas 129047 class_ref 154519 // _FileHeader
+  classdiagramsettings member_max_width 0 end
+  xyz 335 546 3005
+end
+classcanvas 129431 class_ref 154647 // _FileData
+  classdiagramsettings member_max_width 0 end
+  xyz 465 627 3011
+end
+classcanvas 129943 class_ref 154775 // WtSettings
+  classdiagramsettings member_max_width 0 end
+  xyz 460 720 3017
+end
+line 128407 ---+ decenter_begin 152 decenter_end 858
+  from ref 128279 z 2007 to ref 128023
+relationcanvas 128535 relation_ref 164375 // <directional composition>
+  decenter_begin 964
+  decenter_end 779
+  from ref 128023 z 2007 to ref 128279
+  role_a_pos 265 471 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+line 128791 ---+ decenter_begin 97 decenter_end 367
+  from ref 128663 z 3006 to ref 128023
+relationcanvas 128919 relation_ref 164503 // <directional composition>
+  decenter_begin 920
+  decenter_end 894
+  from ref 128023 z 3006 to ref 128663
+  role_a_pos 468 105 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129175 relation_ref 164119 // <directional composition>
+  geometry VH unfixed
+  decenter_begin 480
+  decenter_end 550
+  from ref 128279 z 3006 to point 161 581
+  line 130583 z 3006 to ref 129047
+  role_a_pos 282 563 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+line 129303 ---+ decenter_end 474
+  from ref 129047 z 3006 to ref 128023
+relationcanvas 129559 relation_ref 163991 // <directional composition>
+  from ref 129431 z 3012 to ref 128151
+  role_a_pos 514 636 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129687 relation_ref 164247 // <directional composition>
+  decenter_begin 440
+  from ref 128279 z 3012 to point 40 472
+  line 130327 z 3012 to point 40 656
+  line 130455 z 3012 to ref 129431
+  role_a_pos 427 636 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+line 129815 ---+ geometry VH unfixed decenter_begin 540
+  from ref 129431 z 3012 to point 509 319
+  line 130199 z 3012 to ref 128023
+relationcanvas 130071 relation_ref 163863 // <directional composition>
+  decenter_begin 540
+  decenter_end 536
+  from ref 129431 z 3018 to ref 129943
+  role_a_pos 521 699 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+end

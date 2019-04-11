@@ -1,0 +1,51 @@
+format 221
+
+classcanvas 128151 class_ref 146071 // WtGridAnimation
+  classdiagramsettings member_max_width 0 end
+  xyz 231 173 2000
+end
+classcanvas 128279 class_ref 150039 // WtGameModeState
+  classdiagramsettings member_max_width 0 end
+  xyz 408 209 3005
+end
+classcanvas 128535 class_ref 146327 // GridAnimationStep
+  classdiagramsettings member_max_width 0 end
+  xyz 78 79 3005
+end
+classcanvas 128919 class_ref 145943 // WtAnimationStep
+  classdiagramsettings member_max_width 0 end
+  xyz 40 441 2005
+end
+classcanvas 129047 class_ref 146199 // GridText
+  classdiagramsettings member_max_width 0 end
+  xyz 105 175 3011
+end
+relationcanvas 128407 relation_ref 153879 // <directional composition>
+  from ref 128279 z 3006 to ref 128151
+  role_a_pos 375 225 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+line 128663 ---+ decenter_begin 152
+  from ref 128535 z 3006 to point 40 85
+  line 129815 z 3006 to point 40 40
+  line 129943 z 3006 to point 295 40
+  line 130071 z 3006 to ref 128151
+relationcanvas 128791 relation_ref 149783 // <directional composition>
+  decenter_end 779
+  from ref 128151 z 3006 to point 295 361
+  line 129431 z 3006 to point 40 361
+  line 129559 z 3006 stereotype "<<:vector>>" xyz 1 245 3006 to point 40 125
+  line 129687 z 3006 to ref 128535
+  role_a_pos -49 104 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129175 relation_ref 149655 // <dependency>
+  decenter_begin 517
+  decenter_end 528
+  from ref 128535 z 3012 to ref 129047
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+line 129303 ---+
+  from ref 129047 z 3012 to ref 128151
+end
