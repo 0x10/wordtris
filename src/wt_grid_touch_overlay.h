@@ -46,6 +46,7 @@ public:
         m_size_right( size.w / 2, (size.h / 2) + (size.h / 4) ),
         m_size_drop( size.w, size.h - ((size.h / 2) + (size.h / 4)) ),
         m_press_start_pos( -1, -1 ),
+        m_was_drag( false ),
         m_active_motion_pos( -1, -1 ),
         m_on_left( on_left ),
         m_on_right( on_right ),
@@ -91,14 +92,16 @@ public:
     void on_release( WtCoord& pos )
     {
 //        std::cout << "release detected: (" << pos.x << "," << pos.y << ") -> (" << m_pos.x << "," << m_pos.y << "):(" << m_size.w << "," << m_size.h << ") -> " << m_label << std::endl;
-        if ( m_press_start_pos == WtCoord( -1, -1 ) )
+        if ( ! m_was_drag )
         {
             if ( pos.in_region( m_pos_left, m_size_left ) )
             {
+               // std::cout << "release left\n";
                 if ( m_on_left ) m_on_left();
             }
             if ( pos.in_region( m_pos_right, m_size_right ) )
             {
+               // std::cout << "release right\n";
                 if ( m_on_right ) m_on_right();
             }
             if ( pos.in_region( m_pos_drop, m_size_drop ) )
@@ -106,6 +109,7 @@ public:
                 if ( m_on_drop ) m_on_drop();
             }
         }
+        m_was_drag = false;
         m_press_start_pos = WtCoord( -1, -1 );
         m_active_motion_pos = m_press_start_pos;
     }
@@ -127,12 +131,16 @@ public:
             {
                 if ( (m_active_motion_pos.x+30) < m_press_start_pos.x )
                 {
+                    m_was_drag = true;
                     m_press_start_pos = m_active_motion_pos;
+                    //std::cout << "motion left\n";
                     if ( m_on_left ) m_on_left();
                 }
                 if ( (m_active_motion_pos.x-30) > m_press_start_pos.x )
                 {
+                    m_was_drag = true;
                     m_press_start_pos = m_active_motion_pos;
+                   // std::cout << "motion right\n";
                     if ( m_on_right ) m_on_right();
                 }
             }
@@ -153,6 +161,7 @@ private:
     const WtDim     m_size_drop;
 
     WtCoord         m_press_start_pos;
+    bool            m_was_drag;
     WtCoord         m_active_motion_pos;
 
     OnLeftDetected  m_on_left;

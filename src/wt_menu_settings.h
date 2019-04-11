@@ -42,11 +42,11 @@ public:
                      WtDim(100, 100), 
                      "back_btn.bmp",
                      std::bind ( &WtMenuSettings::leave, this ) ),
-        m_select_mode_btn( WtCoord( offset_x, offset_y ), 
+/*        m_select_mode_btn( WtCoord( offset_x, offset_y ), 
                            WtDim(328, 69), 
                            "menu_btn.bmp", 
                            std::bind ( &WtMenuSettings::select_pressed, this ),
-                           WtL10n_tr("select game mode") ),
+                           WtL10n_tr("select game mode") ),*/
         m_lang_select_btn( WtCoord( offset_x, offset_y + 69 + 20 ),
                            WtDim( 328, 69 ),
                            WtL10n::get_available_languages(),
@@ -102,7 +102,7 @@ public:
 
 
         add_button( m_leave_btn );
-        add_button( m_select_mode_btn );
+       // add_button( m_select_mode_btn );
         add_tristate_button( m_lang_select_btn );
         add_tristate_button( m_diff_select_btn );
         add_tristate_button( m_theme_select_btn );
@@ -130,11 +130,11 @@ public:
 private:
     /**************************
      *
-     *************************/
+     ************************
     void select_pressed()
     {
         enter_child_menu( m_select_mode );
-    }
+    }*/
 
     /**************************
      *
@@ -185,7 +185,7 @@ private:
     size_t                                          m_current_diff;
     WtMenuSelectMode                                m_select_mode;
     WtButton                                        m_leave_btn;
-    WtButton                                        m_select_mode_btn;
+//    WtButton                                        m_select_mode_btn;
     WtTriStateButton                                m_lang_select_btn;
     WtTriStateButton                                m_diff_select_btn;
     WtTriStateButton                                m_theme_select_btn;

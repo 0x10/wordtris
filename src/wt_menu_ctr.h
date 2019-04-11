@@ -41,10 +41,6 @@ private:
         m_drag_start_pos(0,0),
         m_was_drag(false),
         m_drag_button_id(0),
-        m_start_btn( WtCoord( 170, 493 ), 
-                     WtDim( 200, 200 ),
-                     "start_btn.bmp",
-                     std::bind ( &WtMenuCtr::leave, this ) ),
         m_score_btn( WtCoord( 105, 800 ), 
                      WtDim( 100, 100 ), 
                      "score_btn.bmp",
@@ -53,13 +49,12 @@ private:
                        WtDim( 100, 100 ),
                        "settings_btn.bmp",
                        std::bind ( &WtMenuCtr::enter_settings_menu, this ) ),
-        m_game_selection( WtCoord( 0, 100 ),
+        m_game_selection( WtCoord( 0, 493 ),
                           WtDim( ACTIVE_WINDOW_WIDTH, 200 ),
                           GAME_MODE_CTR.get_available_mode_titles(),
-                          0,
-                          [](size_t){} )
+                          GAME_MODE_CTR.mode_idx_from_string( STORAGE.get_settings().game_mode ),
+                          std::bind ( &WtMenuCtr::game_mode_selected, this, std::placeholders::_1 ) )
     {
-        add_button( m_start_btn );
         add_button( m_score_btn );
         add_button( m_setting_btn );
         add_horizontal_carousel( m_game_selection );
@@ -105,6 +100,20 @@ private:
         enter_child_menu( m_settings );
     }
 
+    /**************************
+     *
+     *************************/
+    void game_mode_selected( size_t idx )
+    {
+        std::cout << "selected = " << idx << std::endl;
+        for( size_t l_idx = 0; l_idx < get_listener().size(); l_idx++ )
+        {
+            get_listener()[l_idx]->notify_game_mode_changed( GAME_MODE_CTR.get_available_modes()[idx] );
+        }
+        leave();
+    }
+
+
 
 private:
     WtCoord          m_drag_start_pos;
@@ -115,7 +124,6 @@ private:
     WtMenuPause      m_pause_menu;
     WtMenuHighscores m_scores;
 
-    WtButton         m_start_btn;
     WtButton         m_score_btn;
     WtButton         m_setting_btn;
     WtHorizontalCarousel m_game_selection;

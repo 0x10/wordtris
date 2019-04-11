@@ -16,6 +16,8 @@
 #ifndef _WT_CLICKABLE_H_
 #define _WT_CLICKABLE_H_
 
+#include "global.h"
+
 class WtClickableIf
 {
 public:

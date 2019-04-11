@@ -45,6 +45,26 @@ public:
     /**************************
      *
      *************************/
+    size_t mode_idx_from_string( std::string mode_id )
+    {
+        size_t result = 0;
+        if ( ! mode_id.empty() )
+        {
+            for( size_t idx = 0; idx < m_available_modes.size(); idx++ )
+            {
+                if ( m_available_modes[idx]->get_id_string() == mode_id )
+                {
+                    result = idx;
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+    /**************************
+     *
+     *************************/
     WtGameModeIf* mode_from_string( std::string mode_id )
     {
         WtGameModeIf* result = default_mode();

@@ -49,6 +49,10 @@ public:
     WtDim( ssize_t iW, ssize_t iH ) :
         w(iW),
         h(iH) {}
+    bool operator!=(const WtDim& rhs) const
+    {
+        return ( w != rhs.w ) && ( h != rhs.h );
+    }
 
     ssize_t w;
     ssize_t h;

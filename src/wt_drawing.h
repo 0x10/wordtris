@@ -127,21 +127,24 @@ public:
       *************************/   
     void draw_button( WtButton button )
     {
-        DrawingPolicy::draw_image( WtCoord( button.x(), button.y() ),
-                                   WtDim( button.width(), button.height() ),
-                                   button.image() );
-
-        if ( ! button.label().empty() )
+        if ( button.size() != WtDim( 0,0 ) )
         {
-            WtDim font_sz = DrawingPolicy::get_font_size();
+            DrawingPolicy::draw_image( WtCoord( button.x(), button.y() ),
+                                       WtDim( button.width(), button.height() ),
+                                       button.image() );
 
-            size_t text_center_w = ( button.label().length() / 2 ) * font_sz.w;
-            size_t button_center_x = ( button.width() / 2 + button.x() );
-            size_t button_center_y = ( button.height() / 2 + button.y() );
+            if ( ! button.label().empty() )
+            {
+                WtDim font_sz = DrawingPolicy::get_font_size();
 
-            DrawingPolicy::draw_text( WtCoord( button_center_x - text_center_w,
-                                               button_center_y - font_sz.h ),
-                                      button.label() );
+                size_t text_center_w = ( button.label().length() / 2 ) * font_sz.w;
+                size_t button_center_x = ( button.width() / 2 + button.x() );
+                size_t button_center_y = ( button.height() / 2 + button.y() );
+
+                DrawingPolicy::draw_text( WtCoord( button_center_x - text_center_w,
+                                                   button_center_y - font_sz.h ),
+                                          button.label() );
+            }
         }
     }
 

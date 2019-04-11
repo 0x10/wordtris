@@ -25,4 +25,6 @@
 #include "wt_types.h"
 #include "wt_backend_select.h"
 
+#define ABS(N) ((N<0)?(-N):(N))
+
 #endif /* _WT_GLOBAL_H_ */
