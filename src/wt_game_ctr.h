@@ -60,13 +60,13 @@ private:
         m_pause_menu( NULL ),
         m_grid_touch_control( WtCoord( 0, 100 ),
                               WtDim( ACTIVE_WINDOW_WIDTH, ACTIVE_WINDOW_HEIGHT-100 ),
-                              std::bind ( &WtGameCtr::notify_left, this ),
-                              std::bind ( &WtGameCtr::notify_right, this ),
-                              std::bind ( &WtGameCtr::notify_drop, this ) ),
+                              WT_BIND_EVENT_HANDLER( WtGameCtr::notify_left ),
+                              WT_BIND_EVENT_HANDLER( WtGameCtr::notify_right ),
+                              WT_BIND_EVENT_HANDLER( WtGameCtr::notify_drop ) ),
         m_pause_btn( WtCoord( 393, 32 ),
                      WtDim( 64, 64 ),
                      "pause_btn.bmp",
-                     std::bind ( &WtGameCtr::notify_pause, this ) )
+                     WT_BIND_EVENT_HANDLER( WtGameCtr::notify_pause ) )
     {
         WtSettings settings = STORAGE.get_settings();
         set_mode( GAME_MODE_CTR.mode_from_string( settings.game_mode ) );
@@ -77,7 +77,7 @@ private:
         ACTIVE_WINDOW.init();
         ACTIVE_WINDOW.set_theme( settings.active_theme );
 
-        ACTIVE_INPUT.register_key_press_delegate( std::bind( &WtGameCtr::on_key_press, this, std::placeholders::_1 ) );
+        ACTIVE_INPUT.register_key_press_delegate( WT_BIND_EVENT_HANDLER_1( WtGameCtr::on_key_press ) );
     }
     WtGameCtr( const WtGameCtr& ); 
     WtGameCtr & operator = (const WtGameCtr &);

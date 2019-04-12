@@ -18,7 +18,6 @@
 
 #include "wt_menu_if.h"
 #include "wt_storage.h"
-#include "wt_menu_game_mode_select.h"
 
 #include "wt_tristate_button.h"
 
@@ -41,29 +40,24 @@ public:
         m_leave_btn( WtCoord( 105, 800 ), 
                      WtDim(100, 100), 
                      "back_btn.bmp",
-                     std::bind ( &WtMenuSettings::leave, this ) ),
-/*        m_select_mode_btn( WtCoord( offset_x, offset_y ), 
-                           WtDim(328, 69), 
-                           "menu_btn.bmp", 
-                           std::bind ( &WtMenuSettings::select_pressed, this ),
-                           WtL10n_tr("select game mode") ),*/
+                     WT_BIND_EVENT_HANDLER( WtMenuSettings::leave ) ),
         m_lang_select_btn( WtCoord( offset_x, offset_y + 69 + 20 ),
                            WtDim( 328, 69 ),
                            WtL10n::get_available_languages(),
                            0,
-                           std::bind ( &WtMenuSettings::lang_changed, this, std::placeholders::_1 ) ),
+                           WT_BIND_EVENT_HANDLER_1( WtMenuSettings::lang_changed ) ),
         m_diff_select_btn( WtCoord( offset_x, offset_y + (69 + 20)*2 ),
                            WtDim( 328, 69 ),
                            std::array<const char*, 3>{{ WtGameModeIf::get_available_difficulties()[0].second,
                                                         WtGameModeIf::get_available_difficulties()[1].second,
                                                         WtGameModeIf::get_available_difficulties()[2].second }},
                            0,
-                           std::bind ( &WtMenuSettings::diff_changed, this, std::placeholders::_1 ) ),
+                           WT_BIND_EVENT_HANDLER_1( WtMenuSettings::diff_changed ) ),
         m_theme_select_btn( WtCoord( offset_x, offset_y + (69 + 20)*3 ),
                             WtDim( 328, 69 ),
                             m_selectable_themes,
                             0,
-                            std::bind ( &WtMenuSettings::theme_changed, this, std::placeholders::_1 ) )
+                            WT_BIND_EVENT_HANDLER_1( WtMenuSettings::theme_changed ) )
     {
         for ( size_t idx = 0; idx < WtL10n::get_available_languages().size(); idx++ )
         {
@@ -102,11 +96,9 @@ public:
 
 
         add_button( m_leave_btn );
-       // add_button( m_select_mode_btn );
         add_tristate_button( m_lang_select_btn );
         add_tristate_button( m_diff_select_btn );
         add_tristate_button( m_theme_select_btn );
-
     }
 
     ~WtMenuSettings()
@@ -116,25 +108,6 @@ private: // no copy allowed
     WtMenuSettings( const WtMenuSettings& ); 
     WtMenuSettings & operator = (const WtMenuSettings &);
 
-
-public:
-    /**************************
-     *
-     *************************/
-    virtual void listen( WtSettingsChangeObserver* listener )
-    {
-        WtMenuIf::listen( listener );
-        m_select_mode.listen( listener );
-    }
-
-private:
-    /**************************
-     *
-     ************************
-    void select_pressed()
-    {
-        enter_child_menu( m_select_mode );
-    }*/
 
     /**************************
      *
@@ -181,11 +154,9 @@ private:
         }
     }
 
-  private:
+private:
     size_t                                          m_current_diff;
-    WtMenuSelectMode                                m_select_mode;
     WtButton                                        m_leave_btn;
-//    WtButton                                        m_select_mode_btn;
     WtTriStateButton                                m_lang_select_btn;
     WtTriStateButton                                m_diff_select_btn;
     WtTriStateButton                                m_theme_select_btn;

@@ -25,8 +25,8 @@ class WtTriStateButton
 private:
     const char* m_tri_state_frame           =   "tri_state_btn.bmp";
     const char* m_tri_state_selected_img[3] = { "tri_state_btn_select0.bmp", 
-                                                                 "tri_state_btn_select1.bmp", 
-                                                                 "tri_state_btn_select2.bmp" };
+                                                "tri_state_btn_select1.bmp", 
+                                                "tri_state_btn_select2.bmp" };
     const char* m_tri_state_unselected_img  =   "tri_state_btn_select_none.bmp";
 
 public:
@@ -38,9 +38,8 @@ public:
                       uint8_t selected,
                       OnItemTapDelegate on_item_tap ) :
 
-        m_clickable( [](WtCoord&) {},
-                     std::bind ( &WtTriStateButton::on_release, this, std::placeholders::_1 ),
-                     [](WtCoord&, WtCoord&) {} ),
+        m_clickable( pos, size,
+                     WT_BIND_EVENT_HANDLER_1( WtTriStateButton::on_click ) ),
 
         m_pos( pos ),
         m_size( size ),
@@ -207,34 +206,31 @@ public:
     /**************************
      *
      *************************/
-    void on_release( WtCoord& pos )
+    void on_click( WtCoord& pos )
     {
-        if ( pos.in_region( m_pos, m_size ) )
+        WtCoord working_state_pos = WtCoord( m_pos.x + 1, m_pos.y + 1 );
+
+        uint8_t selected = 0;
+        if ( pos.in_region( working_state_pos, m_item_size ) )
         {
-            WtCoord working_state_pos = WtCoord( m_pos.x + 1, m_pos.y + 1 );
-
-            uint8_t selected = 0;
-            if ( pos.in_region( working_state_pos, m_item_size ) )
-            {
-                selected = 0;
-            }
-
-            working_state_pos.moveX( m_item_size );           
-            if ( pos.in_region( working_state_pos, m_item_size ) )
-            {
-                selected = 1;
-            }
-
-            working_state_pos.moveX( m_item_size );           
-            if ( pos.in_region( working_state_pos, m_item_size ) )
-            {
-                selected = 2;
-            }
-
-            m_selected = selected;
-
-            if ( m_on_item_tap ) m_on_item_tap( m_selected );
+            selected = 0;
         }
+
+        working_state_pos.moveX( m_item_size );           
+        if ( pos.in_region( working_state_pos, m_item_size ) )
+        {
+            selected = 1;
+        }
+
+        working_state_pos.moveX( m_item_size );           
+        if ( pos.in_region( working_state_pos, m_item_size ) )
+        {
+            selected = 2;
+        }
+
+        m_selected = selected;
+
+        if ( m_on_item_tap ) m_on_item_tap( m_selected );
     }
 
 

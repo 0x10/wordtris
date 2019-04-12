@@ -18,6 +18,7 @@
 
 #include <cstring> //for strlen
 #include <iostream>
+#include <math.h>
 
 typedef enum wt_mode_difficulty_tag
 {
@@ -78,35 +79,62 @@ public:
     WtCoord( const WtCoord& c ) :
         x(c.x),
         y(c.y) {}
+    /**************************
+     *
+     *************************/
     WtCoord& operator=( const WtCoord& c )
     {
         x = c.x;
         y = c.y;
         return (*this);
     }
+    /**************************
+     *
+     *************************/
     bool operator==(const WtCoord& rhs) const
     {
         return ( x == rhs.x ) && ( y == rhs.y );
     }
+    /**************************
+     *
+     *************************/
     bool operator!=(const WtCoord& rhs) const
     {
         return ( x != rhs.x ) && ( y != rhs.y );
     }
-
+    /**************************
+     *
+     *************************/
     WtCoord& operator+( const WtCoord& rhs )
     {
         x = x + rhs.x;
         y = y + rhs.y;
         return (*this);
     }
-
-
+    /**************************
+     *
+     *************************/
+    bool near_point( WtCoord pos, size_t distance ) const
+    {
+        bool result = false;
+        ssize_t dist = (( x - pos.x ) * ( x - pos.x )) + (( y - pos.y ) * ( y - pos.y ));
+        size_t sqrt_dist = sqrt( dist );
+        //std::cout << "dist = " << dist << "; sqrt_dist = " << sqrt_dist << std::endl;
+        if ( sqrt_dist  <= distance )
+            result = true;
+        return result;
+    }
+    /**************************
+     *
+     *************************/
     bool in_region( WtCoord start_pos, WtDim size ) const
     {
         return (  ( x >= start_pos.x ) && ( x < start_pos.x+size.w )
                && ( y >= start_pos.y ) && ( y < start_pos.y+size.h ) );
     }
-
+    /**************************
+     *
+     *************************/
     void moveX( const WtDim& dim )
     {
         x = x + dim.w;
@@ -115,6 +143,9 @@ public:
     ssize_t x;
     ssize_t y;
 };
+/**************************
+ *
+ *************************/
 std::ostream & operator << (std::ostream &out, const WtCoord &c)
 {
     out << "(" << c.x << "," << c.y << ")";

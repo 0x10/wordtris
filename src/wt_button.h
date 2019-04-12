@@ -30,9 +30,8 @@ public:
               OnTapDelegate on_tap,
               std::string label="" ) :
 
-        m_clickable( [](WtCoord&) {},
-                     std::bind ( &WtButton::on_release, this, std::placeholders::_1 ),
-                     [](WtCoord&, WtCoord&) {} ),
+        m_clickable( pos, size,
+                     WT_BIND_EVENT_HANDLER_1( WtButton::on_click ) ),
 
         m_pos( pos ),
         m_size( size ),
@@ -153,13 +152,9 @@ public:
     /**************************
      *
      *************************/
-    void on_release( WtCoord& pos )
+    void on_click( WtCoord& )
     {
-//        std::cout << "release detected: " << pos << " -> " << m_pos << ":" << m_size << " -> " << m_label << std::endl;
-        if ( pos.in_region( m_pos, m_size ) )
-        {
-            if ( m_on_tap ) m_on_tap();
-        }
+        if ( m_on_tap ) m_on_tap();
     }
 
 

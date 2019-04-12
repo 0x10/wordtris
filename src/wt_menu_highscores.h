@@ -26,7 +26,7 @@ public:
         m_leave_btn( WtCoord( 105, 800 ), 
                      WtDim(100, 100), 
                      "back_btn.bmp",
-                     std::bind ( &WtMenuHighscores::leave, this ) )
+                     WT_BIND_EVENT_HANDLER( WtMenuHighscores::leave ) )
     {
         add_button( m_leave_btn );
     }

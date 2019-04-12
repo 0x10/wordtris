@@ -32,22 +32,20 @@ public:
         m_leave_btn( WtCoord(offset_x - 158, offset_y-100), 
                      WtDim(100, 100),
                      "back_btn.bmp",
-                     std::bind ( &WtMenuPause::leave, this ) ),
+                     WT_BIND_EVENT_HANDLER( WtMenuPause::leave ) ),
         m_redo_btn( WtCoord(offset_x + 58, offset_y-100), 
                     WtDim(100, 100),
                     "redo_btn.bmp",
-                    std::bind ( &WtMenuPause::restart_pressed, this ) ),
+                    WT_BIND_EVENT_HANDLER( WtMenuPause::restart_pressed ) ),
         m_quit_btn( WtCoord(offset_x + 58, offset_y+100),
                     WtDim(100, 100),
                     "quit_btn.bmp",
-                    std::bind ( &WtMenuPause::quit_pressed, this ) ),
+                    WT_BIND_EVENT_HANDLER( WtMenuPause::quit_pressed ) ),
         m_help_btn( WtCoord(offset_x - 158, offset_y+100),
                     WtDim(100, 100),
                     "help_btn.bmp",
-                    std::bind ( &WtMenuPause::help_pressed, this ) )
+                    WT_BIND_EVENT_HANDLER( WtMenuPause::help_pressed ) )
     {
-
-
         add_button( m_leave_btn );
         add_button( m_redo_btn );
         add_button( m_quit_btn );

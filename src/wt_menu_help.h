@@ -30,7 +30,7 @@ public:
         m_leave_btn( WtCoord( 105, 800 ), 
                      WtDim(100, 100), 
                      "back_btn.bmp",
-                     std::bind ( &WtMenuHelp::leave, this ) )
+                     WT_BIND_EVENT_HANDLER( WtMenuHelp::leave ) )
     {
         add_button( m_leave_btn );
     }

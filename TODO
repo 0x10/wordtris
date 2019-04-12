@@ -28,10 +28,8 @@
 #
 #
 # (design)
-# - Change Game Mode Button with proper "Button" like display; currently it feels more like a label than a button
 # - Logo Design and Naming
 # - get an ui design review
-# - game mode selection at main screen
 #
 #
 # (architecture bugs)

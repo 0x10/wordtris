@@ -44,23 +44,22 @@ private:
         m_score_btn( WtCoord( 105, 800 ), 
                      WtDim( 100, 100 ), 
                      "score_btn.bmp",
-                     std::bind ( &WtMenuCtr::enter_score_menu, this ) ),
+                     WT_BIND_EVENT_HANDLER( WtMenuCtr::enter_score_menu ) ),
         m_setting_btn( WtCoord( 332, 800 ),
                        WtDim( 100, 100 ),
                        "settings_btn.bmp",
-                       std::bind ( &WtMenuCtr::enter_settings_menu, this ) ),
+                       WT_BIND_EVENT_HANDLER( WtMenuCtr::enter_settings_menu ) ),
         m_game_selection( WtCoord( 0, 493 ),
                           WtDim( ACTIVE_WINDOW_WIDTH, 200 ),
                           GAME_MODE_CTR.get_available_mode_titles(),
                           GAME_MODE_CTR.mode_idx_from_string( STORAGE.get_settings().game_mode ),
-                          std::bind ( &WtMenuCtr::game_mode_selected, this, std::placeholders::_1 ) )
+                          WT_BIND_EVENT_HANDLER_1( WtMenuCtr::game_mode_selected ) )
     {
         add_button( m_score_btn );
         add_button( m_setting_btn );
         add_horizontal_carousel( m_game_selection );
 
         m_settings.listen( m_pause_menu.get_help_listener() );
-
     }
     WtMenuCtr( const WtMenuCtr& ); 
     WtMenuCtr & operator = (const WtMenuCtr &);
@@ -88,7 +87,6 @@ private:
      *************************/
     void enter_score_menu()
     {
-        std::cout << "enter score menu\n";
         enter_child_menu( m_scores );
     }
 
@@ -126,6 +124,7 @@ private:
 
     WtButton         m_score_btn;
     WtButton         m_setting_btn;
+
     WtHorizontalCarousel m_game_selection;
 };
 
