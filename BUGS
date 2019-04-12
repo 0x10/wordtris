@@ -6,4 +6,5 @@
 # (1, active) wordtris mode: if a word is found in a column, the whole column is cleared
 # (2, active with (1)) wordtris mode: if a word is found in a row different to the top row, the row above is cleared too
 # (5) texture magic crash happend once at android while guess the word game mode
-# (7)
+# (7) letter drop sometimes drops the next letter too
+# (8)

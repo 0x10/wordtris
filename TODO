@@ -25,6 +25,7 @@
 # - option: supporting (grid-)guidelines
 # - supporting story
 # - ios support
+# - promote the next letter if configured
 #
 #
 # (design)
@@ -41,6 +42,8 @@
 # - Support Non-Ascii characters in Translations
 # - Settings/Storage Architectures seems pretty weird
 #       - review or documentation!
+# - split up wt_types
+# - organize files in folders 
 #
 # (others)
 # - android:
