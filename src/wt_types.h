@@ -80,21 +80,6 @@ public:
     WtCoord() :
         x(0),
         y(0) {}
-    WtCoord( int iX, ssize_t iY ) :
-        x(static_cast<ssize_t>(iX)),
-        y(iY) {}
-    WtCoord( int iX, size_t uY ) :
-        x(static_cast<ssize_t>(iX)),
-        y(static_cast<ssize_t>(uY)) {}
-    WtCoord( ssize_t iX, size_t uY ) :
-        x(iX),
-        y(static_cast<ssize_t>(uY)) {}
-    WtCoord( int iX, int iY ) :
-        x(static_cast<ssize_t>(iX)),
-        y(static_cast<ssize_t>(iY)) {}
-    WtCoord( size_t uX, size_t uY ) :
-        x(static_cast<ssize_t>(uX)),
-        y(static_cast<ssize_t>(uY)) {}
     WtCoord( ssize_t iX, ssize_t iY ) :
         x(iX),
         y(iY) {}

@@ -251,7 +251,7 @@ private:
         size_t x = (col*font->width())+col+GRID_OFFSET_X;
         size_t y = ((row*font->height())+row)+GRID_OFFSET_Y;
 
-        font->write( WtCoord(x, y), ch, m_renderer );
+        font->write( WtCoord( static_cast<ssize_t>(x), static_cast<ssize_t>(y)), ch, m_renderer );
     }
 
     /**************************
