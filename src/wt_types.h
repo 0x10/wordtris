@@ -28,16 +28,6 @@ typedef enum wt_mode_difficulty_tag
 } wt_difficulty;
 
 
-typedef enum wt_controls_tag
-{
-    wt_control_DROP,
-    wt_control_LEFT,
-    wt_control_RIGHT,
-    wt_control_QUIT,
-    wt_control_PAUSE,
-    wt_control_INVALID
-} wt_control;
-
 /**************************
  *
  *************************/
@@ -163,30 +153,6 @@ std::ostream & operator << (std::ostream &out, const WtCoord &c)
     return out;
 }
 
-/**************************
- *
- *************************/
-class WtInputEvent
-{
-public:
-    WtInputEvent() :
-        is_key_event( true ),
-        is_motion_event( false ),
-        is_press_event( false ),
-        call_again( false ),
-        key( wt_control_INVALID ),
-        pos(),
-        d_pos()
-    {}
-
-    bool       is_key_event;
-    bool       is_motion_event;
-    bool       is_press_event;
-    bool       call_again;
-    wt_control key;
-    WtCoord    pos;
-    WtCoord    d_pos;
-};
 
 /**************************
  *
@@ -306,6 +272,7 @@ public:
     std::string player;
     std::string game_mode;
     size_t      score;
+    size_t      level;
 
     /**************************
      *
@@ -315,6 +282,7 @@ public:
         WtStorable::write_string( of, player );
         WtStorable::write_string( of, game_mode );
         WtStorable::write_unsigned<size_t>( of, score );
+        WtStorable::write_unsigned<size_t>( of, level );
     }
 
     /**************************
@@ -333,6 +301,10 @@ public:
         if (inf.eof()) return false;
         
         score = WtStorable::read_unsigned<size_t>( inf );
+
+        if (inf.eof()) return false;
+        
+        level = WtStorable::read_unsigned<size_t>( inf );
 
         return true;
     }

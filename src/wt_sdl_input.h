@@ -18,13 +18,12 @@
 
 #include "SDL.h"
 #include "wt_sdl_config.h"
-#include "wt_types.h"
-#include "wt_backend_policy_if.h"
+#include "wt_input_types.h"
 
 #define SDL_INPUT  INPUT( WtInputPolicySdl )
-class WtInputPolicySdl : public WtInputPolicyIf
+class WtInputPolicySdl
 {
-protected:
+public:
 
     WtInputPolicySdl()
     {
@@ -118,15 +117,6 @@ protected:
         }
         return event;
     }
-
-    /**************************
-     *
-     *************************/   
-    std::string get_key_map()
-    {
-        return std::string("a - LEFT\nd - RIGHT\ns - DROP\np - PAUSE\nq - QUIT\n");
-    }
-
 
 private:
     WtInputPolicySdl( const WtInputPolicySdl& ); 

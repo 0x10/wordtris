@@ -22,13 +22,12 @@
 #include "wt_active_letter.h"
 #include "wt_button.h"
 
-#include <iterator>
 /**************************************
  * input handling class
  **************************************/
 #define INPUT( Policy )  WtInput<Policy>::instance()
 template<typename InputPolicy>
-class WtInput : private InputPolicy
+class WtInput
 {
 // singleton definition
 public:
@@ -39,8 +38,7 @@ public:
     }
     ~WtInput() {}
 private:
-    WtInput() :
-        InputPolicy()
+    WtInput()
     {
     }
     WtInput( const WtInput& ); 
@@ -91,7 +89,7 @@ public:
     void read()
     {
         
-        WtInputEvent ev = InputPolicy::read_input();
+        WtInputEvent ev = m_input_policy.read_input();
         while ( ev.call_again )
         {
             if ( ev.is_key_event )
@@ -120,20 +118,14 @@ public:
 
                 }
             }
-            ev = InputPolicy::read_input();
-        }
-    }
 
-    /**************************
-      *
-      *************************/   
-    std::string get_input_help()
-    {
-        return InputPolicy::get_key_map();
+            ev = m_input_policy.read_input();
+        }
     }
 
 private:
     std::vector< WtClickableIf* > m_active_regions;
+    InputPolicy                   m_input_policy;  
     OnKeyPressDelegate            m_on_key_press;
 };
 

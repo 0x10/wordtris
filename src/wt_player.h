@@ -90,7 +90,7 @@ public:
      *************************/
     uint32_t get_points() const            { return m_points; };
     uint16_t get_solved_word_count() const { return m_words;  };
-    uint8_t  get_current_level() const     { return m_level;  };
+    uint32_t get_current_level() const     { return m_level;  };
 
 private:
     uint32_t m_points;

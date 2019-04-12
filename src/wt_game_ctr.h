@@ -341,6 +341,7 @@ private:
     {
         // eval if player stat is within first 3 of game mode
         // if true add player at correct position
+        std::cout << "highscore entry: Lvl " << player.get_current_level() << " at " << player.get_points() << " within mode \"" << mode->get_title() << "\"" << std::endl;
 
         return scores;
     }

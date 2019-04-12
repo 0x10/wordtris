@@ -37,11 +37,4 @@ public:
     virtual void update() =0;
 };
 
-class WtInputPolicyIf
-{
-public:
-    virtual WtInputEvent read_input() =0;
-    virtual std::string  get_key_map() =0;
-};
-
 #endif /* _WT_BACKEND_POLICY_IF_H */
