@@ -1,6 +1,6 @@
 /*!*****************************************************************************
- * @file wt_random.h
- * @brief helper class which provides random functions
+ * @file wt_utils.h
+ * @brief helper class which provides several common functions
  *
  * This file was developed as part of wordtris
  *
@@ -13,18 +13,76 @@
  *            without written approval of Christian Kranz
  *
  ******************************************************************************/
-#ifndef _WT_RANDOM_H_
-#define _WT_RANDOM_H_
+#ifndef _WT_UTILS_H_
+#define _WT_UTILS_H_
 
 #include <time.h>
 #include <cstdlib>
 #include <chrono>
 #include <random>
 #include <string>
+#include <thread>
 
 #define LETTER_COUNT  (26)
 #define MAX_WEIGHT    (351)
 
+/*******************************
+ *
+ ******************************/
+class WtTime
+{
+public:
+    using TimePoint = std::chrono::steady_clock::time_point;
+    using TimeType  = std::chrono::microseconds;
+
+    /******************************************************************************
+     *
+     *****************************************************************************/
+    static TimeType from_seconds( const size_t s )
+    {
+        return std::chrono::duration_cast<TimeType>( std::chrono::seconds( s ) );
+    }
+
+    /******************************************************************************
+     *
+     *****************************************************************************/
+    static TimePoint get_time()
+    {
+        return std::chrono::steady_clock::now();
+    }
+
+    /******************************************************************************
+     *
+     *****************************************************************************/
+    static TimeType get_time_elapsed( TimePoint start, TimePoint end )
+    {
+        return std::chrono::duration_cast<TimeType>( end - start );
+    }
+
+    /******************************************************************************
+     *
+     *****************************************************************************/
+    static struct timespec get_timespec()
+    {
+        struct timespec time;
+
+        clock_gettime(CLOCK_MONOTONIC, &time);
+
+        return time;
+    }
+
+    /******************************************************************************
+     *
+     *****************************************************************************/
+    static void sleep( TimeType t )
+    {
+        std::this_thread::sleep_for( t );
+    }
+};
+
+/*******************************
+ *
+ ******************************/
 class WtRandom
 {
 public:
@@ -160,14 +218,11 @@ public:
      *****************************************************************************/
     static ssize_t getrandom( uint8_t* buf, size_t read )
     {
-        struct timespec time;
-
-        clock_gettime(CLOCK_MONOTONIC, &time);
-        srand( time.tv_nsec );
+        srand( WtTime::get_timespec().tv_nsec );
         for ( size_t i=0; i<read; i++ )
             buf[i] = rand();
         return read;
     }
 };
 
-#endif /* _WT_RANDOM_H */
+#endif /* _WT_UTILS_H */

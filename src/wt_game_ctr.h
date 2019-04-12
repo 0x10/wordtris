@@ -16,10 +16,8 @@
 #ifndef _WT_GAME_CTR_H_
 #define _WT_GAME_CTR_H_
 
-#include <unistd.h>
-
 #include "wt_input.h"
-
+#include "wt_utils.h"
 #include "wt_player.h"
 #include "wt_board.h"
 #include "wt_active_letter.h"
@@ -128,7 +126,7 @@ private:
 
             ACTIVE_WINDOW.update();
 
-            usleep( animation[a_idx].step_duration );
+            WtTime::sleep( animation[a_idx].step_duration );
         }
     }
 
@@ -416,6 +414,7 @@ public:
             uint8_t countdown = 48 - (m_player.get_current_level()*4);
             while ( !m_game_over && !m_shall_quit )
             {
+                WtTime::TimePoint before = WtTime::get_time();
                 ACTIVE_INPUT.read();
 
                 if ( !m_pause )
@@ -441,8 +440,13 @@ public:
                         set_buttons();
                     }
                 }
+                WtTime::TimePoint after = WtTime::get_time();
 
-                usleep(12500);
+                WtTime::TimeType remaining = WtTime::TimeType(12500) - WtTime::get_time_elapsed( before, after );
+                if ( remaining > WtTime::TimeType(0) )
+                {
+                    WtTime::sleep( remaining );
+                }
             }
         }
         while ( m_shall_restart );
@@ -461,7 +465,7 @@ public:
 
             ACTIVE_WINDOW.draw_message(WtL10n_tr("you lost! :P"));
             ACTIVE_WINDOW.update();
-            sleep(5);
+            WtTime::sleep(WtTime::from_seconds(5));
         }
         unset_buttons();
     }

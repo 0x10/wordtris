@@ -244,7 +244,7 @@ private:
 
             ACTIVE_WINDOW.update();
 
-            usleep(12500);
+            WtTime::sleep(WtTime::TimeType(12500));
 
             done = true;
             for(size_t idx=0;idx<button_fading.size();idx++)
@@ -282,7 +282,7 @@ private:
 
             ACTIVE_WINDOW.update();
 
-            usleep(12500);
+            WtTime::sleep(WtTime::TimeType(12500));
 
             done = true;
             for(size_t idx=0;idx<button_fading.size();idx++)

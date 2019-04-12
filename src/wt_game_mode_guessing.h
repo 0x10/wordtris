@@ -17,7 +17,7 @@
 #define _WT_GAME_MODE_GUESSING_H_
 
 #include "wt_game_mode_if.h"
-#include "wt_random.h"
+#include "wt_utils.h"
 #include "wt_wordlist.h"
 
 class WtGameModeGuessing : public WtGameModeIf

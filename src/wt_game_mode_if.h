@@ -18,7 +18,7 @@
 
 #include <utility>
 
-#include "wt_random.h"
+#include "wt_utils.h"
 #include "wt_player.h"
 #include "wt_board.h"
 #include "wt_animations.h"

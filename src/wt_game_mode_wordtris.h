@@ -18,7 +18,7 @@
 
 #include "wt_string_utils.h"
 #include "wt_game_mode_if.h"
-#include "wt_random.h"
+#include "wt_utils.h"
 #include "wt_wordlist.h"
 #include <locale>         // std::locale, std::tolower
 #include <algorithm>
@@ -94,7 +94,7 @@ public:
                                                                                                     true,
                                                                                                     word, 
                                                                                                     "grid_inverse" ),
-                                                                           200000 );
+                                                                           WtTime::TimeType(200000) );
                                 blink.push_back( step );
                                 step.content.font = "grid";
                                 blink.push_back( step );
@@ -130,7 +130,7 @@ public:
                                                                                                 false,
                                                                                                 word, 
                                                                                                 "grid_inverse" ),
-                                                                       200000 );
+                                                                       WtTime::TimeType(200000) );
                             blink.push_back( step );
                             step.content.font = "grid";
                             blink.push_back( step );

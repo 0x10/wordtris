@@ -17,7 +17,7 @@
 #define _WT_GAME_MODE_ABC_H_
 
 #include "wt_game_mode_if.h"
-#include "wt_random.h"
+#include "wt_utils.h"
 
 
 class WtGameModeAbc : public WtGameModeIf

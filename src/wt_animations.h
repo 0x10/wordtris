@@ -16,6 +16,7 @@
 #ifndef _WT_ANIMATIONS_H_
 #define _WT_ANIMATIONS_H_
 
+#include "wt_utils.h"
 #include <vector>
 
 /**************************
@@ -25,7 +26,7 @@ template<typename animation_content>
 class WtAnimationStep
 {
 public:
-    WtAnimationStep( animation_content c, const size_t duration  ) :
+    WtAnimationStep( animation_content c, const WtTime::TimeType duration  ) :
         content( c ),
         step_duration( duration )
     {}
@@ -34,7 +35,7 @@ public:
 
 public:
     animation_content content;
-    size_t            step_duration;
+    WtTime::TimeType  step_duration;
 };
 
 /**************************
