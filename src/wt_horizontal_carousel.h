@@ -179,6 +179,10 @@ public:
     }
 
 private:
+    WtHorizontalCarousel( const WtHorizontalCarousel& ); 
+    WtHorizontalCarousel & operator = (const WtHorizontalCarousel &);
+
+private:
     WtClickableIf m_clickable;
 
     const WtCoord   m_pos;

@@ -90,30 +90,33 @@ public:
 
 
 public:
-    WtWordList()
-    {
-        load_lists();
-    }
-    WtWordList( const std::string input_list_name, EConvertChars conv=eNone )
+    WtWordList( const std::string input_list_name="", EConvertChars conv=eNone ) :
+        m_words(),
+        m_list_short(),
+        m_list_medium(),
+        m_list_large(),
+        m_list_xlarge()
     {
         load_lists();
 
-
-        const std::vector<std::string>& input_list = get_wordlist_by_name( input_list_name );
-        for( size_t i = 0; i < input_list.size(); i++ )
+        if ( ! input_list_name.empty() )
         {
-            std::string input = input_list[i];
-            if ( !input.empty() )
+            const std::vector<std::string>& input_list = get_wordlist_by_name( input_list_name );
+            for( size_t i = 0; i < input_list.size(); i++ )
             {
-                switch( conv )
+                std::string input = input_list[i];
+                if ( !input.empty() )
                 {
-                    case eToLower: std::transform(input.begin(), input.end(), input.begin(), ::tolower); break;
-                    case eToUpper: std::transform(input.begin(), input.end(), input.begin(), ::toupper); break;
-                    default: break;
-                }
+                    switch( conv )
+                    {
+                        case eToLower: std::transform(input.begin(), input.end(), input.begin(), ::tolower); break;
+                        case eToUpper: std::transform(input.begin(), input.end(), input.begin(), ::toupper); break;
+                        default: break;
+                    }
 
-                WtWord* w = new WtWord( input );
-                m_words.push_back(w);
+                    WtWord* w = new WtWord( input );
+                    m_words.push_back(w);
+                }
             }
         }
     }

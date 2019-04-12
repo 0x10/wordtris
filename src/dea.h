@@ -173,7 +173,8 @@ class TDeaState
 {
 public:
     TDeaState( bool is_accepting ) :
-        m_is_accepting( is_accepting )
+        m_is_accepting( is_accepting ),
+        m_transitions()
     {
     }
 
@@ -256,20 +257,23 @@ private:
 class TDea
 {
 public:
-    TDea()
+    TDea() :
+        m_states(),
+        m_current_state(0)
     {
         m_states.push_back( TDeaState( false ) );
-        m_current_state = 0;
     }
-    TDea( size_t state_count )
+    TDea( size_t state_count ) :
+        m_states(),
+        m_current_state(0)
     {
         m_states.resize( state_count, TDeaState( false ) );
-        m_current_state = 0;
     }
-    TDea( std::string contains_word )
+    TDea( std::string contains_word ) :
+        m_states(),
+        m_current_state(0)
     {
         new_contains( contains_word );
-        m_current_state = 0;
     }
     ~TDea()
     {

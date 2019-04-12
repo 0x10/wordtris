@@ -28,6 +28,7 @@ public:
         m_name(""),
         m_font_w(0),
         m_font_h(0),
+        m_fname( "" ),
         m_font_data()
     {
     }
@@ -40,7 +41,8 @@ public:
         m_name( name ),
         m_font_w( w ),
         m_font_h( h ),
-        m_fname( filename )
+        m_fname( filename ),
+        m_font_data()
     {
         load_font_data( filename, theme, renderer );
     }
@@ -102,7 +104,7 @@ public:
     WtDim size() const
     {
         return WtDim( static_cast<ssize_t>(m_font_w),
-                      static_cast<ssize_t>(m_font_h) );
+                      static_cast<ssize_t>(m_font_w/*m_font_h*/) ); //intentional square
     }
 
     /**************************

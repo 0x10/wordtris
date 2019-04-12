@@ -45,7 +45,12 @@ protected:
     WtDrawingPolicySdl() :
         m_window( 0 ),
         m_renderer( 0 ),
-        m_theme("default")
+        m_bg_img_path( ""),
+        m_theme("default"),
+        m_grid_font(0),
+        m_grid_font_inverse(0),
+        m_text_font(0),
+        m_texture_cache()
     {
         if (SDL_Init(SDL_INIT_VIDEO)) {
             std::cerr << "Failed to initialize SDL: " << SDL_GetError() << std::endl;
@@ -323,7 +328,6 @@ private:
 private:
     SDL_Window*   m_window;
     SDL_Renderer* m_renderer;
-    //TTF_Font*     m_font;
 
     std::string   m_bg_img_path;
     std::string   m_theme;

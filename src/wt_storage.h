@@ -69,7 +69,15 @@ public:
     {
     }
 private:
-    WtStorageCtr()
+    WtStorageCtr() :
+        m_storage_copy(),
+        m_cwd(""),
+        m_asset_cache()
+#ifdef __ANDROID__
+        ,
+        m_assetManager(0),
+        _global_asset_manager()
+#endif /* __ANDROID__ */
     {
         m_storage_copy.header.magic = m_header_magic;
         m_storage_copy.data.settings = WtSettings();

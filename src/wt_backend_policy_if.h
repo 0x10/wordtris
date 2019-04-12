@@ -22,6 +22,7 @@
 class WtDrawingPolicyIf
 {
 public:
+    virtual ~WtDrawingPolicyIf(){}
     virtual void clr() =0;
     virtual void set_theme( std::string name )=0;
     virtual WtDim get_font_size() =0;

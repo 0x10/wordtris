@@ -29,6 +29,7 @@ private:
 public:
     WtMenuPause() :
         WtMenuIf( 0x200, "bg_menu_pause.bmp", false ),
+        m_help(),
         m_leave_btn( WtCoord(offset_x - 158, offset_y-100), 
                      WtDim(100, 100),
                      "back_btn.bmp",

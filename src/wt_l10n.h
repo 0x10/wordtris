@@ -120,7 +120,8 @@ private:
         return locale;
     }
     WtL10n() :
-        m_active_language_idx(0)
+        m_active_language_idx(0),
+        m_translations()
     {
         read_translations( m_translations );
     }

@@ -38,7 +38,10 @@ public:
     }
     ~WtInput() {}
 private:
-    WtInput()
+    WtInput() :
+        m_active_regions(),
+        m_input_policy(),
+        m_on_key_press()
     {
     }
     WtInput( const WtInput& ); 

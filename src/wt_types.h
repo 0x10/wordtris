@@ -102,7 +102,7 @@ public:
     /**************************
      *
      *************************/
-    WtCoord& operator+( const WtCoord& rhs )
+    WtCoord operator+( const WtCoord& rhs )
     {
         x = x + rhs.x;
         y = y + rhs.y;
@@ -269,6 +269,13 @@ public:
 class WtScoreEntry
 {
 public:
+    WtScoreEntry() :
+        player("PLYR"),
+        game_mode(""),
+        score(0),
+        level(0)
+    {}
+
     std::string player;
     std::string game_mode;
     size_t      score;

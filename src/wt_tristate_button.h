@@ -52,7 +52,6 @@ public:
     
     ~WtTriStateButton() {}
 
-
     /**************************
      *
      *************************/
@@ -233,6 +232,9 @@ public:
         if ( m_on_item_tap ) m_on_item_tap( m_selected );
     }
 
+private:
+    WtTriStateButton( const WtTriStateButton& ); 
+    WtTriStateButton& operator = (const WtTriStateButton&);
 
 private:
     WtClickableIf     m_clickable;

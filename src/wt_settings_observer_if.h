@@ -21,6 +21,7 @@
 class WtSettingsChangeObserver
 {
 public:
+    virtual ~WtSettingsChangeObserver(){}
     virtual void notify_language_changed( std::string lang_code )=0;
     virtual void notify_difficulty_changed( wt_difficulty diffi )=0;
     virtual void notify_game_mode_changed( WtGameModeIf* mode )=0;

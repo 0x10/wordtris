@@ -30,21 +30,18 @@
 class WtMenuIf
 {
 public:
-    WtMenuIf() :
-        m_menu_id(0xFF00),
-        m_shall_leave( false ),
-        m_bg( "bg_menu.bmp" ),
-        m_fade( true )
-    {
-    }
-    WtMenuIf( uint16_t menu_id, std::string bg_img="bg_menu.bmp", bool fade=true ) :
+    WtMenuIf( uint16_t menu_id=0xFF00, std::string bg_img="bg_menu.bmp", bool fade=true ) :
         m_menu_id( menu_id ),
         m_shall_leave( false ),
         m_bg( bg_img ),
+        m_buttons(),
+        m_tristate_buttons(),
+        m_carousels(),
+        m_change_listener(),
         m_fade( fade )
     {
     }
-    ~WtMenuIf()
+    virtual ~WtMenuIf()
     {
     }
 
@@ -86,7 +83,6 @@ protected:
      *************************/
     virtual void menu_left()
     {
-
     }
 
     /**************************
@@ -94,7 +90,6 @@ protected:
      *************************/
     virtual void menu_update()
     {
-
     }
 
 

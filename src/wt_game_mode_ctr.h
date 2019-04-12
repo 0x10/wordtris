@@ -101,7 +101,13 @@ public:
         return result;
     }
 private:
-    WtGameModeCtr()
+    WtGameModeCtr() :
+        m_demoMode(),
+        m_guessMode(),
+        m_tetrisMode(),
+        m_abcMode(),
+        m_wordtrisMode(),
+        m_available_modes()
     {
         m_available_modes.push_back( &m_demoMode );
         m_available_modes.push_back( &m_guessMode );
