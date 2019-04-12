@@ -23,7 +23,7 @@
 #include "wt_board.h"
 #include "wt_animations.h"
 
-#define INVALID_GAME_MODE (WtGameModeIf*)(0)
+#define INVALID_GAME_MODE static_cast<WtGameModeIf*>(0)
 
 /**************************
  *

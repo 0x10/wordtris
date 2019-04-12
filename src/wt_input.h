@@ -76,8 +76,10 @@ public:
         {
             if ( m_active_regions[idx]->id() == clickable_region.id() )
             {
-                m_active_regions.erase( m_active_regions.begin() + idx );
-                clickable_region.set_id( -1 );
+                std::vector<WtClickableIf*>::iterator it = m_active_regions.begin();
+                std::advance(it, idx);
+                m_active_regions.erase( it );
+                clickable_region.set_id( m_active_regions.max_size() );
                 break;
             }
         }
@@ -132,7 +134,7 @@ public:
 
 private:
     std::vector< WtClickableIf* > m_active_regions;
-    OnKeyPressDelegate         m_on_key_press;
+    OnKeyPressDelegate            m_on_key_press;
 };
 
 

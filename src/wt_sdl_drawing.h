@@ -146,7 +146,7 @@ public:
             {
                 char cell = board.get_cell( i, j );
                 if ( cell != '\0' )
-                    put_cell( j, ((WtBoard::row_count-i)), cell );
+                    put_cell( j, WtBoard::row_count-i, cell );
             }
     }
 
@@ -206,7 +206,7 @@ protected:
       *************************/   
     WtDim get_font_size()
     {
-        return WtDim( m_text_font->width(), m_text_font->height() );
+        return m_text_font->size();
     }
 
 
@@ -218,7 +218,7 @@ private:
     /**************************
      *
      *************************/
-    void puts_fb( size_t x, size_t y, const char* str, WtSdlFont* font )
+    void puts_fb( ssize_t x, ssize_t y, const char* str, WtSdlFont* font )
     {
         if ( ( NULL != str ) && ( NULL != font ) )
         {
@@ -227,12 +227,12 @@ private:
             size_t x_i = 0;
             WtCoord pos( x, y );
             for (size_t i = 0; i < l; i++) {
-                pos.x = x+x_i*font->width();
+                pos.x = x+static_cast<ssize_t>(x_i*font->width());
                 if (str[i] == '\n')
                 {
                     x_i = 0;
                     pos.x = x;
-                    pos.y += font->height()+font->height()/2;
+                    pos.y += static_cast<ssize_t>(font->height() + (font->height() / 2));
                 }
                 else
                 {
@@ -257,7 +257,7 @@ private:
     /**************************
      *
      *************************/
-    void put_cell( size_t col, size_t row, const char ch )
+    void put_cell( uint8_t col, uint8_t row, const char ch )
     {
         put_cell_custom( col, row, ch, m_grid_font );
     }

@@ -30,12 +30,12 @@ private:
     const char* m_tri_state_unselected_img  =   "tri_state_btn_select_none.bmp";
 
 public:
-    using OnItemTapDelegate = std::function<void(uint8_t)>;
+    using OnItemTapDelegate = std::function<void(size_t)>;
 
     WtTriStateButton( WtCoord pos, 
                       WtDim size,
                       const std::array<const char*, 3>& label,
-                      uint8_t selected,
+                      size_t selected,
                       OnItemTapDelegate on_item_tap ) :
 
         m_clickable( pos, size,
@@ -71,7 +71,7 @@ public:
     /**************************
      *
      *************************/
-    template<uint8_t const idx>
+    template<size_t const idx>
     std::string item_label()
     {
         static_assert( idx < 3, "tri_state_button has only 3 items" );
@@ -90,7 +90,7 @@ public:
     /**************************
      *
      *************************/
-    template<uint8_t const idx>
+    template<size_t const idx>
     std::string item_image()
     {
         static_assert( idx < 3, "tri_state_button has only 3 items" );
@@ -104,7 +104,7 @@ public:
     /**************************
      *
      *************************/
-    template<uint8_t const idx>
+    template<size_t const idx>
     WtButton item()
     {
         static_assert( idx < 3, "tri_state_button has only 3 items" );
@@ -210,7 +210,7 @@ public:
     {
         WtCoord working_state_pos = WtCoord( m_pos.x + 1, m_pos.y + 1 );
 
-        uint8_t selected = 0;
+        size_t selected = 0;
         if ( pos.in_region( working_state_pos, m_item_size ) )
         {
             selected = 0;
@@ -242,7 +242,7 @@ private:
     WtDim             m_item_size;
     std::string       m_label[3];
 
-    uint8_t           m_selected;
+    size_t            m_selected;
 
     OnItemTapDelegate m_on_item_tap;
 };

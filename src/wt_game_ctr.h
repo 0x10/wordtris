@@ -311,7 +311,7 @@ private:
     {
         if ( INVALID_GAME_MODE != m_active_mode )
         {
-            std::cout << "new diff selected = "<< diffi << std::endl;
+            std::cout << "new diff selected = "<< static_cast<size_t>(diffi) << std::endl;
             m_active_mode->set_difficulty( diffi );
 
             WtSettings settings = STORAGE.get_settings();

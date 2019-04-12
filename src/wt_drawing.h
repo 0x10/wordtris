@@ -76,7 +76,8 @@ public:
         for(size_t l_idx = 0; l_idx < line_count; l_idx++ )
         {
             std::string line = hint.substr( l_idx*line_length, line_length );
-            DrawingPolicy::draw_text( WtCoord( 79, 890+(l_idx * DrawingPolicy::get_font_size().h *2) ),
+            DrawingPolicy::draw_text( WtCoord( 79,
+                                               890+(static_cast<ssize_t>(l_idx) * DrawingPolicy::get_font_size().h *2) ),
                                       line );
         }
     }
@@ -91,8 +92,8 @@ public:
         for(size_t l_idx = 0; l_idx < line_count; l_idx++ )
         {
             std::string line = help.substr( l_idx*line_length, line_length );
-            DrawingPolicy::draw_text( WtCoord( (ACTIVE_WINDOW_WIDTH / 2)-((line.length()*DrawingPolicy::get_font_size().w)/2), 
-                                               (ACTIVE_WINDOW_HEIGHT / 4)+(l_idx * DrawingPolicy::get_font_size().h *2) ),
+            DrawingPolicy::draw_text( WtCoord( (ACTIVE_WINDOW_WIDTH / 2)-((static_cast<ssize_t>(line.length())*DrawingPolicy::get_font_size().w)/2), 
+                                               (ACTIVE_WINDOW_HEIGHT / 4)+(static_cast<ssize_t>(l_idx) * DrawingPolicy::get_font_size().h *2) ),
                                       line );
         }
     }
@@ -112,9 +113,9 @@ public:
                                    "menu_btn.bmp" );
         WtDim font_sz = DrawingPolicy::get_font_size();
 
-        size_t text_center_w = ( msg.length() / 2 ) * font_sz.w;
-        size_t button_center_x = ( sz.w / 2 + pos.x );
-        size_t button_center_y = ( sz.h / 2 + pos.y );
+        ssize_t text_center_w = static_cast<ssize_t>( msg.length() / 2 ) * font_sz.w;
+        ssize_t button_center_x = ( sz.w / 2 + pos.x );
+        ssize_t button_center_y = ( sz.h / 2 + pos.y );
 
         DrawingPolicy::draw_text( WtCoord( button_center_x - text_center_w, 
                                            button_center_y - font_sz.h ),
@@ -137,9 +138,9 @@ public:
             {
                 WtDim font_sz = DrawingPolicy::get_font_size();
 
-                size_t text_center_w = ( button.label().length() / 2 ) * font_sz.w;
-                size_t button_center_x = ( button.width() / 2 + button.x() );
-                size_t button_center_y = ( button.height() / 2 + button.y() );
+                ssize_t text_center_w = static_cast<ssize_t>( button.label().length() / 2 ) * font_sz.w;
+                ssize_t button_center_x = ( button.width() / 2 + button.x() );
+                ssize_t button_center_y = ( button.height() / 2 + button.y() );
 
                 DrawingPolicy::draw_text( WtCoord( button_center_x - text_center_w,
                                                    button_center_y - font_sz.h ),

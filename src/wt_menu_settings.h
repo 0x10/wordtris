@@ -63,7 +63,7 @@ public:
         {
             if ( WtL10n::get_available_languages()[idx] == WtL10n::get_language_code() )
             {
-                m_lang_select_btn.select( (uint8_t) idx );
+                m_lang_select_btn.select( idx );
                 break;
             }
         }

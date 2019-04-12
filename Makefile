@@ -1,4 +1,9 @@
 CXX=g++
+CXX_OPTIMIZATION=-Os
+CXX_WARNINGS=-Wpedantic -pedantic-errors -Wall -Wextra -Wcast-align -Wcast-qual -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs -Wnoexcept -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-null-sentinel -Wstrict-overflow=5 -Wundef 
+#CXX_DEBUG=-g
+CXX_FLAGS=$(CXX_OPTIMIZATION) $(CXX_WARNINGS) $(CXX_DEBUG)
+
 ANDROID_DIR=org.libsdl.wordtris
 SRC_DIR=./src
 BUILD_DIR=.
@@ -12,10 +17,10 @@ APK_TRG_NAME=wordtris.apk
 all: clean sdl
 
 sdl:
-	$(CXX) -Os -Wpedantic -pedantic-errors -Wextra -Wall -I./pc_include -I. $(SRC_DIR)/wordtris.cpp -L$(SDL_DIR)/build/.libs -lSDL2 -o $(TARGET_SDL)
+	$(CXX) $(CXX_FLAGS) -I./pc_include -I. $(SRC_DIR)/wordtris.cpp -L$(SDL_DIR)/build/.libs -lSDL2 -o $(TARGET_SDL)
 
 sdl-system:
-	$(CXX) -Os -Wall -DUSE_SYSTEM_SDL -I./pc_include $(SRC_DIR)/wordtris.cpp -lSDL2 -o $(TARGET_SDL)
+	$(CXX) $(CXX_FLAGS) -DUSE_SYSTEM_SDL -I./pc_include $(SRC_DIR)/wordtris.cpp -lSDL2 -o $(TARGET_SDL)
 
 run-sdl: sdl
 	LD_LIBRARY_PATH=$(SDL_DIR)/build/.libs ./$(TARGET_SDL)

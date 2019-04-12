@@ -52,7 +52,7 @@ public:
         m_click( click ),
         m_pan( pan ),
         m_motion( motion ),
-        m_id( -1 ),
+        m_id( 0xFFFFFFFF ),
         m_pos( pos ),
         m_size( size ),
         m_press_pos( -1, -1 ),
@@ -68,7 +68,7 @@ public:
     /**************************
      *
      *************************/
-    void set_id( ssize_t id )
+    void set_id( size_t id )
     {
         m_id = id;
     }
@@ -76,7 +76,7 @@ public:
     /**************************
      *
      *************************/
-    ssize_t id()
+    size_t id()
     {
         return m_id;
     }
@@ -141,7 +141,7 @@ protected:
     ClickDetectedDelegate   m_click;
     PanDetectedDelegate     m_pan;
     MotionDetectedDelegate  m_motion;
-    ssize_t                 m_id;
+    size_t                  m_id;
     const WtCoord           m_pos;
     const WtDim             m_size;
 

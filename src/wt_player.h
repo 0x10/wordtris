@@ -16,6 +16,8 @@
 #ifndef _WT_PLAYER_H_
 #define _WT_PLAYER_H_
 
+#include "wt_board.h"
+
 #define PTS_P_WORD           (1000)
 
 class WtPlayer
@@ -39,8 +41,8 @@ public:
     void word_solved( size_t length=1 )
     {
         m_words ++;
-        m_points += length * (m_level * PTS_P_WORD);
-        m_level = 1 + (uint8_t)((m_words - 1) / 10);       
+        m_points += (static_cast<uint32_t>(length * PTS_P_WORD) * static_cast<uint32_t>(m_level));
+        m_level = 1 + static_cast<uint8_t>((m_words - 1) / 10);
     }
 
     /**************************
@@ -50,7 +52,7 @@ public:
     {
         m_words ++;
         m_points += new_points * m_level;
-        m_level = 1 + (uint8_t)((m_words - 1) / 10);       
+        m_level = 1 + static_cast<uint8_t>((m_words - 1) / 10);
     }
 
     /**************************
@@ -59,7 +61,10 @@ public:
     void letter_dropped( uint8_t row_diff )
     {
         if ( row_diff > 0 )
-            m_points += ( 21 + (3 * m_level) - row_diff );
+        {
+            uint32_t row_pts = static_cast<uint32_t>(row_diff);
+            m_points += ( row_pts * ( 2 * static_cast<uint32_t>(m_level) ) );
+        }
     }
 
     /**************************

@@ -58,6 +58,13 @@ public:
     ssize_t w;
     ssize_t h;
 };
+/**************************
+ *
+ *************************/
+std::ostream & operator << (std::ostream &out, const WtDim &d);
+/**************************
+ *
+ *************************/
 std::ostream & operator << (std::ostream &out, const WtDim &d)
 {
     out << "(" << d.w << "," << d.h << ")";
@@ -73,6 +80,21 @@ public:
     WtCoord() :
         x(0),
         y(0) {}
+    WtCoord( int iX, ssize_t iY ) :
+        x(static_cast<ssize_t>(iX)),
+        y(iY) {}
+    WtCoord( int iX, size_t uY ) :
+        x(static_cast<ssize_t>(iX)),
+        y(static_cast<ssize_t>(uY)) {}
+    WtCoord( ssize_t iX, size_t uY ) :
+        x(iX),
+        y(static_cast<ssize_t>(uY)) {}
+    WtCoord( int iX, int iY ) :
+        x(static_cast<ssize_t>(iX)),
+        y(static_cast<ssize_t>(iY)) {}
+    WtCoord( size_t uX, size_t uY ) :
+        x(static_cast<ssize_t>(uX)),
+        y(static_cast<ssize_t>(uY)) {}
     WtCoord( ssize_t iX, ssize_t iY ) :
         x(iX),
         y(iY) {}
@@ -146,6 +168,10 @@ public:
 /**************************
  *
  *************************/
+std::ostream & operator << (std::ostream &out, const WtCoord &c);
+/**************************
+ *
+ *************************/
 std::ostream & operator << (std::ostream &out, const WtCoord &c)
 {
     out << "(" << c.x << "," << c.y << ")";
@@ -180,6 +206,65 @@ public:
 /**************************
  *
  *************************/
+class WtStorable
+{
+public:
+    /**************************
+     *
+     *************************/
+    static void write_string( std::ofstream& of, const std::string& string )
+    {
+        const char* str = string.c_str();
+        of.write( str, static_cast<std::streamsize>(strlen(str) + 1) );// incl. NULL
+    }
+
+    /**************************
+     *
+     *************************/
+    static std::string read_string( std::ifstream& inf )
+    {
+        char input[0xFF];
+        inf.getline( input, 0xFF, '\0' );
+        return std::string(input);
+    }
+
+    /**************************
+     *
+     *************************/
+    template<typename unsignedtype>
+    static void write_unsigned( std::ofstream& of, const unsignedtype val )
+    {
+        union {
+            unsignedtype uint;
+            char   bytes[sizeof(unsignedtype)];
+        } size_t_conv;
+
+        size_t_conv.uint = val;
+
+        of.write( size_t_conv.bytes, sizeof(unsignedtype) );
+    }
+
+    /**************************
+     *
+     *************************/
+    template<typename unsignedtype>
+    static unsignedtype read_unsigned( std::ifstream& inf )
+    {
+        union {
+            unsignedtype uint;
+            char   bytes[sizeof(unsignedtype)];
+        } size_t_conv;
+
+        inf.read( size_t_conv.bytes, sizeof(unsignedtype) );
+
+        return size_t_conv.uint;
+    }
+};
+
+
+/**************************
+ *
+ *************************/
 class WtSettings
 {
 public:
@@ -201,17 +286,13 @@ public:
      *************************/
     void write( std::ofstream& of )
     {
-        const char* str = language.c_str();
-        of.write( str, strlen(str)+1 );// incl. NULL
+        WtStorable::write_string( of, language );
+        WtStorable::write_string( of, game_mode );
 
-        str = game_mode.c_str();
-        of.write( str, strlen(str)+1 );// incl. NULL
+        char diff = difficulty;
+        of.write( static_cast<char*>(&diff), 1 );
 
-        uint8_t diff = difficulty;
-        of.write( (char*)&diff, 1 );
-
-        str = active_theme.c_str();
-        of.write( str, strlen(str)+1 );// incl. NULL
+        WtStorable::write_string( of, active_theme );
     }
 
     /**************************
@@ -219,20 +300,15 @@ public:
      *************************/
     void read( std::ifstream& inf )
     {
-        char input[0xFF];
-        inf.getline( input, 0xFF, '\0' );
-        language = std::string(input);
+        language = WtStorable::read_string( inf );
+        game_mode = WtStorable::read_string( inf );
 
-        inf.getline( input, 0xFF, '\0' );
-        game_mode = std::string(input);
+        char diff;
+        inf.read( static_cast<char*>(&diff), 1 );
+        difficulty = static_cast<wt_difficulty>(diff);
 
-        uint8_t diff;
-        inf.read( (char*)&diff, 1 );
-        difficulty = (wt_difficulty)diff;
-
-        inf.getline( input, 0xFF, '\0' );
-        active_theme= std::string(input);
-    }    
+        active_theme = WtStorable::read_string( inf );
+    }
 };
 
 
@@ -251,13 +327,9 @@ public:
      *************************/
     void write( std::ofstream& of )
     {
-        const char* str = player.c_str();
-        of.write( str, strlen(str)+1 ); // incl. NULL
-
-        str = game_mode.c_str();
-        of.write( str, strlen(str)+1 );// incl. NULL
-
-        of.write( (char*)&score, sizeof(score) );
+        WtStorable::write_string( of, player );
+        WtStorable::write_string( of, game_mode );
+        WtStorable::write_unsigned<size_t>( of, score );
     }
 
     /**************************
@@ -265,21 +337,17 @@ public:
      *************************/
     bool read( std::ifstream& inf )
     {
-        char input[0xFF];
+        if (inf.eof()) return false;
+
+        player = WtStorable::read_string( inf );
 
         if (inf.eof()) return false;
 
-        inf.getline( input, 0xFF, '\0' );
-        player = std::string( input );
+        game_mode = WtStorable::read_string( inf );
 
         if (inf.eof()) return false;
-
-        inf.getline( input, 0xFF, '\0' );
-        game_mode = std::string( input );
-
-        if (inf.eof()) return false;
-
-        inf.read( (char*)&score, sizeof(score) );
+        
+        score = WtStorable::read_unsigned<size_t>( inf );
 
         return true;
     }

@@ -83,7 +83,7 @@ public:
                 if ( found_idx != std::string::npos )
                 {
                     for ( size_t c_idx = found_idx; c_idx < (m_active_word.length()+found_idx); c_idx++ )
-                        board.set_cell( r_idx, (uint8_t)(c_idx), WtBoard::empty_cell );
+                        board.set_cell( r_idx, static_cast<uint8_t>(c_idx), WtBoard::empty_cell );
                     //TODO gravity bitch!
                     found_word = true;
                     break;

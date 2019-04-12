@@ -301,7 +301,7 @@ private:
 
             for ( uint8_t r_idx = 0; r_idx < WtBoard::row_count; r_idx++ )
             {
-                char cell = new_col_str[ (WtBoard::row_count-1) - r_idx ];
+                char cell = new_col_str[ static_cast<size_t>((WtBoard::row_count-1) - r_idx) ];
                 if ( cell == ' ' )
                 {
                     if ( r_idx < WtBoard::row_count / 2 )
@@ -339,7 +339,7 @@ private:
             //2. replace acc.
             for( size_t c_idx = pos; c_idx < (pos + word.length()); c_idx++ )
             {
-                board.set_cell( r_idx, (uint8_t)c_idx, replace_char );
+                board.set_cell( r_idx, static_cast<uint8_t>(c_idx), replace_char );
 
                 //3. push up or pull down if necessary
                 column_gravity( c_idx, board );            

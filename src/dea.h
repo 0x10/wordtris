@@ -203,7 +203,7 @@ public:
      **************************************************************************/
     void print( size_t idx, bool is_current )
     {
-        printf("     |--> [%zd @ %p] is_accepting == %d", idx, (void*)this, m_is_accepting );
+        printf("     |--> [%zd @ %p] is_accepting == %d", idx, static_cast<void*>(this), m_is_accepting );
         if ( false != is_current ) printf(" {*}\n");
         else printf("\n");
 
@@ -290,8 +290,8 @@ public:
      **************************************************************************/
     void print()
     {
-        printf("dea %p\n", (void*)this);
-        printf(" |--> states => %zd @ %p\n", m_states.size(), (void*)&m_states );
+        printf("dea %p\n", static_cast<void*>(this));
+        printf(" |--> states => %zd @ %p\n", m_states.size(), static_cast<void*>(&m_states) );
         for ( size_t s_idx=0; s_idx < m_states.size() ; s_idx++ )
         {
             m_states[s_idx].print( s_idx, ( s_idx == m_current_state ) );

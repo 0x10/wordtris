@@ -83,7 +83,7 @@ public:
     /**************************
      *
      *************************/
-    size_t width()
+    size_t width() const
     {
         return m_font_w;
     }
@@ -91,9 +91,18 @@ public:
     /**************************
      *
      *************************/
-    size_t height()
+    size_t height() const
     {
-        return m_font_w;
+        return m_font_h;
+    }
+
+    /**************************
+     *
+     *************************/
+    WtDim size() const
+    {
+        return WtDim( static_cast<ssize_t>(m_font_w),
+                      static_cast<ssize_t>(m_font_h) );
     }
 
     /**************************
@@ -107,7 +116,7 @@ public:
         small.w = m_font_w;
         small.h = m_font_h;
 
-        SDL_RenderCopy(renderer, m_font_data[(ch - 0x20)], NULL, &small );        
+        SDL_RenderCopy(renderer, m_font_data[static_cast<size_t>(ch - 0x20)], NULL, &small );        
     }
 private:
     /**************************
@@ -134,7 +143,7 @@ private:
     SDL_Texture *get_letter_texture( SDL_Texture* t_letters, char letter, SDL_Renderer* renderer )
     {
         SDL_Rect letter_rect;
-        letter_rect.x = (letter - 0x20) * m_font_w;
+        letter_rect.x = static_cast<size_t>(letter - 0x20) * m_font_w;
         letter_rect.y = 0;
         letter_rect.w = m_font_w;
         letter_rect.h = m_font_h;

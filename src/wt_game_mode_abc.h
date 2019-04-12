@@ -182,7 +182,7 @@ private:
 
         for( uint8_t removedCount = 0; removedCount < lettersToRemove; removedCount++ )
         {
-            size_t r_idx = WtRandom::get_random_from_sequence( indices );
+            size_t r_idx = WtRandom::get_random_from_sequence<size_t>( indices );
 
             removed.push_back( out_seq[r_idx] );
             out_seq[r_idx] = WtBoard::empty_cell;

@@ -136,7 +136,7 @@ public:
         std::cout << "highscores.size() == " << m_storage_copy.data.highscores.size() << std::endl;
         std::cout << "settings.language == " << m_storage_copy.data.settings.language << std::endl;
         std::cout << "settings.game mode == " << m_storage_copy.data.settings.game_mode << std::endl;
-        std::cout << "settings.diff == " << m_storage_copy.data.settings.difficulty << std::endl;
+        std::cout << "settings.diff == " << static_cast<size_t>(m_storage_copy.data.settings.difficulty) << std::endl;
         std::cout << "settings.active_theme == " << m_storage_copy.data.settings.active_theme << std::endl;
         // distribute
         //
@@ -200,7 +200,7 @@ private:
         {
             m_storage_copy.header.magic = m_header_magic;
 
-            output_file.write( (char*)&m_storage_copy.header, sizeof(m_storage_copy.header));
+            WtStorable::write_unsigned<uint32_t>( output_file, m_storage_copy.header.magic );
 
             m_storage_copy.data.settings.write( output_file );
             for(size_t idx = 0; idx < m_storage_copy.data.highscores.size(); idx++ )
@@ -234,10 +234,10 @@ private:
         std::ifstream input_file( fname, std::ios::binary );
         if ( input_file.is_open() )
         {
-            input_file.read( (char*)&m_storage_copy.header, sizeof(m_storage_copy.header) );
+            m_storage_copy.header.magic = WtStorable::read_unsigned<uint32_t>( input_file );
 
             //if ( (! input_file.eof()) && (!input_file.fail()) ) in case latter wont work
-            if ( input_file.gcount() == sizeof(m_storage_copy.header) )
+            if ( static_cast<size_t>(input_file.gcount()) == sizeof(m_storage_copy.header) )
             {
                 // check binary compatibility
                 if ( m_storage_copy.header.magic == m_header_magic )
@@ -292,8 +292,8 @@ private:
         std::streamsize size = file.tellg();
         file.seekg(0, std::ios::beg);
 
-        buffer.resize(size);
-        if (!file.read((char*)buffer.data(), size))
+        buffer.resize(static_cast<size_t>(size));
+        if (!file.read(reinterpret_cast<char*>(buffer.data()), size))
         {
             std::cout << "error read file " << fname << std::endl;
         }

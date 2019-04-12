@@ -89,9 +89,10 @@ public:
     /******************************************************************************
      *
      *****************************************************************************/
-    static size_t get_random_from_sequence( std::vector<size_t>& seq )
+    template<typename itemtype>
+    static itemtype get_random_from_sequence( std::vector<itemtype>& seq )
     {
-        char result = 0;
+        itemtype result = 0;
         uint8_t buf;
         if ( WtRandom::getrandom( &buf, 1 ) <= 1 )
         {
@@ -108,7 +109,7 @@ public:
         char result = '\0';
         unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
         std::default_random_engine generator(seed);
-        int random = dist( generator );
+        size_t random = static_cast<size_t>(dist( generator ));
 
         result = word[(random % word.length())];
 
@@ -175,6 +176,7 @@ private:
     /******************************************************************************
      *
      *****************************************************************************/
+#if 0
     static char get_weighted_random_letter( void )
     {
         const char letters[LETTER_COUNT] = 
@@ -198,7 +200,7 @@ private:
         }
         return result;
     }
-
+#endif
     /******************************************************************************
      *
      *****************************************************************************/
@@ -208,7 +210,7 @@ private:
         uint8_t buf;
         if ( WtRandom::getrandom( &buf, 1 ) <= 1 )
         {
-            result = (char)((uint8_t)'a' + (buf % ((uint8_t)'z' - (uint8_t)'a') ) );
+            result = static_cast<char>(static_cast<uint8_t>('a') + (buf % (static_cast<uint8_t>('z') - static_cast<uint8_t>('a') ) ) );
         }
         return result;
     }
@@ -216,7 +218,7 @@ public:
     /******************************************************************************
      * this wrapper may solve some issues on some systems...
      *****************************************************************************/
-    static ssize_t getrandom( uint8_t* buf, size_t read )
+    static size_t getrandom( uint8_t* buf, size_t read )
     {
         srand( WtTime::get_timespec().tv_nsec );
         for ( size_t i=0; i<read; i++ )
