@@ -17,16 +17,16 @@ APK_TRG_NAME=wordtris.apk
 all: clean sdl
 
 sdl:
-	$(CXX) $(CXX_FLAGS) -I./pc_include -I. $(SRC_DIR)/wordtris.cpp -L$(SDL_DIR)/build/.libs -lSDL2 -o $(TARGET_SDL)
+	$(CXX) $(CXX_FLAGS) -I./pc_include -I$(BUILD_DIR) -I$(SRC_DIR) $(SRC_DIR)/wordtris.cpp -L$(SDL_DIR)/build/.libs -lSDL2 -o $(TARGET_SDL)
 
 sdl-system:
-	$(CXX) $(CXX_FLAGS) -DUSE_SYSTEM_SDL -I./pc_include $(SRC_DIR)/wordtris.cpp -lSDL2 -o $(TARGET_SDL)
+	$(CXX) $(CXX_FLAGS) -DUSE_SYSTEM_SDL -I./pc_include -I$(SRC_DIR) $(SRC_DIR)/wordtris.cpp -lSDL2 -o $(TARGET_SDL)
 
 run-sdl: sdl
 	LD_LIBRARY_PATH=$(SDL_DIR)/build/.libs ./$(TARGET_SDL)
 
 debug-sdl:
-	$(CXX) $(CXX_DEBUG) $(CXX_FLAGS) -I./pc_include -I. $(SRC_DIR)/wordtris.cpp -L$(SDL_DIR)/build/.libs -lSDL2 -o $(TARGET_SDL)
+	$(CXX) $(CXX_DEBUG) $(CXX_FLAGS) -I./pc_include -I$(BUILD_DIR) -I$(SRC_DIR) $(SRC_DIR)/wordtris.cpp -L$(SDL_DIR)/build/.libs -lSDL2 -o $(TARGET_SDL)
 	LD_LIBRARY_PATH=$(SDL_DIR)/build/.libs gdb ./$(TARGET_SDL)
 
 ncurses:

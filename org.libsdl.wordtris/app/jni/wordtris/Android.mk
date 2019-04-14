@@ -6,7 +6,7 @@ LOCAL_MODULE := main
 
 SDL_PATH := ../SDL
 
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/$(SDL_PATH)/include
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/$(SDL_PATH)/include $(LOCAL_PATH)/src
 
 # Add your application source files here...
 LOCAL_SRC_FILES :=  \

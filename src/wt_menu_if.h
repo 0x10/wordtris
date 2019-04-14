@@ -16,9 +16,9 @@
 #ifndef _WT_MENU_IF_H_
 #define _WT_MENU_IF_H_
 
-#include "wt_button.h"
-#include "wt_tristate_button.h"
-#include "wt_horizontal_carousel.h"
+#include "widgets/wt_button.h"
+#include "widgets/wt_tristate_button.h"
+#include "widgets/wt_horizontal_carousel.h"
 
 #include "wt_settings_observer_if.h"
 #include "wt_input.h"

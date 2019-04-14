@@ -28,7 +28,7 @@
 #include "wt_storage.h"
 #include "wt_animations.h"
 
-#include "wt_grid_touch_overlay.h"
+#include "widgets/wt_grid_touch_overlay.h"
 
 #define GAME_CTR  WtGameCtr::instance()
 class WtGameCtr : public WtSettingsChangeObserver

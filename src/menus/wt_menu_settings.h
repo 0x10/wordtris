@@ -19,7 +19,7 @@
 #include "wt_menu_if.h"
 #include "wt_storage.h"
 
-#include "wt_tristate_button.h"
+#include "widgets/wt_tristate_button.h"
 
 
 class WtMenuSettings : public WtMenuIf

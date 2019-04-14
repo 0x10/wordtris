@@ -17,10 +17,10 @@
 #define _WT_MENU_CTR_H_
 
 #include "wt_menu_if.h"
-#include "wt_menu_settings.h"
-#include "wt_menu_highscores.h"
-#include "wt_menu_pause.h"
-#include "wt_horizontal_carousel.h"
+#include "menus/wt_menu_settings.h"
+#include "menus/wt_menu_highscores.h"
+#include "menus/wt_menu_pause.h"
+#include "widgets/wt_horizontal_carousel.h"
 
 #define MENU_CTR  WtMenuCtr::instance()
 class WtMenuCtr : public WtMenuIf

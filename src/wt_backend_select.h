@@ -23,7 +23,7 @@
 #define ACTIVE_WINDOW_WIDTH  NCURSES_WIDTH
 #define ACTIVE_WINDOW_HEIGHT NCURSES_HEIGHT
 #else
-#include "wt_sdl.h"
+#include "sdl/wt_sdl.h"
 #define ACTIVE_WINDOW        SDL_WINDOW
 #define ACTIVE_INPUT         SDL_INPUT
 #define ACTIVE_WINDOW_WIDTH  SDL_WIDTH

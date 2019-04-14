@@ -16,10 +16,10 @@
 #ifndef _WT_GAME_MODE_CTR_H_
 #define _WT_GAME_MODE_CTR_H_
 
-#include "wt_game_mode_guessing.h"
-#include "wt_game_mode_tetris.h"
-#include "wt_game_mode_abc.h"
-#include "wt_game_mode_wordtris.h"
+#include "game_modes/wt_game_mode_guessing.h"
+#include "game_modes/wt_game_mode_tetris.h"
+#include "game_modes/wt_game_mode_abc.h"
+#include "game_modes/wt_game_mode_wordtris.h"
 
 #define GAME_MODE_CTR  WtGameModeCtr::instance()
 class WtGameModeCtr

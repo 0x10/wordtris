@@ -20,7 +20,7 @@
 #include "wt_player.h"
 #include "wt_board.h"
 #include "wt_active_letter.h"
-#include "wt_button.h"
+#include "widgets/wt_button.h"
 
 /**************************************
  * input handling class
