@@ -17,7 +17,6 @@
 #define _WT_CHECKBOX_BUTTON_H_
 
 
-#include "wt_clickable_if.h"
 #include "widgets/wt_button.h"
 
 class WtCheckboxButton 

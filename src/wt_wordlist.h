@@ -18,7 +18,6 @@
 
 #include "global.h"
 
-#include "wt_l10n.h"
 #include "dea.h"
 
 /**************************************
