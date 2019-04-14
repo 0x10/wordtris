@@ -26,6 +26,8 @@ public:
     WtGameModeGuessing() :
         WtGameModeIf( "Guess it" ),
         m_active_word( "BlAcK" ),
+        m_active_word_guessed(""),
+        m_active_word_scrambled(""),
         m_wordlist()
     {
         m_active_word_guessed   = m_active_word;

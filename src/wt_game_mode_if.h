@@ -48,6 +48,7 @@ public:
         m_current_diff( wt_difficulty_EASY ),
         m_id_string( id_string )
         {}
+    virtual ~WtGameModeIf() {}
 
     /**************************
      * 

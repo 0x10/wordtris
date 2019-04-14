@@ -38,7 +38,7 @@ public:
         m_wordlist.load_from_list( "20k list", WtWordList::eToUpper );
         std::cout << "words = " << m_wordlist.size() << std::endl;
     }
-    ~WtGameModeWordtris()
+    virtual ~WtGameModeWordtris()
     {
     }
 

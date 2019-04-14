@@ -74,7 +74,8 @@ public:
     }
 
 public:
-    WtGridAnimation()
+    WtGridAnimation() :
+        m_animation_steps()
      {
      }
     ~WtGridAnimation() {}

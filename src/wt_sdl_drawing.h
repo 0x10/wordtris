@@ -196,7 +196,6 @@ public:
         rect.h = size.h;
         SDL_RenderCopy(m_renderer, button_img, NULL, &rect);
     }
-protected:
     /**************************
       *
       *************************/   

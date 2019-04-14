@@ -93,7 +93,7 @@ public:
     /**************************
      *
      *************************/
-    std::vector<std::string> get_available_mode_titles()
+    const std::vector<std::string> get_available_mode_titles() const
     {
         std::vector<std::string> result;
         for ( size_t idx = 0; idx < m_available_modes.size(); idx++ )
