@@ -341,6 +341,9 @@ private:
     virtual void notify_supporting_grid_changed( bool show_grid )
     {
         std::cout << "grid " << ( show_grid ? "active" : "inactive" ) << std::endl;
+        WtSettings settings = STORAGE.get_settings();
+        settings.show_support_grid = show_grid;
+        STORAGE.store_settings( settings );
     }
 
 
@@ -350,6 +353,9 @@ private:
     virtual void notify_show_next_stone_changed( bool show_stone )
     {
         std::cout << "preview " << ( show_stone ? "active" : "inactive" ) << std::endl;
+        WtSettings settings = STORAGE.get_settings();
+        settings.show_next_stone = show_stone;
+        STORAGE.store_settings( settings );
     }
 
 

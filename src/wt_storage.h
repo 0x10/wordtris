@@ -69,7 +69,7 @@ private:
     typedef std::map< std::string, std::vector<uint8_t> > SimpleFileCache;
     // least significant word is fixed magic and most sig. word
     // may represent file structure
-    static           const uint32_t m_header_magic = 0x0001ADDE;
+    static           const uint32_t m_header_magic = 0x0002ADDE;
     static constexpr const char*    m_fname        = "wordtris.dat";
 
 // singleton definition

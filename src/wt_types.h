@@ -210,6 +210,33 @@ public:
 
         return size_t_conv.uint;
     }
+
+
+    /**************************
+     *
+     *************************/
+    static void write_boolean( std::ofstream& of, const bool& flag )
+    {
+        char bflag = '0';
+
+        if ( flag )
+        {
+            bflag = '1';
+        }
+
+        of.write( &bflag, 1 );
+    }
+
+    /**************************
+     *
+     *************************/
+    static bool read_boolean( std::ifstream& inf )
+    {
+        char bflag;
+        inf.read( &bflag, 1 );
+
+        return ( bflag == '1' );
+    }
 };
 
 
@@ -223,7 +250,9 @@ public:
         language( "en" ),
         game_mode( "" ),
         difficulty( wt_difficulty_EASY ),
-        active_theme( "default" )
+        active_theme( "default" ),
+        show_support_grid( false ),
+        show_next_stone( false )
     {
     }
     ~WtSettings() {}
@@ -231,6 +260,8 @@ public:
     std::string   game_mode;
     wt_difficulty difficulty;
     std::string   active_theme;
+    bool          show_support_grid;
+    bool          show_next_stone;
 
     /**************************
      *
@@ -239,11 +270,10 @@ public:
     {
         WtStorable::write_string( of, language );
         WtStorable::write_string( of, game_mode );
-
-        char diff = difficulty;
-        of.write( static_cast<char*>(&diff), 1 );
-
+        WtStorable::write_unsigned<wt_difficulty>( of, difficulty );
         WtStorable::write_string( of, active_theme );
+        WtStorable::write_boolean( of, show_support_grid );
+        WtStorable::write_boolean( of, show_next_stone );
     }
 
     /**************************
@@ -253,12 +283,10 @@ public:
     {
         language = WtStorable::read_string( inf );
         game_mode = WtStorable::read_string( inf );
-
-        char diff;
-        inf.read( static_cast<char*>(&diff), 1 );
-        difficulty = static_cast<wt_difficulty>(diff);
-
+        difficulty = WtStorable::read_unsigned<wt_difficulty>( inf );
         active_theme = WtStorable::read_string( inf );
+        show_support_grid = WtStorable::read_boolean( inf );
+        show_next_stone = WtStorable::read_boolean( inf );
     }
 };
 

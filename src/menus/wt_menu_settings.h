@@ -62,12 +62,12 @@ public:
         m_supporting_grid_btn( WtCoord( offset_x, offset_y + (69 + 20)*4 ),
                                m_standard_btn_size,
                                WtL10n_tr( "Supporting Grid" ),
-                               false,
+                               STORAGE.get_settings().show_support_grid,
                                WT_BIND_EVENT_HANDLER_1( WtMenuSettings::supporting_grid_changed ) ),
         m_next_stone_btn( WtCoord( offset_x, offset_y + (69 + 20)*5 ),
                           m_standard_btn_size,
                           WtL10n_tr( "Show next stone" ),
-                          false,
+                          STORAGE.get_settings().show_next_stone,
                           WT_BIND_EVENT_HANDLER_1( WtMenuSettings::show_next_stone_changed ) )
 
     {
