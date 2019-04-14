@@ -17,10 +17,18 @@
 # - animations:
 #       - bomb animation
 # - multiplayer? coop vs pubg
-# - option: supporting (grid-)guidelines
 # - supporting story
 # - ios support
-# - promote the next letter if configured
+# - option: supporting (grid-)guidelines
+#       - setting is evaluated in game ctr and draws as overlay to wtBoard and wtActive
+# - option: promote the next letter if configured
+#       - new menu type (checkbox) needed (shares with supporting grid lines)
+#           - maybe create two new types: WtLabel and WtCheckBox/WtBoolSlider
+#           - a single type widget would be a WtCheckBoxButton: fullsize button with checkbox at end of label and two states
+#       - setting is evaluated in game mode
+#       - game modes supporting this feature need to precalc the next letter on each get next
+#       - ui redesign needed for grid view
+#           - scores does not need a label and can shrink in size to show next letter between pause and score
 #
 #
 # (design)
