@@ -26,7 +26,8 @@
 #       - game modes supporting this feature need to precalc the next letter on each get next
 #       - ui redesign needed for grid view
 #           - scores does not need a label and can shrink in size to show next letter between pause and score
-# - highscore name entry
+# - highscore player name entry
+# - pause end animation ( 3.. 2.. 1.. Go! )
 #
 # (design)
 # - Logo Design and Naming
