@@ -16,9 +16,7 @@
 #ifndef _WT_TRISTATE_BUTTON_H_
 #define _WT_TRISTATE_BUTTON_H_
 
-
-#include "wt_clickable_if.h"
-
+#include "widgets/wt_button.h"
 
 class WtTriStateButton 
 {
@@ -38,13 +36,26 @@ public:
                       size_t selected,
                       OnItemTapDelegate on_item_tap ) :
 
-        m_clickable( pos, size,
-                     WT_BIND_EVENT_HANDLER_1( WtTriStateButton::on_click ) ),
 
-        m_pos( pos ),
-        m_size( size ),
-        m_item_size( (size.w - 1) / 3, size.h - 2 ),
-        m_label{ label[0], label[1], label[2] },
+        m_buttons{ 
+            WtButton( pos, size, m_tri_state_frame, nullptr, "" ),
+            WtButton( WtCoord( (pos.x + 1) + (0*((size.w - 1) / 3)), pos.y + 1 ),
+                      WtDim( (size.w - 1) / 3, size.h - 2 ),
+                      ( selected == 0 ? m_tri_state_selected_img[0] : m_tri_state_unselected_img ),
+                      WT_BIND_EVENT_HANDLER( WtTriStateButton::on_item_clicked<0> ),
+                      label[0] ),
+            WtButton( WtCoord( (pos.x + 1) + (1*((size.w - 1) / 3)), pos.y + 1 ),
+                      WtDim( (size.w - 1) / 3, size.h - 2 ),
+                      ( selected == 1 ? m_tri_state_selected_img[1] : m_tri_state_unselected_img ),
+                      WT_BIND_EVENT_HANDLER( WtTriStateButton::on_item_clicked<1> ),
+                      label[1] ),
+            WtButton( WtCoord( (pos.x + 1) + (2*((size.w - 1) / 3)), pos.y + 1 ),
+                      WtDim( (size.w - 1) / 3, size.h - 2 ),
+                      ( selected == 2 ? m_tri_state_selected_img[2] : m_tri_state_unselected_img ),
+                      WT_BIND_EVENT_HANDLER( WtTriStateButton::on_item_clicked<2> ),
+                      label[2] )
+        },
+
         m_selected( selected ),
         m_on_item_tap( on_item_tap )
     {
@@ -52,138 +63,17 @@ public:
     
     ~WtTriStateButton() {}
 
-    /**************************
-     *
-     *************************/
-    operator WtClickableIf&()
-    {
-        return get_observable();
-    }
-    /**************************
-     *
-     *************************/
-    WtClickableIf& get_observable()
-    {
-        return m_clickable;
-    }
 
     /**************************
      *
      *************************/
     template<size_t const idx>
-    std::string item_label()
+    WtButton& item()
     {
-        static_assert( idx < 3, "tri_state_button has only 3 items" );
-
-        return WtL10n::translate(m_label[idx]);
+        static_assert( idx < 4, "tri_state_button has only 3+1 items" );
+        return m_buttons[idx];
     }
 
-    /**************************
-     *
-     *************************/
-    std::string background_image()
-    {
-        return m_tri_state_frame;
-    }
-
-    /**************************
-     *
-     *************************/
-    template<size_t const idx>
-    std::string item_image()
-    {
-        static_assert( idx < 3, "tri_state_button has only 3 items" );
-
-        if ( m_selected == idx )
-            return m_tri_state_selected_img[idx];
-        else
-            return m_tri_state_unselected_img;
-    }
-
-    /**************************
-     *
-     *************************/
-    template<size_t const idx>
-    WtButton item()
-    {
-        static_assert( idx < 3, "tri_state_button has only 3 items" );
-        WtCoord item_pos( m_pos.x + 1, m_pos.y + 1 );
-        if ( idx > 0 )
-            item_pos.moveX( m_item_size );
-        if ( idx > 1 )
-            item_pos.moveX( m_item_size );
-
-        return WtButton( item_pos,
-                         m_item_size,
-                         item_image<idx>(),
-                         [](){},
-                         item_label<idx>() );
-
-    }
-
-    /**************************
-     *
-     *************************/
-    ssize_t width()
-    {
-        return m_size.w;
-    }
-
-    /**************************
-     *
-     *************************/
-    ssize_t height()
-    {
-        return m_size.h;
-    }
-
-    /**************************
-     *
-     *************************/
-    WtDim size() const
-    {
-        return m_size;
-    }
-
-    /**************************
-     *
-     *************************/
-    WtCoord position() const
-    {
-        return m_pos;
-    }
-
-    /**************************
-     *
-     *************************/
-    void set_position( WtCoord new_pos )
-    {
-        m_pos = new_pos;
-    }
-
-    /**************************
-     *
-     *************************/
-    ssize_t x()
-    {
-        return m_pos.x;
-    }
-
-    /**************************
-     *
-     *************************/
-    void set_x( ssize_t x )
-    {
-        m_pos.x = x;
-    }
-
-    /**************************
-     *
-     *************************/
-    ssize_t y()
-    {
-        return m_pos.y;
-    }
 
     /**************************
      *
@@ -198,38 +88,32 @@ public:
         {
             std::cout << "id out of range\n";
         }
+        update_images();
     }
 
-public:
+private:
+    /**************************
+     *
+     *************************/
+    void update_images()
+    {
+        m_buttons[1].set_image( ( m_selected == 0 ? m_tri_state_selected_img[0] : m_tri_state_unselected_img ) );
+        m_buttons[2].set_image( ( m_selected == 1 ? m_tri_state_selected_img[1] : m_tri_state_unselected_img ) );
+        m_buttons[3].set_image( ( m_selected == 2 ? m_tri_state_selected_img[2] : m_tri_state_unselected_img ) );
+    }
 
     /**************************
      *
      *************************/
-    void on_click( WtCoord& pos )
+    template<size_t const idx>
+    void on_item_clicked()
     {
-        WtCoord working_state_pos = WtCoord( m_pos.x + 1, m_pos.y + 1 );
-
-        size_t selected = 0;
-        if ( pos.in_region( working_state_pos, m_item_size ) )
+        if ( m_selected != idx )
         {
-            selected = 0;
+            m_selected = idx;
+            update_images();
+            if ( m_on_item_tap ) m_on_item_tap( m_selected );
         }
-
-        working_state_pos.moveX( m_item_size );           
-        if ( pos.in_region( working_state_pos, m_item_size ) )
-        {
-            selected = 1;
-        }
-
-        working_state_pos.moveX( m_item_size );           
-        if ( pos.in_region( working_state_pos, m_item_size ) )
-        {
-            selected = 2;
-        }
-
-        m_selected = selected;
-
-        if ( m_on_item_tap ) m_on_item_tap( m_selected );
     }
 
 private:
@@ -237,13 +121,7 @@ private:
     WtTriStateButton& operator = (const WtTriStateButton&);
 
 private:
-    WtClickableIf     m_clickable;
-
-    WtCoord           m_pos;
-    WtDim             m_size;
-    WtDim             m_item_size;
-    std::string       m_label[3];
-
+    WtButton          m_buttons[4];
     size_t            m_selected;
 
     OnItemTapDelegate m_on_item_tap;

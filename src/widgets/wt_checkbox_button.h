@@ -48,88 +48,9 @@ public:
     /**************************
      *
      *************************/
-    operator WtClickableIf&()
-    {
-        return m_button.get_observable();
-    }
-    /**************************
-     *
-     *************************/
-    WtClickableIf& get_observable()
-    {
-        return m_button;
-    }
-
-    /**************************
-     *
-     *************************/
     operator WtButton&()
     {
         return m_button;
-    }
-
-    /**************************
-     *
-     *************************/
-    ssize_t width()
-    {
-        return m_button.width();
-    }
-
-    /**************************
-     *
-     *************************/
-    ssize_t height()
-    {
-        return m_button.height();
-    }
-
-    /**************************
-     *
-     *************************/
-    WtDim size() const
-    {
-        return m_button.size();
-    }
-
-    /**************************
-     *
-     *************************/
-    WtCoord position() const
-    {
-        return m_button.position();
-    }
-
-    /**************************
-     *
-     *************************/
-    void set_position( WtCoord new_pos )
-    {
-        m_button.set_position( new_pos );
-    }
-
-    /**************************
-     *
-     *************************/
-    ssize_t x()
-    {
-        return m_button.x();
-    }
-
-    /**************************
-     *
-     *************************/
-    void set_x( ssize_t x )
-    {
-        m_button.set_x( x );
-    }
-
-    /**************************
-     *
-     *************************/
-    ssize_t y()
-    {
-        return m_button.y();
     }
 
     /**************************

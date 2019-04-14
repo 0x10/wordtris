@@ -35,7 +35,6 @@ public:
         m_shall_leave( false ),
         m_bg( bg_img ),
         m_buttons(),
-        m_tristate_buttons(),
         m_carousels(),
         m_change_listener(),
         m_fade( fade )
@@ -129,7 +128,10 @@ protected:
      *************************/
     void add_tristate_button( WtTriStateButton& button )
     {
-        m_tristate_buttons.push_back( &button );
+        m_buttons.push_back( &button.item<0>() );
+        m_buttons.push_back( &button.item<1>() );
+        m_buttons.push_back( &button.item<2>() );
+        m_buttons.push_back( &button.item<3>() );
     }
 
     /**************************
@@ -154,10 +156,6 @@ protected:
         {
             ACTIVE_INPUT.add_active_region( *(m_buttons[idx]) );
         }
-        for(size_t idx=0;idx<m_tristate_buttons.size();idx++)
-        {
-            ACTIVE_INPUT.add_active_region( *(m_tristate_buttons[idx]) );
-        }
         for(size_t idx=0;idx<m_carousels.size();idx++)
         {
             ACTIVE_INPUT.add_active_region( *(m_carousels[idx]) );
@@ -174,10 +172,6 @@ protected:
         for (size_t idx=0;idx<m_buttons.size();idx++)
         {
             ACTIVE_INPUT.remove_active_region( *(m_buttons[idx]) );
-        }
-        for (size_t idx=0;idx<m_tristate_buttons.size();idx++)
-        {
-            ACTIVE_INPUT.remove_active_region( *(m_tristate_buttons[idx]) );
         }
         for(size_t idx=0;idx<m_carousels.size();idx++)
         {
@@ -309,15 +303,6 @@ private:
         {
             ACTIVE_WINDOW.draw_button( *(m_buttons[idx]) );
         }
-        for(size_t idx=0;idx<m_tristate_buttons.size();idx++)
-        {
-            ACTIVE_WINDOW.draw_image( m_tristate_buttons[idx]->position(),
-                                      m_tristate_buttons[idx]->size(),
-                                      m_tristate_buttons[idx]->background_image() );
-            ACTIVE_WINDOW.draw_button( m_tristate_buttons[idx]->item<0>() );
-            ACTIVE_WINDOW.draw_button( m_tristate_buttons[idx]->item<1>() );
-            ACTIVE_WINDOW.draw_button( m_tristate_buttons[idx]->item<2>() );
-        }
         for(size_t idx=0;idx<m_carousels.size();idx++)
         {
             for( size_t c_idx = 0; c_idx < m_carousels[idx]->size(); c_idx++ )
@@ -332,7 +317,6 @@ private:
     bool                                    m_shall_leave;
     std::string                             m_bg;
     std::vector< WtButton* >                m_buttons;
-    std::vector< WtTriStateButton* >        m_tristate_buttons;
     std::vector< WtHorizontalCarousel* >    m_carousels;
     std::vector<WtSettingsChangeObserver*>  m_change_listener;
     bool                                    m_fade;
