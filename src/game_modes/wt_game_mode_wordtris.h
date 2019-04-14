@@ -80,7 +80,7 @@ public:
             for ( uint8_t r_idx = 0; r_idx < WtBoard::row_count; r_idx++ )
             {
                 std::string row_str = board.get_row_string( r_idx );
-                std::vector<std::string> sequences = split( std::string(row_str) );
+                std::vector<std::string> sequences = split( row_str );
                 for( size_t s_idx = 0; s_idx < sequences.size(); s_idx++ )
                 {
                     if ( sequences[s_idx].length() >= min_word_length )

@@ -1,8 +1,9 @@
 CXX=g++
 CXX_OPTIMIZATION=-Os
-CXX_WARNINGS=-Wpedantic -pedantic-errors -Wall -Wextra -Wcast-align -Wcast-qual -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs -Wnoexcept -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-null-sentinel -Wstrict-overflow=5 -Wundef -Weffc++ 
+CXX_WARNINGS=-Wpedantic -pedantic-errors -Wall -Wextra -Wcast-align -Wcast-qual -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs -Wnoexcept -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-null-sentinel -Wstrict-overflow=5 -Wundef -Weffc++ -Wuseless-cast -Wnull-dereference -Wduplicated-branches -Wduplicated-cond -Wstack-protector
 CXX_DEBUG=-g
-CXX_FLAGS=-std=c++11 $(CXX_OPTIMIZATION) $(CXX_WARNINGS)
+CXX_FLAGS=-std=c++11 $(CXX_OPTIMIZATION) -fPIE -fstack-protector-all -pipe $(CXX_WARNINGS)#-D_FORTIFY_SOURCE=2
+LD_FLAGS=-Wl,-z,defs -Wl,-z,now -Wl,-z,relro -Wl,-z,noexecstack
 
 ANDROID_DIR=org.libsdl.wordtris
 SRC_DIR=./src
@@ -17,16 +18,16 @@ APK_TRG_NAME=wordtris.apk
 all: clean sdl
 
 sdl:
-	$(CXX) $(CXX_FLAGS) -I./pc_include -I$(BUILD_DIR) -I$(SRC_DIR) $(SRC_DIR)/wordtris.cpp -L$(SDL_DIR)/build/.libs -lSDL2 -o $(TARGET_SDL)
+	$(CXX) $(CXX_FLAGS) $(LD_FLAGS) -I./pc_include -I$(BUILD_DIR) -I$(SRC_DIR) $(SRC_DIR)/wordtris.cpp -L$(SDL_DIR)/build/.libs -lSDL2 -o $(TARGET_SDL)
 
 sdl-system:
-	$(CXX) $(CXX_FLAGS) -DUSE_SYSTEM_SDL -I./pc_include -I$(SRC_DIR) $(SRC_DIR)/wordtris.cpp -lSDL2 -o $(TARGET_SDL)
+	$(CXX) $(CXX_FLAGS) $(LD_FLAGS) -DUSE_SYSTEM_SDL -I./pc_include -I$(SRC_DIR) $(SRC_DIR)/wordtris.cpp -lSDL2 -o $(TARGET_SDL)
 
 run-sdl: sdl
 	LD_LIBRARY_PATH=$(SDL_DIR)/build/.libs ./$(TARGET_SDL)
 
 debug-sdl:
-	$(CXX) $(CXX_DEBUG) $(CXX_FLAGS) -I./pc_include -I$(BUILD_DIR) -I$(SRC_DIR) $(SRC_DIR)/wordtris.cpp -L$(SDL_DIR)/build/.libs -lSDL2 -o $(TARGET_SDL)
+	$(CXX) $(CXX_DEBUG) $(CXX_FLAGS) $(LD_FLAGS) -I./pc_include -I$(BUILD_DIR) -I$(SRC_DIR) $(SRC_DIR)/wordtris.cpp -L$(SDL_DIR)/build/.libs -lSDL2 -o $(TARGET_SDL)
 	LD_LIBRARY_PATH=$(SDL_DIR)/build/.libs gdb ./$(TARGET_SDL)
 
 ncurses:
