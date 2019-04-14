@@ -34,23 +34,37 @@ class WtStorageCtr
 {
 private:
     // changes affect devices with installed base
-    typedef struct
+    struct _FileHeader
     {
+        _FileHeader() :
+            magic( m_header_magic )
+        {}
+
         uint32_t magic;
-    } _FileHeader;
+    };
 
     // changes affect devices with installed base
-    typedef struct
+    struct _FileData
     {
+        _FileData() :
+            settings(),
+            highscores()
+        {}
+
         WtSettings   settings;
         WtHighscores highscores;       
-    } _FileData;
+    };
 
-    typedef struct
+    struct _PersistentFileStructure
     {
+        _PersistentFileStructure() :
+            header(),
+            data()
+        {}
+
         _FileHeader  header;
         _FileData    data;
-    } _PersistentFileStructure;
+    };
 
     typedef std::map< std::string, std::vector<uint8_t> > SimpleFileCache;
     // least significant word is fixed magic and most sig. word
