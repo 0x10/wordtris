@@ -88,15 +88,6 @@ private: // no copy allowed
     }
 
 
-public:
-    /**************************
-     *
-     *************************/
-    virtual WtSettingsChangeObserver* get_help_listener()
-    {
-        return &m_help;
-    }
-
 private:
     WtMenuHelp m_help;
 

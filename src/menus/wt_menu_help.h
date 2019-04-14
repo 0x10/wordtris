@@ -21,12 +21,11 @@
 #include "wt_game_mode_ctr.h"
 #include "wt_storage.h"
 
-class WtMenuHelp : public WtMenuIf, public WtSettingsChangeObserver
+class WtMenuHelp : public WtMenuIf
 {
 public:
     WtMenuHelp() :
         WtMenuIf( 0x500, "bg_menu_pause.bmp", false ),
-        m_selected_mode( GAME_MODE_CTR.mode_from_string( STORAGE.get_settings().game_mode ) ),
         m_leave_btn( WtCoord( 105, 800 ), 
                      WtDim(100, 100), 
                      "back_btn.bmp",
@@ -43,39 +42,18 @@ private: // no copy allowed
     WtMenuHelp & operator = (const WtMenuHelp &);
 
     /**************************
-     *
-     *************************/
-    void notify_language_changed( std::string ) {}
-    /**************************
-     *
-     *************************/
-    virtual void notify_difficulty_changed( wt_difficulty ) {}
-    /**************************
-     *
-     *************************/
-    virtual void notify_theme_changed( std::string ) {}
-
-    /**************************
-     *
-     *************************/
-    virtual void notify_game_mode_changed( WtGameModeIf* mode )
-    {
-        m_selected_mode = mode;
-    }
-
-    /**************************
      * 
      *************************/
     void menu_update()
     {
-        if ( m_selected_mode != INVALID_GAME_MODE )
+        WtGameModeIf* active_mode = GAME_MODE_CTR.mode_from_string( STORAGE.get_settings().game_mode );
+        if ( active_mode != INVALID_GAME_MODE )
         {
-            ACTIVE_WINDOW.draw_help_box( m_selected_mode->get_help() );
+            ACTIVE_WINDOW.draw_help_box( active_mode->get_help() );
         }
     }
 
 private:
-    WtGameModeIf* m_selected_mode;
 
     WtButton      m_leave_btn;
 };

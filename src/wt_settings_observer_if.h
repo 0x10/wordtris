@@ -26,6 +26,8 @@ public:
     virtual void notify_difficulty_changed( wt_difficulty diffi )=0;
     virtual void notify_game_mode_changed( WtGameModeIf* mode )=0;
     virtual void notify_theme_changed( std::string name )=0;
+    virtual void notify_supporting_grid_changed( bool show_grid )=0;
+    virtual void notify_show_next_stone_changed( bool show_stone )=0;
 };
 
 

@@ -63,12 +63,12 @@ public:
                                m_standard_btn_size,
                                WtL10n_tr( "Supporting Grid" ),
                                false,
-                               [](bool b){ std::cout << "grid " << ( b ? "active" : "inactive" ) << std::endl; } ),
+                               WT_BIND_EVENT_HANDLER_1( WtMenuSettings::supporting_grid_changed ) ),
         m_next_stone_btn( WtCoord( offset_x, offset_y + (69 + 20)*5 ),
                           m_standard_btn_size,
                           WtL10n_tr( "Show next stone" ),
                           false,
-                          [](bool b){ std::cout << "preview " << ( b ? "active" : "inactive" ) << std::endl; } )
+                          WT_BIND_EVENT_HANDLER_1( WtMenuSettings::show_next_stone_changed ) )
 
     {
         for ( size_t idx = 0; idx < WtL10n::get_available_languages().size(); idx++ )
@@ -165,6 +165,28 @@ private: // no copy allowed
             {
                 get_listener()[idx]->notify_theme_changed( std::string( m_selectable_themes[id] ) );
             }
+        }
+    }
+
+    /**************************
+     *
+     *************************/
+    void supporting_grid_changed( bool show_grid )
+    {
+        for( size_t idx = 0; idx < get_listener().size(); idx++ )
+        {
+            get_listener()[idx]->notify_supporting_grid_changed( show_grid );
+        }
+    }
+
+    /**************************
+     *
+     *************************/
+    void show_next_stone_changed( bool show_next )
+    {
+        for( size_t idx = 0; idx < get_listener().size(); idx++ )
+        {
+            get_listener()[idx]->notify_show_next_stone_changed( show_next );
         }
     }
 

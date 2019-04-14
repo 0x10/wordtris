@@ -61,8 +61,6 @@ private:
         add_button( m_score_btn );
         add_button( m_setting_btn );
         add_horizontal_carousel( m_game_selection );
-
-        m_settings.listen( m_pause_menu.get_help_listener() );
     }
     WtMenuCtr( const WtMenuCtr& ); 
     WtMenuCtr & operator = (const WtMenuCtr &);

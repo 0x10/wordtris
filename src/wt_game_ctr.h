@@ -338,6 +338,24 @@ private:
     /**************************
      *
      *************************/
+    virtual void notify_supporting_grid_changed( bool show_grid )
+    {
+        std::cout << "grid " << ( show_grid ? "active" : "inactive" ) << std::endl;
+    }
+
+
+    /**************************
+     *
+     *************************/
+    virtual void notify_show_next_stone_changed( bool show_stone )
+    {
+        std::cout << "preview " << ( show_stone ? "active" : "inactive" ) << std::endl;
+    }
+
+
+    /**************************
+     *
+     *************************/
     bool insert_entry( WtHighscores& scores, WtScoreEntry& entry )
     {
         bool entry_added = false;
