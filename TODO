@@ -4,11 +4,6 @@
 #   -> categories are not strictly assigned but at first glimpse
 #
 # (features)
-# - Highscores shall be updated:
-#       - function hook available but update strategy not quite clear
-#       - ideas:
-#           - EITHER: store highscores per game mode (e.g. first 5 of each mode)
-#           - OR: store highscores overall (e.g. first 15 of all modes)
 # - Tri-State Button Animation (may be more complex and may be dropped due to that)
 # - Game Modes need a intro menu
 #       - intro menu may be not game mode specific

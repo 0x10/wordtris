@@ -123,9 +123,17 @@ private: // no copy allowed
     /**************************
      *
      *************************/
+    virtual void menu_entered()
+    {
+        m_selected_mode = GAME_MODE_CTR.mode_idx_from_string( STORAGE.get_settings().game_mode );
+    }
+
+    /**************************
+     *
+     *************************/
     virtual void menu_update()
     {
-        draw_title( m_game_mode_titles[m_selected_mode] );
+        draw_title( WtL10n::translate( m_game_mode_titles[m_selected_mode] ) );
 
         size_t score_entry = 1;
 
@@ -138,22 +146,6 @@ private: // no copy allowed
                 score_entry++;
             }
         }
-        WtScoreEntry e;
-        e.score = 100000;
-        draw_entry( score_entry++, e );
-        e.score = 99;
-        draw_entry( score_entry++, e );
-        e.score = 999;
-        draw_entry( score_entry++, e );
-        e.score = 9999;
-        draw_entry( score_entry++, e );
-        e.score = 99999;
-        draw_entry( score_entry++, e );
-        draw_entry( score_entry++, e );
-        draw_entry( score_entry++, e );
-        draw_entry( score_entry++, e );
-        draw_entry( score_entry++, e );
-        draw_entry( score_entry++, e );
     }
 
 private:

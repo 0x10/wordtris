@@ -81,6 +81,13 @@ protected:
     /**************************
      * signal
      *************************/
+    virtual void menu_entered()
+    {
+    }
+
+    /**************************
+     * signal
+     *************************/
     virtual void menu_left()
     {
     }
@@ -155,6 +162,8 @@ protected:
         {
             ACTIVE_INPUT.add_active_region( *(m_carousels[idx]) );
         }
+
+        menu_entered();
     }
 
     /**************************

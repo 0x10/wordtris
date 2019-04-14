@@ -269,11 +269,14 @@ public:
 class WtScoreEntry
 {
 public:
-    WtScoreEntry() :
-        player("PLYR"),
-        game_mode(""),
-        score(0),
-        level(0)
+    WtScoreEntry( std::string mode="",
+                  size_t      points=0,
+                  size_t      lvl=0,
+                  std::string pl="PLYR" ) :
+        player(pl),
+        game_mode(mode),
+        score(points),
+        level(lvl)
     {}
 
     std::string player;

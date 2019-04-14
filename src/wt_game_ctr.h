@@ -334,16 +334,53 @@ private:
         STORAGE.store_settings( settings );
     }
 
+
     /**************************
      *
      *************************/
-    WtHighscores& update_highscores( WtPlayer& player, WtGameModeIf* mode, WtHighscores& scores )
+    bool insert_entry( WtHighscores& scores, WtScoreEntry& entry )
+    {
+        bool entry_added = false;
+        size_t game_mode_entries=0;
+        for( size_t idx = 0; idx < scores.size(); idx++ )
+        {
+            if ( scores[idx].game_mode == entry.game_mode )
+            {
+                if ( scores[idx].score < entry.score )
+                {
+                    WtHighscores::iterator it = scores.begin();
+                    std::advance( it, idx );
+                    scores.insert( it, entry );
+                    entry_added = true;
+                    break;
+                }
+                game_mode_entries++;
+            }
+        }
+
+        if ( ( !entry_added ) && ( game_mode_entries < 10 ) )
+        {
+            scores.push_back( entry );
+            entry_added = true;
+        }
+        return entry_added;
+    }
+
+
+    /**************************
+     *
+     *************************/
+    bool update_highscores( WtPlayer& player, WtGameModeIf* mode, WtHighscores& scores )
     {
         // eval if player stat is within first 3 of game mode
         // if true add player at correct position
         std::cout << "highscore entry: Lvl " << player.get_current_level() << " at " << player.get_points() << " within mode \"" << mode->get_title() << "\"" << std::endl;
 
-        return scores;
+        WtScoreEntry new_entry( mode->get_title(),
+                               player.get_points(),
+                               player.get_current_level() );
+
+        return insert_entry( scores, new_entry );
     }
 
 public:
@@ -452,19 +489,23 @@ public:
         }
         while ( m_shall_restart );
 
-        STORAGE.store_highscores( update_highscores( m_player, m_active_mode, STORAGE.get_scores() ) );
-
         if ( m_game_over )
         {
+            bool new_highscore = update_highscores( m_player, m_active_mode, STORAGE.get_scores() );
+            STORAGE.store_highscores( STORAGE.get_scores() );
+
             ACTIVE_WINDOW.set_bg( "bg_menu_pause.bmp" );
             ACTIVE_WINDOW.clr();
             ACTIVE_WINDOW.draw_player_stat( m_player );
-//            ACTIVE_WINDOW.draw_board( m_board );
-//            ACTIVE_WINDOW.draw_active_letter( m_active );
-//            ACTIVE_WINDOW.draw_hint( m_active_mode->get_hint() );
- //           ACTIVE_WINDOW.draw_button( m_pause_btn );
 
-            ACTIVE_WINDOW.draw_message(WtL10n_tr("you lost! :P"));
+            if ( new_highscore )
+            {
+                ACTIVE_WINDOW.draw_message(WtL10n_tr("wow! new highscore"));
+            }
+            else
+            {
+                ACTIVE_WINDOW.draw_message(WtL10n_tr("you lost! :P"));
+            }
             ACTIVE_WINDOW.update();
             WtTime::sleep(WtTime::from_seconds(5));
         }
