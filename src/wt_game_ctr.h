@@ -72,7 +72,6 @@ private:
         if ( INVALID_GAME_MODE != m_active_mode )
            m_active_mode->set_difficulty( settings.difficulty );
 
-        ACTIVE_WINDOW.init();
         ACTIVE_WINDOW.set_theme( settings.active_theme );
 
         ACTIVE_INPUT.register_key_press_delegate( WT_BIND_EVENT_HANDLER_1( WtGameCtr::on_key_press ) );

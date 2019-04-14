@@ -1,5 +1,5 @@
 /*!*****************************************************************************
- * @file wt_types.h
+ * @file wt_storage_types.h
  * @brief some common type declarations needed within multiple units
  *
  * This file was developed as part of wordtris
@@ -13,8 +13,8 @@
  *            without written approval of Christian Kranz
  *
  ******************************************************************************/
-#ifndef _WT_TYPES_H_
-#define _WT_TYPES_H_
+#ifndef _WT_STORAGE_TYPES_H_
+#define _WT_STORAGE_TYPES_H_
 
 #include <cstring> //for strlen
 #include <iostream>
@@ -26,132 +26,6 @@ typedef enum wt_mode_difficulty_tag
     wt_difficulty_MEDIUM,
     wt_difficulty_HARD
 } wt_difficulty;
-
-
-/**************************
- *
- *************************/
-class WtDim
-{
-public:
-    WtDim() :
-        w(0),
-        h(0) {}
-    WtDim( ssize_t iW, ssize_t iH ) :
-        w(iW),
-        h(iH) {}
-    bool operator!=(const WtDim& rhs) const
-    {
-        return ( w != rhs.w ) && ( h != rhs.h );
-    }
-
-    ssize_t w;
-    ssize_t h;
-};
-/**************************
- *
- *************************/
-std::ostream & operator << (std::ostream &out, const WtDim &d);
-/**************************
- *
- *************************/
-std::ostream & operator << (std::ostream &out, const WtDim &d)
-{
-    out << "(" << d.w << "," << d.h << ")";
-    return out;
-}
-
-/**************************
- *
- *************************/
-class WtCoord
-{
-public:    
-    WtCoord() :
-        x(0),
-        y(0) {}
-    WtCoord( ssize_t iX, ssize_t iY ) :
-        x(iX),
-        y(iY) {}
-    WtCoord( const WtCoord& c ) :
-        x(c.x),
-        y(c.y) {}
-    /**************************
-     *
-     *************************/
-    WtCoord& operator=( const WtCoord& c )
-    {
-        x = c.x;
-        y = c.y;
-        return (*this);
-    }
-    /**************************
-     *
-     *************************/
-    bool operator==(const WtCoord& rhs) const
-    {
-        return ( x == rhs.x ) && ( y == rhs.y );
-    }
-    /**************************
-     *
-     *************************/
-    bool operator!=(const WtCoord& rhs) const
-    {
-        return ( x != rhs.x ) && ( y != rhs.y );
-    }
-    /**************************
-     *
-     *************************/
-    WtCoord operator+( const WtCoord& rhs )
-    {
-        x = x + rhs.x;
-        y = y + rhs.y;
-        return (*this);
-    }
-    /**************************
-     *
-     *************************/
-    bool near_point( WtCoord pos, size_t distance ) const
-    {
-        bool result = false;
-        ssize_t dist = (( x - pos.x ) * ( x - pos.x )) + (( y - pos.y ) * ( y - pos.y ));
-        size_t sqrt_dist = sqrt( dist );
-        //std::cout << "dist = " << dist << "; sqrt_dist = " << sqrt_dist << std::endl;
-        if ( sqrt_dist  <= distance )
-            result = true;
-        return result;
-    }
-    /**************************
-     *
-     *************************/
-    bool in_region( WtCoord start_pos, WtDim size ) const
-    {
-        return (  ( x >= start_pos.x ) && ( x < start_pos.x+size.w )
-               && ( y >= start_pos.y ) && ( y < start_pos.y+size.h ) );
-    }
-    /**************************
-     *
-     *************************/
-    void moveX( const WtDim& dim )
-    {
-        x = x + dim.w;
-    }
-
-    ssize_t x;
-    ssize_t y;
-};
-/**************************
- *
- *************************/
-std::ostream & operator << (std::ostream &out, const WtCoord &c);
-/**************************
- *
- *************************/
-std::ostream & operator << (std::ostream &out, const WtCoord &c)
-{
-    out << "(" << c.x << "," << c.y << ")";
-    return out;
-}
 
 
 /**************************
@@ -350,4 +224,4 @@ public:
 
 typedef std::vector<WtScoreEntry> WtHighscores;
 
-#endif /* _WT_TYPES_H */
+#endif /* _WT_STORAGE_TYPES_H */

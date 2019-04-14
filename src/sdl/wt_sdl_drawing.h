@@ -202,7 +202,7 @@ public:
     void draw_text( const WtCoord     pos,
                     const std::string text )
     {
-        puts_fb( pos.x, pos.y, text.c_str(), m_text_font );
+        puts_fb( pos.x, pos.y, text, m_text_font );
     }
 
     /**************************
@@ -222,12 +222,12 @@ private:
     /**************************
      *
      *************************/
-    void puts_fb( ssize_t x, ssize_t y, const char* str, WtSdlFont* font )
+    void puts_fb( ssize_t x, ssize_t y, const std::string str, WtSdlFont* font )
     {
-        if ( ( NULL != str ) && ( NULL != font ) )
+        if ( NULL != font )
         {
             // loop through all characters in the text string
-            size_t l = strlen(str);
+            size_t l = str.length();
             size_t x_i = 0;
             WtCoord pos( x, y );
             for (size_t i = 0; i < l; i++) {

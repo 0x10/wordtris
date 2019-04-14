@@ -42,7 +42,6 @@
 # - Support Non-Ascii characters in Translations
 # - Settings/Storage Architectures seems pretty weird
 #       - review or documentation!
-# - split up wt_types
 # - button to control its own label position
 #
 # (others)

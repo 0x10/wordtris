@@ -49,11 +49,6 @@ public:
     /**************************
      *
      *************************/
-    void init() {}
-
-    /**************************
-     *
-     *************************/
     void draw_player_stat( const WtPlayer& player )
     {
         std::string player_stat = "Score: ";
@@ -149,7 +144,6 @@ public:
         }
     }
 
-private:
 };
 
 

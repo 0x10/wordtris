@@ -18,7 +18,7 @@
 
 #include <fstream>
 #include <unistd.h>
-#include "wt_types.h"
+#include "wt_storage_types.h"
 #include "SDL.h"
 
 #ifdef __ANDROID__

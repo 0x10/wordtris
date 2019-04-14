@@ -22,7 +22,7 @@
 #include <functional>
 
 #include "wt_l10n.h"
-#include "wt_types.h"
+#include "wt_basic_types.h"
 #include "wt_backend_select.h"
 
 #define ABS(N) ((N<0)?(-N):(N))
