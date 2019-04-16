@@ -131,11 +131,15 @@ public:
 
             if ( ! button.label().empty() )
             {
+                ssize_t text_center_w;
+                ssize_t button_center_x;
+                ssize_t button_center_y;
+
                 WtDim font_sz = DrawingPolicy::get_font_size();
 
-                ssize_t text_center_w = static_cast<ssize_t>( button.label().length() / 2 ) * font_sz.w;
-                ssize_t button_center_x = ( button.width() / 2 + button.x() );
-                ssize_t button_center_y = ( button.height() / 2 + button.y() );
+                text_center_w = static_cast<ssize_t>( button.label().length() / 2 ) * font_sz.w;
+                button_center_x = ( ( button.width() / 2 ) + button.x() ) + button.label_pos().x;
+                button_center_y = ( ( button.height() / 2 ) + button.y() ) + button.label_pos().y;
 
                 DrawingPolicy::draw_text( WtCoord( button_center_x - text_center_w,
                                                    button_center_y - font_sz.h ),

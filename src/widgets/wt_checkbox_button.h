@@ -36,7 +36,8 @@ public:
         m_button( pos, size,
                   ( checked ? m_checkbox_btn_checked : m_checkbox_btn_unchecked ),
                   WT_BIND_EVENT_HANDLER( WtCheckboxButton::on_click ),
-                  label ),
+                  label,
+                  WtCoord( -1 * (size.w / 6),0)),
         m_checked( checked ),
         m_on_tap( on_tap )
     {
