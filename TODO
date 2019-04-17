@@ -19,18 +19,14 @@
 # - multiplayer? coop vs pubg
 # - supporting story
 # - ios support
-# - option: promote the next letter if configured
-#       - setting is evaluated in game mode
-#       - game modes supporting this feature need to precalc the next letter on each get next
-#       - ui redesign needed for grid view
-#           - scores does not need a label and can shrink in size to show next letter between pause and score
 # - highscore player name entry
 # - pause end animation ( 3.. 2.. 1.. Go! )
+# - show pogress until next level and current level
 #
 # (design)
 # - Logo Design and Naming
 # - get an ui design review
-#
+# - ui redesign of player statistics and hint/letter preview
 #
 # (architecture bugs)
 # - Drawing:
