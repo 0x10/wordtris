@@ -217,9 +217,10 @@ public:
       *
       *************************/   
     void draw_text( const WtCoord     pos,
-                    const std::string text )
+                    const std::string text,
+                    const std::string font="text_font")
     {
-        puts_fb( pos.x, pos.y, text, m_text_font );
+        puts_fb( pos.x, pos.y, text, ( font == "text_font" ? m_text_font : m_grid_font ) );
     }
 
     /**************************

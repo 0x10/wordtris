@@ -89,9 +89,10 @@ private:
         ACTIVE_WINDOW.draw_board( m_board );
         ACTIVE_WINDOW.draw_player_stat( m_player );
         ACTIVE_WINDOW.draw_active_letter( m_active );
-        ACTIVE_WINDOW.draw_hint( m_active_mode->get_hint() );
         ACTIVE_WINDOW.draw_button( m_pause_btn );
-
+        ACTIVE_WINDOW.draw_hint( m_active_mode->get_hint(), 
+                                 m_active_mode->letter_after_next(), 
+                                 STORAGE.get_settings().show_next_stone );
 
         if ( STORAGE.get_settings().show_support_grid )
         {
@@ -171,6 +172,7 @@ private:
             {
                 /* generate next stone */
                 m_active.get_next( m_active_mode->next_letter() );
+
 
                 game_over = m_active_mode->stone_blocked( m_board,
                                                           m_active.current_row(),

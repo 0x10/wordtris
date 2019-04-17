@@ -33,10 +33,13 @@ public:
     WtGameModeWordtris() :
         WtGameModeIf( "WordtrisClassic" ),
         m_letters( "ETAOINSRHDLUCMFYWGPBVKXQJZ" ),
-        m_wordlist()
+        m_wordlist(),
+        m_next_letter(generate_letter())
     {
         m_wordlist.load_from_list( "20k list", WtWordList::eToUpper );
         std::cout << "words = " << m_wordlist.size() << std::endl;
+
+
     }
     virtual ~WtGameModeWordtris()
     {
@@ -157,11 +160,19 @@ public:
      *************************/
     virtual char next_letter()
     {
-                                                   // E  T A O I N S R H D L U C M F Y W G P B V K X Q J Z,?,*
-        std::discrete_distribution<int> distribution {12,9,8,8,7,7,6,6,6,4,4,3,3,2,2,2,2,2,2,1,1,1,1,1,1,1,5,5 };
-        return WtRandom::get_random_letter_of_weight_seq( std::string(m_letters).append("?*"),
-                                                          distribution ); 
+        char next = m_next_letter;
+        m_next_letter = generate_letter();
+        return next;
     }
+
+    /**************************
+     *
+     *************************/
+    virtual char letter_after_next()
+    {
+        return m_next_letter;
+    }
+
 
     /**************************
      *
@@ -430,9 +441,21 @@ private:
         return result_list;
     }
 
+
+    /**************************
+     *
+     *************************/
+    char generate_letter()
+    {
+                                                   // E  T A O I N S R H D L U C M F Y W G P B V K X Q J Z,?,*
+        std::discrete_distribution<int> distribution {12,9,8,8,7,7,6,6,6,4,4,3,3,2,2,2,2,2,2,1,1,1,1,1,1,1,5,5 };
+        return WtRandom::get_random_letter_of_weight_seq( std::string(m_letters).append("?*"),
+                                                          distribution ); 
+    }
 private:
    const std::string m_letters;
    WtWordList        m_wordlist;
+   char              m_next_letter;
 };
 
 #endif /* _WT_GAME_MODE_WORDTRIS_H_ */

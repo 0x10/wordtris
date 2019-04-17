@@ -30,7 +30,8 @@ public:
     virtual void draw_active_letter( const WtLetter& active ) =0;
     virtual void set_bg( const std::string bg_img ) =0;
     virtual void draw_text( const WtCoord     pos,
-                            const std::string text ) =0;
+                            const std::string text,
+                            const std::string font="text_font") =0;
 
     virtual void draw_image( const WtCoord     pos,
                              const WtDim       size,

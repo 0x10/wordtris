@@ -51,7 +51,7 @@ public:
      *************************/
     void draw_player_stat( const WtPlayer& player )
     {
-        std::string player_stat = "Score: ";
+        std::string player_stat = "";
         player_stat.append( std::to_string( player.get_points() ) );
 
         DrawingPolicy::draw_image( WtCoord( 79, 32 ),
@@ -64,8 +64,15 @@ public:
     /**************************
      *
      *************************/
-    void draw_hint( const std::string hint )
+    void draw_hint( const std::string hint, const char letter_after_next, bool show_letter_after_next )
     {
+        if ( show_letter_after_next )
+        {
+            ACTIVE_WINDOW.draw_text( WtCoord( 270, 45 ),
+                                     std::string(1, letter_after_next ),
+                                     "grid_font" );
+        }
+
         const size_t line_length = 30;
         size_t line_count = (hint.length() / line_length) + ( hint.length() % line_length > 0 ? 1 : 0 );
         for(size_t l_idx = 0; l_idx < line_count; l_idx++ )

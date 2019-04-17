@@ -123,6 +123,14 @@ public:
     /**************************
      *
      *************************/
+    virtual char letter_after_next()
+    {
+        return WtBoard::empty_cell;
+    }
+
+    /**************************
+     *
+     *************************/
     virtual bool stone_blocked( WtBoard& board,
                                 uint8_t  row,
                                 uint8_t  col )
