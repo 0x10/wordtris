@@ -19,8 +19,6 @@
 # - multiplayer? coop vs pubg
 # - supporting story
 # - ios support
-# - option: supporting (grid-)guidelines
-#       - setting is evaluated in game ctr and draws as overlay to wtBoard and wtActive
 # - option: promote the next letter if configured
 #       - setting is evaluated in game mode
 #       - game modes supporting this feature need to precalc the next letter on each get next

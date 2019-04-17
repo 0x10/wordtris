@@ -91,6 +91,20 @@ private:
         ACTIVE_WINDOW.draw_active_letter( m_active );
         ACTIVE_WINDOW.draw_hint( m_active_mode->get_hint() );
         ACTIVE_WINDOW.draw_button( m_pause_btn );
+
+
+        if ( STORAGE.get_settings().show_support_grid )
+        {
+            for ( uint8_t r_idx = 0; r_idx < WtBoard::row_count; r_idx++ )
+            {
+                if ( ( r_idx != m_active.current_row() )
+                    &&
+                     ( !m_board.cell_occupied(r_idx, m_active.current_column()) ) )
+                {
+                    ACTIVE_WINDOW.draw_custom_cell_bg( r_idx, m_active.current_column(), "grid_font_helper.bmp" );
+                }
+            }
+        }
     }
 
     /**************************

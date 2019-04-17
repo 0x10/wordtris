@@ -120,6 +120,23 @@ public:
     /**************************
      *
      *************************/
+    void draw_custom_cell_bg( uint8_t     row,
+                              uint8_t     col,
+                              std::string image )
+    {
+        WtSdlFont* font = m_grid_font;
+        row = WtBoard::row_count - row;
+        ssize_t x = (col*static_cast<ssize_t>(font->width()))+col+GRID_OFFSET_X;
+        ssize_t y = ((row*static_cast<ssize_t>(font->height()))+row)+GRID_OFFSET_Y;
+
+        draw_image( WtCoord( x, y ),
+                    font->size(),
+                    image );
+    }
+
+    /**************************
+     *
+     *************************/
     void draw_at_grid( uint8_t row,
                        uint8_t column,
                        bool horizontal,
