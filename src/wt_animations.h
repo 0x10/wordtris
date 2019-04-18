@@ -62,7 +62,29 @@ public:
         uint8_t col;
         bool    horizontal;
     };
-    typedef WtAnimationStep<GridText> GridAnimationStep;
+    struct GridContent {
+        GridContent( uint8_t r,
+                     uint8_t c,
+                     uint8_t r_count,
+                     uint8_t c_count,
+                     std::string f,
+                     std::vector<char> cells ) :
+            row( r ),
+            col( c ),
+            row_count( r_count ),
+            col_count( c_count ),
+            font( f ),
+            cell_content( cells )
+        {}
+
+        uint8_t row;
+        uint8_t col;
+        uint8_t row_count;
+        uint8_t col_count;
+        std::string font;
+        std::vector<char> cell_content;
+    };
+    typedef WtAnimationStep<GridContent> GridAnimationStep;
 
     /**************************
      *
@@ -110,6 +132,19 @@ public:
     size_t size() const
     {
         return m_animation_steps.size();
+    }
+
+    /**************************
+     *
+     *************************/
+    static GridContent fromGridText( GridText gt )
+    {
+        GridContent gc( gt.row, gt.col,
+                        ( gt.horizontal ? 1 : gt.text.length() ),
+                        ( gt.horizontal ? gt.text.length() : 1 ),
+                        gt.font, 
+                        std::vector<char>(gt.text.begin(), gt.text.end()));
+        return gc;
     }
 
 private:

@@ -92,12 +92,12 @@ public:
                         if ( !word.empty() ) 
                         {
                             {
-                                WtGridAnimation::GridAnimationStep step( WtGridAnimation::GridText( WtBoard::row_count-r_idx,
+                                WtGridAnimation::GridAnimationStep step( WtGridAnimation::fromGridText( WtGridAnimation::GridText( WtBoard::row_count-r_idx,
                                                                                                     row_str.find( word ),
                                                                                                     true,
                                                                                                     word, 
-                                                                                                    "grid_inverse" ),
-                                                                           WtTime::TimeType(200000) );
+                                                                                                    "grid_inverse" ) ),
+                                                                         WtTime::TimeType(200000) );
                                 blink.push_back( step );
                                 step.content.font = "grid";
                                 blink.push_back( step );
@@ -128,11 +128,11 @@ public:
                     if ( !word.empty() ) 
                     {
                         {
-                            WtGridAnimation::GridAnimationStep step( WtGridAnimation::GridText( WtBoard::row_count-col_str.find( word ),
+                            WtGridAnimation::GridAnimationStep step( WtGridAnimation::fromGridText( WtGridAnimation::GridText( WtBoard::row_count-col_str.find( word ),
                                                                                                 c_idx,
                                                                                                 false,
                                                                                                 word, 
-                                                                                                "grid_inverse" ),
+                                                                                                "grid_inverse" ) ),
                                                                        WtTime::TimeType(200000) );
                             blink.push_back( step );
                             step.content.font = "grid";

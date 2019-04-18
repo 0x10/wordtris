@@ -64,7 +64,8 @@ private:
         m_pause_btn( WtCoord( 393, 32 ),
                      WtDim( 64, 64 ),
                      "pause_btn.bmp",
-                     WT_BIND_EVENT_HANDLER( WtGameCtr::notify_pause ) )
+                     WT_BIND_EVENT_HANDLER( WtGameCtr::notify_pause ) ),
+        m_pause_end_animation()
     {
         WtSettings settings = STORAGE.get_settings();
         set_mode( GAME_MODE_CTR.mode_from_string( settings.game_mode ) );
@@ -75,6 +76,8 @@ private:
         ACTIVE_WINDOW.set_theme( settings.active_theme );
 
         ACTIVE_INPUT.register_key_press_delegate( WT_BIND_EVENT_HANDLER_1( WtGameCtr::on_key_press ) );
+
+        construct_pause_animation( m_pause_end_animation );
     }
     WtGameCtr( const WtGameCtr& ); 
     WtGameCtr & operator = (const WtGameCtr &);
@@ -132,11 +135,18 @@ private:
             ACTIVE_WINDOW.clr();
             draw();
 
-            ACTIVE_WINDOW.draw_at_grid( animation[a_idx].content.row,
-                                        animation[a_idx].content.col,
-                                        animation[a_idx].content.horizontal,
-                                        animation[a_idx].content.text,
-                                        animation[a_idx].content.font );
+            for ( uint8_t r_idx = 0; r_idx < animation[a_idx].content.row_count; r_idx++ )
+            {
+                for ( uint8_t c_idx = 0; c_idx < animation[a_idx].content.col_count; c_idx++ )
+                {
+                    size_t cell_idx = static_cast<size_t>( (r_idx * animation[a_idx].content.col_count) + c_idx );
+                    ACTIVE_WINDOW.draw_at_grid( animation[a_idx].content.row + r_idx,
+                                                animation[a_idx].content.col + c_idx,
+                                                animation[a_idx].content.cell_content[cell_idx],
+                                                animation[a_idx].content.font );
+                }
+            }
+
 
             ACTIVE_WINDOW.update();
 
@@ -422,6 +432,14 @@ private:
         return insert_entry( scores, new_entry );
     }
 
+    /**************************
+     *
+     *************************/
+    void construct_pause_animation( WtGridAnimation& pause_animation )
+    {
+
+    }
+
 public:
     /**************************
      *
@@ -552,19 +570,21 @@ public:
     }
 
 private:
-    WtPlayer                    m_player;
-    WtLetter                    m_active;
-    WtBoard                     m_board;
-    WtGameModeIf*               m_active_mode;
-    bool                        m_game_over;
-    bool                        m_shall_quit;
-    bool                        m_shall_restart;
-    bool                        m_pause;
-    WtMenuIf*                   m_pause_menu;
+    WtPlayer            m_player;
+    WtLetter            m_active;
+    WtBoard             m_board;
+    WtGameModeIf*       m_active_mode;
+    bool                m_game_over;
+    bool                m_shall_quit;
+    bool                m_shall_restart;
+    bool                m_pause;
+    WtMenuIf*           m_pause_menu;
 
 
-    WtGridTouchOverlay          m_grid_touch_control;
-    WtButton                    m_pause_btn;
+    WtGridTouchOverlay  m_grid_touch_control;
+    WtButton            m_pause_btn;
+
+    WtGridAnimation     m_pause_end_animation; 
 };
 
 

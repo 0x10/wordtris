@@ -139,23 +139,13 @@ public:
      *************************/
     void draw_at_grid( uint8_t row,
                        uint8_t column,
-                       bool horizontal,
-                       std::string text,
+                       char    value,
                        std::string font )
     {
-        for ( size_t i = 0; i < text.size(); i++ )
-        {
-            if ( horizontal )
-                put_cell_custom( (column+i)%WtBoard::col_count,
-                                 row,
-                                 text[i], 
-                                 ( font == "grid_inverse" ? m_grid_font_inverse : m_grid_font ) );
-            else
-                put_cell_custom( column,
-                                 (row-i)%WtBoard::row_count, 
-                                 text[(text.length()-1)-i], 
-                                 ( font == "grid_inverse" ? m_grid_font_inverse : m_grid_font ) );
-        }
+        put_cell_custom( column,
+                         row,
+                         value,
+                         ( font == "grid_inverse" ? m_grid_font_inverse : m_grid_font ) );
     }
 
     /**************************
