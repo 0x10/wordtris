@@ -142,10 +142,13 @@ public:
                        char    value,
                        std::string font )
     {
-        put_cell_custom( column,
-                         row,
-                         value,
-                         ( font == "grid_inverse" ? m_grid_font_inverse : m_grid_font ) );
+        if ( value != WtBoard::empty_cell )
+        {
+            put_cell_custom( column,
+                             row,
+                             value,
+                             ( font == "grid_inverse" ? m_grid_font_inverse : m_grid_font ) );
+        }
     }
 
     /**************************
@@ -157,7 +160,7 @@ public:
             for( uint8_t j=0; j < WtBoard::col_count; j++ )
             {
                 char cell = board.get_cell( i, j );
-                if ( cell != '\0' )
+                if ( cell != WtBoard::empty_cell )
                     put_cell( j, WtBoard::row_count-i, cell );
             }
     }

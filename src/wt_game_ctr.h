@@ -437,7 +437,65 @@ private:
      *************************/
     void construct_pause_animation( WtGridAnimation& pause_animation )
     {
+        const char x = WtBoard::empty_cell;
+        const uint8_t final_row = 5;
+        const uint8_t row_count = 12;
+        const std::string font = "grid_inverse";
 
+        std::vector<char> cells_one{'1','1','1','1','1','1',
+                                    '1','1','1','1','1','1',
+                                     x , x ,'1','1', x , x,
+                                     x , x ,'1','1', x , x,
+                                     x , x ,'1','1', x , x,
+                                     x , x ,'1','1', x , x,
+                                     x , x ,'1','1', x , x,
+                                     x , x ,'1','1', x , x,
+                                     x , x ,'1','1', x , x,
+                                     x , x ,'1','1', x , x,
+                                    '1','1','1','1','1','1',
+                                    '1','1','1','1','1','1'};
+        std::vector<char> cells_two{'2','2','2','2','2','2','2','2',
+                                    '2','2','2','2','2','2','2','2',
+                                     x ,'2','2', x , x ,'2','2', x,
+                                     x ,'2','2', x , x ,'2','2', x,
+                                     x ,'2','2', x , x ,'2','2', x,
+                                     x ,'2','2', x , x ,'2','2', x,
+                                     x ,'2','2', x , x ,'2','2', x,
+                                     x ,'2','2', x , x ,'2','2', x,
+                                     x ,'2','2', x , x ,'2','2', x,
+                                     x ,'2','2', x , x ,'2','2', x,
+                                    '2','2','2','2','2','2','2','2',
+                                    '2','2','2','2','2','2','2','2'};
+        std::vector<char> cells_three{'3','3','3','3','3','3','3','3','3','3',
+                                      '3','3','3','3','3','3','3','3','3','3',
+                                       x ,'3','3', x ,'3','3', x ,'3','3', x,
+                                       x ,'3','3', x ,'3','3', x ,'3','3', x,
+                                       x ,'3','3', x ,'3','3', x ,'3','3', x,
+                                       x ,'3','3', x ,'3','3', x ,'3','3', x,
+                                       x ,'3','3', x ,'3','3', x ,'3','3', x,
+                                       x ,'3','3', x ,'3','3', x ,'3','3', x,
+                                       x ,'3','3', x ,'3','3', x ,'3','3', x,
+                                       x ,'3','3', x ,'3','3', x ,'3','3', x,
+                                      '3','3','3','3','3','3','3','3','3','3',
+                                      '3','3','3','3','3','3','3','3','3','3' };
+
+        WtGridAnimation::GridContent one( final_row, 2, row_count, WtBoard::col_count-4,
+                                          font, cells_one );
+
+        WtGridAnimation::GridContent two( final_row, 1, row_count, WtBoard::col_count-2,
+                                          font, cells_two );
+
+        WtGridAnimation::GridContent three( final_row, 0, row_count, WtBoard::col_count,
+                                            font, cells_three );
+
+
+        WtGridAnimation::GridAnimationStep step_three( three, WtTime::from_seconds(1));
+        WtGridAnimation::GridAnimationStep step_two( two, WtTime::from_seconds(1));
+        WtGridAnimation::GridAnimationStep step_one( one, WtTime::from_seconds(1));
+
+        pause_animation.push_back( step_three );
+        pause_animation.push_back( step_two );
+        pause_animation.push_back( step_one );
     }
 
 public:
@@ -532,6 +590,7 @@ public:
                         unset_buttons();
                         m_pause_menu->show();
                         ACTIVE_WINDOW.set_bg( WtGameCtr::background_image );
+                        play_animation( m_pause_end_animation );
                         set_buttons();
                     }
                 }
