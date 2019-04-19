@@ -435,6 +435,40 @@ private:
     /**************************
      *
      *************************/
+    void construct_running_letter_animation( WtGridAnimation& animation,
+                                             const uint8_t row_count, const uint8_t col_count,
+                                             std::vector<char> letter_data,
+                                             const uint8_t drop_until_row,
+                                             const uint8_t col_offset,
+                                             WtTime::TimeType speed_per_row )
+    {
+        const std::string font = "grid_inverse";
+        for ( size_t draw_idx = 1;
+              draw_idx < WtBoard::row_count-drop_until_row;
+              draw_idx++ )
+        {
+            if ( draw_idx <= row_count )
+            {
+                size_t selected_row_start = (row_count - draw_idx) * col_count;
+                std::vector<char> row_cells(letter_data.begin()+selected_row_start, letter_data.end());
+
+                WtGridAnimation::GridContent step_content( 1, col_offset, draw_idx, col_count, font, row_cells );
+                WtGridAnimation::GridAnimationStep step_next( step_content, speed_per_row);
+                animation.push_back( step_next );
+            }
+            else
+            {
+                WtGridAnimation::GridContent letter( draw_idx-row_count, col_offset, row_count, col_count,
+                                                     font, letter_data );
+                WtGridAnimation::GridAnimationStep step_next( letter, speed_per_row);
+                animation.push_back( step_next );
+            }
+        }
+    }
+
+    /**************************
+     *
+     *************************/
     void construct_pause_animation( WtGridAnimation& pause_animation )
     {
         const char x = WtBoard::empty_cell;
@@ -479,22 +513,46 @@ private:
                                       '3','3','3','3','3','3','3','3','3','3',
                                       '3','3','3','3','3','3','3','3','3','3' };
 
-        WtGridAnimation::GridContent one( final_row, 2, row_count, WtBoard::col_count-4,
-                                          font, cells_one );
+        const uint8_t col_count_3 = WtBoard::col_count;
+        const uint8_t col_count_2 = WtBoard::col_count-2;
+        const uint8_t col_count_1 = WtBoard::col_count-4;
 
-        WtGridAnimation::GridContent two( final_row, 1, row_count, WtBoard::col_count-2,
-                                          font, cells_two );
+        construct_running_letter_animation( pause_animation,
+                                            row_count, col_count_3,
+                                            cells_three,
+                                            final_row, 0,
+                                            WtTime::TimeType(50000) );
 
         WtGridAnimation::GridContent three( final_row, 0, row_count, WtBoard::col_count,
                                             font, cells_three );
-
-
-        WtGridAnimation::GridAnimationStep step_three( three, WtTime::from_seconds(1));
-        WtGridAnimation::GridAnimationStep step_two( two, WtTime::from_seconds(1));
-        WtGridAnimation::GridAnimationStep step_one( one, WtTime::from_seconds(1));
-
+        WtGridAnimation::GridAnimationStep step_three( three, WtTime::TimeType(300000));
         pause_animation.push_back( step_three );
+
+
+
+        construct_running_letter_animation( pause_animation,
+                                            row_count, col_count_2,
+                                            cells_two,
+                                            final_row, 1,
+                                            WtTime::TimeType(50000) );
+
+        WtGridAnimation::GridContent two( final_row, 1, row_count, WtBoard::col_count-2,
+                                          font, cells_two );
+        WtGridAnimation::GridAnimationStep step_two( two, WtTime::TimeType(300000));
         pause_animation.push_back( step_two );
+
+
+
+        construct_running_letter_animation( pause_animation,
+                                            row_count, col_count_1,
+                                            cells_one,
+                                            final_row, 2,
+                                            WtTime::TimeType(50000) );
+
+        WtGridAnimation::GridContent one( final_row, 2, row_count, WtBoard::col_count-4,
+                                          font, cells_one );
+        WtGridAnimation::GridAnimationStep step_one( one, WtTime::TimeType(300000));
+
         pause_animation.push_back( step_one );
     }
 
