@@ -97,24 +97,17 @@ public:
      *************************/
     void on_pan( WtCoord& press_start_pos, WtCoord& active_pos, WtCoord& /*d_pos*/ )
     {
-        if ( active_pos.in_region( m_pos_drop, m_size_drop ) )
+        if ( (active_pos.x+30) < press_start_pos.x )
         {
-            if ( m_on_drop ) m_on_drop();
+            press_start_pos = active_pos;
+            //std::cout << "motion left\n";
+            if ( m_on_left ) m_on_left();
         }
-        else
+        if ( (active_pos.x-30) > press_start_pos.x )
         {
-            if ( (active_pos.x+30) < press_start_pos.x )
-            {
-                press_start_pos = active_pos;
-                //std::cout << "motion left\n";
-                if ( m_on_left ) m_on_left();
-            }
-            if ( (active_pos.x-30) > press_start_pos.x )
-            {
-                press_start_pos = active_pos;
-               // std::cout << "motion right\n";
-                if ( m_on_right ) m_on_right();
-            }
+            press_start_pos = active_pos;
+           // std::cout << "motion right\n";
+            if ( m_on_right ) m_on_right();
         }
     }
 
