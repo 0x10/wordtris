@@ -415,8 +415,8 @@ private:
         std::cout << "highscore entry: Lvl " << player.get_current_level() << " at " << player.get_points() << " within mode \"" << mode->get_title() << "\"" << std::endl;
 
         WtScoreEntry new_entry( mode->get_title(),
-                               player.get_points(),
-                               player.get_current_level() );
+                                player.get_points(),
+                                player.get_current_level() );
 
         return insert_entry( scores, new_entry );
     }
@@ -655,7 +655,7 @@ public:
         }
         while ( m_shall_restart );
 
-        if ( m_game_over )
+        if (( m_game_over || m_shall_quit ) && m_player.get_points() > 0 )
         {
             bool new_highscore = update_highscores( m_player, m_active_mode, STORAGE.get_scores() );
             STORAGE.store_highscores( STORAGE.get_scores() );

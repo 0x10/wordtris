@@ -21,6 +21,8 @@
 # - ios support
 # - highscore player name entry
 # - show pogress until next level and current level
+# - show some basic settings in pause menu
+#       - e.g. show support grid and show next stone
 #
 # (design)
 # - Logo Design and Naming
