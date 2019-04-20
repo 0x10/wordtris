@@ -17,6 +17,8 @@
 # - animations:
 #       - bomb animation
 # - multiplayer? coop vs pubg
+#       - possible P2P connection via WebRTC
+#          https://developer.mozilla.org/en-US/docs/Games/Techniques/WebRTC_data_channels 
 # - supporting story
 # - ios support
 # - highscore player name entry
