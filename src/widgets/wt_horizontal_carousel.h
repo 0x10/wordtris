@@ -157,6 +157,19 @@ public:
         {
             if ( m_on_game_selected ) m_on_game_selected( m_selected );
         }
+        else
+        {
+            if ( pos.x > ( m_selected_pos.x + m_item_img_size.w ) )
+            {
+                m_selected = get_next_idx( m_selected );
+                m_selected_pos.x = (m_size.w - m_item_img_size.w) / 2;
+            }
+            else
+            {
+                m_selected = get_prev_idx( m_selected );
+                m_selected_pos.x = (m_size.w - m_item_img_size.w) / 2;
+            }
+        }
     }
 
     /**************************
