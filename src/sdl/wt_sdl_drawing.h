@@ -26,12 +26,10 @@
 #include "wt_sdl_font.h"
 #include "wt_sdl_config.h"
 
-#include "wt_backend_policy_if.h"
-
 #define SDL_WINDOW WINDOW( WtDrawingPolicySdl )
 
 
-class WtDrawingPolicySdl : public WtDrawingPolicyIf
+class WtDrawingPolicySdl
 {
 private:
     static const uint8_t TEXT_FONT_SIZE = 12;
@@ -124,13 +122,8 @@ public:
                               uint8_t     col,
                               std::string image )
     {
-        WtSdlFont* font = m_grid_font;
-        row = WtBoard::row_count - row;
-        ssize_t x = (col*static_cast<ssize_t>(font->width()))+col+GRID_OFFSET_X;
-        ssize_t y = ((row*static_cast<ssize_t>(font->height()))+row)+GRID_OFFSET_Y;
-
-        draw_image( WtCoord( x, y ),
-                    font->size(),
+        draw_image( grid_pos_to_screen_pos( row, col, m_grid_font ),
+                    m_grid_font->size(),
                     image );
     }
 
@@ -138,42 +131,23 @@ public:
      *
      *************************/
     void draw_at_grid( uint8_t row,
-                       uint8_t column,
+                       uint8_t col,
                        char    value,
-                       std::string font )
+                       const std::string font="grid" )
     {
-        if ( value != WtBoard::empty_cell )
+        WtSdlFont* selected_font = m_grid_font;
+        if ( font == "grid_inverse" )
+            selected_font = m_grid_font_inverse;
+
+
+        if ( value >= selected_font->start_symbol() )
         {
-            put_cell_custom( column,
-                             row,
-                             value,
-                             ( font == "grid_inverse" ? m_grid_font_inverse : m_grid_font ) );
+            selected_font->write( grid_pos_to_screen_pos( row, col, selected_font ), 
+                                  value, 
+                                  m_renderer );
         }
     }
 
-    /**************************
-     *
-     *************************/
-    void draw_board( const WtBoard& board )
-    {
-        for( uint8_t i=0 ; i < WtBoard::row_count; i++ )
-            for( uint8_t j=0; j < WtBoard::col_count; j++ )
-            {
-                char cell = board.get_cell( i, j );
-                if ( cell != WtBoard::empty_cell )
-                    put_cell( j, WtBoard::row_count-i, cell );
-            }
-    }
-
-    /**************************
-     *
-     *************************/
-    void draw_active_letter( const WtLetter& active )
-    {
-        put_cell( active.current_column(), 
-                  WtBoard::row_count - active.current_row(), 
-                  active.current_value() );
-    }
 
     /**************************
      *
@@ -211,9 +185,9 @@ public:
       *************************/   
     void draw_text( const WtCoord     pos,
                     const std::string text,
-                    const std::string font="text_font")
+                    const std::string font="text")
     {
-        puts_fb( pos.x, pos.y, text, ( font == "text_font" ? m_text_font : m_grid_font ) );
+        puts_fb( pos.x, pos.y, text, ( font == "text" ? m_text_font : m_grid_font ) );
     }
 
     /**************************
@@ -229,6 +203,21 @@ public:
 private:
     WtDrawingPolicySdl( const WtDrawingPolicySdl& ); 
     WtDrawingPolicySdl & operator = ( const WtDrawingPolicySdl& );
+
+    /**************************
+     *
+     *************************/   
+    WtCoord grid_pos_to_screen_pos( uint8_t row, uint8_t col,
+                                    WtSdlFont* font )
+    {
+        WtCoord screen_pos(0,0);
+        if ( NULL != font )
+        {
+            screen_pos.x = (col*static_cast<ssize_t>(font->width()))+col+GRID_OFFSET_X;
+            screen_pos.y = ((row*static_cast<ssize_t>(font->height()))+row)+GRID_OFFSET_Y;
+        }
+        return screen_pos;
+    }
 
     /**************************
      *
@@ -256,25 +245,6 @@ private:
                 }
             }
         }
-    }
-
-    /**************************
-     *
-     *************************/
-    void put_cell_custom( size_t col, size_t row, const char ch, WtSdlFont* font )
-    {
-        size_t x = (col*font->width())+col+GRID_OFFSET_X;
-        size_t y = ((row*font->height())+row)+GRID_OFFSET_Y;
-
-        font->write( WtCoord( static_cast<ssize_t>(x), static_cast<ssize_t>(y)), ch, m_renderer );
-    }
-
-    /**************************
-     *
-     *************************/
-    void put_cell( uint8_t col, uint8_t row, const char ch )
-    {
-        put_cell_custom( col, row, ch, m_grid_font );
     }
 
     /**************************

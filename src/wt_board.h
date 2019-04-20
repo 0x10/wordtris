@@ -54,7 +54,7 @@ public:
      *
      *************************/
     bool cell_occupied( uint8_t r,
-                        uint8_t c )
+                        uint8_t c ) const
     {
         return ( get_cell( r, c ) != empty_cell );
     }

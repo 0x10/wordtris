@@ -35,7 +35,7 @@ public:
         static WtDrawing _instance;
         return _instance;
     }
-    ~WtDrawing() {}
+    virtual ~WtDrawing() {}
 private:
     WtDrawing() :
         DrawingPolicy()
@@ -46,6 +46,34 @@ private:
 
 // api defintion
 public:
+
+    /**************************
+     *
+     *************************/
+    void draw_active_letter( const WtLetter& active,
+                             const bool show_support_grid,
+                             const WtBoard& board )
+    {
+        DrawingPolicy::draw_at_grid( WtBoard::row_count - active.current_row(),
+                                     active.current_column(),
+                                     active.current_value() );
+
+        if ( show_support_grid )
+        {
+            for ( uint8_t r_idx = 0; r_idx < WtBoard::row_count; r_idx++ )
+            {
+                if ( ( r_idx != active.current_row() )
+                    &&
+                     ( ! board.cell_occupied( r_idx, active.current_column() ) ) )
+                {
+                    ACTIVE_WINDOW.draw_custom_cell_bg( WtBoard::row_count - r_idx, 
+                                                       active.current_column(), 
+                                                       "grid_font_helper.bmp" );
+                }
+            }
+        }
+    }
+
     /**************************
      *
      *************************/
@@ -61,6 +89,20 @@ public:
                                   player_stat );
     }
 
+
+    /**************************
+     *
+     *************************/
+    void draw_board( const WtBoard& board )
+    {
+        for( uint8_t i=0 ; i < WtBoard::row_count; i++ )
+            for( uint8_t j=0; j < WtBoard::col_count; j++ )
+            {
+                DrawingPolicy::draw_at_grid( WtBoard::row_count-i, j, board.get_cell( i, j ) );
+            }
+    }
+
+
     /**************************
      *
      *************************/
@@ -70,7 +112,7 @@ public:
         {
             ACTIVE_WINDOW.draw_text( WtCoord( 270, 45 ),
                                      std::string(1, letter_after_next ),
-                                     "grid_font" );
+                                     "grid" );
         }
 
         const size_t line_length = 30;

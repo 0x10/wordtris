@@ -91,24 +91,13 @@ private:
     {
         ACTIVE_WINDOW.draw_board( m_board );
         ACTIVE_WINDOW.draw_player_stat( m_player );
-        ACTIVE_WINDOW.draw_active_letter( m_active );
+        ACTIVE_WINDOW.draw_active_letter( m_active,
+                                          STORAGE.get_settings().show_support_grid,
+                                          m_board );
         ACTIVE_WINDOW.draw_button( m_pause_btn );
         ACTIVE_WINDOW.draw_hint( m_active_mode->get_hint(), 
                                  m_active_mode->letter_after_next(), 
                                  STORAGE.get_settings().show_next_stone );
-
-        if ( STORAGE.get_settings().show_support_grid )
-        {
-            for ( uint8_t r_idx = 0; r_idx < WtBoard::row_count; r_idx++ )
-            {
-                if ( ( r_idx != m_active.current_row() )
-                    &&
-                     ( !m_board.cell_occupied(r_idx, m_active.current_column()) ) )
-                {
-                    ACTIVE_WINDOW.draw_custom_cell_bg( r_idx, m_active.current_column(), "grid_font_helper.bmp" );
-                }
-            }
-        }
     }
 
     /**************************

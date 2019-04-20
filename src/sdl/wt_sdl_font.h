@@ -23,6 +23,8 @@
 
 class WtSdlFont
 {
+private:
+    const char m_start_symbol = 0x20; // font data starts at printable space
 public:
     WtSdlFont() :
         m_name(""),
@@ -67,7 +69,7 @@ public:
 
         SDL_Texture* font_complete = WtSdlUtils::loadAssetToTexture( renderer, filename, theme );
         // fonts are organized by ascii code...
-        for(char i = ' '; i < '~'; i++ )
+        for(char i = m_start_symbol; i < '~'; i++ )
         {
             m_font_data.push_back( get_letter_texture( font_complete, i, renderer ) );
         }
@@ -118,8 +120,17 @@ public:
         small.w = m_font_w;
         small.h = m_font_h;
 
-        SDL_RenderCopy(renderer, m_font_data[static_cast<size_t>(ch - 0x20)], NULL, &small );        
+        SDL_RenderCopy(renderer, m_font_data[static_cast<size_t>(ch - m_start_symbol)], NULL, &small );        
     }
+
+    /**************************
+     *
+     *************************/
+    char start_symbol() const
+    {
+        return m_start_symbol;
+    }
+
 private:
     /**************************
      *
@@ -145,7 +156,7 @@ private:
     SDL_Texture *get_letter_texture( SDL_Texture* t_letters, char letter, SDL_Renderer* renderer )
     {
         SDL_Rect letter_rect;
-        letter_rect.x = static_cast<size_t>(letter - 0x20) * m_font_w;
+        letter_rect.x = static_cast<size_t>(letter - m_start_symbol) * m_font_w;
         letter_rect.y = 0;
         letter_rect.w = m_font_w;
         letter_rect.h = m_font_h;
