@@ -26,7 +26,22 @@
 #include "wt_sdl_font.h"
 #include "wt_sdl_config.h"
 
+
 #define SDL_WINDOW WINDOW( WtDrawingPolicySdl )
+
+SDL_Window*   sdl_cleanup_window=NULL;
+SDL_Renderer* sdl_cleanup_renderer=NULL;
+
+void cleanup_sdl();
+void cleanup_sdl()
+{
+    std::cout << "cleanup sdl..\n";
+    if ( sdl_cleanup_renderer != NULL )
+        SDL_DestroyRenderer(sdl_cleanup_renderer);
+    if ( sdl_cleanup_window != NULL )
+        SDL_DestroyWindow(sdl_cleanup_window);
+    SDL_Quit();
+}
 
 
 class WtDrawingPolicySdl
@@ -45,19 +60,24 @@ protected:
         m_renderer( 0 ),
         m_bg_img_path( ""),
         m_theme("default"),
-        m_grid_font(0),
-        m_grid_font_inverse(0),
-        m_text_font(0),
+        m_grid_font( "grid", GRID_FONT_SIZE, GRID_FONT_SIZE, "grid_font.bmp" ),
+        m_grid_font_inverse( "grid_inverse", GRID_FONT_SIZE, GRID_FONT_SIZE, "grid_font_inverse.bmp" ),
+        m_text_font( "text", TEXT_FONT_SIZE, TEXT_FONT_SIZE*2, "text_font.bmp" ),
         m_texture_cache()
     {
         if (SDL_Init(SDL_INIT_VIDEO)) {
             std::cerr << "Failed to initialize SDL: " << SDL_GetError() << std::endl;
             exit(-1);
         }
+        atexit(cleanup_sdl);
+
         if (SDL_CreateWindowAndRenderer(SDL_WIDTH, SDL_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS, &m_window, &m_renderer)) {
             std::cerr << "Failed to create window and renderer: " << SDL_GetError() << std::endl;
             exit(-1);
         }
+
+        sdl_cleanup_window = m_window;
+        sdl_cleanup_renderer = m_renderer;
 
         SDL_RenderSetLogicalSize(m_renderer, SDL_WIDTH, SDL_HEIGHT);
         SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
@@ -68,18 +88,19 @@ protected:
         */
         set_bg("bg.bmp");
 
-        m_grid_font = new WtSdlFont( "grid", GRID_FONT_SIZE, GRID_FONT_SIZE, "grid_font.bmp", m_theme, m_renderer );
-        m_grid_font_inverse = new WtSdlFont( "grid_inverse", GRID_FONT_SIZE, GRID_FONT_SIZE, "grid_font_inverse.bmp", m_theme, m_renderer );
-        m_text_font = new WtSdlFont( "text", TEXT_FONT_SIZE, TEXT_FONT_SIZE*2, "text_font.bmp", m_theme, m_renderer );
-
+        m_grid_font.load_font_data( m_theme, m_renderer );
+        m_grid_font_inverse.load_font_data( m_theme, m_renderer );
+        m_text_font.load_font_data( m_theme, m_renderer );
     }
 
     ~WtDrawingPolicySdl()
     {
-        delete m_grid_font;
-        delete m_text_font;
+        std::cout << "destroy sdl..\n";
 
         clear_texture_cache();
+
+        sdl_cleanup_window = NULL;
+        sdl_cleanup_renderer = NULL;
 
         SDL_DestroyRenderer(m_renderer);
         SDL_DestroyWindow(m_window);
@@ -107,8 +128,9 @@ public:
     virtual void set_theme( std::string name )
     {
         // todo base class themeable
-        m_grid_font->set_theme( name, m_renderer );
-        m_text_font->set_theme( name, m_renderer );
+        m_grid_font.set_theme( name, m_renderer );
+        m_grid_font_inverse.set_theme( name, m_renderer );
+        m_text_font.set_theme( name, m_renderer );
         m_theme = name;
         // TODO check if available and if not keep old
         
@@ -122,8 +144,8 @@ public:
                               uint8_t     col,
                               std::string image )
     {
-        draw_image( grid_pos_to_screen_pos( row, col, m_grid_font ),
-                    m_grid_font->size(),
+        draw_image( grid_pos_to_screen_pos( row, col, &m_grid_font ),
+                    m_grid_font.size(),
                     image );
     }
 
@@ -135,9 +157,9 @@ public:
                        char    value,
                        const std::string font="grid" )
     {
-        WtSdlFont* selected_font = m_grid_font;
+        WtSdlFont* selected_font = &m_grid_font;
         if ( font == "grid_inverse" )
-            selected_font = m_grid_font_inverse;
+            selected_font = &m_grid_font_inverse;
 
 
         if ( value >= selected_font->start_symbol() )
@@ -187,7 +209,7 @@ public:
                     const std::string text,
                     const std::string font="text")
     {
-        puts_fb( pos.x, pos.y, text, ( font == "text" ? m_text_font : m_grid_font ) );
+        puts_fb( pos.x, pos.y, text, ( font == "text" ? &m_text_font : &m_grid_font ) );
     }
 
     /**************************
@@ -195,7 +217,7 @@ public:
       *************************/   
     WtDim get_font_size()
     {
-        return m_text_font->size();
+        return m_text_font.size();
     }
 
 
@@ -312,9 +334,9 @@ private:
     std::string   m_bg_img_path;
     std::string   m_theme;
 
-    WtSdlFont*    m_grid_font;
-    WtSdlFont*    m_grid_font_inverse;
-    WtSdlFont*    m_text_font;
+    WtSdlFont     m_grid_font;
+    WtSdlFont     m_grid_font_inverse;
+    WtSdlFont     m_text_font;
 
     SDL_TextureCache m_texture_cache;
 };
