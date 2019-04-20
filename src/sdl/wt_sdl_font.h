@@ -114,13 +114,16 @@ public:
      *************************/
     void write( WtCoord pos, char ch, SDL_Renderer* renderer )
     {
-        SDL_Rect small;
-        small.x = pos.x;
-        small.y = pos.y;
-        small.w = m_font_w;
-        small.h = m_font_h;
+        if ( ch >= m_start_symbol )
+        {
+            SDL_Rect small;
+            small.x = pos.x;
+            small.y = pos.y;
+            small.w = m_font_w;
+            small.h = m_font_h;
 
-        SDL_RenderCopy(renderer, m_font_data[static_cast<size_t>(ch - m_start_symbol)], NULL, &small );        
+            SDL_RenderCopy(renderer, m_font_data[static_cast<size_t>(ch - m_start_symbol)], NULL, &small );
+        }
     }
 
     /**************************
