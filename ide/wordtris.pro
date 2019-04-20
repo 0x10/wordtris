@@ -107,6 +107,7 @@ HEADERS += \
     ../src/wt_animations.h \
     ../src/wt_backend_policy_if.h \
     ../src/wt_backend_select.h \
+    ../src/wt_basic_types.h \
     ../src/wt_board.h \
     ../src/wt_clickable_if.h \
     ../src/wt_drawing.h \
@@ -121,11 +122,13 @@ HEADERS += \
     ../src/wt_menu_if.h \
     ../src/wt_player.h \
     ../src/wt_settings_observer_if.h \
+    ../src/wt_storable.h \
     ../src/wt_storage.h \
+    ../src/wt_storage_types.h \
     ../src/wt_string_utils.h \
-    ../src/wt_types.h \
     ../src/wt_utils.h \
     ../src/wt_wordlist.h
 
 SOURCES += \
+    ../src/wordtris.cpp \
     ../src/wordtris.cpp
