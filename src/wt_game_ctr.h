@@ -639,7 +639,8 @@ public:
                         unset_buttons();
                         m_pause_menu->show();
                         ACTIVE_WINDOW.set_bg( WtGameCtr::background_image );
-                        play_animation( m_pause_end_animation );
+                        if ( ( ! m_shall_quit ) && ( ! m_shall_restart ) )
+                            play_animation( m_pause_end_animation );
                         set_buttons();
                     }
                 }
