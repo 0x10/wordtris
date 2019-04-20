@@ -444,13 +444,15 @@ private:
     {
         const std::string font = "grid_inverse";
         for ( size_t draw_idx = 1;
-              draw_idx < WtBoard::row_count-drop_until_row;
+              draw_idx < static_cast<size_t>(WtBoard::row_count-drop_until_row);
               draw_idx++ )
         {
             if ( draw_idx <= row_count )
             {
                 size_t selected_row_start = (row_count - draw_idx) * col_count;
-                std::vector<char> row_cells(letter_data.begin()+selected_row_start, letter_data.end());
+                std::vector<char>::iterator it = letter_data.begin();
+                std::advance( it, selected_row_start );
+                std::vector<char> row_cells(it, letter_data.end());
 
                 WtGridAnimation::GridContent step_content( 1, col_offset, draw_idx, col_count, font, row_cells );
                 WtGridAnimation::GridAnimationStep step_next( step_content, speed_per_row);
@@ -521,7 +523,7 @@ private:
                                             row_count, col_count_3,
                                             cells_three,
                                             final_row, 0,
-                                            WtTime::TimeType(50000) );
+                                            WtTime::TimeType(30000) );
 
         WtGridAnimation::GridContent three( final_row, 0, row_count, WtBoard::col_count,
                                             font, cells_three );
@@ -534,7 +536,7 @@ private:
                                             row_count, col_count_2,
                                             cells_two,
                                             final_row, 1,
-                                            WtTime::TimeType(50000) );
+                                            WtTime::TimeType(30000) );
 
         WtGridAnimation::GridContent two( final_row, 1, row_count, WtBoard::col_count-2,
                                           font, cells_two );
@@ -547,7 +549,7 @@ private:
                                             row_count, col_count_1,
                                             cells_one,
                                             final_row, 2,
-                                            WtTime::TimeType(50000) );
+                                            WtTime::TimeType(30000) );
 
         WtGridAnimation::GridContent one( final_row, 2, row_count, WtBoard::col_count-4,
                                           font, cells_one );
