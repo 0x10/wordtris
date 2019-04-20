@@ -146,11 +146,8 @@ private: // no copy allowed
         size_t lang_idx = id;
         if ( WtL10n::get_language_code() != WtL10n::get_available_languages()[lang_idx] )
         {
+            // handles own observers
             WtL10n::set_language( WtL10n::get_available_languages()[lang_idx] );
-            for( size_t idx = 0; idx < get_listener().size(); idx++ )
-            {
-                get_listener()[idx]->notify_language_changed( WtL10n::get_language_code() );
-            }
         }
     }
 

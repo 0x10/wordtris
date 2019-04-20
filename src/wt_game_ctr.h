@@ -294,18 +294,6 @@ private:
     /**************************
      *
      *************************/
-    void notify_language_changed( std::string lang_code )
-    {
-        std::cout << "new lanuage selected = "<< lang_code << std::endl;
-
-        WtSettings settings = STORAGE.get_settings();
-        settings.language = lang_code;
-        STORAGE.store_settings( settings );
-    }
-
-    /**************************
-     *
-     *************************/
     void notify_game_mode_changed( WtGameModeIf* mode )
     {
         if ( NULL != mode )

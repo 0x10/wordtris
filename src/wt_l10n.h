@@ -51,6 +51,8 @@ private:
                                                               WtL10n_tr("de"),
                                                               WtL10n_tr("fr") } };
 public:
+    using LangChangedDelegate = std::function<void(void)>;
+
     /**************************
      *
      *************************/
@@ -112,6 +114,14 @@ public:
         return result;
     }
 
+    /**************************
+     *
+     *************************/
+    static void register_lang_change_obsever( LangChangedDelegate lco )
+    {
+        WtL10n::instance().m_language_observer.push_back( lco );
+    }
+
     ~WtL10n() {}
 private:
     static WtL10n& instance()
@@ -121,7 +131,8 @@ private:
     }
     WtL10n() :
         m_active_language_idx(0),
-        m_translations()
+        m_translations(),
+        m_language_observer()
     {
         read_translations( m_translations );
     }
@@ -152,6 +163,10 @@ private:
             if ( WtL10n::get_available_languages()[l_idx] == lang_code )
             {
                 m_active_language_idx = l_idx;
+                for ( size_t idx = 0; idx < m_language_observer.size(); idx++ )
+                {
+                    if ( m_language_observer[idx] ) m_language_observer[idx]();
+                }
                 break;
             }
         }
@@ -276,6 +291,8 @@ private:
 private:
     size_t                           m_active_language_idx;
     LocaleMap                        m_translations;
+
+    std::vector<LangChangedDelegate> m_language_observer;
 };
 
 #endif /* _WT_L10N_H_ */

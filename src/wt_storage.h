@@ -110,6 +110,8 @@ private:
         __android_log_print(ANDROID_LOG_VERBOSE, APPNAME, "%s", cwd );
 #endif
         m_cwd = std::string( cwd );
+
+        WtL10n::register_lang_change_obsever( WT_BIND_EVENT_HANDLER( WtStorageCtr::update_language ) );
     }
     WtStorageCtr( const WtStorageCtr& ); 
     WtStorageCtr & operator = (const WtStorageCtr &);
@@ -199,6 +201,16 @@ public:
             internal_load_from_assets( fname, m_asset_cache[fname] );
             return m_asset_cache[fname];
         }
+    }
+
+    /**************************
+     *
+     *************************/
+    void update_language()
+    {
+        m_storage_copy.data.settings.language = WtL10n::get_language_code();
+        write_to_file();
+        std::cout << "new lanuage selected = "<< m_storage_copy.data.settings.language << std::endl;
     }
 
 private:
