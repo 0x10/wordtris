@@ -81,6 +81,7 @@ public:
     {
         WtMenuIf::listen( listener );
         m_settings.listen( listener );
+        m_pause_menu.listen( listener );
     }
 private:
     /**************************
