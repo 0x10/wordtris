@@ -66,9 +66,9 @@ public:
                     &&
                      ( ! board.cell_occupied( r_idx, active.current_column() ) ) )
                 {
-                    ACTIVE_WINDOW.draw_custom_cell_bg( WtBoard::row_count - r_idx, 
-                                                       active.current_column(), 
-                                                       "grid_font_helper.bmp" );
+                    DrawingPolicy::draw_custom_cell_bg( WtBoard::row_count - r_idx, 
+                                                        active.current_column(), 
+                                                        "grid_font_helper.bmp" );
                 }
             }
         }
@@ -110,9 +110,9 @@ public:
     {
         if ( show_letter_after_next )
         {
-            ACTIVE_WINDOW.draw_text( WtCoord( 270, 45 ),
-                                     std::string(1, letter_after_next ),
-                                     "grid" );
+            DrawingPolicy::draw_text( WtCoord( 270, 45 ),
+                                      std::string(1, letter_after_next ),
+                                      "grid" );
         }
 
         const size_t line_length = 30;
@@ -174,8 +174,8 @@ public:
     {
         if ( button.size() != WtDim( 0,0 ) )
         {
-            DrawingPolicy::draw_image( WtCoord( button.x(), button.y() ),
-                                       WtDim( button.width(), button.height() ),
+            DrawingPolicy::draw_image( button.position(),
+                                       button.size(),
                                        button.image() );
 
             if ( ! button.label().empty() )
