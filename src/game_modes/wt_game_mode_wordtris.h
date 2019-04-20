@@ -36,7 +36,7 @@ public:
         m_wordlist(),
         m_next_letter(generate_letter())
     {
-        m_wordlist.load_from_list( "20k list", WtWordList::eToUpper );
+        m_wordlist.load_from_list( "xlarge.txt", WtWordList::eToUpper );
         std::cout << "words = " << m_wordlist.size() << std::endl;
 
 

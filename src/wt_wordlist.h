@@ -87,46 +87,29 @@ public:
         eNone,
     } EConvertChars;
 
-
-public:
     WtWordList( const std::string input_list_name="", EConvertChars conv=eNone ) :
         m_words(),
-        m_list_short(),
-        m_list_medium(),
-        m_list_large(),
-        m_list_xlarge()
+        m_list_fname(input_list_name),
+        m_conv( conv ),
+        m_list()
     {
-        load_lists();
-
         if ( ! input_list_name.empty() )
-        {
-            const std::vector<std::string>& input_list = get_wordlist_by_name( input_list_name );
-            for( size_t i = 0; i < input_list.size(); i++ )
-            {
-                std::string input = input_list[i];
-                if ( !input.empty() )
-                {
-                    switch( conv )
-                    {
-                        case eToLower: std::transform(input.begin(), input.end(), input.begin(), ::tolower); break;
-                        case eToUpper: std::transform(input.begin(), input.end(), input.begin(), ::toupper); break;
-                        default: break;
-                    }
+            load_from_list( input_list_name, conv );
 
-                    WtWord* w = new WtWord( input );
-                    m_words.push_back(w);
-                }
-            }
-        }
+        WtL10n::register_lang_change_obsever( WT_BIND_EVENT_HANDLER( WtWordList::language_changed ) );
     }
     ~WtWordList()
     {
-        for( size_t w_idx = 0; w_idx < m_words.size(); w_idx++ )
-            delete m_words[w_idx];
-        m_words.clear();
     }
 
-public:
+    /**************************************
+     *
+     *************************************/
+    operator const std::vector<std::string>&()
+    {
+        return m_list;
+    }
+
     /**************************************
      *
      *************************************/
@@ -140,27 +123,35 @@ public:
      *************************************/
     void load_from_list( const std::string input_list_name, EConvertChars conv=eNone )
     {
-        const std::vector<std::string>& input_list = get_wordlist_by_name( input_list_name );
-
-        for( size_t w_idx = 0; w_idx < m_words.size(); w_idx++ )
-            delete m_words[w_idx];
-        m_words.clear();
-
-        for( size_t i = 0; i < input_list.size(); i++ )
+        if ( ! input_list_name.empty() )
         {
-            std::string input = input_list[i];
-            if ( !input.empty() )
-            {
-                switch( conv )
-                {
-                    case eToLower: std::transform(input.begin(), input.end(), input.begin(), ::tolower); break;
-                    case eToUpper: std::transform(input.begin(), input.end(), input.begin(), ::toupper); break;
-                    default: break;
-                }
+            std::vector<std::string>& input_list = m_list;
+            m_list_fname = input_list_name;
+            m_conv = conv;
+            m_words.clear();
+            load_list_from_file( input_list_name, WtL10n::get_language_code(), input_list );
 
-                WtWord* w = new WtWord( input );
-                m_words.push_back(w);
+            for( size_t i = 0; i < input_list.size(); i++ )
+            {
+                std::string input = input_list[i];
+                if ( !input.empty() )
+                {
+                    switch( conv )
+                    {
+                        case eToLower: std::transform(input.begin(), input.end(), input.begin(), ::tolower); break;
+                        case eToUpper: std::transform(input.begin(), input.end(), input.begin(), ::toupper); break;
+                        default: break;
+                    }
+
+                    m_words.push_back( WtWord( input ) );
+                }
             }
+        }
+        else
+        {
+            m_list_fname = "";
+            m_conv = eNone;
+            m_words.clear();
         }
     }
 
@@ -174,48 +165,29 @@ public:
         {
             for( size_t w_idx = 0; w_idx < m_words.size(); w_idx++ )
             {
-//                std::cout << idx << " update on " << m_words[w_idx]->as_string() << std::endl;
-                m_words[w_idx]->search_update( sequence[idx] );
+//                std::cout << idx << " update on " << m_words[w_idx].as_string() << std::endl;
+                m_words[w_idx].search_update( sequence[idx] );
             }
         }
         for( size_t w_idx = 0; w_idx < m_words.size(); w_idx++ )
         {
-            if ( m_words[w_idx]->search_found() )
+            if ( m_words[w_idx].search_found() )
             {
-                found_words.push_back( m_words[w_idx]->as_string() );
+                found_words.push_back( m_words[w_idx].as_string() );
             }
-            m_words[w_idx]->search_reset();
+            m_words[w_idx].search_reset();
         }
         return found_words;
     }
 
-    /**************************************
-     *
-     *************************************/
-    const std::vector<std::string>& get_wordlist_by_name( const std::string name )
-    {
-        if ( name == "short list" )
-            return m_list_short;
-        if ( name == "1k list" )
-            return m_list_medium;
-        if ( name == "5k list" )
-            return m_list_large;
-        if ( name == "20k list" )
-            return m_list_xlarge;
-        else
-            return m_list_short;
-    }
 
 private:
     /**************************************
      *
      *************************************/
-    void load_lists()
+    void language_changed()
     {
-        load_list_from_file( "short.txt", WtL10n::get_language_code(), m_list_short );
-        load_list_from_file( "medium.txt", WtL10n::get_language_code(), m_list_medium );
-        load_list_from_file( "large.txt", WtL10n::get_language_code(), m_list_large );
-        load_list_from_file( "xlarge.txt", WtL10n::get_language_code(), m_list_xlarge );
+        load_from_list( m_list_fname, m_conv );
     }
 
     /**************************************
@@ -225,6 +197,7 @@ private:
                               const std::string language, 
                               std::vector<std::string>& list )
     {
+        list.clear();
         std::string fname( "wordlists/" );
         fname.append(language).append("/").append(list_name);
         std::cout << "try to load wordlist at \"" << fname << "\"" << std::endl;
@@ -236,11 +209,10 @@ private:
     }
 
 private:
-    std::vector<WtWord*>     m_words;
-    std::vector<std::string> m_list_short;
-    std::vector<std::string> m_list_medium;
-    std::vector<std::string> m_list_large;
-    std::vector<std::string> m_list_xlarge;
+    std::vector<WtWord>      m_words;
+    std::string              m_list_fname;
+    EConvertChars            m_conv;
+    std::vector<std::string> m_list;
 };
 
 

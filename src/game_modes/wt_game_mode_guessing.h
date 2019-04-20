@@ -28,10 +28,8 @@ public:
         m_active_word( "BlAcK" ),
         m_active_word_guessed(""),
         m_active_word_scrambled(""),
-        m_wordlist()
+        m_wordlist("short.txt")
     {
-        m_active_word_guessed   = m_active_word;
-        m_active_word_scrambled = scramble( m_active_word );
     }
     ~WtGameModeGuessing()
     {
@@ -40,7 +38,7 @@ public:
     /**************************
      *
      *************************/
-    virtual std::string get_title()
+    std::string get_title()
     {
         return WtL10n_tr("Guess it!");
     }
@@ -48,17 +46,15 @@ public:
     /**************************
      * 
      *************************/
-    virtual void init_game( WtBoard&, WtPlayer& )
+    void init_game( WtBoard&, WtPlayer& )
     {
-        m_active_word           = "BlAcK";
-        m_active_word_guessed   = m_active_word;
-        m_active_word_scrambled = scramble( m_active_word );
+        get_next_word();
     }
 
     /**************************
      *
      *************************/
-    virtual WtGameModeState eval_board( WtBoard& board, WtPlayer& player )
+    WtGameModeState eval_board( WtBoard& board, WtPlayer& player )
     {
         WtGameModeState gs( false,
                             WtGridAnimation::no_animation() );
@@ -109,7 +105,7 @@ public:
     /**************************
      *
      *************************/
-    virtual char next_letter()
+    char next_letter()
     {
         char next = '#';
         if ( ! m_active_word_guessed.empty() )
@@ -126,7 +122,7 @@ public:
     /**************************
      *
      *************************/
-    virtual std::string get_hint()
+    std::string get_hint()
     {
         return std::string( WtL10n_tr("Guess the word: ") ).append(m_active_word_scrambled);
     }
@@ -139,11 +135,11 @@ private:
     /**************************
      *
      *************************/
-    virtual void get_next_word()
+    void get_next_word()
     {
         size_t idx = 0;
         uint8_t buf;
-        const std::vector<std::string>& guess_list = m_wordlist.get_wordlist_by_name("short list");
+        const std::vector<std::string>& guess_list = m_wordlist;
         if ( WtRandom::getrandom( &buf, 1 ) <= 1 )
         {
             idx = (buf % guess_list.size());
@@ -156,7 +152,7 @@ private:
     /**************************
      *
      *************************/
-    virtual void remove_letter( std::string& word, char letter )
+    void remove_letter( std::string& word, char letter )
     {
         size_t first_idx = word.find_first_of( letter );
         if ( first_idx != std::string::npos )
@@ -168,7 +164,7 @@ private:
     /**************************
      *
      *************************/
-    virtual std::string scramble( std::string word )
+    std::string scramble( std::string word )
     {
         std::string word_copy = word;
         std::string result = std::string("");

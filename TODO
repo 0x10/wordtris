@@ -43,8 +43,6 @@
 # - Support Non-Ascii characters in Translations
 # - Settings/Storage Architectures seems pretty weird
 #       - review or documentation!
-# - load only used wordlists
-# - wordlists shall respond to language change
 #
 # (others)
 # - android:

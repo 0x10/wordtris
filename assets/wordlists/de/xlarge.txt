@@ -108,6 +108,7 @@ mit
 Mix
 Mol
 Mut
+nah
 neu
 nie
 nix
