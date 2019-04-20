@@ -105,7 +105,6 @@ HEADERS += \
     ../src/global.h \
     ../src/wt_active_letter.h \
     ../src/wt_animations.h \
-    ../src/wt_backend_policy_if.h \
     ../src/wt_backend_select.h \
     ../src/wt_basic_types.h \
     ../src/wt_board.h \
