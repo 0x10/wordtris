@@ -10,6 +10,9 @@
 # - more proper balanced game modes
 #       - some are noted at whiteboard but need to be evaluated
 #       - AND: others are need to be made
+#       - ideas:
+#           - labyrinth game mode: navigate a symbol until bottom and if success level up else game over...
+#           - flappy bird mode: similar to labyrinth but with gates similar to flappy bird
 # - Audio-Support
 #       - background music
 #       - on stone 2 board commit sound
@@ -26,6 +29,7 @@
 #       SDL_StartTextInput();
 #       #endif /* __ANDROID__ */
 # - show pogress until next level and current level
+# - bonus points for double / triple / quad / etc.
 #
 # (design)
 # - Logo Design and Naming
@@ -39,6 +43,7 @@
 #       - add word wrap on text boxes instead of char wrap
 #       - support non 16:9 devices
 # - Support Non-Ascii characters in Translations
+#       - use ttf for text font -> reduced complexity for asset storage
 # - Settings/Storage Architectures seems pretty weird
 #       - review or documentation!
 #
@@ -47,3 +52,5 @@
 #       - (config management) release build for apk incl. signed certificates
 #       - (business) eval income model: either ad based vs by app store payment vs freemium
 # - version tracking
+# - git optimization: store assets somewhere else?
+#       - e.g. on the deadlock server within an asset pack and refer within git to a specific sha/version/whatever
