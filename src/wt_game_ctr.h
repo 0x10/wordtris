@@ -535,6 +535,13 @@ private:
         pause_animation.push_back( step_one );
     }
 
+    /**************************
+     *
+     *************************/
+    uint8_t get_current_update_counter( WtPlayer& player )
+    {
+        return ( player.get_current_level() < 12 ?  48 - (player.get_current_level()*4) : 4 );
+    }
 public:
     /**************************
      *
@@ -601,7 +608,7 @@ public:
                 m_active.init( m_active_mode->next_letter() );
             }
 
-            uint8_t countdown = 48 - (m_player.get_current_level()*4);
+            uint8_t countdown = get_current_update_counter( m_player );
             while ( !m_game_over && !m_shall_quit )
             {
                 WtTime::TimePoint before = WtTime::get_time();
@@ -613,11 +620,13 @@ public:
                     {
                         m_game_over = update_game();
 
-                        countdown = 48 - (m_player.get_current_level()*4);
-                    }         
+                        countdown = get_current_update_counter( m_player );
+                    }
 
                     update_window();
-                    countdown--;
+
+                    if ( countdown > 0 )
+                        countdown--;
                 }
                 else
                 {
