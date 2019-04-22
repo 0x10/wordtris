@@ -319,6 +319,7 @@ private:
         AAsset_read(file, buffer.data(), fileLength);
         // For safety you can add a 0 terminating character at the end of your file ...
         buffer[fileLength] = '\0';
+        AAsset_close( file );
     }
 #else
     {
