@@ -122,6 +122,14 @@ private: // no copy allowed
         }
     }
 
+    /**************************
+     * signal
+     *************************/
+    void menu_entered()
+    {
+        m_supporting_grid_btn.set_checked( STORAGE.get_settings().show_support_grid );
+        m_next_stone_btn.set_checked( STORAGE.get_settings().show_next_stone );
+    }
 
 private:
     WtMenuHelp m_help;

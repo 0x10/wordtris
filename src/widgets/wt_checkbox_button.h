@@ -59,6 +59,7 @@ public:
     void set_checked( bool new_checked )
     {
         m_checked = new_checked;
+        m_button.set_image( ( m_checked ? m_checkbox_btn_checked : m_checkbox_btn_unchecked ) );
     }
 
 
