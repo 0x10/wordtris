@@ -21,7 +21,12 @@
 #       - bomb animation
 # - multiplayer? coop vs pubg
 #       - possible P2P connection via WebRTC
-#          https://developer.mozilla.org/en-US/docs/Games/Techniques/WebRTC_data_channels 
+#          https://developer.mozilla.org/en-US/docs/Games/Techniques/WebRTC_data_channels
+#       - conceptual sketch:
+#           player sets up profile (local) -> app generates a uid and shares with server or gets the uid from server
+#           if player wants to play multiplayer it connects with its unique id and the server marks the user as online
+#           player is able to search for other players by name
+#           if player chose other player -> webrtc channel open
 # - supporting story
 # - ios support
 # - highscore player name entry
