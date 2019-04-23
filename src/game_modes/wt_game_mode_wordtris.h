@@ -37,9 +37,6 @@ public:
         m_next_letter(generate_letter())
     {
         m_wordlist.load_from_list( "xlarge.txt", WtWordList::eToUpper );
-        std::cout << "words = " << m_wordlist.size() << std::endl;
-
-
     }
     virtual ~WtGameModeWordtris()
     {
@@ -59,6 +56,8 @@ public:
     virtual void init_game( WtBoard& board, WtPlayer& player )
     {
         (void)player; //currently not used
+
+        std::cout << "words = " << m_wordlist.size() << std::endl;
 
         for( size_t r_idx = 0; r_idx < WtBoard::row_count/2; r_idx++ )
             for( size_t c_idx = 0; c_idx < WtBoard::col_count; c_idx++ )
