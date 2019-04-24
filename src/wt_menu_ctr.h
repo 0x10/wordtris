@@ -37,7 +37,7 @@ public:
     }
 private:
     WtMenuCtr() :
-        WtMenuIf( 0x100, "bg_menu_settings.bmp" ),
+        WtMenuIf( 0x100 ),
         m_drag_start_pos(0,0),
         m_was_drag(false),
         m_drag_button_id(0),

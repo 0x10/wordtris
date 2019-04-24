@@ -50,33 +50,6 @@ public:
     /**************************
      *
      *************************/
-    void draw_active_letter( const WtLetter& active,
-                             const bool show_support_grid,
-                             const WtBoard& board )
-    {
-        DrawingPolicy::draw_at_grid( WtBoard::row_count - active.current_row(),
-                                     active.current_column(),
-                                     active.current_value() );
-
-        if ( show_support_grid )
-        {
-            for ( uint8_t r_idx = 0; r_idx < WtBoard::row_count; r_idx++ )
-            {
-                if ( ( r_idx != active.current_row() )
-                    &&
-                     ( ! board.cell_occupied( r_idx, active.current_column() ) ) )
-                {
-                    DrawingPolicy::draw_custom_cell_bg( WtBoard::row_count - r_idx, 
-                                                        active.current_column(), 
-                                                        "grid_font_helper.bmp" );
-                }
-            }
-        }
-    }
-
-    /**************************
-     *
-     *************************/
     void draw_player_stat( const WtPlayer& player )
     {
         std::string player_stat = "";
@@ -93,13 +66,35 @@ public:
     /**************************
      *
      *************************/
-    void draw_board( const WtBoard& board )
+    void draw_board( const WtBoard& board, 
+                     const WtLetter& active,
+                     const bool show_support_grid )
     {
         for( uint8_t i=0 ; i < WtBoard::row_count; i++ )
+        {
             for( uint8_t j=0; j < WtBoard::col_count; j++ )
             {
-                DrawingPolicy::draw_at_grid( WtBoard::row_count-i, j, board.get_cell( i, j ) );
+                char val = board.get_cell( i, j );
+                if ( val != WtBoard::empty_cell )
+                {
+                    DrawingPolicy::draw_at_grid( WtBoard::row_count-i, j, val );
+                }
+                else
+                {
+                    std::string cell_background = "grid.bmp";
+                    if ( ( show_support_grid ) && ( i != active.current_row() ) && ( j == active.current_column() ) )
+                    {
+                        cell_background = "grid_font_helper.bmp";
+                    }
+
+                    DrawingPolicy::draw_custom_cell_bg( WtBoard::row_count-i, j, cell_background );
+                }
             }
+        }
+
+        DrawingPolicy::draw_at_grid( WtBoard::row_count - active.current_row(),
+                                     active.current_column(),
+                                     active.current_value() );
     }
 
 

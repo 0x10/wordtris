@@ -36,7 +36,7 @@ private:
 
 public:
     WtMenuSettings() :
-        WtMenuIf( 0x300, "bg_menu_settings.bmp" ),
+        WtMenuIf( 0x300 ),
         m_current_diff(0),
         m_leave_btn( WtCoord( 105, 800 ), 
                      WtDim(100, 100), 

@@ -30,7 +30,7 @@
 class WtMenuIf
 {
 public:
-    WtMenuIf( uint16_t menu_id=0xFF00, std::string bg_img="bg_menu.bmp", bool fade=true ) :
+    WtMenuIf( uint16_t menu_id=0xFF00, std::string bg_img="bg.bmp", bool fade=true ) :
         m_menu_id( menu_id ),
         m_shall_leave( false ),
         m_bg( bg_img ),

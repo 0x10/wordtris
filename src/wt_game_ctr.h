@@ -89,11 +89,10 @@ private:
      *************************/
     void draw()
     {
-        ACTIVE_WINDOW.draw_board( m_board );
+        ACTIVE_WINDOW.draw_board( m_board, 
+                                  m_active,
+                                  STORAGE.get_settings().show_support_grid );
         ACTIVE_WINDOW.draw_player_stat( m_player );
-        ACTIVE_WINDOW.draw_active_letter( m_active,
-                                          STORAGE.get_settings().show_support_grid,
-                                          m_board );
         ACTIVE_WINDOW.draw_button( m_pause_btn );
         ACTIVE_WINDOW.draw_hint( m_active_mode->get_hint(), 
                                  m_active_mode->letter_after_next(), 

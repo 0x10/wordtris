@@ -22,7 +22,7 @@ class WtMenuHighscores : public WtMenuIf
 {
 public:
     WtMenuHighscores() :
-        WtMenuIf( 0x400, "bg_menu_settings.bmp" ),
+        WtMenuIf( 0x400 ),
         m_leave_btn( WtCoord( 105, 800 ), 
                      WtDim(100, 100), 
                      "back_btn.bmp",
