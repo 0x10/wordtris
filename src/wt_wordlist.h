@@ -158,7 +158,7 @@ public:
     /**************************************
      *
      *************************************/
-    std::vector<std::string> get_contained_words( std::string sequence )
+    std::vector<std::string> get_contained_words( const std::string sequence, const size_t min_length )
     {
         std::vector<std::string> found_words;
         for( size_t idx = 0; idx<sequence.length(); idx++ )
@@ -171,7 +171,7 @@ public:
         }
         for( size_t w_idx = 0; w_idx < m_words.size(); w_idx++ )
         {
-            if ( m_words[w_idx].search_found() )
+            if ( m_words[w_idx].search_found() && ( m_words[w_idx].as_string().length() > min_length ) )
             {
                 found_words.push_back( m_words[w_idx].as_string() );
             }

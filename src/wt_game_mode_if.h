@@ -115,7 +115,7 @@ public:
     /**************************
      *
      *************************/
-    virtual wt_difficulty get_difficulty()
+    virtual wt_difficulty get_difficulty() const
     {
         return m_current_diff;
     }

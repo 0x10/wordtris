@@ -27,8 +27,6 @@
 
 class WtGameModeWordtris : public WtGameModeIf
 {
-private:
-    static const size_t min_word_length = 3;
 public:
     WtGameModeWordtris() :
         WtGameModeIf( "WordtrisClassic" ),
@@ -85,9 +83,9 @@ public:
                 std::vector<std::string> sequences = split( row_str );
                 for( size_t s_idx = 0; s_idx < sequences.size(); s_idx++ )
                 {
-                    if ( sequences[s_idx].length() >= min_word_length )
+                    if ( sequences[s_idx].length() >= min_word_length() )
                     {
-                        std::string word = contains_word( sequences[s_idx] );
+                        std::string word = contains_word( sequences[s_idx], min_word_length() );
                         if ( !word.empty() ) 
                         {
                             {
@@ -121,9 +119,9 @@ public:
                 std::string trimmed = col_str;
                 trim( trimmed );
 
-                if ( trimmed.length() >= min_word_length )
+                if ( trimmed.length() >= min_word_length() )
                 {
-                    std::string word = contains_word( trimmed );
+                    std::string word = contains_word( trimmed, min_word_length() );
                     if ( !word.empty() ) 
                     {
                         {
@@ -178,7 +176,16 @@ public:
      *************************/
     virtual std::string get_hint()
     {
-        return WtL10n_tr("try to build 3+ letter words!");
+        switch (get_difficulty())
+        {
+            default:
+            case wt_difficulty_EASY:
+                return WtL10n_tr("try to build 3+ letter words!");
+            case wt_difficulty_MEDIUM:
+                return WtL10n_tr("try to build 4+ letter words!");
+            case wt_difficulty_HARD:
+                return WtL10n_tr("try to build 5+ letter words!");
+        }
     }
 
 
@@ -390,7 +397,7 @@ private:
     /**************************
      *
      *************************/
-    std::string contains_word( std::string sequence )
+    std::string contains_word( const std::string sequence, const size_t min_length )
     {
         std::string result = "";
 
@@ -407,7 +414,7 @@ private:
         // WtWordList::search_for_word( sequence );
         // length is taken by sequence.length() within search
         // also language selection
-        std::vector<std::string> found_words = m_wordlist.get_contained_words( sequence );
+        std::vector<std::string> found_words = m_wordlist.get_contained_words( sequence, min_length );
 
         if ( found_words.size() > 0 )
         {
@@ -451,6 +458,24 @@ private:
         return WtRandom::get_random_letter_of_weight_seq( std::string(m_letters).append("?*"),
                                                           distribution ); 
     }
+
+    /**************************
+     *
+     *************************/
+    size_t min_word_length() const
+    {
+        switch (get_difficulty())
+        {
+            default:
+            case wt_difficulty_EASY:
+                return 3;
+            case wt_difficulty_MEDIUM:
+                return 4;
+            case wt_difficulty_HARD:
+                return 5;
+        }
+    }
+
 private:
    const std::string m_letters;
    WtWordList        m_wordlist;
