@@ -62,7 +62,7 @@ private:
                               WT_BIND_EVENT_HANDLER( WtGameCtr::notify_right ),
                               WT_BIND_EVENT_HANDLER( WtGameCtr::notify_drop ) ),
         m_pause_btn( WtCoord( 393, 32 ),
-                     WtDim( 64, 64 ),
+                     WtDim( 65, 65 ),
                      "pause_btn.bmp",
                      WT_BIND_EVENT_HANDLER( WtGameCtr::notify_pause ) ),
         m_pause_end_animation()

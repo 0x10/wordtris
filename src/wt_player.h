@@ -38,11 +38,15 @@ public:
     /**************************
      *
      *************************/
-    void word_solved( size_t length=1 )
+    void word_solved( size_t length=1, uint32_t base_points=PTS_P_WORD )
     {
         m_words ++;
-        m_points += (static_cast<uint32_t>(length * PTS_P_WORD) * static_cast<uint32_t>(m_level));
-        m_level = 1 + static_cast<uint8_t>((m_words - 1) / 10);
+
+        m_points += (static_cast<uint32_t>(length * base_points) * static_cast<uint32_t>(m_level));
+
+        uint8_t new_level = 1 + static_cast<uint8_t>(m_words / 10);
+        if ( new_level > m_level )
+            m_level = new_level;
     }
 
     /**************************
@@ -51,8 +55,13 @@ public:
     void row_cleared( uint32_t new_points )
     {
         m_words ++;
+
         m_points += new_points * m_level;
+
         m_level = 1 + static_cast<uint8_t>((m_words - 1) / 10);
+        uint8_t new_level = 1 + static_cast<uint8_t>(m_words / 10);
+        if ( new_level > m_level )
+            m_level = new_level;
     }
 
     /**************************

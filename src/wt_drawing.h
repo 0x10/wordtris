@@ -52,14 +52,20 @@ public:
      *************************/
     void draw_player_stat( const WtPlayer& player )
     {
-        std::string player_stat = "";
-        player_stat.append( std::to_string( player.get_points() ) );
+        std::string player_stat = "Lvl ";
+        player_stat.append( std::to_string( player.get_current_level() ) );
+        player_stat.append( " W " );
+        player_stat.append( std::to_string( static_cast<size_t>(player.get_solved_word_count()) ) );
+        std::string player_scores = "Pts ";
+        player_scores.append( std::to_string( player.get_points() ) );
 
         DrawingPolicy::draw_image( WtCoord( 79, 32 ),
                                    WtDim( 256, 65 ),
                                    "label_bg.bmp" );
-        DrawingPolicy::draw_text( WtCoord( 90, 50 ),
+        DrawingPolicy::draw_text( WtCoord( 90, 35 ),
                                   player_stat );
+        DrawingPolicy::draw_text( WtCoord( 90, 65 ),
+                                  player_scores );
     }
 
 
@@ -105,7 +111,7 @@ public:
     {
         if ( show_letter_after_next )
         {
-            DrawingPolicy::draw_text( WtCoord( 270, 45 ),
+            DrawingPolicy::draw_text( WtCoord( 270, 46 ),
                                       std::string(1, letter_after_next ),
                                       "grid" );
         }
