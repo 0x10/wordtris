@@ -37,10 +37,14 @@ public:
     /**************************
      *
      *************************/
-    static std::string read_string( std::ifstream& inf )
+    static std::string read_string( std::ifstream& inf, bool& was_eof )
     {
-        char input[0xFF];
-        inf.getline( input, 0xFF, '\0' );
+        char input[0xFF] = {0};
+
+        was_eof = ( was_eof || inf.eof() );
+        if ( ! was_eof )
+            inf.getline( input, 0xFF, '\0' );
+
         return std::string(input);
     }
 
@@ -64,14 +68,16 @@ public:
      *
      *************************/
     template<typename unsignedtype>
-    static unsignedtype read_unsigned( std::ifstream& inf )
+    static unsignedtype read_unsigned( std::ifstream& inf, bool& was_eof )
     {
         union {
             unsignedtype uint;
             char   bytes[sizeof(unsignedtype)];
         } size_t_conv;
 
-        inf.read( size_t_conv.bytes, sizeof(unsignedtype) );
+        was_eof = ( was_eof || inf.eof() );
+        if ( ! was_eof )
+            inf.read( size_t_conv.bytes, sizeof(unsignedtype) );
 
         return size_t_conv.uint;
     }
@@ -95,10 +101,13 @@ public:
     /**************************
      *
      *************************/
-    static bool read_boolean( std::ifstream& inf )
+    static bool read_boolean( std::ifstream& inf, bool& was_eof )
     {
-        char bflag;
-        inf.read( &bflag, 1 );
+        char bflag='0';
+
+        was_eof = ( was_eof || inf.eof() );
+        if ( ! was_eof )
+            inf.read( &bflag, 1 );
 
         return ( bflag == '1' );
     }

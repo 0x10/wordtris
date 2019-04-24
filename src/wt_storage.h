@@ -69,7 +69,7 @@ private:
     typedef std::map< std::string, std::vector<uint8_t> > SimpleFileCache;
     // least significant word is fixed magic and most sig. word
     // may represent file structure
-    static           const uint32_t m_header_magic = 0x0002ADDE;
+    static           const uint32_t m_header_magic = 0x0003ADDE;
     static constexpr const char*    m_fname        = "wordtris.dat";
 
 // singleton definition
@@ -237,6 +237,8 @@ private:
             WtStorable::write_unsigned<uint32_t>( output_file, m_storage_copy.header.magic );
 
             m_storage_copy.data.settings.write( output_file );
+
+            WtStorable::write_unsigned<size_t>( output_file, m_storage_copy.data.highscores.size() );
             for(size_t idx = 0; idx < m_storage_copy.data.highscores.size(); idx++ )
             {
                 m_storage_copy.data.highscores[idx].write( output_file );
@@ -268,30 +270,44 @@ private:
         std::ifstream input_file( fname, std::ios::binary );
         if ( input_file.is_open() )
         {
-            m_storage_copy.header.magic = WtStorable::read_unsigned<uint32_t>( input_file );
+            bool was_eof = false;
+            m_storage_copy.header.magic = WtStorable::read_unsigned<uint32_t>( input_file, was_eof );
 
             //if ( (! input_file.eof()) && (!input_file.fail()) ) in case latter wont work
-            if ( static_cast<size_t>(input_file.gcount()) == sizeof(m_storage_copy.header) )
+            if ( !was_eof && ( static_cast<size_t>(input_file.gcount()) == sizeof(m_storage_copy.header) ) )
             {
                 // check binary compatibility
                 if ( m_storage_copy.header.magic == m_header_magic )
                 {
                     std::cout << "read: header matches\n";
 
-                    m_storage_copy.data.settings.read( input_file );
-
-                    m_storage_copy.data.highscores.clear();
-                    while( !input_file.eof() )
+                    if ( m_storage_copy.data.settings.read( input_file ) )
                     {
-                        WtScoreEntry tmp;
-                        if ( tmp.read( input_file ) )
-                            m_storage_copy.data.highscores.push_back( tmp );
-                    }
+                        m_storage_copy.data.highscores.clear();
+                        was_eof = false;
+                        size_t highscore_entries = WtStorable::read_unsigned<size_t>( input_file, was_eof );
+                        if ( ! was_eof )
+                        {
+                            size_t idx = 0;
+                            for ( ; idx < highscore_entries; idx++ )
+                            {
+                                WtScoreEntry tmp;
+                                if ( tmp.read( input_file ) )
+                                    m_storage_copy.data.highscores.push_back( tmp );
+                                else
+                                    break;
+                            }
 
-                    // check read size
-                    // todo..
-                    {
-                        success = true;
+                            // check read size
+                            if ( idx == highscore_entries )
+                            {
+                                success = true;
+                            }
+                        }
+                        else
+                        {
+                            success = true;
+                        }
                     }
                 }
             }

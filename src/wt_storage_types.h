@@ -64,14 +64,18 @@ public:
     /**************************
      *
      *************************/
-    void read( std::ifstream& inf )
+    bool read( std::ifstream& inf )
     {
-        language = WtStorable::read_string( inf );
-        game_mode = WtStorable::read_string( inf );
-        difficulty = WtStorable::read_unsigned<wt_difficulty>( inf );
-        active_theme = WtStorable::read_string( inf );
-        show_support_grid = WtStorable::read_boolean( inf );
-        show_next_stone = WtStorable::read_boolean( inf );
+        bool was_eof = false;
+
+        language = WtStorable::read_string( inf, was_eof );
+        game_mode = WtStorable::read_string( inf, was_eof );
+        difficulty = WtStorable::read_unsigned<wt_difficulty>( inf, was_eof );
+        active_theme = WtStorable::read_string( inf, was_eof );
+        show_support_grid = WtStorable::read_boolean( inf, was_eof );
+        show_next_stone = WtStorable::read_boolean( inf, was_eof );
+
+        return ( ! was_eof );
     }
 };
 
@@ -114,26 +118,63 @@ public:
      *************************/
     bool read( std::ifstream& inf )
     {
-        if (inf.eof()) return false;
+        bool was_eof = false;
 
-        player = WtStorable::read_string( inf );
+        player = WtStorable::read_string( inf, was_eof );
+        game_mode = WtStorable::read_string( inf, was_eof );
+        score = WtStorable::read_unsigned<size_t>( inf, was_eof );
+        level = WtStorable::read_unsigned<size_t>( inf, was_eof );
 
-        if (inf.eof()) return false;
-
-        game_mode = WtStorable::read_string( inf );
-
-        if (inf.eof()) return false;
-        
-        score = WtStorable::read_unsigned<size_t>( inf );
-
-        if (inf.eof()) return false;
-        
-        level = WtStorable::read_unsigned<size_t>( inf );
-
-        return true;
+        return ( ! was_eof );
     }
 };
 
 typedef std::vector<WtScoreEntry> WtHighscores;
+
+/**************************
+ *
+ *************************/
+class WtAchievement
+{
+public:
+    WtAchievement( std::string mode = "",
+                   std::string achievement_name = "",
+                   bool        reached = false ) :
+        game_mode( mode ),
+        achievement( achievement_name ),
+        acomplished( reached )
+    {}
+    virtual ~WtAchievement() {}
+
+    std::string game_mode;
+    std::string achievement;
+    bool        acomplished;
+
+    /**************************
+     *
+     *************************/
+    void write( std::ofstream& of )
+    {
+        WtStorable::write_string( of, game_mode );
+        WtStorable::write_string( of, achievement );
+        WtStorable::write_boolean( of, acomplished );
+    }
+
+    /**************************
+     *
+     *************************/
+    bool read( std::ifstream& inf )
+    {
+        bool was_eof = false;
+
+        game_mode = WtStorable::read_string( inf, was_eof );
+        achievement = WtStorable::read_string( inf, was_eof );
+        acomplished = WtStorable::read_boolean( inf, was_eof );
+
+        return ( ! was_eof );
+    }
+};
+
+typedef std::vector<WtAchievement> WtAchievements;
 
 #endif /* _WT_STORAGE_TYPES_H */
