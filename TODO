@@ -7,6 +7,7 @@
 # - Tri-State Button Animation (may be more complex and may be dropped due to that)
 # - Game Modes need a intro menu
 #       - intro menu may be not game mode specific
+#       - intro as popup directly after game mode start
 # - more proper balanced game modes
 #       - some are noted at whiteboard but need to be evaluated
 #       - AND: others are need to be made
@@ -36,6 +37,11 @@
 # - show pogress until next level and current level
 # - bonus points for double / triple / quad / etc.
 #       highlight bonus with animation
+# - achievements per game mode;
+#   for classic:
+#       - get two words in a row -> up to 5 words
+#       - get 100k points -> up to 1mio
+#       - reach level 12
 #
 # (design)
 # - Logo Design and Naming
