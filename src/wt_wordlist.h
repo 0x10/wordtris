@@ -171,7 +171,7 @@ public:
         }
         for( size_t w_idx = 0; w_idx < m_words.size(); w_idx++ )
         {
-            if ( m_words[w_idx].search_found() && ( m_words[w_idx].as_string().length() > min_length ) )
+            if ( m_words[w_idx].search_found() && ( m_words[w_idx].as_string().length() >= min_length ) )
             {
                 found_words.push_back( m_words[w_idx].as_string() );
             }

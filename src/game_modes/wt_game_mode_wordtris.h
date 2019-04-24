@@ -56,6 +56,7 @@ public:
         (void)player; //currently not used
 
         std::cout << "words = " << m_wordlist.size() << std::endl;
+        std::cout << "min length = " << min_word_length() << std::endl;
 
         for( size_t r_idx = 0; r_idx < WtBoard::row_count/2; r_idx++ )
             for( size_t c_idx = 0; c_idx < WtBoard::col_count; c_idx++ )
@@ -73,6 +74,7 @@ public:
         WtGameModeState gs( false,
                             WtGridAnimation::no_animation() );
         bool something_found = false;
+        size_t found_count = 0;
 
         do
         {
@@ -102,10 +104,11 @@ public:
                                 blink.push_back( step );
                             }
                             gs.animation = blink;
-                            player.word_solved( word.length() );
+                            player.word_solved( word.length() * (found_count + 1) );
                             erase_from_row( r_idx, row_str, word, board );
                             something_found = true;
-                            
+                            found_count++;
+
                             break;
                         }
                     }
@@ -138,9 +141,10 @@ public:
                             blink.push_back( step );
                         }
                         gs.animation = blink;
-                        player.word_solved( word.length() );
+                        player.word_solved( word.length() * (found_count + 1) );
                         erase_from_col( c_idx, col_str, word, board );
                         something_found = true;
+                        found_count++;
 
                         break;
                     }
