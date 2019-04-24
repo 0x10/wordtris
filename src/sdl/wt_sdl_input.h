@@ -54,7 +54,7 @@ public:
                     if ('s'==sdl_event.key.keysym.sym) event.key = wt_control_DROP;
                     if ('p'==sdl_event.key.keysym.sym) event.key = wt_control_PAUSE;
                     if ('q'==sdl_event.key.keysym.sym) event.key = wt_control_QUIT;
-                    if (SDLK_AC_BACK == sdl_event.key.keysym.sym) event.key = wt_control_QUIT;
+                    if (SDLK_AC_BACK == sdl_event.key.keysym.sym) event.key = wt_control_PAUSE;
                     break;
 
                 case SDL_FINGERDOWN:

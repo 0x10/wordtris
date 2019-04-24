@@ -593,6 +593,7 @@ public:
             m_shall_restart = false;
             m_game_over = false;
             m_shall_quit = false;
+            m_pause = false;
 
             m_player.reset();
             m_board.init();
