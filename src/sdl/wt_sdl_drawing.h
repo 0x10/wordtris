@@ -26,7 +26,6 @@
 #include "wt_sdl_font.h"
 #include "wt_sdl_config.h"
 
-
 #define SDL_WINDOW WINDOW( WtDrawingPolicySdl )
 
 SDL_Window*   sdl_cleanup_window=NULL;
@@ -70,6 +69,18 @@ protected:
             exit(-1);
         }
         atexit(cleanup_sdl);
+
+
+        SDL_DisplayMode dm;
+
+        if (SDL_GetCurrentDisplayMode(0, &dm) != 0)
+        {
+             SDL_Log("SDL_GetDesktopDisplayMode failed: %s", SDL_GetError());
+             exit(-1);
+        }
+
+        std::cout << "const w/h = (" << SDL_WIDTH << "," << SDL_HEIGHT << ")" << std::endl;
+        std::cout << "dm w/h = (" << dm.w << "," << dm.h << ")" << std::endl;
 
         if (SDL_CreateWindowAndRenderer(SDL_WIDTH, SDL_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS, &m_window, &m_renderer)) {
             std::cerr << "Failed to create window and renderer: " << SDL_GetError() << std::endl;
