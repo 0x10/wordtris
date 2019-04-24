@@ -34,7 +34,6 @@
 #       #ifdef __ANDROID__
 #       SDL_StartTextInput();
 #       #endif /* __ANDROID__ */
-# - show pogress until next level and current level
 # - bonus points for double / triple / quad / etc.
 #       highlight bonus with animation
 # - achievements per game mode;
