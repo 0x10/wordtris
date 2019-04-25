@@ -16,14 +16,15 @@
 #ifndef _WT_MENU_CTR_H_
 #define _WT_MENU_CTR_H_
 
-#include "wt_menu_if.h"
+#include "wt_view_if.h"
+#include "wt_game_ctr.h"
 #include "menus/wt_menu_settings.h"
 #include "menus/wt_menu_highscores.h"
-#include "menus/wt_menu_pause.h"
 #include "widgets/wt_horizontal_carousel.h"
 
+
 #define MENU_CTR  WtMenuCtr::instance()
-class WtMenuCtr : public WtMenuIf
+class WtMenuCtr : public WtViewIf
 {
 // singleton definition
 public:
@@ -37,13 +38,13 @@ public:
     }
 private:
     WtMenuCtr() :
-        WtMenuIf( 0x100 ),
+        WtViewIf(),
         m_drag_start_pos(0,0),
         m_was_drag(false),
         m_drag_button_id(0),
         m_settings(),
-        m_pause_menu(),
         m_scores(),
+        m_game_ctr(),
         m_score_btn( WtCoord( 105, 800 ), 
                      WtDim( 100, 100 ), 
                      "score_btn.bmp",
@@ -58,6 +59,12 @@ private:
                           GAME_MODE_CTR.mode_idx_from_string( STORAGE.get_settings().game_mode ),
                           WT_BIND_EVENT_HANDLER_1( WtMenuCtr::game_mode_selected ) )
     {
+        WtSettings settings = STORAGE.get_settings();
+        ACTIVE_WINDOW.set_theme( settings.active_theme );
+        WtL10n::set_language( settings.language );
+
+        m_game_ctr.set_game_mode( GAME_MODE_CTR.mode_from_string( settings.game_mode ) );
+
         add_button( m_score_btn );
         add_button( m_setting_btn );
         add_horizontal_carousel( m_game_selection );
@@ -65,25 +72,6 @@ private:
     WtMenuCtr( const WtMenuCtr& ); 
     WtMenuCtr & operator = (const WtMenuCtr &);
 
-public:
-    /**************************
-     *
-     *************************/
-    WtMenuIf* get_pause_menu()
-    {
-        return &m_pause_menu;
-    }
-
-    /**************************
-     *
-     *************************/
-    virtual void listen( WtSettingsChangeObserver* listener )
-    {
-        WtMenuIf::listen( listener );
-        m_settings.listen( listener );
-        m_pause_menu.listen( listener );
-    }
-private:
     /**************************
      *
      *************************/
@@ -106,11 +94,17 @@ private:
     void game_mode_selected( size_t idx )
     {
         std::cout << "selected = " << idx << std::endl;
-        for( size_t l_idx = 0; l_idx < get_listener().size(); l_idx++ )
+        WtGameModeIf* mode = GAME_MODE_CTR.get_available_modes()[idx];
+        WtSettings settings = STORAGE.get_settings();
+        
+        if ( settings.game_mode != mode->get_id_string() )
         {
-            get_listener()[l_idx]->notify_game_mode_changed( GAME_MODE_CTR.get_available_modes()[idx] );
+            settings.game_mode = mode->get_id_string();
+            STORAGE.store_settings( settings );
         }
-        leave();
+
+        m_game_ctr.set_game_mode( mode );
+        enter_child_menu( m_game_ctr );
     }
 
 
@@ -121,8 +115,8 @@ private:
     uint16_t         m_drag_button_id;
 
     WtMenuSettings   m_settings;
-    WtMenuPause      m_pause_menu;
     WtMenuHighscores m_scores;
+    WtGameCtr        m_game_ctr;
 
     WtButton         m_score_btn;
     WtButton         m_setting_btn;

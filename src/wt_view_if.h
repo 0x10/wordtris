@@ -1,6 +1,6 @@
 /*!*****************************************************************************
- * @file wt_menu_if.h
- * @brief interface declaration for menu views
+ * @file wt_view_if.h
+ * @brief interface declaration for views
  *
  * This file was developed as part of wordtris
  *
@@ -13,95 +13,99 @@
  *            without written approval of Christian Kranz
  *
  ******************************************************************************/
-#ifndef _WT_MENU_IF_H_
-#define _WT_MENU_IF_H_
+#ifndef _WT_VIEW_IF_H_
+#define _WT_VIEW_IF_H_
 
 #include "widgets/wt_button.h"
 #include "widgets/wt_tristate_button.h"
 #include "widgets/wt_horizontal_carousel.h"
 
-#include "wt_settings_observer_if.h"
 #include "wt_input.h"
+#include "wt_drawing.h"
+#include "wt_utils.h"
 
-#define MENU_BUTTON_ID( id )    (this->get_id() | id)
-#define TO_BUTTON_ID( id )      (0x00FF & id)
-#define INVALID_BUTTON_ID       (0xFF)
 
-class WtMenuIf
+class WtViewIf
 {
 public:
-    WtMenuIf( uint16_t menu_id=0xFF00, std::string bg_img="bg.bmp", bool fade=true ) :
-        m_menu_id( menu_id ),
+    WtViewIf( std::string bg_img="bg.bmp", 
+              bool fade=true, 
+              WtTime::TimeType refresh_rate=WtTime::TimeType(0) ) :
         m_shall_leave( false ),
+        m_shall_exit( false ),
         m_bg( bg_img ),
         m_buttons(),
         m_carousels(),
-        m_change_listener(),
-        m_fade( fade )
+        m_fade( fade ),
+        m_refresh_sleep_time( refresh_rate )
     {
     }
-    virtual ~WtMenuIf()
+    virtual ~WtViewIf()
     {
-    }
-
-    /**************************
-     *
-     *************************/
-    virtual void listen( WtSettingsChangeObserver* listener )
-    {
-        m_change_listener.push_back( listener );
     }
 
     /**************************
      *
      *************************/
-    void show()
+    bool show()
     {
-        open_menu();
+        open_view();
 
         while( !m_shall_leave )
         {
+            WtTime::TimePoint before = WtTime::get_time();
+
             ACTIVE_INPUT.read();
 
-            ACTIVE_WINDOW.clr();
+            if ( ! m_shall_leave )
+            {
+                show_self();
 
-            show_self();
-
-            menu_update();
-
-            ACTIVE_WINDOW.update();
+                if ( m_refresh_sleep_time > WtTime::TimeType(0) )
+                {
+                    WtTime::TimePoint after = WtTime::get_time();
+                    WtTime::TimeType remaining = m_refresh_sleep_time - WtTime::get_time_elapsed( before, after );
+                    if ( remaining > WtTime::TimeType(0) )
+                    {
+                        WtTime::sleep( remaining );
+                    }
+                }
+            }
         }
 
-        close_menu();
-    }
+        close_view();
 
-    /**************************
-     *
-     *************************/
-    void quit()
-    {
-        leave();
+        return m_shall_exit;
     }
 
 protected:
     /**************************
+     *
+     *************************/
+    void exit()
+    {
+        m_shall_exit = true;
+        leave();
+    }
+
+    /**************************
      * signal
      *************************/
-    virtual void menu_entered()
+    virtual void entered_view()
     {
     }
 
     /**************************
      * signal
      *************************/
-    virtual void menu_left()
+    virtual void left_view()
     {
     }
 
     /**************************
      * signal
      *************************/
-    virtual void menu_update()
+    virtual void update_view()
     {
     }
 
@@ -114,13 +118,6 @@ protected:
         m_shall_leave = true;
     }
 
-    /**************************
-     *
-     *************************/
-    uint16_t get_id() const
-    {
-        return m_menu_id;
-    }
 
     /**************************
      *
@@ -152,12 +149,13 @@ protected:
     /**************************
      *
      *************************/
-    void open_menu()
+    void open_view()
     {
         m_shall_leave = false;
         ACTIVE_WINDOW.set_bg( get_bg_img() );
+        ACTIVE_INPUT.register_on_quit_handler( WT_BIND_EVENT_HANDLER( WtViewIf::exit ) );
 
-        fade_in();
+        if ( m_fade ) fade_in();
 
         for(size_t idx=0;idx<m_buttons.size();idx++)
         {
@@ -168,13 +166,13 @@ protected:
             ACTIVE_INPUT.add_active_region( *(m_carousels[idx]) );
         }
 
-        menu_entered();
+        entered_view();
     }
 
     /**************************
      *
      *************************/
-    void close_menu()
+    void close_view()
     {
         for (size_t idx=0;idx<m_buttons.size();idx++)
         {
@@ -185,30 +183,30 @@ protected:
             ACTIVE_INPUT.remove_active_region( *(m_carousels[idx]) );
         }
 
-        fade_out();
+        if ( m_fade ) fade_out();
 
-        menu_left();
+        left_view();
     }
 
     /**************************
      *
      *************************/
-    void enter_child_menu( WtMenuIf& sub_menu )
+    void enter_child_menu( WtViewIf& sub_view )
     {
-        close_menu();
+        close_view();
 
-        sub_menu.show();
+        m_shall_exit = sub_view.show();
 
-        open_menu();
+        if ( !m_shall_exit )
+        {
+            open_view();
+        }
+        else
+        {
+            leave();
+        }
     }
 
-    /**************************
-     *
-     *************************/
-    std::vector<WtSettingsChangeObserver*>& get_listener()
-    {
-        return m_change_listener;
-    }
 
 private:
     /**************************
@@ -224,7 +222,7 @@ private:
      *************************/
     void fade_in()
     {
-        bool done = !m_fade;
+        bool done = false;
         
         std::vector<WtButton> button_fading;
 
@@ -268,7 +266,7 @@ private:
      *************************/
     void fade_out()
     {
-        bool done = !m_fade;
+        bool done = false;
         std::vector<WtButton> button_fading;
 
         for (size_t idx=0;idx<m_buttons.size();idx++)
@@ -306,6 +304,8 @@ private:
      *************************/
     void show_self()
     {
+        ACTIVE_WINDOW.clr();
+
         for(size_t idx=0;idx<m_buttons.size();idx++)
         {
             ACTIVE_WINDOW.draw_button( *(m_buttons[idx]) );
@@ -317,17 +317,21 @@ private:
                 ACTIVE_WINDOW.draw_button( (*(m_carousels[idx]))[c_idx] );
             }
         }
+
+        update_view();
+
+        ACTIVE_WINDOW.update();
     }
 
 private:
-    const uint16_t                          m_menu_id;
     bool                                    m_shall_leave;
+    bool                                    m_shall_exit;
     std::string                             m_bg;
     std::vector< WtButton* >                m_buttons;
     std::vector< WtHorizontalCarousel* >    m_carousels;
-    std::vector<WtSettingsChangeObserver*>  m_change_listener;
     bool                                    m_fade;
+    WtTime::TimeType                        m_refresh_sleep_time;
 };
 
 
-#endif /* _WT_MENU_IF_H_ */
+#endif /* _WT_VIEW_IF_H_ */

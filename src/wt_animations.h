@@ -16,6 +16,7 @@
 #ifndef _WT_ANIMATIONS_H_
 #define _WT_ANIMATIONS_H_
 
+#include "wt_view_if.h"
 #include "wt_utils.h"
 #include <vector>
 
@@ -41,9 +42,10 @@ public:
 /**************************
  *
  *************************/
-class WtGridAnimation 
+class WtGridAnimation : public WtViewIf
 {
 public:
+    using OnUpdateOverlayDelegate = std::function<void(void)>;
     struct GridText {
         GridText( uint8_t r,
                   uint8_t c,
@@ -97,7 +99,10 @@ public:
 
 public:
     WtGridAnimation() :
-        m_animation_steps()
+        WtViewIf( "bg.bmp", false ),
+        m_animation_steps(),
+        m_update_overlay( nullptr ),
+        m_a_idx( 0 )
      {
      }
     ~WtGridAnimation() {}
@@ -126,13 +131,6 @@ public:
         return m_animation_steps.empty();
     }
 
-    /**************************
-     *
-     *************************/
-    size_t size() const
-    {
-        return m_animation_steps.size();
-    }
 
     /**************************
      *
@@ -147,8 +145,59 @@ public:
         return gc;
     }
 
+    /**************************
+     *
+     *************************/
+    void set_overlay_drawing( OnUpdateOverlayDelegate update_overlay )
+    {
+        m_update_overlay = update_overlay;
+    }
+
+private:
+    /**************************
+     *
+     *************************/
+    void draw_animation_step( const GridAnimationStep& step )
+    {
+        for ( uint8_t r_idx = 0; r_idx < step.content.row_count; r_idx++ )
+        {
+            for ( uint8_t c_idx = 0; c_idx < step.content.col_count; c_idx++ )
+            {
+                size_t cell_idx = static_cast<size_t>( (r_idx * step.content.col_count) + c_idx );
+                ACTIVE_WINDOW.draw_at_grid( step.content.row + r_idx,
+                                            step.content.col + c_idx,
+                                            step.content.cell_content[cell_idx],
+                                            step.content.font );
+            }
+        }
+    }
+
+    /**************************
+     *
+     *************************/
+    virtual void update_view()
+    {
+        if ( m_a_idx < m_animation_steps.size() )
+        {
+            if ( m_update_overlay ) m_update_overlay();
+
+            draw_animation_step( m_animation_steps[m_a_idx] );
+
+            ACTIVE_WINDOW.update();
+            WtTime::sleep( m_animation_steps[m_a_idx].step_duration );
+            m_a_idx++;
+        }
+
+        if ( m_a_idx >= m_animation_steps.size() )
+        {
+            m_a_idx = 0;
+            leave();
+        }
+    }
 private:
     std::vector< GridAnimationStep > m_animation_steps;
+    OnUpdateOverlayDelegate m_update_overlay;
+    size_t m_a_idx;
 };
 
 /**************************

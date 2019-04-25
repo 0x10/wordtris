@@ -16,20 +16,24 @@
 #ifndef _WT_MENU_PAUSE_H_
 #define _WT_MENU_PAUSE_H_
 
-#include "wt_menu_if.h"
-#include "wt_menu_help.h"
+#include "wt_view_if.h"
+#include "menus/wt_menu_help.h"
+#include "widgets/wt_checkbox_button.h"
 #include "wt_game_mode_if.h"
-#include "wt_game_ctr.h"
 
-class WtMenuPause : public WtMenuIf
+class WtMenuPause : public WtViewIf
 {
+public:
+    using OnQuitDelegate = std::function<void(void)>;
+    using OnRestartDelegate = std::function<void(void)>;
 private:
     static const size_t offset_x = (ACTIVE_WINDOW_WIDTH / 2);
     static const size_t offset_y = (ACTIVE_WINDOW_HEIGHT / 2) - (69+20);
            const WtDim  m_standard_btn_size = WtDim( 328, 69 );
 public:
-    WtMenuPause() :
-        WtMenuIf( 0x200, "bg_menu_pause.bmp", false ),
+    WtMenuPause( OnRestartDelegate restart_handler,
+                 OnQuitDelegate    quit_handler ) :
+        WtViewIf( "bg_menu_pause.bmp", false ),
         m_help(),
         m_leave_btn( WtCoord(offset_x - 158, offset_y-100), 
                      WtDim(100, 100),
@@ -56,7 +60,9 @@ public:
                           m_standard_btn_size,
                           WtL10n_tr( "Show next stone" ),
                           STORAGE.get_settings().show_next_stone,
-                          WT_BIND_EVENT_HANDLER_1( WtMenuPause::show_next_stone_changed ) )
+                          WT_BIND_EVENT_HANDLER_1( WtMenuPause::show_next_stone_changed ) ),
+        m_restart_handler( restart_handler ),
+        m_quit_handler( quit_handler )
     {
         add_button( m_leave_btn );
         add_button( m_redo_btn );
@@ -79,7 +85,7 @@ private: // no copy allowed
      *************************/
     void restart_pressed()
     {
-        GAME_CTR.restart();
+        if ( m_restart_handler ) m_restart_handler();
         leave();
     }
 
@@ -88,7 +94,7 @@ private: // no copy allowed
      *************************/
     void quit_pressed()
     {
-        GAME_CTR.quit();
+        if ( m_quit_handler ) m_quit_handler();
         leave();
     }
 
@@ -105,9 +111,12 @@ private: // no copy allowed
      *************************/
     void supporting_grid_changed( bool show_grid )
     {
-        for( size_t idx = 0; idx < get_listener().size(); idx++ )
+        std::cout << "grid " << ( show_grid ? "active" : "inactive" ) << std::endl;
+        WtSettings settings = STORAGE.get_settings();
+        if ( settings.show_support_grid != show_grid )
         {
-            get_listener()[idx]->notify_supporting_grid_changed( show_grid );
+            settings.show_support_grid = show_grid;
+            STORAGE.store_settings( settings );
         }
     }
 
@@ -116,30 +125,36 @@ private: // no copy allowed
      *************************/
     void show_next_stone_changed( bool show_next )
     {
-        for( size_t idx = 0; idx < get_listener().size(); idx++ )
+        std::cout << "preview " << ( show_next ? "active" : "inactive" ) << std::endl;
+        WtSettings settings = STORAGE.get_settings();
+        if ( settings.show_next_stone != show_next )
         {
-            get_listener()[idx]->notify_show_next_stone_changed( show_next );
+            settings.show_next_stone = show_next;
+            STORAGE.store_settings( settings );
         }
     }
 
     /**************************
      * signal
      *************************/
-    void menu_entered()
+    void entered_view()
     {
         m_supporting_grid_btn.set_checked( STORAGE.get_settings().show_support_grid );
         m_next_stone_btn.set_checked( STORAGE.get_settings().show_next_stone );
     }
 
 private:
-    WtMenuHelp m_help;
+    WtMenuHelp          m_help;
 
-    WtButton m_leave_btn;
-    WtButton m_redo_btn;
-    WtButton m_quit_btn;
-    WtButton m_help_btn;
-    WtCheckboxButton m_supporting_grid_btn;
-    WtCheckboxButton m_next_stone_btn;
+    WtButton            m_leave_btn;
+    WtButton            m_redo_btn;
+    WtButton            m_quit_btn;
+    WtButton            m_help_btn;
+    WtCheckboxButton    m_supporting_grid_btn;
+    WtCheckboxButton    m_next_stone_btn;
+
+    OnRestartDelegate   m_restart_handler;
+    OnQuitDelegate      m_quit_handler;
 };
 
 #endif /* _WT_MENU_GAME_MODE_SELECT_H_ */

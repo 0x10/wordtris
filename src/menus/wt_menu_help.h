@@ -16,16 +16,16 @@
 #ifndef _WT_MENU_HELP_H_
 #define _WT_MENU_HELP_H_
 
-#include "wt_menu_if.h"
+#include "wt_view_if.h"
 #include "wt_game_mode_if.h"
 #include "wt_game_mode_ctr.h"
 #include "wt_storage.h"
 
-class WtMenuHelp : public WtMenuIf
+class WtMenuHelp : public WtViewIf
 {
 public:
     WtMenuHelp() :
-        WtMenuIf( 0x500, "bg_menu_pause.bmp", false ),
+        WtViewIf( "bg_menu_pause.bmp", false ),
         m_leave_btn( WtCoord( 105, 800 ), 
                      WtDim(100, 100), 
                      "back_btn.bmp",
@@ -44,7 +44,7 @@ private: // no copy allowed
     /**************************
      * 
      *************************/
-    void menu_update()
+    void update_view()
     {
         WtGameModeIf* active_mode = GAME_MODE_CTR.mode_from_string( STORAGE.get_settings().game_mode );
         if ( active_mode != INVALID_GAME_MODE )

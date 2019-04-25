@@ -16,13 +16,13 @@
 #ifndef _WT_MENU_HIGHSCORES_H_
 #define _WT_MENU_HIGHSCORES_H_
 
-#include "wt_menu_if.h"
+#include "wt_view_if.h"
 
-class WtMenuHighscores : public WtMenuIf
+class WtMenuHighscores : public WtViewIf
 {
 public:
     WtMenuHighscores() :
-        WtMenuIf( 0x400 ),
+        WtViewIf(),
         m_leave_btn( WtCoord( 105, 800 ), 
                      WtDim(100, 100), 
                      "back_btn.bmp",
@@ -43,7 +43,7 @@ public:
         add_button( m_left_btn );
         add_button( m_right_btn );
     }
-    virtual ~WtMenuHighscores() {}
+    ~WtMenuHighscores() {}
 private: // no copy allowed
     WtMenuHighscores( const WtMenuHighscores& ); 
     WtMenuHighscores & operator = (const WtMenuHighscores &);
@@ -123,7 +123,7 @@ private: // no copy allowed
     /**************************
      *
      *************************/
-    virtual void menu_entered()
+    void entered_view()
     {
         m_selected_mode = GAME_MODE_CTR.mode_idx_from_string( STORAGE.get_settings().game_mode );
     }
@@ -131,7 +131,7 @@ private: // no copy allowed
     /**************************
      *
      *************************/
-    virtual void menu_update()
+    void update_view()
     {
         draw_title( WtL10n::translate( m_game_mode_titles[m_selected_mode] ) );
 

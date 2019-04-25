@@ -16,14 +16,14 @@
 #ifndef _WT_MENU_SETTINGS_H_
 #define _WT_MENU_SETTINGS_H_
 
-#include "wt_menu_if.h"
+#include "wt_view_if.h"
 #include "wt_storage.h"
 
 #include "widgets/wt_tristate_button.h"
 #include "widgets/wt_checkbox_button.h"
 
 
-class WtMenuSettings : public WtMenuIf
+class WtMenuSettings : public WtViewIf
 {
 private:
     static const size_t offset_x = (ACTIVE_WINDOW_WIDTH - 328) / 2;
@@ -36,7 +36,7 @@ private:
 
 public:
     WtMenuSettings() :
-        WtMenuIf( 0x300 ),
+        WtViewIf(),
         m_current_diff(0),
         m_leave_btn( WtCoord( 105, 800 ), 
                      WtDim(100, 100), 
@@ -129,11 +129,17 @@ private: // no copy allowed
     void diff_changed( uint8_t id )
     {
         size_t diff_idx = id;
-        if ( STORAGE.get_settings().difficulty != WtGameModeIf::get_available_difficulties()[diff_idx].first )
+        wt_difficulty diffi = WtGameModeIf::get_available_difficulties()[diff_idx].first;
+        WtSettings settings = STORAGE.get_settings();
+        if ( settings.difficulty != diffi )
         {
-            for( size_t idx = 0; idx < get_listener().size(); idx++ )
+            settings.difficulty = diffi;
+            STORAGE.store_settings( settings );
+
+            WtGameModeIf* active_mode = GAME_MODE_CTR.mode_from_string( STORAGE.get_settings().game_mode );
+            if ( active_mode != INVALID_GAME_MODE )
             {
-                get_listener()[idx]->notify_difficulty_changed( WtGameModeIf::get_available_difficulties()[diff_idx].first );
+                active_mode->set_difficulty( diffi );
             }
         }
     }
@@ -158,10 +164,12 @@ private: // no copy allowed
     {
         if ( STORAGE.get_settings().active_theme != m_selectable_themes[id] )
         {
-            for( size_t idx = 0; idx < get_listener().size(); idx++ )
-            {
-                get_listener()[idx]->notify_theme_changed( std::string( m_selectable_themes[id] ) );
-            }
+            ACTIVE_WINDOW.set_theme( m_selectable_themes[id] );
+
+            std::cout << "new theme selected = "<< m_selectable_themes[id] << std::endl;
+            WtSettings settings = STORAGE.get_settings();
+            settings.active_theme = m_selectable_themes[id];
+            STORAGE.store_settings( settings );
         }
     }
 
@@ -170,9 +178,12 @@ private: // no copy allowed
      *************************/
     void supporting_grid_changed( bool show_grid )
     {
-        for( size_t idx = 0; idx < get_listener().size(); idx++ )
+        std::cout << "grid " << ( show_grid ? "active" : "inactive" ) << std::endl;
+        WtSettings settings = STORAGE.get_settings();
+        if ( settings.show_support_grid != show_grid )
         {
-            get_listener()[idx]->notify_supporting_grid_changed( show_grid );
+            settings.show_support_grid = show_grid;
+            STORAGE.store_settings( settings );
         }
     }
 
@@ -181,16 +192,19 @@ private: // no copy allowed
      *************************/
     void show_next_stone_changed( bool show_next )
     {
-        for( size_t idx = 0; idx < get_listener().size(); idx++ )
+        std::cout << "preview " << ( show_next ? "active" : "inactive" ) << std::endl;
+        WtSettings settings = STORAGE.get_settings();
+        if ( settings.show_next_stone != show_next )
         {
-            get_listener()[idx]->notify_show_next_stone_changed( show_next );
+            settings.show_next_stone = show_next;
+            STORAGE.store_settings( settings );
         }
     }
 
     /**************************
      * signal
      *************************/
-    void menu_entered()
+    void entered_view()
     {
         m_supporting_grid_btn.set_checked( STORAGE.get_settings().show_support_grid );
         m_next_stone_btn.set_checked( STORAGE.get_settings().show_next_stone );

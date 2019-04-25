@@ -109,6 +109,7 @@ public:
      *************************/
     void set_difficulty( wt_difficulty new_difficulty )
     {
+        std::cout << "new diff selected = "<< static_cast<size_t>(new_difficulty) << std::endl;
         m_current_diff = new_difficulty;
     }
 
