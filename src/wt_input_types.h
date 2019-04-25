@@ -36,6 +36,7 @@ class WtInputEvent
 public:
     WtInputEvent() :
         is_key_event( true ),
+        is_system_event( false ),
         is_motion_event( false ),
         is_press_event( false ),
         call_again( false ),
@@ -45,6 +46,7 @@ public:
     {}
 
     bool       is_key_event;
+    bool       is_system_event;
     bool       is_motion_event;
     bool       is_press_event;
     bool       call_again;

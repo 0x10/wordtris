@@ -197,9 +197,10 @@ private:
         switch( key )
         {
             default:
+            case wt_control_QUIT:
             case wt_control_INVALID:
+                // unhandled events are ignored
                 break;
-
 
             case wt_control_DROP:
                 notify_drop();
@@ -209,9 +210,6 @@ private:
                 break;
             case wt_control_RIGHT:
                 notify_right();
-                break;
-            case wt_control_QUIT:
-                exit(0);
                 break;
             case wt_control_PAUSE:
                 notify_pause();

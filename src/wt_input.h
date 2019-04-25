@@ -41,7 +41,9 @@ private:
     WtInput() :
         m_active_regions(),
         m_input_policy(),
-        m_on_key_press()
+        m_on_key_press(),
+        m_shall_be_quit(false),
+        m_on_quit_handler()
     {
     }
     WtInput( const WtInput& ); 
@@ -50,6 +52,7 @@ private:
 // api defintion
 public:
     using OnKeyPressDelegate = std::function<void(wt_control)>;
+    using OnQuitDelegate = std::function<void(void)>;
 
     /**************************
      *
@@ -57,6 +60,14 @@ public:
     void register_key_press_delegate( const OnKeyPressDelegate& on_key_press  )
     {
         m_on_key_press = on_key_press;
+    }
+
+    /**************************
+     *
+     *************************/
+    void register_on_quit_handler( const OnQuitDelegate& on_quit_handler  )
+    {
+        m_on_quit_handler = on_quit_handler;
     }
 
     /**************************
@@ -100,6 +111,14 @@ public:
                 wt_control ch = ev.key;
                 if ( m_on_key_press ) m_on_key_press( ch );
             }
+            else if ( ev.is_system_event )
+            {
+                if ( ev.key == wt_control_QUIT )
+                {
+                    m_shall_be_quit = true;
+                    if ( m_on_quit_handler ) m_on_quit_handler();
+                }
+            }
             else
             {
                 // eval button
@@ -126,10 +145,20 @@ public:
         }
     }
 
+    /**************************
+     *
+     *************************/
+    bool shall_be_quit() const
+    {
+        return m_shall_be_quit;
+    }
+
 private:
     std::vector< WtClickableIf* > m_active_regions;
     InputPolicy                   m_input_policy;  
     OnKeyPressDelegate            m_on_key_press;
+    bool                          m_shall_be_quit;
+    OnQuitDelegate                m_on_quit_handler;
 };
 
 

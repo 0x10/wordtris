@@ -27,22 +27,6 @@
 #include "wt_sdl_config.h"
 
 #define SDL_WINDOW WINDOW( WtDrawingPolicySdl )
-
-SDL_Window*   sdl_cleanup_window=NULL;
-SDL_Renderer* sdl_cleanup_renderer=NULL;
-
-void cleanup_sdl();
-void cleanup_sdl()
-{
-    std::cout << "cleanup sdl..\n";
-    if ( sdl_cleanup_renderer != NULL )
-        SDL_DestroyRenderer(sdl_cleanup_renderer);
-    if ( sdl_cleanup_window != NULL )
-        SDL_DestroyWindow(sdl_cleanup_window);
-    SDL_Quit();
-}
-
-
 class WtDrawingPolicySdl
 {
 private:
@@ -68,8 +52,6 @@ protected:
             std::cerr << "Failed to initialize SDL: " << SDL_GetError() << std::endl;
             exit(-1);
         }
-        atexit(cleanup_sdl);
-
 
         SDL_DisplayMode dm;
 
@@ -86,9 +68,6 @@ protected:
             std::cerr << "Failed to create window and renderer: " << SDL_GetError() << std::endl;
             exit(-1);
         }
-
-        sdl_cleanup_window = m_window;
-        sdl_cleanup_renderer = m_renderer;
 
         SDL_RenderSetLogicalSize(m_renderer, SDL_WIDTH, SDL_HEIGHT);
         SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
@@ -109,9 +88,6 @@ protected:
         std::cout << "destroy sdl..\n";
 
         clear_texture_cache();
-
-        sdl_cleanup_window = NULL;
-        sdl_cleanup_renderer = NULL;
 
         SDL_DestroyRenderer(m_renderer);
         SDL_DestroyWindow(m_window);

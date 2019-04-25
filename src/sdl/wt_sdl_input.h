@@ -32,7 +32,7 @@ public:
     ~WtInputPolicySdl() {}
     /**************************
      *
-     *************************/   
+     *************************/
     WtInputEvent read_input()
     {
         WtInputEvent event;
@@ -44,7 +44,8 @@ public:
             switch (sdl_event.type)
             {
                 case SDL_QUIT:
-                    event.is_key_event = true;
+                    event.is_key_event = false;
+                    event.is_system_event = true;
                     event.key = wt_control_QUIT;
                     break;
                 case SDL_APP_WILLENTERBACKGROUND:
@@ -57,8 +58,13 @@ public:
                     if ('d'==sdl_event.key.keysym.sym) event.key = wt_control_RIGHT;
                     if ('s'==sdl_event.key.keysym.sym) event.key = wt_control_DROP;
                     if ('p'==sdl_event.key.keysym.sym) event.key = wt_control_PAUSE;
-                    if ('q'==sdl_event.key.keysym.sym) event.key = wt_control_QUIT;
                     if (SDLK_AC_BACK == sdl_event.key.keysym.sym) event.key = wt_control_PAUSE;
+                    if ('q'==sdl_event.key.keysym.sym)
+                    {
+                        event.is_key_event = false;
+                        event.is_system_event = true;
+                        event.key = wt_control_QUIT;
+                    }
                     break;
 
                 case SDL_FINGERDOWN:

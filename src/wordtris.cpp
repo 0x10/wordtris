@@ -24,8 +24,26 @@
 /******************************************************************************
  *
  *****************************************************************************/
+void on_quit();
+
+
+
+/******************************************************************************
+ *
+ *****************************************************************************/
+void on_quit()
+{
+    MENU_CTR.quit();
+    GAME_CTR.quit();
+}
+
+/******************************************************************************
+ *
+ *****************************************************************************/
 int main( int, char** )
 {
+    ACTIVE_INPUT.register_on_quit_handler( std::bind( on_quit ) );
+
     if ( ! STORAGE.load() )
     {
         // defaults should be used...
@@ -35,11 +53,13 @@ int main( int, char** )
 
     MENU_CTR.listen( &GAME_CTR );
 
-    while( 1 )
+    while( !ACTIVE_INPUT.shall_be_quit() )
     {
-        MENU_CTR.show();
-
-        GAME_CTR.run();
+        if ( !ACTIVE_INPUT.shall_be_quit() )
+            MENU_CTR.show();
+        
+        if ( !ACTIVE_INPUT.shall_be_quit() )
+            GAME_CTR.run();
     }
 
     return 0;
