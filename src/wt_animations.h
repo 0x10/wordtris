@@ -185,15 +185,18 @@ private:
      *************************/
     virtual void update_view()
     {
+        if ( m_update_overlay ) m_update_overlay();
         if ( m_a_idx < m_animation_steps.size() )
         {
-            if ( m_update_overlay ) m_update_overlay();
-
             draw_animation_step( m_animation_steps[m_a_idx] );
 
             ACTIVE_WINDOW.update();
             WtTime::sleep( m_animation_steps[m_a_idx].step_duration );
             m_a_idx++;
+        }
+        else
+        {
+            ACTIVE_WINDOW.update();
         }
 
         if ( m_a_idx >= m_animation_steps.size() )

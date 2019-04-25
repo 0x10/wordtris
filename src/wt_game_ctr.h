@@ -114,8 +114,12 @@ private:
     {
         if ( ! animation.empty() )
         {
+            m_game_state = GAME_PAUSED; // handle animation like being in pause mode to
+                                        // prevent android backbutton magic from ending in
+                                        // pause mode
             animation.set_overlay_drawing( WT_BIND_EVENT_HANDLER( WtGameCtr::update_window ) );
             enter_child_menu( animation );
+            m_game_state = GAME_STARTED;
         }
     }
 
