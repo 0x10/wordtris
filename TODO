@@ -3,6 +3,16 @@
 #   -> prorities may be assigned
 #   -> categories are not strictly assigned but at first glimpse
 #
+# (road to release) - see below for details
+#   - android certificate & release build
+#   - tutorial or game mode specific intro section
+#   - complete translations
+#   - utf8 / iso8859-1
+#   - naming / logo
+#   - (at least strategy) revenue system (ads, install-fee, whatever)
+#   - scaleable ui / 16:9 fixed
+#
+#
 # (features)
 # - Tri-State Button Animation (may be more complex and may be dropped due to that)
 # - Game Modes need a intro menu
@@ -51,6 +61,7 @@
 # - Logo Design and Naming
 # - get an ui design review
 # - ui redesign of player statistics and hint/letter preview
+# - flags instead of language names
 #
 # (architecture bugs)
 # - Drawing:
