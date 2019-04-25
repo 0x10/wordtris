@@ -41,6 +41,11 @@
 #       - get two words in a row -> up to 5 words
 #       - get 100k points -> up to 1mio
 #       - reach level 12
+# - game mode handle highscore entry creation
+# - score summary at end of game (instead of "wow highscore" and even on lost)
+# - container for game mode specific settings like "show tutorial"
+# - non-modal animations like score info overlay on word solved during continued gaming
+#
 #
 # (design)
 # - Logo Design and Naming
