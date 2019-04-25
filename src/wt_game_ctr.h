@@ -443,8 +443,11 @@ private:
      *************************/
     void enter_pause()
     {
-        m_game_state = GAME_PAUSED;
-        enter_child_menu( m_pause_menu );
+        if ( m_game_state == GAME_STARTED )
+        {
+            m_game_state = GAME_PAUSED;
+            enter_child_menu( m_pause_menu );
+        }
     }
 
     /**************************
