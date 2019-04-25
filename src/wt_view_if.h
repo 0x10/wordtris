@@ -109,6 +109,13 @@ protected:
     {
     }
 
+    /**************************
+     * signal
+     *************************/
+    virtual void draw_view()
+    {
+        ACTIVE_WINDOW.update();
+    }
 
     /**************************
      *
@@ -320,7 +327,7 @@ private:
 
         update_view();
 
-        ACTIVE_WINDOW.update();
+        draw_view();
     }
 
 private:

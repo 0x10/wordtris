@@ -175,6 +175,14 @@ private:
     /**************************
      *
      *************************/
+    virtual void draw_view()
+    {
+        // empty instance just to omit drawing
+    }
+
+    /**************************
+     *
+     *************************/
     virtual void update_view()
     {
         if ( m_a_idx < m_animation_steps.size() )
