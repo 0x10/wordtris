@@ -34,6 +34,7 @@ private:
     typedef enum {
         GAME_STOPPED=0,
         GAME_STARTED,
+        GAME_ANIMATION_RUNNING,
         GAME_PAUSED,
         GAME_TO_QUIT
     } wt_game_state;
@@ -105,6 +106,9 @@ private:
         ACTIVE_WINDOW.draw_hint( m_active_mode->get_hint(), 
                                  m_active_mode->letter_after_next(), 
                                  STORAGE.get_settings().show_next_stone );
+
+        if ( m_game_state == GAME_ANIMATION_RUNNING ) // get dirty...
+            ACTIVE_WINDOW.draw_button( m_pause_btn );
     }
 
     /**************************
@@ -114,12 +118,12 @@ private:
     {
         if ( ! animation.empty() )
         {
-            m_game_state = GAME_PAUSED; // handle animation like being in pause mode to
-                                        // prevent android backbutton magic from ending in
-                                        // pause mode
+            wt_game_state old_state = m_game_state;
+
+            m_game_state = GAME_ANIMATION_RUNNING; 
             animation.set_overlay_drawing( WT_BIND_EVENT_HANDLER( WtGameCtr::update_window ) );
             enter_child_menu( animation );
-            m_game_state = GAME_STARTED;
+            m_game_state = old_state;
         }
     }
 
