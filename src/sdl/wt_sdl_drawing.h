@@ -47,7 +47,7 @@ protected:
         m_grid_font( "grid", GRID_FONT_SIZE, GRID_FONT_SIZE, "grid_font.bmp" ),
         m_grid_font_inverse( "grid_inverse", GRID_FONT_SIZE, GRID_FONT_SIZE, "grid_font_inverse.bmp" ),
         //m_text_font( "text", TEXT_FONT_SIZE, TEXT_FONT_SIZE*2, "text_font.bmp" ),
-        m_text_font( "text", TEXT_FONT_SIZE, TEXT_FONT_SIZE+(TEXT_FONT_SIZE / 2), SDL_ASSETS"DejaVuSansMono.ttf", true ),
+        m_text_font( "text", TEXT_FONT_SIZE, TEXT_FONT_SIZE*2, SDL_ASSETS"DejaVuSansMono.ttf", true ),
         m_texture_cache()
     {
         if (SDL_Init(SDL_INIT_VIDEO)) {
@@ -249,22 +249,59 @@ private:
     {
         if ( NULL != font )
         {
-            // loop through all characters in the text string
-            size_t l = str.length();
-            size_t x_i = 0;
-            WtCoord pos( x, y );
-            for (size_t i = 0; i < l; i++) {
-                pos.x = x+static_cast<ssize_t>(x_i*font->width());
-                if (str[i] == '\n')
+            if ( font->is_ttf() )
+            {
+                WtCoord pos( x, y );
+                SDL_TextureCache::const_iterator it = m_texture_cache.find(str);
+                if ( it != m_texture_cache.end() )
                 {
-                    x_i = 0;
-                    pos.x = x;
-                    pos.y += static_cast<ssize_t>(font->height() + (font->height() / 2));
+                    // load from cache
+                    SDL_Texture* text_tex = (*it).second;
+
+                    SDL_Rect small;
+                    small.x = pos.x;
+                    small.y = pos.y;
+                    WtDim size = font->text_size( str );
+                    small.w = size.w;
+                    small.h = size.h;
+                    SDL_RenderCopy( m_renderer, text_tex, NULL, &small );
                 }
                 else
                 {
-                    font->write( pos, str[i], m_renderer );
-                    x_i++;
+                    WtDim text_tex_size(0,0);
+                    SDL_Texture* text_tex = font->write_text( pos, str, text_tex_size, m_renderer );
+                    if ( NULL != text_tex )
+                    {
+                        SDL_Rect small;
+                        small.x = pos.x;
+                        small.y = pos.y;
+                        small.w = text_tex_size.w;
+                        small.h = text_tex_size.h;
+                        SDL_RenderCopy( m_renderer, text_tex, NULL, &small );
+
+                        m_texture_cache[str] = text_tex;
+                    }
+                }
+            }
+            else
+            {
+                // loop through all characters in the text string
+                size_t l = str.length();
+                size_t x_i = 0;
+                WtCoord pos( x, y );
+                for (size_t i = 0; i < l; i++) {
+                    pos.x = x+static_cast<ssize_t>(x_i*font->width());
+                    if (str[i] == '\n')
+                    {
+                        x_i = 0;
+                        pos.x = x;
+                        pos.y += static_cast<ssize_t>(font->height() + (font->height() / 2));
+                    }
+                    else
+                    {
+                        font->write( pos, str[i], m_renderer );
+                        x_i++;
+                    }
                 }
             }
         }

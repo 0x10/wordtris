@@ -56,6 +56,14 @@ public:
     /**************************
      *
      *************************/
+    bool is_ttf() const
+    {
+        return m_is_ttf;
+    }
+
+    /**************************
+     *
+     *************************/
     void load_font_data( std::string theme, SDL_Renderer* renderer )
     {
         std::cout << "load font data = "<< m_fname <<std::endl;
@@ -79,7 +87,7 @@ public:
         else
         {
             //Open the font 
-            m_ttf_font = TTF_OpenFont( m_fname.c_str(), m_font_h ); 
+            m_ttf_font = TTF_OpenFont( m_fname.c_str(), m_font_w ); 
             if( m_ttf_font == NULL ) 
             { 
                 std::cerr << "Failed to load font: " << TTF_GetError() << std::endl;
@@ -119,6 +127,45 @@ public:
     {
         return WtDim( static_cast<ssize_t>(m_font_w),
                       static_cast<ssize_t>(m_font_w/*m_font_h*/) ); //intentional square
+    }
+
+    /**************************
+     *
+     *************************/
+    WtDim text_size( const std::string text ) const
+    {
+        WtDim sz(0,0);
+        if ( m_is_ttf )
+        {
+            int w=0;
+            int h=0;
+            TTF_SizeUTF8( m_ttf_font, text.c_str(), &w, &h );
+            sz.w = w;
+            sz.h = h;
+        }
+        return sz;
+    }
+
+    /**************************
+     *
+     *************************/
+    SDL_Texture* write_text( WtCoord pos, std::string text, WtDim& sz, SDL_Renderer* renderer )
+    {
+        SDL_Texture* text_tex = NULL;
+        if ( m_is_ttf )
+        {
+            SDL_Color text_color = { 255, 255, 255, 0 };
+            SDL_Color bg_color = { 0, 0, 0, 255 };
+            SDL_Surface* text_surface = TTF_RenderUTF8_Solid( m_ttf_font, text.c_str(), text_color );
+            if ( NULL != text_surface )
+            {
+                text_tex = SDL_CreateTextureFromSurface( renderer, text_surface );
+                sz.w = text_surface->w;
+                sz.h = text_surface->h;
+                SDL_FreeSurface( text_surface );
+            }
+        }
+        return text_tex;
     }
 
     /**************************
