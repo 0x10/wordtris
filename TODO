@@ -71,8 +71,6 @@
 #       - support non 16:9 devices
 # - Support Non-Ascii characters in Translations
 #       - use ttf for text font -> reduced complexity for asset storage
-# - Settings/Storage Architectures seems pretty weird
-#       - review or documentation!
 #
 # (others)
 # - android:
