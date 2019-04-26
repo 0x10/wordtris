@@ -7,7 +7,9 @@
 #   - android certificate & release build
 #   - tutorial or game mode specific intro section
 #   - complete translations
-#   - utf8 / iso8859-1
+#   - [PROGRESS] utf8 / iso8859-1
+#           => text font merged to ttf
+#           => grid pending
 #   - naming / logo
 #   - (at least strategy) revenue system (ads, install-fee, whatever)
 #   - [DONE] scaleable ui / 16:9 fixed 
@@ -77,8 +79,6 @@
 #             with fixed size and then position / background-overscan according to real screen size
 #           - for aspect ratios like 4:3 another screen layout may be a solution
 #       - add word wrap on text boxes instead of char wrap
-# - Support Non-Ascii characters in Translations
-#       - use ttf for text font -> reduced complexity for asset storage
 #
 # (others)
 # - android:
@@ -90,4 +90,3 @@
 #       - remove bmp assets and create script to generate assets from xcf on build 
 #           - SDL2_image has xcf reading capabilities
 #           - other libs
-# - font lizenzen klaeren
