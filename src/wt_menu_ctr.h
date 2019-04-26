@@ -23,20 +23,9 @@
 #include "widgets/wt_horizontal_carousel.h"
 
 
-#define MENU_CTR  WtMenuCtr::instance()
 class WtMenuCtr : public WtViewIf
 {
-// singleton definition
 public:
-    static WtMenuCtr& instance()
-    {
-        static WtMenuCtr _instance;
-        return _instance;
-    }
-    ~WtMenuCtr()
-    {
-    }
-private:
     WtMenuCtr() :
         WtViewIf(),
         m_drag_start_pos(0,0),
@@ -59,16 +48,15 @@ private:
                           GAME_MODE_CTR.mode_idx_from_string( STORAGE.get_settings().game_mode ),
                           WT_BIND_EVENT_HANDLER_1( WtMenuCtr::game_mode_selected ) )
     {
-        WtSettings settings = STORAGE.get_settings();
-        ACTIVE_WINDOW.set_theme( settings.active_theme );
-        WtL10n::set_language( settings.language );
-
-        m_game_ctr.set_game_mode( GAME_MODE_CTR.mode_from_string( settings.game_mode ) );
+        m_game_ctr.set_game_mode( GAME_MODE_CTR.mode_from_string( STORAGE.get_settings().game_mode ) );
 
         add_button( m_score_btn );
         add_button( m_setting_btn );
         add_horizontal_carousel( m_game_selection );
     }
+
+    ~WtMenuCtr() {}
+private:
     WtMenuCtr( const WtMenuCtr& ); 
     WtMenuCtr & operator = (const WtMenuCtr &);
 
