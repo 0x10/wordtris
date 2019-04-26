@@ -25,9 +25,10 @@
 #           - labyrinth game mode: navigate a symbol until bottom and if success level up else game over...
 #           - flappy bird mode: similar to labyrinth but with gates similar to flappy bird
 # - Audio-Support
-#       - background music
-#       - on stone 2 board commit sound
-#       - on row/word clear sound
+#       - background music: http://tones.wolfram.com/generate/G7sEHQdvMUXcifmtPgsLBKrWKhEG3CvRWfJTIg8ypZgrr54L
+#       - on stone 2 board commit sound -> DIY
+#       - on row/word clear sound -> DIY
+#       - on bomb sound -> DIY
 # - animations:
 #       - bomb animation
 # - multiplayer? coop vs pubg
