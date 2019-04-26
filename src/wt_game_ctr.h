@@ -22,11 +22,12 @@
 #include "wt_active_letter.h"
 #include "wt_game_mode_if.h"
 #include "wt_game_mode_ctr.h"
-#include "wt_storage.h"
 #include "wt_animations.h"
 #include "menus/wt_menu_pause.h"
+#include "menus/wt_menu_score_summary.h"
 
 #include "widgets/wt_grid_touch_overlay.h"
+
 
 class WtGameCtr : public WtViewIf
 {
@@ -47,6 +48,7 @@ public:
         m_active_mode( GAME_MODE_CTR.default_mode() ),
         m_pause_menu( WT_BIND_EVENT_HANDLER( WtGameCtr::restart ), 
                       WT_BIND_EVENT_HANDLER( WtGameCtr::return_to_menu ) ),
+        m_score_summary(),
         m_grid_touch_control( WtCoord( 0, 100 ),
                               WtDim( ACTIVE_WINDOW_WIDTH, ACTIVE_WINDOW_HEIGHT-100 ),
                               WT_BIND_EVENT_HANDLER( WtGameCtr::notify_left ),
@@ -248,55 +250,6 @@ private:
         }
     }
 
-
-    /**************************
-     *
-     *************************/
-    bool insert_entry( WtHighscores& scores, WtScoreEntry& entry )
-    {
-        bool entry_added = false;
-        size_t game_mode_entries=0;
-        for( size_t idx = 0; idx < scores.size(); idx++ )
-        {
-            if ( scores[idx].game_mode == entry.game_mode )
-            {
-                if ( scores[idx].score < entry.score )
-                {
-                    WtHighscores::iterator it = scores.begin();
-                    std::advance( it, idx );
-                    scores.insert( it, entry );
-                    entry_added = true;
-                    break;
-                }
-                game_mode_entries++;
-            }
-        }
-
-        if ( ( !entry_added ) && ( game_mode_entries < 10 ) )
-        {
-            scores.push_back( entry );
-            entry_added = true;
-        }
-        return entry_added;
-    }
-
-
-    /**************************
-     *
-     *************************/
-    bool update_highscores( WtPlayer& player, WtGameModeIf* mode, WtHighscores& scores )
-    {
-        // eval if player stat is within first 3 of game mode
-        // if true add player at correct position
-        std::cout << "highscore entry: Lvl " << player.get_current_level() << " at " << player.get_points() << " within mode \"" << mode->get_title() << "\"" << std::endl;
-
-        WtScoreEntry new_entry( mode->get_title(),
-                                player.get_points(),
-                                player.get_current_level() );
-
-        return insert_entry( scores, new_entry );
-    }
-
     /**************************
      *
      *************************/
@@ -342,23 +295,10 @@ private:
         m_game_state = GAME_STOPPED;
         if ( m_player.get_points() > 0 )
         {
-            bool new_highscore = update_highscores( m_player, m_active_mode, STORAGE.get_scores() );
+            m_score_summary.update_highscores( m_player, m_active_mode, STORAGE.get_scores() );
             STORAGE.store_highscores( STORAGE.get_scores() );
 
-            ACTIVE_WINDOW.set_bg( "bg_menu_pause.bmp" );
-            ACTIVE_WINDOW.clr();
-            ACTIVE_WINDOW.draw_player_stat( m_player );
-
-            if ( new_highscore )
-            {
-                ACTIVE_WINDOW.draw_message(WtL10n_tr("wow! new highscore"));
-            }
-            else
-            {
-                ACTIVE_WINDOW.draw_message(WtL10n_tr("you lost! :P"));
-            }
-            ACTIVE_WINDOW.update();
-            WtTime::sleep(WtTime::from_seconds(5));
+            enter_child_menu( m_score_summary );
         }
         leave();
     }
@@ -456,7 +396,7 @@ private:
     WtBoard             m_board;
     WtGameModeIf*       m_active_mode;
     WtMenuPause         m_pause_menu;
-
+    WtMenuScoreSummary  m_score_summary;
 
     WtGridTouchOverlay  m_grid_touch_control;
     WtButton            m_pause_btn;
