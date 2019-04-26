@@ -10,7 +10,10 @@
 #   - utf8 / iso8859-1
 #   - naming / logo
 #   - (at least strategy) revenue system (ads, install-fee, whatever)
-#   - scaleable ui / 16:9 fixed
+#   - [DONE] scaleable ui / 16:9 fixed 
+#           => fixed using renderer logical size and overscan to eliminate letterboxes
+#           => should work fine for most nearly 16:9 aspect ratios; 16:10 hides some ui elements maybe fix later (see below)
+#           => handle 4:3 aspect ratios within ios port (will need a proper ui scale handling)
 #
 #
 # (features)
@@ -66,13 +69,14 @@
 #
 # (architecture bugs)
 # - Drawing:
-#       - issue may be resolved to overscan hidden feature 
-#       - decide wether to modify it locally to have it fixed at the top
-#         see patch here: https://hg.libsdl.org/SDL/rev/8a29b371e2db
-#           - message box to not use hard coded images and positions/dimensions
-#           - do not use hard coded absolute pixel values which depend on SDL_WIDHT=540/SDL_HEIGHT=960 but relative values
-#           - add word wrap on text boxes instead of char wrap
-#           - support non 16:9 devices
+#       - support non 16:9 devices:
+#           - issue may be resolved to overscan hidden feature 
+#           - decide wether to modify it locally to have it fixed at the top
+#               see patch here: https://hg.libsdl.org/SDL/rev/8a29b371e2db
+#           - proper solution "sdl"-like would be to render to texture instead of renderer directly
+#             with fixed size and then position / background-overscan according to real screen size
+#           - for aspect ratios like 4:3 another screen layout may be a solution
+#       - add word wrap on text boxes instead of char wrap
 # - Support Non-Ascii characters in Translations
 #       - use ttf for text font -> reduced complexity for asset storage
 #
