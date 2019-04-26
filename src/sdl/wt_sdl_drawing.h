@@ -17,6 +17,7 @@
 #define _WT_SDL_DRAWING_H_
 
 #include "SDL.h"
+#include "SDL_ttf.h"
 
 #include <cassert>
 #include <iostream>
@@ -30,7 +31,7 @@
 class WtDrawingPolicySdl
 {
 private:
-    static const uint8_t TEXT_FONT_SIZE = 12;
+    static const uint8_t TEXT_FONT_SIZE = 14;
     static const uint8_t GRID_FONT_SIZE = 37;
     static const uint8_t GRID_OFFSET_X = 78;
     static const uint8_t GRID_OFFSET_Y = 127-GRID_FONT_SIZE;
@@ -45,7 +46,8 @@ protected:
         m_theme("default"),
         m_grid_font( "grid", GRID_FONT_SIZE, GRID_FONT_SIZE, "grid_font.bmp" ),
         m_grid_font_inverse( "grid_inverse", GRID_FONT_SIZE, GRID_FONT_SIZE, "grid_font_inverse.bmp" ),
-        m_text_font( "text", TEXT_FONT_SIZE, TEXT_FONT_SIZE*2, "text_font.bmp" ),
+        //m_text_font( "text", TEXT_FONT_SIZE, TEXT_FONT_SIZE*2, "text_font.bmp" ),
+        m_text_font( "text", TEXT_FONT_SIZE, TEXT_FONT_SIZE+(TEXT_FONT_SIZE / 2), SDL_ASSETS"DejaVuSansMono.ttf", true ),
         m_texture_cache()
     {
         if (SDL_Init(SDL_INIT_VIDEO)) {
@@ -86,10 +88,7 @@ protected:
         SDL_SetRenderDrawBlendMode(m_renderer, SDL_BLENDMODE_BLEND);
         SDL_SetHint( SDL_HINT_RENDER_LOGICAL_SIZE_MODE, "1" );
         SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "nearest" );
-        /*
         TTF_Init();
-        m_font = TTF_OpenFont("assets/DejaVuSansMono.ttf", 30);
-        */
         set_bg("bg.bmp");
 
         m_grid_font.load_font_data( m_theme, m_renderer );
@@ -105,6 +104,7 @@ protected:
 
         SDL_DestroyRenderer(m_renderer);
         SDL_DestroyWindow(m_window);
+        TTF_Quit();
         SDL_Quit();
     }
 

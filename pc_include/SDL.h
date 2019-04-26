@@ -22,10 +22,11 @@
 
 #ifdef USE_SYSTEM_SDL
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #else
 #include "SDL2-2.0.9/include/SDL.h"
+#include "SDL2_ttf-2.0.15/SDL_ttf.h"
 #endif /* USE_SYSTEM_SDL */
-//#include <SDL2/SDL_ttf.h>
 
 #define SDL_ASSETS "assets/"
 

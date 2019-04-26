@@ -18,6 +18,7 @@
 
 
 #include "SDL.h"
+#include "SDL_ttf.h"
 
 #include "wt_sdl_utils.h"
 
@@ -26,29 +27,30 @@ class WtSdlFont
 private:
     const char m_start_symbol = 0x20; // font data starts at printable space
 public:
-    WtSdlFont() :
-        m_name(""),
-        m_font_w(0),
-        m_font_h(0),
-        m_fname( "" ),
-        m_font_data()
-    {
-    }
-    WtSdlFont( std::string name, 
-               size_t w,
-               size_t h,
-               std::string filename ) :
+    WtSdlFont( std::string name="", 
+               size_t w=0,
+               size_t h=0,
+               std::string filename="",
+               bool is_ttf=false ) :
         m_name( name ),
         m_font_w( w ),
         m_font_h( h ),
         m_fname( filename ),
-        m_font_data()
+        m_font_data(),
+        m_is_ttf( is_ttf ),
+        m_ttf_font(NULL)
     {
     }
     ~WtSdlFont()
     {
         for(size_t i = 0; i < m_font_data.size(); i++)
             SDL_DestroyTexture(m_font_data[i]);
+
+        if ( NULL != m_ttf_font )
+        {
+            TTF_CloseFont( m_ttf_font );
+            m_ttf_font = NULL;
+        }
     }
 
     /**************************
@@ -57,20 +59,32 @@ public:
     void load_font_data( std::string theme, SDL_Renderer* renderer )
     {
         std::cout << "load font data = "<< m_fname <<std::endl;
-        if ( m_font_data.size() > 0 )
+        if ( ! m_is_ttf )
         {
-            for(size_t i = 0; i < m_font_data.size(); i++)
-                SDL_DestroyTexture( m_font_data[i] );
-            m_font_data.clear();
-        }
+            if ( m_font_data.size() > 0 )
+            {
+                for(size_t i = 0; i < m_font_data.size(); i++)
+                    SDL_DestroyTexture( m_font_data[i] );
+                m_font_data.clear();
+            }
 
-        SDL_Texture* font_complete = WtSdlUtils::loadAssetToTexture( renderer, m_fname, theme );
-        // fonts are organized by ascii code...
-        for(char i = m_start_symbol; i < '~'; i++ )
-        {
-            m_font_data.push_back( get_letter_texture( font_complete, i, renderer ) );
+            SDL_Texture* font_complete = WtSdlUtils::loadAssetToTexture( renderer, m_fname, theme );
+            // fonts are organized by ascii code...
+            for(char i = m_start_symbol; i < '~'; i++ )
+            {
+                m_font_data.push_back( get_letter_texture( font_complete, i, renderer ) );
+            }
+            SDL_DestroyTexture(font_complete);
         }
-        SDL_DestroyTexture(font_complete);
+        else
+        {
+            //Open the font 
+            m_ttf_font = TTF_OpenFont( m_fname.c_str(), m_font_h ); 
+            if( m_ttf_font == NULL ) 
+            { 
+                std::cerr << "Failed to load font: " << TTF_GetError() << std::endl;
+            }
+        }
     }
 
     /**************************
@@ -78,7 +92,8 @@ public:
      *************************/
     void set_theme( std::string name, SDL_Renderer* renderer )
     {
-        load_font_data( name, renderer );
+        if ( ! m_is_ttf )
+            load_font_data( name, renderer );
     }
 
     /**************************
@@ -111,15 +126,42 @@ public:
      *************************/
     void write( WtCoord pos, char ch, SDL_Renderer* renderer )
     {
-        if ( ch >= m_start_symbol )
+        SDL_Texture* glyph = NULL;
+        WtDim glyph_size( m_font_w, m_font_h );
+
+        if ( ! m_is_ttf )
+        {
+            if ( ch >= m_start_symbol )
+            {
+                glyph = m_font_data[static_cast<size_t>(ch - m_start_symbol)];
+            }
+        }
+        else
+        {
+            SDL_Color text_color = { 200, 200, 200, 0 };
+            SDL_Color bg_color = { 0, 0, 0, 255 };
+                SDL_Surface* text_surface = TTF_RenderText_Solid( m_ttf_font, std::string( &ch, 1 ).c_str(), text_color );
+            if ( NULL != text_surface )
+            {
+                glyph = SDL_CreateTextureFromSurface( renderer, text_surface );
+                glyph_size.w = text_surface->w;
+                glyph_size.h = text_surface->h;
+                SDL_FreeSurface( text_surface );
+            }
+        }
+
+        if ( NULL != glyph )
         {
             SDL_Rect small;
             small.x = pos.x;
             small.y = pos.y;
-            small.w = m_font_w;
-            small.h = m_font_h;
+            small.w = glyph_size.w;
+            small.h = glyph_size.h;
 
-            SDL_RenderCopy(renderer, m_font_data[static_cast<size_t>(ch - m_start_symbol)], NULL, &small );
+            SDL_RenderCopy(renderer, glyph, NULL, &small );
+
+            if ( m_is_ttf )
+                SDL_DestroyTexture( glyph );
         }
     }
 
@@ -169,6 +211,8 @@ private:
     size_t                      m_font_h;
     std::string                 m_fname;
     std::vector<SDL_Texture*>   m_font_data;
+    bool                        m_is_ttf;
+    TTF_Font*                   m_ttf_font;
 };
 
 #endif /* _WT_SDL_FONT_H_ */
