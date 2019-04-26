@@ -31,7 +31,7 @@
 class WtDrawingPolicySdl
 {
 private:
-    static const uint8_t TEXT_FONT_SIZE = 14;
+    static const uint8_t TEXT_FONT_SIZE = 20;
     static const uint8_t GRID_FONT_SIZE = 37;
     static const uint8_t GRID_OFFSET_X = 78;
     static const uint8_t GRID_OFFSET_Y = 127-GRID_FONT_SIZE;
@@ -258,10 +258,10 @@ private:
                     // load from cache
                     SDL_Texture* text_tex = (*it).second;
 
-                    SDL_Rect small;
-                    small.x = pos.x;
-                    small.y = pos.y;
                     WtDim size = font->text_size( str );
+                    SDL_Rect small;
+                    small.x = pos.x + (size.w/2)-str.length();
+                    small.y = pos.y + (size.h/2);
                     small.w = size.w;
                     small.h = size.h;
                     SDL_RenderCopy( m_renderer, text_tex, NULL, &small );
@@ -273,8 +273,8 @@ private:
                     if ( NULL != text_tex )
                     {
                         SDL_Rect small;
-                        small.x = pos.x;
-                        small.y = pos.y;
+                        small.x = pos.x + (text_tex_size.w/2);
+                        small.y = pos.y + (text_tex_size.h/2);
                         small.w = text_tex_size.w;
                         small.h = text_tex_size.h;
                         SDL_RenderCopy( m_renderer, text_tex, NULL, &small );
