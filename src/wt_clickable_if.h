@@ -16,7 +16,7 @@
 #ifndef _WT_CLICKABLE_H_
 #define _WT_CLICKABLE_H_
 
-
+#include "wt_utils.h"
 
 class WtClickableIf
 {
@@ -52,7 +52,8 @@ public:
         m_size( size ),
         m_press_pos( -1, -1 ),
         m_active_motion_pos( -1, -1 ),
-        m_was_pan( false )
+        m_was_pan( false ),
+        m_press_time()
     {
     };
  
@@ -83,6 +84,8 @@ public:
     {
         if ( pos.in_region( m_pos, m_size ) )
         {
+            m_press_time = WtTime::get_time();
+
             m_press_pos = pos;
             m_active_motion_pos = pos;
             if ( m_press ) m_press ( pos );
@@ -96,10 +99,24 @@ public:
     {
         if ( m_press_pos != WtCoord( -1, -1 ) )
         {
+            WtTime::TimePoint release_time = WtTime::get_time();
+
             // call on_release handler 
             if ( m_release )                     m_release ( pos );
-            // call on_click handler 
-            if ( ( !m_was_pan ) && ( m_click ) ) m_click ( pos );
+
+            // call on_click handler
+            WtTime::TimeType elapsed = WtTime::get_time_elapsed( m_press_time, release_time );
+            if ( elapsed < WtTime::from_milliseconds(125) )
+            {
+                if ( m_click ) m_click ( pos );
+            }
+            else
+            {
+                if ( !m_was_pan && ( elapsed < WtTime::from_milliseconds(500) ))
+                {
+                    if ( m_click ) m_click ( pos );
+                }
+            }
 
             m_press_pos = WtCoord( -1, -1 );
             m_active_motion_pos = WtCoord( -1, -1 );
@@ -118,7 +135,7 @@ public:
             if ( m_pan )
             {
                 m_active_motion_pos = m_active_motion_pos + d_pos;
-                if ( !m_active_motion_pos.near_point( m_press_pos, 2 ) )
+                if ( !m_active_motion_pos.near_point( m_press_pos, 20 ) )
                 {
                   //  std::cout << "drag started: " << pos << " != " << m_press_start_pos << std::endl;
                     m_was_pan = true;
@@ -143,6 +160,7 @@ protected:
     WtCoord                 m_press_pos;
     WtCoord                 m_active_motion_pos;
     bool                    m_was_pan;
+    WtTime::TimePoint       m_press_time;
 };
 
 

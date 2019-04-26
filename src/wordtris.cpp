@@ -44,9 +44,9 @@ int main( int, char** )
     WtTime::TimePoint after = WtTime::get_time();
 
     WtTime::TimeType elapsed = WtTime::get_time_elapsed( before, after );
-    if ( elapsed < WtTime::TimeType(1000000) )
+    if ( elapsed < WtTime::from_seconds(1) )
     {
-        WtTime::sleep( WtTime::TimeType(1000000)-elapsed );
+        WtTime::sleep( WtTime::from_seconds(1) - elapsed );
     }
 
     (void)main_menu.show();

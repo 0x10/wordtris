@@ -96,7 +96,7 @@ public:
                                                                                                     true,
                                                                                                     word, 
                                                                                                     "grid_inverse" ) ),
-                                                                         WtTime::TimeType(200000) );
+                                                                         WtTime::from_milliseconds(200) );
                                 blink.push_back( step );
                                 step.content.font = "grid";
                                 blink.push_back( step );
@@ -133,7 +133,7 @@ public:
                                                                                                 false,
                                                                                                 word, 
                                                                                                 "grid_inverse" ) ),
-                                                                       WtTime::TimeType(200000) );
+                                                                       WtTime::from_milliseconds(200) );
                             blink.push_back( step );
                             step.content.font = "grid";
                             blink.push_back( step );

@@ -309,11 +309,11 @@ public:
                                             row_count, col_count_3,
                                             cells_three,
                                             final_row, 0,
-                                            WtTime::TimeType(30000) );
+                                            WtTime::from_milliseconds(30) );
 
         WtGridAnimation::GridContent three( final_row, 0, row_count, WtBoard::col_count,
                                             font, cells_three );
-        WtGridAnimation::GridAnimationStep step_three( three, WtTime::TimeType(300000));
+        WtGridAnimation::GridAnimationStep step_three( three, WtTime::from_milliseconds(300) );
         pause_animation.push_back( step_three );
 
 
@@ -322,11 +322,11 @@ public:
                                             row_count, col_count_2,
                                             cells_two,
                                             final_row, 1,
-                                            WtTime::TimeType(30000) );
+                                            WtTime::from_milliseconds(30) );
 
         WtGridAnimation::GridContent two( final_row, 1, row_count, WtBoard::col_count-2,
                                           font, cells_two );
-        WtGridAnimation::GridAnimationStep step_two( two, WtTime::TimeType(300000));
+        WtGridAnimation::GridAnimationStep step_two( two, WtTime::from_milliseconds(300));
         pause_animation.push_back( step_two );
 
 
@@ -335,11 +335,11 @@ public:
                                             row_count, col_count_1,
                                             cells_one,
                                             final_row, 2,
-                                            WtTime::TimeType(30000) );
+                                            WtTime::from_milliseconds(30) );
 
         WtGridAnimation::GridContent one( final_row, 2, row_count, WtBoard::col_count-4,
                                           font, cells_one );
-        WtGridAnimation::GridAnimationStep step_one( one, WtTime::TimeType(300000));
+        WtGridAnimation::GridAnimationStep step_one( one, WtTime::from_milliseconds(300));
 
         pause_animation.push_back( step_one );
     }
