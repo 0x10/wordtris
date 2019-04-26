@@ -126,9 +126,10 @@ private:
     /**************************
      *
      *************************/
-    bool update_game()
+    bool update_game( bool& animation_played )
     {
         bool game_over = false;
+        animation_played = false;
         if ( m_active_mode->stone_blocked( m_board,
                                            m_active.current_row() - 1,
                                            m_active.current_column() ) )
@@ -145,6 +146,7 @@ private:
             if ( !eval_result.animation.empty() )
             {
                 play_animation( eval_result.animation );
+                animation_played = true;
             }
 
             if ( !eval_result.game_over )
@@ -527,22 +529,28 @@ private:
                 break;
 
             case GAME_STARTED:
-                if ( m_current_update_counter == 0 )
                 {
-                    bool game_over = update_game();
-
-                    if ( game_over )
+                    bool was_animation_played = false;
+                    if ( m_current_update_counter == 0 )
                     {
-                        leave_game();
+                        bool game_over = update_game( was_animation_played );
+
+                        if ( game_over )
+                        {
+                            leave_game();
+                        }
+
+                        m_current_update_counter = get_current_update_counter( m_player );
                     }
 
-                    m_current_update_counter = get_current_update_counter( m_player );
+                    if ( ! was_animation_played )
+                    {
+                        update_window();
+                    }
+
+                    if ( m_current_update_counter > 0 )
+                        m_current_update_counter--;
                 }
-
-                update_window();
-
-                if ( m_current_update_counter > 0 )
-                    m_current_update_counter--;
                 break;
         }
    }
