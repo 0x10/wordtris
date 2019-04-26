@@ -10,9 +10,7 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE := SDL2
 
-FREETYPE_PATH := ../freetype
-
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/include $(LOCAL_PATH)/$(FREETYPE_PATH)/include
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_C_INCLUDES)
 
@@ -52,7 +50,7 @@ LOCAL_SRC_FILES := \
 	$(wildcard $(LOCAL_PATH)/src/video/yuv2rgb/*.c) \
 	$(wildcard $(LOCAL_PATH)/src/test/*.c))
 
-LOCAL_SHARED_LIBRARIES := hidapi freetype
+LOCAL_SHARED_LIBRARIES := hidapi
 
 LOCAL_CFLAGS += -DGL_GLEXT_PROTOTYPES
 LOCAL_LDLIBS := -ldl -lGLESv1_CM -lGLESv2 -llog -landroid
