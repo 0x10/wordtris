@@ -62,7 +62,7 @@ public:
     {
         ACTIVE_INPUT.register_key_press_delegate( WT_BIND_EVENT_HANDLER_1( WtGameCtr::on_key_press ) );
 
-        construct_pause_animation( m_pause_end_animation );
+        WtGridAnimationBuilder::construct_pause_animation( m_pause_end_animation );
 
         add_button( m_pause_btn );
     }
@@ -295,132 +295,6 @@ private:
                                 player.get_current_level() );
 
         return insert_entry( scores, new_entry );
-    }
-
-    /**************************
-     *
-     *************************/
-    void construct_running_letter_animation( WtGridAnimation& animation,
-                                             const uint8_t row_count, const uint8_t col_count,
-                                             std::vector<char> letter_data,
-                                             const uint8_t drop_until_row,
-                                             const uint8_t col_offset,
-                                             WtTime::TimeType speed_per_row )
-    {
-        const std::string font = "grid_inverse";
-        for ( size_t draw_idx = 1;
-              draw_idx < static_cast<size_t>(WtBoard::row_count-drop_until_row);
-              draw_idx++ )
-        {
-            if ( draw_idx <= row_count )
-            {
-                size_t selected_row_start = (row_count - draw_idx) * col_count;
-                std::vector<char>::iterator it = letter_data.begin();
-                std::advance( it, selected_row_start );
-                std::vector<char> row_cells(it, letter_data.end());
-
-                WtGridAnimation::GridContent step_content( 1, col_offset, draw_idx, col_count, font, row_cells );
-                WtGridAnimation::GridAnimationStep step_next( step_content, speed_per_row);
-                animation.push_back( step_next );
-            }
-            else
-            {
-                WtGridAnimation::GridContent letter( draw_idx-row_count, col_offset, row_count, col_count,
-                                                     font, letter_data );
-                WtGridAnimation::GridAnimationStep step_next( letter, speed_per_row);
-                animation.push_back( step_next );
-            }
-        }
-    }
-
-    /**************************
-     *
-     *************************/
-    void construct_pause_animation( WtGridAnimation& pause_animation )
-    {
-        const char x = WtBoard::empty_cell;
-        const uint8_t final_row = 5;
-        const uint8_t row_count = 12;
-        const std::string font = "grid_inverse";
-
-        std::vector<char> cells_one{'1','1','1','1','1','1',
-                                    '1','1','1','1','1','1',
-                                     x , x ,'1','1', x , x,
-                                     x , x ,'1','1', x , x,
-                                     x , x ,'1','1', x , x,
-                                     x , x ,'1','1', x , x,
-                                     x , x ,'1','1', x , x,
-                                     x , x ,'1','1', x , x,
-                                     x , x ,'1','1', x , x,
-                                     x , x ,'1','1', x , x,
-                                    '1','1','1','1','1','1',
-                                    '1','1','1','1','1','1'};
-        std::vector<char> cells_two{'2','2','2','2','2','2','2','2',
-                                    '2','2','2','2','2','2','2','2',
-                                     x ,'2','2', x , x ,'2','2', x,
-                                     x ,'2','2', x , x ,'2','2', x,
-                                     x ,'2','2', x , x ,'2','2', x,
-                                     x ,'2','2', x , x ,'2','2', x,
-                                     x ,'2','2', x , x ,'2','2', x,
-                                     x ,'2','2', x , x ,'2','2', x,
-                                     x ,'2','2', x , x ,'2','2', x,
-                                     x ,'2','2', x , x ,'2','2', x,
-                                    '2','2','2','2','2','2','2','2',
-                                    '2','2','2','2','2','2','2','2'};
-        std::vector<char> cells_three{'3','3','3','3','3','3','3','3','3','3',
-                                      '3','3','3','3','3','3','3','3','3','3',
-                                       x ,'3','3', x ,'3','3', x ,'3','3', x,
-                                       x ,'3','3', x ,'3','3', x ,'3','3', x,
-                                       x ,'3','3', x ,'3','3', x ,'3','3', x,
-                                       x ,'3','3', x ,'3','3', x ,'3','3', x,
-                                       x ,'3','3', x ,'3','3', x ,'3','3', x,
-                                       x ,'3','3', x ,'3','3', x ,'3','3', x,
-                                       x ,'3','3', x ,'3','3', x ,'3','3', x,
-                                       x ,'3','3', x ,'3','3', x ,'3','3', x,
-                                      '3','3','3','3','3','3','3','3','3','3',
-                                      '3','3','3','3','3','3','3','3','3','3' };
-
-        const uint8_t col_count_3 = WtBoard::col_count;
-        const uint8_t col_count_2 = WtBoard::col_count-2;
-        const uint8_t col_count_1 = WtBoard::col_count-4;
-
-        construct_running_letter_animation( pause_animation,
-                                            row_count, col_count_3,
-                                            cells_three,
-                                            final_row, 0,
-                                            WtTime::TimeType(30000) );
-
-        WtGridAnimation::GridContent three( final_row, 0, row_count, WtBoard::col_count,
-                                            font, cells_three );
-        WtGridAnimation::GridAnimationStep step_three( three, WtTime::TimeType(300000));
-        pause_animation.push_back( step_three );
-
-
-
-        construct_running_letter_animation( pause_animation,
-                                            row_count, col_count_2,
-                                            cells_two,
-                                            final_row, 1,
-                                            WtTime::TimeType(30000) );
-
-        WtGridAnimation::GridContent two( final_row, 1, row_count, WtBoard::col_count-2,
-                                          font, cells_two );
-        WtGridAnimation::GridAnimationStep step_two( two, WtTime::TimeType(300000));
-        pause_animation.push_back( step_two );
-
-
-
-        construct_running_letter_animation( pause_animation,
-                                            row_count, col_count_1,
-                                            cells_one,
-                                            final_row, 2,
-                                            WtTime::TimeType(30000) );
-
-        WtGridAnimation::GridContent one( final_row, 2, row_count, WtBoard::col_count-4,
-                                          font, cells_one );
-        WtGridAnimation::GridAnimationStep step_one( one, WtTime::TimeType(300000));
-
-        pause_animation.push_back( step_one );
     }
 
     /**************************
