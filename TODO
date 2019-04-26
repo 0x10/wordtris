@@ -65,10 +65,13 @@
 #
 # (architecture bugs)
 # - Drawing:
-#       - message box to not use hard coded images and positions/dimensions
-#       - do not use hard coded absolute pixel values which depend on SDL_WIDHT=540/SDL_HEIGHT=960 but relative values
-#       - add word wrap on text boxes instead of char wrap
-#       - support non 16:9 devices
+#       - issue may be resolved to overscan hidden feature 
+#       - decide wether to modify it locally to have it fixed at the top
+#         see patch here: https://hg.libsdl.org/SDL/rev/8a29b371e2db
+#           - message box to not use hard coded images and positions/dimensions
+#           - do not use hard coded absolute pixel values which depend on SDL_WIDHT=540/SDL_HEIGHT=960 but relative values
+#           - add word wrap on text boxes instead of char wrap
+#           - support non 16:9 devices
 # - Support Non-Ascii characters in Translations
 #       - use ttf for text font -> reduced complexity for asset storage
 #
