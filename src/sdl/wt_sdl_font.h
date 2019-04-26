@@ -161,13 +161,12 @@ public:
     /**************************
      *
      *************************/
-    SDL_Texture* write_text( WtCoord pos, std::string text, WtDim& sz, SDL_Renderer* renderer )
+    SDL_Texture* write_text( std::string text, WtDim& sz, SDL_Renderer* renderer )
     {
         SDL_Texture* text_tex = NULL;
         if ( m_is_ttf )
         {
             SDL_Color text_color = { 255, 255, 255, 0 };
-            SDL_Color bg_color = { 0, 0, 0, 255 };
             SDL_Surface* text_surface = TTF_RenderUTF8_Blended( m_ttf_font, text.c_str(), text_color );
             if ( NULL != text_surface )
             {
@@ -186,7 +185,7 @@ public:
     void write( WtCoord pos, char ch, SDL_Renderer* renderer )
     {
         SDL_Texture* glyph = NULL;
-        WtDim glyph_size( m_font_w, m_font_h );
+        WtDim glyph_size( static_cast<ssize_t>(m_font_w), static_cast<ssize_t>(m_font_h) );
 
         if ( ! m_is_ttf )
         {
@@ -198,8 +197,7 @@ public:
         else
         {
             SDL_Color text_color = { 200, 200, 200, 0 };
-            SDL_Color bg_color = { 0, 0, 0, 255 };
-                SDL_Surface* text_surface = TTF_RenderText_Solid( m_ttf_font, std::string( &ch, 1 ).c_str(), text_color );
+            SDL_Surface* text_surface = TTF_RenderUTF8_Blended( m_ttf_font, std::string( &ch, 1 ).c_str(), text_color );
             if ( NULL != text_surface )
             {
                 glyph = SDL_CreateTextureFromSurface( renderer, text_surface );
@@ -233,6 +231,9 @@ public:
     }
 
 private:
+    WtSdlFont( const WtSdlFont& ); 
+    WtSdlFont & operator = ( const WtSdlFont& );
+
     /**************************
      *
      *************************/

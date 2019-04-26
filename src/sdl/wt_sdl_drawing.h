@@ -31,7 +31,7 @@
 class WtDrawingPolicySdl
 {
 private:
-    static const uint8_t TEXT_FONT_SIZE = 20;
+    static const uint8_t TEXT_FONT_SIZE = 24;
     static const uint8_t GRID_FONT_SIZE = 37;
     static const uint8_t GRID_OFFSET_X = 78;
     static const uint8_t GRID_OFFSET_Y = 127-GRID_FONT_SIZE;
@@ -46,8 +46,7 @@ protected:
         m_theme("default"),
         m_grid_font( "grid", GRID_FONT_SIZE, GRID_FONT_SIZE, "grid_font.bmp" ),
         m_grid_font_inverse( "grid_inverse", GRID_FONT_SIZE, GRID_FONT_SIZE, "grid_font_inverse.bmp" ),
-        //m_text_font( "text", TEXT_FONT_SIZE, TEXT_FONT_SIZE*2, "text_font.bmp" ),
-        m_text_font( "text", TEXT_FONT_SIZE, TEXT_FONT_SIZE, SDL_ASSETS"DejaVuSansMono.ttf", true ),
+        m_text_font( "text", TEXT_FONT_SIZE, TEXT_FONT_SIZE, SDL_ASSETS"SourceSansPro-Light.ttf", true ),
         m_texture_cache()
     {
         if (SDL_Init(SDL_INIT_VIDEO)) {
@@ -262,35 +261,32 @@ private:
             if ( font->is_ttf() )
             {
                 WtCoord pos( x, y );
+                WtDim size = font->text_size( str );
+                SDL_Texture* text_tex = nullptr;
+
                 SDL_TextureCache::const_iterator it = m_texture_cache.find(str);
                 if ( it != m_texture_cache.end() )
                 {
                     // load from cache
-                    SDL_Texture* text_tex = (*it).second;
+                    text_tex = (*it).second;
+                }
+                else
+                {
+                    text_tex = font->write_text( str, size, m_renderer );
+                    if ( nullptr != text_tex )
+                    {
+                        m_texture_cache[str] = text_tex;
+                    }
+                }
 
-                    WtDim size = font->text_size( str );
+                if ( text_tex != nullptr )
+                {
                     SDL_Rect small;
                     small.x = pos.x;
                     small.y = pos.y;
                     small.w = size.w;
                     small.h = size.h;
                     SDL_RenderCopy( m_renderer, text_tex, NULL, &small );
-                }
-                else
-                {
-                    WtDim text_tex_size(0,0);
-                    SDL_Texture* text_tex = font->write_text( pos, str, text_tex_size, m_renderer );
-                    if ( NULL != text_tex )
-                    {
-                        SDL_Rect small;
-                        small.x = pos.x;
-                        small.y = pos.y;
-                        small.w = text_tex_size.w;
-                        small.h = text_tex_size.h;
-                        SDL_RenderCopy( m_renderer, text_tex, NULL, &small );
-
-                        m_texture_cache[str] = text_tex;
-                    }
                 }
             }
             else

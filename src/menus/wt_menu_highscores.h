@@ -93,7 +93,7 @@ private: // no copy allowed
         WtCoord entry_pos ( 100,
                             ((ACTIVE_WINDOW_HEIGHT / 8) + (5*font_size.h)) );
 
-        entry_pos.y = entry_pos.y + ( static_cast<ssize_t>(index) * (2*font_size.h) );
+        entry_pos.y = entry_pos.y + ( static_cast<ssize_t>(index) * (font_size.h + (font_size.h/2)) );
 
         {
             std::stringstream ss;
