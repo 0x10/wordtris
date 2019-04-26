@@ -76,8 +76,8 @@ private: // no copy allowed
      *************************/
     void draw_title( const std::string& title )
     {
-        WtDim   font_size = ACTIVE_WINDOW.get_font_size();
-        WtCoord title_pos ( (ACTIVE_WINDOW_WIDTH / 2)-((static_cast<ssize_t>(title.length())*font_size.w) / 2),
+        WtDim   font_size = ACTIVE_WINDOW.get_text_size( title );
+        WtCoord title_pos ( (ACTIVE_WINDOW_WIDTH / 2)-(font_size.w / 2),
                             (ACTIVE_WINDOW_HEIGHT / 8) + (2*font_size.h) );
 
         ACTIVE_WINDOW.draw_text( title_pos, title );
@@ -91,9 +91,9 @@ private: // no copy allowed
     {
         WtDim   font_size = ACTIVE_WINDOW.get_font_size();
         WtCoord entry_pos ( 100,
-                            ((ACTIVE_WINDOW_HEIGHT / 8) + (2*font_size.h))+ (6*font_size.h) );
+                            ((ACTIVE_WINDOW_HEIGHT / 8) + (5*font_size.h)) );
 
-        entry_pos.y = entry_pos.y + ( static_cast<ssize_t>(index) * (3*font_size.h) );
+        entry_pos.y = entry_pos.y + ( static_cast<ssize_t>(index) * (2*font_size.h) );
 
         {
             std::stringstream ss;
@@ -105,8 +105,10 @@ private: // no copy allowed
 
         {
             std::string level_label = "Level ";
+            WtDim text_font_size = ACTIVE_WINDOW.get_text_size( level_label );
+
             ACTIVE_WINDOW.draw_text( entry_pos, level_label );
-            entry_pos.x = entry_pos.x + (font_size.w * static_cast<ssize_t>(level_label.length()+1));
+            entry_pos.x = entry_pos.x + text_font_size.w;
             std::stringstream ss;
             ss << entry.level;
             ACTIVE_WINDOW.draw_text( entry_pos, ss.str() ); 
@@ -115,7 +117,8 @@ private: // no copy allowed
         {
             std::stringstream ss;
             ss << entry.score;
-            entry_pos.x = (ACTIVE_WINDOW_WIDTH - 100) - (font_size.w * static_cast<ssize_t>(ss.str().length()));
+            WtDim text_font_size = ACTIVE_WINDOW.get_text_size( ss.str() );
+            entry_pos.x = (ACTIVE_WINDOW_WIDTH - 100) - (text_font_size.w);
             ACTIVE_WINDOW.draw_text( entry_pos, ss.str() ); 
         }
     }

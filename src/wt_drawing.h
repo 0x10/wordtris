@@ -156,14 +156,14 @@ public:
         DrawingPolicy::draw_image( pos,
                                    sz,
                                    "menu_btn.bmp" );
-        WtDim font_sz = DrawingPolicy::get_font_size();
+        WtDim font_sz = DrawingPolicy::get_text_size( msg );
 
-        ssize_t text_center_w = static_cast<ssize_t>( msg.length() / 2 ) * font_sz.w;
+        ssize_t text_center_w = font_sz.w / 2;
         ssize_t button_center_x = ( sz.w / 2 + pos.x );
         ssize_t button_center_y = ( sz.h / 2 + pos.y );
 
         DrawingPolicy::draw_text( WtCoord( button_center_x - text_center_w, 
-                                           button_center_y - font_sz.h ),
+                                           button_center_y - (font_sz.h/2) ),
                                   msg );
     }
 
@@ -185,14 +185,14 @@ public:
                 ssize_t button_center_x;
                 ssize_t button_center_y;
 
-                WtDim font_sz = DrawingPolicy::get_font_size();
+                WtDim font_sz = DrawingPolicy::get_text_size( button.label() );
 
-                text_center_w = static_cast<ssize_t>( button.label().length() / 2 ) * font_sz.w;
+                text_center_w = font_sz.w / 2;
                 button_center_x = ( ( button.width() / 2 ) + button.x() ) + button.label_pos().x;
                 button_center_y = ( ( button.height() / 2 ) + button.y() ) + button.label_pos().y;
 
                 DrawingPolicy::draw_text( WtCoord( button_center_x - text_center_w,
-                                                   button_center_y - font_sz.h ),
+                                                   button_center_y - (font_sz.h/2)  ),
                                           button.label() );
             }
         }

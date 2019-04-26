@@ -78,7 +78,7 @@ const std::vector<WtTranslationTexts> wt_translations = {
     { "fr",
        { "French"/* en */,
          "Franz."/* de */,
-         "Francais"/* fr */ }
+         "Français"/* fr */ }
     },
     { "hard",
        { "Hard"/* en */,

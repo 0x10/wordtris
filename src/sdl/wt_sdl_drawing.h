@@ -47,7 +47,7 @@ protected:
         m_grid_font( "grid", GRID_FONT_SIZE, GRID_FONT_SIZE, "grid_font.bmp" ),
         m_grid_font_inverse( "grid_inverse", GRID_FONT_SIZE, GRID_FONT_SIZE, "grid_font_inverse.bmp" ),
         //m_text_font( "text", TEXT_FONT_SIZE, TEXT_FONT_SIZE*2, "text_font.bmp" ),
-        m_text_font( "text", TEXT_FONT_SIZE, TEXT_FONT_SIZE*2, SDL_ASSETS"DejaVuSansMono.ttf", true ),
+        m_text_font( "text", TEXT_FONT_SIZE, TEXT_FONT_SIZE, SDL_ASSETS"DejaVuSansMono.ttf", true ),
         m_texture_cache()
     {
         if (SDL_Init(SDL_INIT_VIDEO)) {
@@ -99,6 +99,10 @@ protected:
     ~WtDrawingPolicySdl()
     {
         std::cout << "destroy sdl..\n";
+
+        m_text_font.close();
+        m_grid_font.close();
+        m_grid_font_inverse.close();
 
         clear_texture_cache();
 
@@ -221,7 +225,13 @@ public:
         return m_text_font.size();
     }
 
-
+    /**************************
+      *
+      *************************/   
+    WtDim get_text_size( const std::string &str )
+    {
+        return m_text_font.text_size( str );
+    }
 
 private:
     WtDrawingPolicySdl( const WtDrawingPolicySdl& ); 
@@ -260,8 +270,8 @@ private:
 
                     WtDim size = font->text_size( str );
                     SDL_Rect small;
-                    small.x = pos.x + (size.w/2)-str.length();
-                    small.y = pos.y + (size.h/2);
+                    small.x = pos.x;
+                    small.y = pos.y;
                     small.w = size.w;
                     small.h = size.h;
                     SDL_RenderCopy( m_renderer, text_tex, NULL, &small );
@@ -273,8 +283,8 @@ private:
                     if ( NULL != text_tex )
                     {
                         SDL_Rect small;
-                        small.x = pos.x + (text_tex_size.w/2);
-                        small.y = pos.y + (text_tex_size.h/2);
+                        small.x = pos.x;
+                        small.y = pos.y;
                         small.w = text_tex_size.w;
                         small.h = text_tex_size.h;
                         SDL_RenderCopy( m_renderer, text_tex, NULL, &small );
@@ -364,6 +374,25 @@ private:
         m_texture_cache.clear();
     }
 
+
+    void draw_red_debug_dot( const WtCoord& pos )
+    {
+        /* Declaring the surface. */
+        SDL_Surface *s;
+        /* Creating the surface. */
+        s = SDL_CreateRGBSurface(0, 1, 1, 32, 0, 0, 0, 0);
+        /* Filling the surface with red color. */
+        SDL_FillRect(s, NULL, SDL_MapRGB(s->format, 255, 0, 0));
+        SDL_Texture* t = SDL_CreateTextureFromSurface( m_renderer, s );
+        SDL_FreeSurface(s);
+        SDL_Rect small;
+        small.x = pos.x;
+        small.y = pos.y;
+        small.w = 1;
+        small.h = 1;
+        SDL_RenderCopy( m_renderer, t, NULL, &small );
+        SDL_DestroyTexture( t );
+    }
 
 private:
     SDL_Window*   m_window;

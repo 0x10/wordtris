@@ -192,7 +192,7 @@ public:
      *************************/
     virtual std::string get_title()
     {
-        return "Demo";
+        return "Demö";
     }
 
     /**************************

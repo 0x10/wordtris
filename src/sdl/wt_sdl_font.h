@@ -43,14 +43,6 @@ public:
     }
     ~WtSdlFont()
     {
-        for(size_t i = 0; i < m_font_data.size(); i++)
-            SDL_DestroyTexture(m_font_data[i]);
-
-        if ( NULL != m_ttf_font )
-        {
-            TTF_CloseFont( m_ttf_font );
-            m_ttf_font = NULL;
-        }
     }
 
     /**************************
@@ -61,6 +53,22 @@ public:
         return m_is_ttf;
     }
 
+
+    /**************************
+     *
+     *************************/
+    void close()
+    {
+        for(size_t i = 0; i < m_font_data.size(); i++)
+            SDL_DestroyTexture(m_font_data[i]);
+
+        if ( NULL != m_ttf_font )
+        {
+            std::cout << "destroy font\n";
+            TTF_CloseFont( m_ttf_font );
+            m_ttf_font = NULL;
+        }
+    }
     /**************************
      *
      *************************/
@@ -87,10 +95,14 @@ public:
         else
         {
             //Open the font 
-            m_ttf_font = TTF_OpenFont( m_fname.c_str(), m_font_w ); 
-            if( m_ttf_font == NULL ) 
-            { 
-                std::cerr << "Failed to load font: " << TTF_GetError() << std::endl;
+            if ( m_ttf_font == NULL )
+            {
+                std::cout << "load font\n";
+                m_ttf_font = TTF_OpenFont( m_fname.c_str(), m_font_w ); 
+                if( m_ttf_font == NULL ) 
+                { 
+                    std::cerr << "Failed to load font: " << TTF_GetError() << std::endl;
+                }
             }
         }
     }
@@ -156,7 +168,7 @@ public:
         {
             SDL_Color text_color = { 255, 255, 255, 0 };
             SDL_Color bg_color = { 0, 0, 0, 255 };
-            SDL_Surface* text_surface = TTF_RenderUTF8_Solid( m_ttf_font, text.c_str(), text_color );
+            SDL_Surface* text_surface = TTF_RenderUTF8_Blended( m_ttf_font, text.c_str(), text_color );
             if ( NULL != text_surface )
             {
                 text_tex = SDL_CreateTextureFromSurface( renderer, text_surface );
