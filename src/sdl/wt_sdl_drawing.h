@@ -224,7 +224,25 @@ public:
                     const std::string text,
                     const std::string font="text")
     {
-        puts_fb( pos.x, pos.y, text, ( font == "text" ? &m_text_font : &m_grid_font ) );
+        if ( font == "text" )
+        {
+            puts_fb( pos.x, pos.y, text, &m_text_font );
+        }
+        else
+        {
+            WtCoord screen_pos(0,0);
+            ssize_t in_cell_x_offset = 0;
+            ssize_t in_cell_y_offset = 0;
+            WtDim c_size = m_grid_font.text_size( text );
+            in_cell_x_offset = (m_grid_font.width()/2)-(c_size.w/2);
+            in_cell_y_offset = ((c_size.h - m_grid_font.height()) / 2) + 1;
+            screen_pos.x = pos.x + in_cell_x_offset;
+            screen_pos.y = pos.y - in_cell_y_offset;
+
+            draw_image( pos, m_grid_font.size(), "grid_font_bg.bmp" );
+
+            puts_fb( screen_pos.x, screen_pos.y, text, &m_grid_font );
+        }
     }
 
     /**************************
