@@ -148,7 +148,7 @@ public:
                               uint8_t     col,
                               std::string image )
     {
-        draw_image( grid_pos_to_screen_pos( row, col, '\0', &m_grid_font ),
+        draw_image( grid_pos_to_screen_pos( row, col, &m_grid_font ),
                     m_grid_font.size(),
                     image );
     }
@@ -168,13 +168,20 @@ public:
 
         if ( value >= selected_font->start_symbol() )
         {
-            WtCoord pos = grid_pos_to_screen_pos( row, col, value, selected_font );
-            draw_red_debug_dot( pos );
+            WtCoord pos = grid_pos_to_screen_pos_text( row, col, value, selected_font );
+
+            if ( value == ' ' )
+            {
+                draw_custom_cell_bg( row, col,
+                                     "grid_font_bg_space.bmp" );
+            }
+            else
+            {
+                draw_custom_cell_bg( row, col,
+                                     "grid_font_bg.bmp" );
+            }
 
             puts_fb( pos.x, pos.y, std::string(1, value), selected_font );
-            /*selected_font->write( pos, 
-                                  value, 
-                                  m_renderer );*/
         }
     }
 
@@ -243,10 +250,24 @@ private:
     /**************************
      *
      *************************/   
-    WtCoord grid_pos_to_screen_pos( uint8_t row, uint8_t col, char c,
-                                    WtSdlFont* font )
+    WtCoord grid_pos_to_screen_pos( uint8_t row, uint8_t col, WtSdlFont* font )
     {
         WtCoord screen_pos(0,0);
+        if ( NULL != font )
+        {
+            screen_pos.x = (((col*static_cast<ssize_t>(font->width()))+col)+GRID_OFFSET_X);
+            screen_pos.y = (((row*static_cast<ssize_t>(font->height()))+row)+GRID_OFFSET_Y);
+        }
+        return screen_pos;
+    }
+
+    /**************************
+     *
+     *************************/   
+    WtCoord grid_pos_to_screen_pos_text( uint8_t row, uint8_t col, char c,
+                                    WtSdlFont* font )
+    {
+        WtCoord screen_pos = grid_pos_to_screen_pos( row, col, font );
         if ( NULL != font )
         {
             ssize_t in_cell_x_offset = 0;
@@ -255,10 +276,10 @@ private:
             {
                 WtDim c_size = font->text_size( std::string(1, c) );
                 in_cell_x_offset = (font->width()/2)-(c_size.w/2);
-                in_cell_y_offset = (c_size.h - font->height()) / 2;
+                in_cell_y_offset = ((c_size.h - font->height()) / 2) + 1;
             }
-            screen_pos.x = (((col*static_cast<ssize_t>(font->width()))+col)+GRID_OFFSET_X)+in_cell_x_offset;
-            screen_pos.y = (((row*static_cast<ssize_t>(font->height()))+row)+GRID_OFFSET_Y)-in_cell_y_offset;
+            screen_pos.x = screen_pos.x + in_cell_x_offset;
+            screen_pos.y = screen_pos.y - in_cell_y_offset;
         }
         return screen_pos;
     }
