@@ -45,7 +45,6 @@ protected:
         m_bg_img_path( ""),
         m_theme("default"),
         m_grid_font( "grid", GRID_FONT_SIZE, GRID_FONT_SIZE, SDL_ASSETS"SourceSansPro-Light.ttf", true ),
-        m_grid_font_inverse( "grid_inverse", GRID_FONT_SIZE, GRID_FONT_SIZE, "grid_font_inverse.bmp" ),
         m_text_font( "text", TEXT_FONT_SIZE, TEXT_FONT_SIZE, SDL_ASSETS"SourceSansPro-Light.ttf", true ),
         m_texture_cache()
     {
@@ -91,7 +90,6 @@ protected:
         set_bg("bg.bmp");
 
         m_grid_font.load_font_data( m_theme, m_renderer );
-        m_grid_font_inverse.load_font_data( m_theme, m_renderer );
         m_text_font.load_font_data( m_theme, m_renderer );
     }
 
@@ -101,7 +99,6 @@ protected:
 
         m_text_font.close();
         m_grid_font.close();
-        m_grid_font_inverse.close();
 
         clear_texture_cache();
 
@@ -133,7 +130,6 @@ public:
     {
         // todo base class themeable
         m_grid_font.set_theme( name, m_renderer );
-        m_grid_font_inverse.set_theme( name, m_renderer );
         m_text_font.set_theme( name, m_renderer );
         m_theme = name;
         // TODO check if available and if not keep old
@@ -162,9 +158,6 @@ public:
                        const std::string font="grid" )
     {
         WtSdlFont* selected_font = &m_grid_font;
-        if ( font == "grid_inverse" )
-            selected_font = &m_grid_font_inverse;
-
 
         if ( value >= selected_font->start_symbol() )
         {
@@ -177,11 +170,21 @@ public:
             }
             else
             {
-                draw_custom_cell_bg( row, col,
-                                     "grid_font_bg.bmp" );
-            }
+                std::string font_bg = "grid_font_bg.bmp";
+                SDL_Color font_col = {255, 255, 255, 255};
 
-            puts_fb( pos.x, pos.y, std::string(1, value), selected_font );
+                if ( font != "grid" )
+                {
+                    font_bg = "grid_font_bg_inverse.bmp";
+                    font_col.r = 0;
+                    font_col.g = 0;
+                    font_col.b = 0;
+                    font_col.a = 255;
+                }
+
+                draw_custom_cell_bg( row, col, font_bg );
+                puts_fb( pos.x, pos.y, std::string(1, value), selected_font, font_col );
+            }
         }
     }
 
@@ -305,7 +308,7 @@ private:
     /**************************
      *
      *************************/
-    void puts_fb( ssize_t x, ssize_t y, const std::string str, WtSdlFont* font )
+    void puts_fb( ssize_t x, ssize_t y, const std::string str, WtSdlFont* font, SDL_Color font_color={255,255,255,255} )
     {
         if ( NULL != font )
         {
@@ -314,8 +317,18 @@ private:
                 WtCoord pos( x, y );
                 WtDim size = font->text_size( str );
                 SDL_Texture* text_tex = nullptr;
+                std::string index = str;
+                {
+                    std::stringstream ss;
+                    ss << index;
+                    ss << std::hex << static_cast<size_t>(font_color.r);
+                    ss << std::hex << static_cast<size_t>(font_color.g);
+                    ss << std::hex << static_cast<size_t>(font_color.b);
+                    ss << std::hex << static_cast<size_t>(font_color.a);
+                    index = ss.str();
+                }
 
-                SDL_TextureCache::const_iterator it = m_texture_cache.find(str);
+                SDL_TextureCache::const_iterator it = m_texture_cache.find(index);
                 if ( it != m_texture_cache.end() )
                 {
                     // load from cache
@@ -323,10 +336,10 @@ private:
                 }
                 else
                 {
-                    text_tex = font->write_text( str, size, m_renderer );
+                    text_tex = font->write_text( str, size, font_color, m_renderer );
                     if ( nullptr != text_tex )
                     {
-                        m_texture_cache[str] = text_tex;
+                        m_texture_cache[index] = text_tex;
                     }
                 }
 
@@ -451,7 +464,6 @@ private:
     std::string   m_theme;
 
     WtSdlFont     m_grid_font;
-    WtSdlFont     m_grid_font_inverse;
     WtSdlFont     m_text_font;
 
     SDL_TextureCache m_texture_cache;

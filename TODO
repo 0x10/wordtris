@@ -8,8 +8,7 @@
 #   - tutorial or game mode specific intro section
 #   - complete translations
 #   - [PROGRESS] utf8 / iso8859-1
-#           => text font merged to ttf
-#           => grid pending
+#           => internal type from char to utf8_char
 #   - naming / logo
 #   - (at least strategy) revenue system (ads, install-fee, whatever)
 #   - [DONE] scaleable ui / 16:9 fixed 

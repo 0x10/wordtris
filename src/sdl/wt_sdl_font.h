@@ -161,13 +161,12 @@ public:
     /**************************
      *
      *************************/
-    SDL_Texture* write_text( std::string text, WtDim& sz, SDL_Renderer* renderer )
+    SDL_Texture* write_text( std::string text, WtDim& sz, SDL_Color color, SDL_Renderer* renderer )
     {
         SDL_Texture* text_tex = NULL;
         if ( m_is_ttf )
         {
-            SDL_Color text_color = { 255, 255, 255, 0 };
-            SDL_Surface* text_surface = TTF_RenderUTF8_Blended( m_ttf_font, text.c_str(), text_color );
+            SDL_Surface* text_surface = TTF_RenderUTF8_Blended( m_ttf_font, text.c_str(), color );
             if ( NULL != text_surface )
             {
                 text_tex = SDL_CreateTextureFromSurface( renderer, text_surface );
