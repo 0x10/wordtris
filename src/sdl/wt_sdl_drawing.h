@@ -423,8 +423,9 @@ private:
                                          SDL_TEXTUREACCESS_TARGET, 
                                          1, 1 );
                 SDL_SetRenderTarget( m_renderer, tex );
-                SDL_SetRenderDrawBlendMode( m_renderer, SDL_BLENDMODE_NONE );
-                SDL_SetRenderDrawColor( m_renderer, 255, 0, 255, 0 );
+                SDL_SetRenderDrawBlendMode( m_renderer, SDL_BLENDMODE_BLEND );
+                SDL_SetTextureBlendMode( tex, SDL_BLENDMODE_BLEND );
+                SDL_SetRenderDrawColor( m_renderer, 0, 0, 0, 0 );
                 SDL_RenderFillRect( m_renderer, NULL );
                 SDL_SetRenderTarget( m_renderer, NULL );
 
