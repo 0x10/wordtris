@@ -25,7 +25,7 @@ public:
         WtViewIf( "bg_menu_pause.bmp", false ),
         m_leave_btn( WtCoord( (ACTIVE_WINDOW_WIDTH-105) - 100, 800 ), 
                      WtDim(100, 100), 
-                     "right.bmp",
+                     "next_btn.bmp",
                      WT_BIND_EVENT_HANDLER( WtMenuScoreSummary::leave ) ),
         m_new_highscore( false )
     {

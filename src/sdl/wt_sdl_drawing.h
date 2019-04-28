@@ -212,13 +212,34 @@ public:
                      const WtDim       size,
                      const std::string fname )
     {
-        SDL_Texture*  button_img = get_texture( fname );
+        bool mirror_vertical = false;
+        std::string fname_real = fname;
+        if ( fname == "right.bmp" )
+        {
+            fname_real = "left.bmp";
+            mirror_vertical = true;
+        }
+        if ( fname == "next_btn.bmp" )
+        {
+            fname_real = "back_btn.bmp";
+            mirror_vertical = true;
+        }
+
+
+        SDL_Texture*  button_img = get_texture( fname_real );
         SDL_Rect rect;
         rect.x = pos.x;
         rect.y = pos.y;
         rect.w = size.w;
         rect.h = size.h;
-        SDL_RenderCopy(m_renderer, button_img, NULL, &rect);
+        if (mirror_vertical)
+        {
+            SDL_RenderCopyEx(m_renderer, button_img, NULL, &rect, 180, NULL, SDL_FLIP_VERTICAL);
+        }
+        else
+        {
+            SDL_RenderCopy(m_renderer, button_img, NULL, &rect);
+        }
     }
     /**************************
       *
