@@ -145,6 +145,8 @@ private:
                                             m_active.current_column(), 
                                             m_active.current_value() );
 
+            m_grid_touch_control.set_direction_seperator_pos( ACTIVE_WINDOW.grid_pos_to_coord( WtBoard::row_count - 1, 5 ).x );
+
             WtGameModeState eval_result = m_active_mode->eval_board( m_board,
                                                                      m_player );
 
@@ -168,8 +170,6 @@ private:
             {
                 game_over = true;
             }
-
-            m_grid_touch_control.set_direction_seperator_pos( ACTIVE_WINDOW.grid_pos_to_coord( m_active.current_row(), m_active.current_column() ).x );
         }
         else
         {
