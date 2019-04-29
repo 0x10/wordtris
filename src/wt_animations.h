@@ -153,6 +153,7 @@ public:
         m_update_overlay = update_overlay;
     }
 
+
 private:
     /**************************
      *
@@ -204,6 +205,14 @@ private:
             m_a_idx = 0;
             leave();
         }
+    }
+
+    /**************************
+     *
+     *************************/
+    void left_view()
+    {
+        m_a_idx = 0;
     }
 private:
     std::vector< GridAnimationStep > m_animation_steps;
