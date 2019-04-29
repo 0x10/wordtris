@@ -258,8 +258,8 @@ public:
             ssize_t in_cell_x_offset = 0;
             ssize_t in_cell_y_offset = 0;
             WtDim c_size = m_grid_font.text_size( text );
-            in_cell_x_offset = (m_grid_font.width()/2)-(c_size.w/2);
-            in_cell_y_offset = ((c_size.h - m_grid_font.height()) / 2) + 1;
+            in_cell_x_offset = (static_cast<ssize_t>(m_grid_font.width())/2)-(c_size.w/2);
+            in_cell_y_offset = ((c_size.h - static_cast<ssize_t>(m_grid_font.height())) / 2) + 1;
             screen_pos.x = pos.x + in_cell_x_offset;
             screen_pos.y = pos.y - in_cell_y_offset;
 
@@ -317,8 +317,8 @@ private:
             if ( c != '\0' )
             {
                 WtDim c_size = font->text_size( std::string(1, c) );
-                in_cell_x_offset = (font->width()/2)-(c_size.w/2);
-                in_cell_y_offset = ((c_size.h - font->height()) / 2) + 1;
+                in_cell_x_offset = (static_cast<ssize_t>(font->width())/2)-(c_size.w/2);
+                in_cell_y_offset = ((c_size.h - static_cast<ssize_t>(font->height())) / 2) + 1;
             }
             screen_pos.x = screen_pos.x + in_cell_x_offset;
             screen_pos.y = screen_pos.y - in_cell_y_offset;
