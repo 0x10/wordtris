@@ -103,7 +103,7 @@ private:
     {
         if ( key == wt_control_BACK )
         {
-            exit();
+            do_exit();
         }
     }
 

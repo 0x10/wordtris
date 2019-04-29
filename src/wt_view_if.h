@@ -111,7 +111,7 @@ protected:
     /**************************
      *
      *************************/
-    void exit()
+    void do_exit()
     {
         m_shall_exit = true;
         leave();
@@ -213,7 +213,7 @@ protected:
     {
         m_shall_leave = false;
         ACTIVE_WINDOW.set_bg( get_bg_img() );
-        ACTIVE_INPUT.register_on_quit_handler( WT_BIND_EVENT_HANDLER( WtViewIf::exit ) );
+        ACTIVE_INPUT.register_on_quit_handler( WT_BIND_EVENT_HANDLER( WtViewIf::do_exit ) );
 
         if ( m_fade ) fade_in();
 
