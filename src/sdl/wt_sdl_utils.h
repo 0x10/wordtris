@@ -42,7 +42,6 @@ public:
         else
         {
             std::cout<<"could not load "<<path<<std::endl;
-            exit(-1);
         }
         return result_texture;
     }

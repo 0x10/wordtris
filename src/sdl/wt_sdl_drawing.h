@@ -48,52 +48,77 @@ protected:
         m_text_font( "text", TEXT_FONT_SIZE, TEXT_FONT_SIZE, SDL_ASSETS"SourceSansPro-Light.ttf", true ),
         m_texture_cache()
     {
-        if (SDL_Init(SDL_INIT_VIDEO)) {
-            std::cerr << "Failed to initialize SDL: " << SDL_GetError() << std::endl;
-            exit(-1);
-        }
 
-        SDL_DisplayMode dm;
-
-        if (SDL_GetCurrentDisplayMode(0, &dm) != 0)
-        {
-            SDL_Log("SDL_GetDesktopDisplayMode failed: %s", SDL_GetError());
-            SDL_Quit();
-            exit(-1);
-        }
-
-        std::cout << "const w/h = (" << SDL_WIDTH << "," << SDL_HEIGHT << ")" << std::endl;
-        std::cout << "dm w/h = (" << dm.w << "," << dm.h << ")" << std::endl;
-
-        m_window = SDL_CreateWindow( "main", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SDL_WIDTH, SDL_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS  );
-        
-        if ( NULL == m_window ) {
-            SDL_Quit();
-            std::cerr << "Failed to create window: " << SDL_GetError() << std::endl;
-            exit(-1);
-        }
-
-        m_renderer = SDL_CreateRenderer( m_window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED );
-        if ( NULL == m_renderer ) {
-            std::cerr << "Failed to create renderer: " << SDL_GetError() << std::endl;
-            SDL_DestroyWindow(m_window);
-            SDL_Quit();
-            exit(-1);
-        }
-
-        SDL_RenderSetLogicalSize(m_renderer, SDL_WIDTH, SDL_HEIGHT);
-        SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
-        SDL_SetRenderDrawBlendMode(m_renderer, SDL_BLENDMODE_BLEND);
-        SDL_SetHint( SDL_HINT_RENDER_LOGICAL_SIZE_MODE, "1" );
-        SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "nearest" );
-        TTF_Init();
-        set_bg("bg.bmp");
-
-        m_grid_font.load_font_data( m_theme, m_renderer );
-        m_text_font.load_font_data( m_theme, m_renderer );
     }
 
     ~WtDrawingPolicySdl()
+    {
+
+    }
+
+public:
+    /**************************
+     *
+     *************************/
+    bool open()
+    {
+        bool success = false;
+        if (SDL_Init(SDL_INIT_VIDEO)) {
+            std::cerr << "Failed to initialize SDL: " << SDL_GetError() << std::endl;
+        }
+        else
+        {
+            SDL_DisplayMode dm;
+
+            if (SDL_GetCurrentDisplayMode(0, &dm) != 0)
+            {
+                SDL_Log("SDL_GetDesktopDisplayMode failed: %s", SDL_GetError());
+                SDL_Quit();
+            }
+            else
+                {
+                std::cout << "const w/h = (" << SDL_WIDTH << "," << SDL_HEIGHT << ")" << std::endl;
+                std::cout << "dm w/h = (" << dm.w << "," << dm.h << ")" << std::endl;
+
+                m_window = SDL_CreateWindow( "main", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SDL_WIDTH, SDL_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS  );
+                
+                if ( NULL == m_window ) {
+                    SDL_Quit();
+                    std::cerr << "Failed to create window: " << SDL_GetError() << std::endl;
+                }
+                else
+                {
+                    m_renderer = SDL_CreateRenderer( m_window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED );
+                    if ( NULL == m_renderer ) {
+                        std::cerr << "Failed to create renderer: " << SDL_GetError() << std::endl;
+                        SDL_DestroyWindow(m_window);
+                        SDL_Quit();
+                    }
+                    else
+                    {
+                        SDL_RenderSetLogicalSize(m_renderer, SDL_WIDTH, SDL_HEIGHT);
+                        SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
+                        SDL_SetRenderDrawBlendMode(m_renderer, SDL_BLENDMODE_BLEND);
+                        SDL_SetHint( SDL_HINT_RENDER_LOGICAL_SIZE_MODE, "1" );
+                        SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "nearest" );
+                        TTF_Init();
+                        set_bg("bg.bmp");
+
+                        m_grid_font.load_font_data( m_theme, m_renderer );
+                        m_text_font.load_font_data( m_theme, m_renderer );
+                        success = true;
+                    }
+                }
+            }
+        }
+
+        return success;
+    }
+
+    /**************************
+     *
+     *************************/
+    void close()
     {
         std::cout << "destroy sdl..\n";
 
@@ -108,7 +133,6 @@ protected:
         SDL_Quit();
     }
 
-public:
     /**************************
      *
      *************************/
