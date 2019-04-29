@@ -38,19 +38,19 @@ int main( int, char** )
     ACTIVE_WINDOW.draw_message(WtL10n_tr("Loading..."));
     ACTIVE_WINDOW.update();
 
-
-    WtTime::TimePoint before = WtTime::get_time();
-    WtMenuCtr main_menu;
-    WtTime::TimePoint after = WtTime::get_time();
-
-    WtTime::TimeType elapsed = WtTime::get_time_elapsed( before, after );
-    if ( elapsed < WtTime::from_seconds(1) )
     {
-        WtTime::sleep( WtTime::from_seconds(1) - elapsed );
+        WtTime::TimePoint before = WtTime::get_time();
+        WtMenuCtr main_menu;
+        WtTime::TimePoint after = WtTime::get_time();
+
+        WtTime::TimeType elapsed = WtTime::get_time_elapsed( before, after );
+        if ( elapsed < WtTime::from_seconds(1) )
+        {
+            WtTime::sleep( WtTime::from_seconds(1) - elapsed );
+        }
+
+        (void)main_menu.show();
     }
-
-    (void)main_menu.show();
-
     return 0;
 }
 
