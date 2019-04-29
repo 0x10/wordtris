@@ -25,6 +25,7 @@
 #include "wt_animations.h"
 #include "menus/wt_menu_pause.h"
 #include "menus/wt_menu_score_summary.h"
+#include "menus/wt_menu_game_mode_intro.h"
 
 #include "widgets/wt_grid_touch_overlay.h"
 
@@ -35,6 +36,7 @@ private:
     typedef enum {
         GAME_STOPPED=0,
         GAME_STARTED,
+        GAME_TO_START,
         GAME_ANIMATION_RUNNING,
         GAME_PAUSED,
         GAME_TO_QUIT
@@ -49,6 +51,7 @@ public:
         m_pause_menu( WT_BIND_EVENT_HANDLER( WtGameCtr::restart ), 
                       WT_BIND_EVENT_HANDLER( WtGameCtr::return_to_menu ) ),
         m_score_summary(),
+        m_game_mode_intro(),
         m_grid_touch_control( WtCoord( 0, 100 ),
                               WtDim( ACTIVE_WINDOW_WIDTH, ACTIVE_WINDOW_HEIGHT-100 ),
                               WT_BIND_EVENT_HANDLER( WtGameCtr::notify_left ),
@@ -87,6 +90,7 @@ public:
                 mode->set_difficulty( STORAGE.get_settings().difficulty );
             }
             m_active_mode = mode;
+            m_game_mode_intro.set_game_mode( m_active_mode );
         }
     }
 
@@ -324,7 +328,7 @@ private:
             m_active_mode->init_game( m_board, m_player );
             m_active.init( m_active_mode->next_letter() );
             m_current_update_counter = get_current_update_counter( m_player );
-            m_game_state = GAME_STARTED;
+            m_game_state = GAME_TO_START;
             m_grid_touch_control.set_direction_seperator_pos( ACTIVE_WINDOW.grid_pos_to_coord( m_active.current_row(), m_active.current_column() ).x );
         }
     }
@@ -350,6 +354,12 @@ private:
                 m_game_state = GAME_STARTED;
                 play_animation( m_pause_end_animation );
                 break;
+
+            case GAME_TO_START:
+                enter_child_menu( m_game_mode_intro );
+                m_game_state = GAME_STARTED;
+                break;
+
 
             case GAME_STARTED:
                 {
@@ -400,8 +410,10 @@ private:
     WtLetter            m_active;
     WtBoard             m_board;
     WtGameModeIf*       m_active_mode;
+
     WtMenuPause         m_pause_menu;
     WtMenuScoreSummary  m_score_summary;
+    WtMenuGameModeIntro m_game_mode_intro;
 
     WtGridTouchOverlay  m_grid_touch_control;
     WtButton            m_pause_btn;
