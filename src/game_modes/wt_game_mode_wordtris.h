@@ -128,7 +128,7 @@ public:
                     if ( !word.empty() ) 
                     {
                         {
-                            WtGridAnimation::GridAnimationStep step( WtGridAnimation::fromGridText( WtGridAnimation::GridText( WtBoard::row_count-col_str.find( word ),
+                            WtGridAnimation::GridAnimationStep step( WtGridAnimation::fromGridText( WtGridAnimation::GridText( col_str.find( word ),
                                                                                                 c_idx,
                                                                                                 false,
                                                                                                 word, 
