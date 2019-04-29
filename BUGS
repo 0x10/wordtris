@@ -6,4 +6,6 @@
 # (1, active) wordtris mode: if a word is found in a column, the whole column is cleared
 # (2, active with (1)) wordtris mode: if a word is found in a row different to the top row, the row above is cleared too
 #       - (1) / (2) / (related 8): eval rows from center column and optimize to only eval rows/cols affected by last move
-# (12)
+# (12) stone position related press direction evaluation: if finger is left of active -> tap left of stone -> move left 
+# (13) android backbutton use in menu as back and quit
+# (14)
