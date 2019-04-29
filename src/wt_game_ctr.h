@@ -169,6 +169,8 @@ private:
             {
                 game_over = true;
             }
+
+            m_grid_touch_control.set_direction_seperator_pos( ACTIVE_WINDOW.grid_pos_to_coord( m_active.current_row(), m_active.current_column() ).x );
         }
         else
         {
@@ -234,6 +236,7 @@ private:
                                              m_active.current_column() - 1 ) )
         {
             m_active.move_left();
+            m_grid_touch_control.set_direction_seperator_pos( ACTIVE_WINDOW.grid_pos_to_coord( m_active.current_row(), m_active.current_column() ).x );
         }
     }
 
@@ -247,6 +250,7 @@ private:
                                              m_active.current_column() + 1 ) )
         {
             m_active.move_right(); 
+            m_grid_touch_control.set_direction_seperator_pos( ACTIVE_WINDOW.grid_pos_to_coord( m_active.current_row(), m_active.current_column() ).x );
         }
     }
 
@@ -321,6 +325,7 @@ private:
             m_active.init( m_active_mode->next_letter() );
             m_current_update_counter = get_current_update_counter( m_player );
             m_game_state = GAME_STARTED;
+            m_grid_touch_control.set_direction_seperator_pos( ACTIVE_WINDOW.grid_pos_to_coord( m_active.current_row(), m_active.current_column() ).x );
         }
     }
 

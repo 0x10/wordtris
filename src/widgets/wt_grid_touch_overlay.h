@@ -69,25 +69,41 @@ public:
         return m_clickable;
     }
 
+    /**************************
+     *
+     *************************/
+    void set_direction_seperator_pos( ssize_t x_pos )
+    {
+        m_size_left.w = x_pos;
+        m_pos_right.x = x_pos;
+        m_size_right.w = m_size.w - x_pos;
+    }
+
 public:
     /**************************
      *
      *************************/
     void on_click( WtCoord& pos )
     {
-        if ( pos.in_region( m_pos_left, m_size_left ) )
+        WtCoord middle( m_size_left.w - 15, 100 );
+        WtDim mid_sz( 37, m_size.h-100 );
+        if ( ! pos.in_region( middle, mid_sz ) )
         {
-           // std::cout << "click left\n";
-            if ( m_on_left ) m_on_left();
-        }
-        if ( pos.in_region( m_pos_right, m_size_right ) )
-        {
-           // std::cout << "click right\n";
-            if ( m_on_right ) m_on_right();
-        }
-        if ( pos.in_region( m_pos_drop, m_size_drop ) )
-        {
-            if ( m_on_drop ) m_on_drop();
+            if ( pos.in_region( m_pos_left, m_size_left ) )
+            {
+                if ( m_on_left ) m_on_left();
+            }
+            else if ( pos.in_region( m_pos_right, m_size_right ) )
+            {
+               // std::cout << "click right\n";
+                if ( m_on_right ) m_on_right();
+            }
+            else if ( pos.in_region( m_pos_drop, m_size_drop ) )
+            {
+                if ( m_on_drop ) m_on_drop();
+            }
+            else
+            {}
         }
     }
 
@@ -118,11 +134,11 @@ private:
     const WtCoord   m_pos;
     const WtDim     m_size;
 
-    const WtCoord   m_pos_left;
-    const WtCoord   m_pos_right;
+    WtCoord   m_pos_left;
+    WtCoord   m_pos_right;
     const WtCoord   m_pos_drop;
-    const WtDim     m_size_left;
-    const WtDim     m_size_right;
+    WtDim     m_size_left;
+    WtDim     m_size_right;
     const WtDim     m_size_drop;
 
     OnLeftDetected  m_on_left;

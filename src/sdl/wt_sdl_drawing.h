@@ -270,19 +270,30 @@ public:
     }
 
     /**************************
-      *
-      *************************/   
+     *
+     *************************/   
     WtDim get_font_size()
     {
         return m_text_font.size();
     }
 
     /**************************
-      *
-      *************************/   
+     *
+     *************************/   
     WtDim get_text_size( const std::string &str )
     {
         return m_text_font.text_size( str );
+    }
+
+    /**************************
+     *
+     *************************/   
+    WtCoord grid_pos_to_coord( uint8_t r, uint8_t c )
+    {
+        WtCoord grid_coord = grid_pos_to_screen_pos( r, c, &m_grid_font );
+        grid_coord.x = grid_coord.x + static_cast<ssize_t>(m_grid_font.width() / 2);
+        draw_red_debug_dot( grid_coord );
+        return grid_coord;
     }
 
 private:
