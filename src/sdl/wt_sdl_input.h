@@ -58,7 +58,8 @@ public:
                     if ('d'==sdl_event.key.keysym.sym) event.key = wt_control_RIGHT;
                     if ('s'==sdl_event.key.keysym.sym) event.key = wt_control_DROP;
                     if ('p'==sdl_event.key.keysym.sym) event.key = wt_control_PAUSE;
-                    if (SDLK_AC_BACK == sdl_event.key.keysym.sym) event.key = wt_control_PAUSE;
+                    if (SDLK_AC_BACK == sdl_event.key.keysym.sym) event.key = wt_control_BACK;
+                    if ('b' == sdl_event.key.keysym.sym) event.key = wt_control_BACK;
                     if ('q'==sdl_event.key.keysym.sym)
                     {
                         event.is_key_event = false;
@@ -118,6 +119,7 @@ public:
 
 
                 default:
+                    std::cout << "unknown event = " << sdl_event.type << std::endl;
                     /*SDL_PumpEvents();
                     SDL_FlushEvent( SDL_FINGERDOWN );
                     SDL_FlushEvent( SDL_FINGERUP );

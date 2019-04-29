@@ -24,6 +24,7 @@ typedef enum wt_controls_tag
     wt_control_RIGHT,
     wt_control_QUIT,
     wt_control_PAUSE,
+    wt_control_BACK,
     wt_control_INVALID
 } wt_control;
 
@@ -35,7 +36,7 @@ class WtInputEvent
 {
 public:
     WtInputEvent() :
-        is_key_event( true ),
+        is_key_event( false ),
         is_system_event( false ),
         is_motion_event( false ),
         is_press_event( false ),

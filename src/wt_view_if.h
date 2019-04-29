@@ -28,16 +28,46 @@
 class WtViewIf
 {
 public:
+    using OnKeyPressDelegate = std::function<void(wt_control)>;
+public:
     WtViewIf( std::string bg_img="bg.bmp", 
               bool fade=true, 
-              WtTime::TimeType refresh_rate=WtTime::TimeType(0) ) :
+              WtTime::TimeType refresh_rate=WtTime::TimeType(0),
+              OnKeyPressDelegate on_key_press_handler = nullptr ) :
         m_shall_leave( false ),
         m_shall_exit( false ),
         m_bg( bg_img ),
         m_buttons(),
         m_carousels(),
         m_fade( fade ),
-        m_refresh_sleep_time( refresh_rate )
+        m_refresh_sleep_time( refresh_rate ),
+        m_active_child( nullptr ),
+        m_on_key_press_handler( on_key_press_handler )
+    {
+    }
+    WtViewIf & operator = (const WtViewIf & rhs)
+    {
+        m_shall_leave = rhs.m_shall_leave;
+        m_shall_exit = rhs.m_shall_exit;
+        m_bg = rhs.m_bg;
+        m_buttons.clear();
+        m_carousels.clear();
+        m_fade = rhs.m_fade;
+        m_refresh_sleep_time = rhs.m_refresh_sleep_time;
+        m_active_child = nullptr;
+        m_on_key_press_handler = rhs.m_on_key_press_handler;
+        return *this;
+    }
+    WtViewIf( const WtViewIf& rhs ) :
+        m_shall_leave( rhs.m_shall_leave ),
+        m_shall_exit( rhs.m_shall_exit ),
+        m_bg( rhs.m_bg ),
+        m_buttons(),
+        m_carousels(),
+        m_fade( rhs.m_fade ),
+        m_refresh_sleep_time( rhs.m_refresh_sleep_time ),
+        m_active_child( nullptr ),
+        m_on_key_press_handler( rhs.m_on_key_press_handler )
     {
     }
     virtual ~WtViewIf()
@@ -77,7 +107,6 @@ public:
 
         return m_shall_exit;
     }
-
 protected:
     /**************************
      *
@@ -120,11 +149,35 @@ protected:
     /**************************
      *
      *************************/
+    void on_key_press( wt_control key )
+    {
+        if ( nullptr != m_active_child )
+        {
+            m_active_child->on_key_press( key );
+        }
+        else
+        {
+            if ( m_on_key_press_handler )
+            {
+                m_on_key_press_handler(key);
+            }
+            else
+            {
+                if ( key == wt_control_BACK )
+                {
+                    leave();
+                }
+            }
+        }
+    }
+
+    /**************************
+     *
+     *************************/
     void leave()
     {
         m_shall_leave = true;
     }
-
 
     /**************************
      *
@@ -202,7 +255,9 @@ protected:
     {
         close_view();
 
+        m_active_child = &sub_view;
         m_shall_exit = sub_view.show();
+        m_active_child = nullptr;
 
         if ( !m_shall_exit )
         {
@@ -338,6 +393,8 @@ private:
     std::vector< WtHorizontalCarousel* >    m_carousels;
     bool                                    m_fade;
     WtTime::TimeType                        m_refresh_sleep_time;
+    WtViewIf*                               m_active_child;
+    OnKeyPressDelegate                      m_on_key_press_handler;
 };
 
 

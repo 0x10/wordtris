@@ -27,7 +27,7 @@ class WtMenuCtr : public WtViewIf
 {
 public:
     WtMenuCtr() :
-        WtViewIf(),
+        WtViewIf( "bg.bmp", true, WtTime::TimeType(0), WT_BIND_EVENT_HANDLER_1( WtMenuCtr::handle_key_press ) ),
         m_drag_start_pos(0,0),
         m_was_drag(false),
         m_drag_button_id(0),
@@ -48,6 +48,7 @@ public:
                           GAME_MODE_CTR.mode_idx_from_string( STORAGE.get_settings().game_mode ),
                           WT_BIND_EVENT_HANDLER_1( WtMenuCtr::game_mode_selected ) )
     {
+        ACTIVE_INPUT.register_key_press_delegate( WT_BIND_EVENT_HANDLER_1( WtMenuCtr::on_key_press ) );
         m_game_ctr.set_game_mode( GAME_MODE_CTR.mode_from_string( STORAGE.get_settings().game_mode ) );
 
         add_button( m_score_btn );
@@ -95,7 +96,16 @@ private:
         enter_child_menu( m_game_ctr );
     }
 
-
+    /**************************
+     *
+     *************************/
+    void handle_key_press( wt_control key )
+    {
+        if ( key == wt_control_BACK )
+        {
+            exit();
+        }
+    }
 
 private:
     WtCoord          m_drag_start_pos;

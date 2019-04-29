@@ -41,7 +41,7 @@ private:
     } wt_game_state;
 public:
     WtGameCtr() :
-        WtViewIf( "bg.bmp", false, WtTime::TimeType(12500) ),
+        WtViewIf( "bg.bmp", false, WtTime::TimeType(12500), WT_BIND_EVENT_HANDLER_1( WtGameCtr::on_key_press ) ),
         m_player(),
         m_active(),
         m_board(),
@@ -62,7 +62,6 @@ public:
         m_current_update_counter(48),
         m_game_state( GAME_STOPPED )
     {
-        ACTIVE_INPUT.register_key_press_delegate( WT_BIND_EVENT_HANDLER_1( WtGameCtr::on_key_press ) );
 
         WtGridAnimationBuilder::construct_pause_animation( m_pause_end_animation );
 
@@ -203,6 +202,7 @@ private:
                 notify_right();
                 break;
             case wt_control_PAUSE:
+            case wt_control_BACK:
                 enter_pause();
                 break;
         }
