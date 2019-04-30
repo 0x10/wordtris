@@ -52,6 +52,10 @@ public:
                     event.is_key_event = true;
                     event.key = wt_control_PAUSE;
                     break;
+                case SDL_KEYUP:
+                case SDL_WINDOWEVENT:
+                case SDL_TEXTINPUT:
+                    break;
                 case SDL_KEYDOWN:
                     event.is_key_event = true;
                     if ('a'==sdl_event.key.keysym.sym) event.key = wt_control_LEFT;
