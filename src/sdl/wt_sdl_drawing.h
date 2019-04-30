@@ -461,6 +461,7 @@ private:
                 SDL_SetRenderDrawBlendMode( m_renderer, SDL_BLENDMODE_BLEND );
                 SDL_SetTextureBlendMode( tex, SDL_BLENDMODE_BLEND );
                 SDL_SetRenderDrawColor( m_renderer, 0, 0, 0, 0 );
+                SDL_RenderClear( m_renderer );
                 SDL_RenderFillRect( m_renderer, NULL );
                 SDL_SetRenderTarget( m_renderer, NULL );
 
