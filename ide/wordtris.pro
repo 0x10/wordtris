@@ -89,6 +89,7 @@ HEADERS += \
     ../src/menus/wt_menu_help.h \
     ../src/menus/wt_menu_highscores.h \
     ../src/menus/wt_menu_pause.h \
+    ../src/menus/wt_menu_score_summary.h \
     ../src/menus/wt_menu_settings.h \
     ../src/sdl/wt_sdl.h \
     ../src/sdl/wt_sdl_config.h \
@@ -118,16 +119,14 @@ HEADERS += \
     ../src/wt_l10n.h \
     ../src/wt_l10n_translations.h \
     ../src/wt_menu_ctr.h \
-    ../src/wt_menu_if.h \
     ../src/wt_player.h \
-    ../src/wt_settings_observer_if.h \
     ../src/wt_storable.h \
     ../src/wt_storage.h \
     ../src/wt_storage_types.h \
     ../src/wt_string_utils.h \
     ../src/wt_utils.h \
+    ../src/wt_view_if.h \
     ../src/wt_wordlist.h
 
 SOURCES += \
-    ../src/wordtris.cpp \
     ../src/wordtris.cpp
