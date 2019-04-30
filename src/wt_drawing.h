@@ -60,7 +60,7 @@ public:
         player_scores.append( std::to_string( player.get_points() ) );
 
         DrawingPolicy::draw_image( WtCoord( 79, 32 ),
-                                   WtDim( 256, 65 ),
+                                   WtDim( 317, 65 ),
                                    "label_bg.bmp" );
         DrawingPolicy::draw_text( WtCoord( 90, 35 ),
                                   player_stat );
@@ -111,7 +111,7 @@ public:
     {
         if ( show_letter_after_next )
         {
-            DrawingPolicy::draw_text( WtCoord( 270, 46 ),
+            DrawingPolicy::draw_text( WtCoord( 308, 46 ),
                                       std::string(1, letter_after_next ),
                                       "grid" );
         }
