@@ -52,6 +52,16 @@ public:
     /**************************
      *
      *************************/
+    uint8_t words_since_levelup() const
+    {
+        uint8_t solved_words = get_solved_word_count();
+        uint8_t next_level_word_count = (( solved_words / 10 ) + 1 ) * 10;
+        return 10 - ( next_level_word_count - solved_words );
+    }
+
+    /**************************
+     *
+     *************************/
     void row_cleared( uint32_t new_points )
     {
         m_words ++;

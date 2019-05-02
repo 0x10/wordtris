@@ -52,12 +52,14 @@ public:
      *************************/
     void draw_player_stat( const WtPlayer& player )
     {
+        WtCoord base_pos( 79,32 );
+
         std::string player_stat = "";
         player_stat.append( std::to_string( player.get_current_level() ) );
         std::string player_scores = "";
         player_scores.append( std::to_string( player.get_points() ) );
 
-        DrawingPolicy::draw_image( WtCoord( 79, 32 ),
+        DrawingPolicy::draw_image( base_pos,
                                    WtDim( 317, 65 ),
                                    "label_bg.bmp" );
         WtDim font_sz = DrawingPolicy::get_text_size( player_stat );
@@ -67,60 +69,8 @@ public:
         DrawingPolicy::draw_text( WtCoord( 160, (32+(65/2))-((font_sz.h/2)+2) ),
                                   player_scores );
 
-        /* TODO: business logic code! remove from drawing */
-        uint8_t solved_words = player.get_solved_word_count();
-        uint8_t next_level_word_count = (( solved_words / 10 ) + 1 ) * 10;
-        uint8_t words_since_levelup = 10 - ( next_level_word_count - solved_words );
-
-        WtCoord word_fill_pos( 79, 32 );
-
-        switch( words_since_levelup )
-        {
-            case 10:
-                DrawingPolicy::draw_image( WtCoord( word_fill_pos.x+16, word_fill_pos.y ),
-                                           WtDim( 31, 5 ),
-                                           "hud_level_progress_10.bmp" );
-            case 9:
-                DrawingPolicy::draw_image( WtCoord( word_fill_pos.x, word_fill_pos.y+5 ),
-                                           WtDim( 47, 6 ),
-                                           "hud_level_progress_9.bmp" );
-            case 8:
-                DrawingPolicy::draw_image( WtCoord( word_fill_pos.x, word_fill_pos.y+5 ),
-                                           WtDim( 47, 6 ),
-                                           "hud_level_progress_8.bmp" );
-            case 7:
-                DrawingPolicy::draw_image( WtCoord( word_fill_pos.x, word_fill_pos.y+5 ),
-                                           WtDim( 47, 6 ),
-                                           "hud_level_progress_7.bmp" );
-            case 6:
-                DrawingPolicy::draw_image( WtCoord( word_fill_pos.x, word_fill_pos.y+5 ),
-                                           WtDim( 47, 6 ),
-                                           "hud_level_progress_6.bmp" );
-            case 5:
-                DrawingPolicy::draw_image( WtCoord( word_fill_pos.x, word_fill_pos.y+5 ),
-                                           WtDim( 47, 6 ),
-                                           "hud_level_progress_5.bmp" );
-            case 4:
-                DrawingPolicy::draw_image( WtCoord( word_fill_pos.x, word_fill_pos.y+5 ),
-                                           WtDim( 47, 6 ),
-                                           "hud_level_progress_4.bmp" );
-            case 3:
-                DrawingPolicy::draw_image( WtCoord( word_fill_pos.x, word_fill_pos.y+5 ),
-                                           WtDim( 47, 6 ),
-                                           "hud_level_progress_3.bmp" );
-            case 2:
-                DrawingPolicy::draw_image( WtCoord( word_fill_pos.x, word_fill_pos.y+5 ),
-                                           WtDim( 47, 6 ),
-                                           "hud_level_progress_2.bmp" );
-            case 1:
-                DrawingPolicy::draw_image( WtCoord( word_fill_pos.x, word_fill_pos.y+5 ),
-                                           WtDim( 47, 6 ),
-                                           "hud_level_progress_1.bmp" );
-            default:
-            case 0:
-            break;
-        }
-    }
+        draw_level_up_indicator( player, base_pos );
+     }
 
 
     /**************************
@@ -252,6 +202,42 @@ public:
         }
     }
 
+private:
+    /**************************
+      *
+      *************************/   
+    void draw_level_up_indicator( const WtPlayer& player, const WtCoord& base_pos )
+    {
+        const WtDim indicator_bar_sizes[10] = {
+            {37, 7}, {49, 6}, {59, 7}, {61, 6}, {63, 6}, {63, 7}, {61, 6}, {57, 7}, {47, 6}, {31, 5}
+        };
+        std::string fname = "hud_level_progress_";
+        WtCoord word_fill_pos = base_pos + WtCoord( 14, 57 );
+
+        size_t w_count = static_cast<size_t>(player.words_since_levelup());
+        if ( w_count > 0 )
+        {
+            if ( w_count >= 1 )
+            {
+                DrawingPolicy::draw_image( word_fill_pos,
+                                           indicator_bar_sizes[0],
+                                           std::string( fname ).append("1").append(".bmp") );
+            }
+
+            if ( w_count > 1 )
+            {
+                WtCoord working_pos = word_fill_pos;
+                for ( size_t w_count_idx = 2; w_count_idx <= w_count; w_count_idx++ )
+                {
+                    WtCoord next_pos = working_pos + WtCoord( (indicator_bar_sizes[w_count_idx - 2].w - indicator_bar_sizes[w_count_idx - 1].w)/2, -indicator_bar_sizes[w_count_idx - 1].h );
+                    DrawingPolicy::draw_image( next_pos,
+                                               indicator_bar_sizes[w_count_idx - 1],
+                                               std::string( fname ).append( std::to_string(w_count_idx) ).append(".bmp") );
+                    working_pos = next_pos;
+                }
+            }
+        }
+    }
 };
 
 

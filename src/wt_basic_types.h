@@ -93,11 +93,9 @@ public:
     /**************************
      *
      *************************/
-    WtCoord operator+( const WtCoord& rhs )
+    WtCoord operator+( const WtCoord& rhs ) const
     {
-        x = x + rhs.x;
-        y = y + rhs.y;
-        return (*this);
+        return WtCoord( x + rhs.x, y + rhs.y );
     }
     /**************************
      *
