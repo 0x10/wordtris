@@ -30,6 +30,9 @@ sdl-system:
 run-sdl: sdl
 	LD_LIBRARY_PATH=$(SDL_DIR)/build/.libs:$(SDL_TTF_DIR)/build/.libs ./$(TARGET_SDL)
 
+system-run-sdl: sdl-system
+	./$(TARGET_SDL)
+
 debug-sdl:
 	$(CXX) $(CXX_DEBUG) $(CXX_FLAGS) $(LD_FLAGS) $(INCLUDES) $(SRC_DIR)/wordtris.cpp $(LIBS) -o $(TARGET_SDL)
 	LD_LIBRARY_PATH=$(SDL_DIR)/build/.libs:$(SDL_TTF_DIR)/build/.libs gdb ./$(TARGET_SDL)
