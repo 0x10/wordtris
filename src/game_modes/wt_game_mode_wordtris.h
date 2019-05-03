@@ -103,8 +103,18 @@ public:
                                 step.content.font = "grid_inverse";
                                 blink.push_back( step );
                             }
+
+                            {
+                                uint32_t current_level = player.get_current_level();
+                                player.word_solved( word.length() * (found_count + 1) );
+                                if ( player.get_current_level() != current_level )
+                                {
+                                    WtGridAnimationBuilder::construct_level_up_animation( blink );
+                                }
+                            }
+
                             gs.animation = blink;
-                            player.word_solved( word.length() * (found_count + 1) );
+
                             erase_from_row( r_idx, row_str, word, board );
                             something_found = true;
                             found_count++;

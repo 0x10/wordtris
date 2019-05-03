@@ -27,9 +27,10 @@ template<typename animation_content>
 class WtAnimationStep
 {
 public:
-    WtAnimationStep( animation_content c, const WtTime::TimeType duration  ) :
+    WtAnimationStep( animation_content c, const WtTime::TimeType duration, const size_t rep_count=0 ) :
         content( c ),
-        step_duration( duration )
+        step_duration( duration ),
+        repeat_count( rep_count )
     {}
 
     ~WtAnimationStep() {}
@@ -37,6 +38,7 @@ public:
 public:
     animation_content content;
     WtTime::TimeType  step_duration;
+    size_t            repeat_count;
 };
 
 /**************************
@@ -193,7 +195,10 @@ private:
 
             ACTIVE_WINDOW.update();
             WtTime::sleep( m_animation_steps[m_a_idx].step_duration );
-            m_a_idx++;
+            if ( m_animation_steps[m_a_idx].repeat_count == 0 )
+                m_a_idx++;
+            else
+                m_animation_steps[m_a_idx].repeat_count--;
         }
         else
         {
@@ -226,6 +231,24 @@ private:
 class WtGridAnimationBuilder
 {
 public:
+    /**************************
+     *
+     *************************/
+    static void construct_level_up_animation( WtGridAnimation& animation )
+    {
+        std::cout << "construct level up animation\n";
+        WtGridAnimation::GridAnimationStep step( WtGridAnimation::fromGridText( WtGridAnimation::GridText( 2, 0,
+                                                                                                           true,
+                                                                                                            "Level  Up!", 
+                                                                            "grid_inverse" ) ),
+                                                 WtTime::from_milliseconds(200), 2 );
+        animation.push_back( step );
+        step.content.font = "grid";
+        animation.push_back( step );
+        step.content.font = "grid_inverse";
+        animation.push_back( step );
+    }
+
     /**************************
      *
      *************************/

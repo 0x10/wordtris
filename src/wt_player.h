@@ -42,9 +42,9 @@ public:
     {
         m_words ++;
 
-        m_points += (static_cast<uint32_t>(length * base_points) * static_cast<uint32_t>(m_level));
+        m_points += (static_cast<uint32_t>(length * base_points) * m_level);
 
-        uint8_t new_level = 1 + static_cast<uint8_t>(m_words / 10);
+        uint8_t new_level = 1 + static_cast<uint32_t>(m_words / 10);
         if ( new_level > m_level )
             m_level = new_level;
     }
@@ -68,8 +68,8 @@ public:
 
         m_points += new_points * m_level;
 
-        m_level = 1 + static_cast<uint8_t>((m_words - 1) / 10);
-        uint8_t new_level = 1 + static_cast<uint8_t>(m_words / 10);
+        m_level = 1 + static_cast<uint32_t>((m_words - 1) / 10);
+        uint8_t new_level = 1 + static_cast<uint32_t>(m_words / 10);
         if ( new_level > m_level )
             m_level = new_level;
     }
@@ -82,7 +82,7 @@ public:
         if ( row_diff > 0 )
         {
             uint32_t row_pts = static_cast<uint32_t>(row_diff);
-            m_points += ( row_pts * ( 2 * static_cast<uint32_t>(m_level) ) );
+            m_points += ( row_pts * ( 2 * m_level ) );
         }
     }
 
@@ -107,6 +107,14 @@ public:
     /**************************
      *
      *************************/
+    void set_words_offset( uint16_t words )
+    {
+        m_words = words;
+    }
+
+    /**************************
+     *
+     *************************/
     uint32_t get_points() const            { return m_points; };
     uint16_t get_solved_word_count() const { return m_words;  };
     uint32_t get_current_level() const     { return m_level;  };
@@ -114,7 +122,7 @@ public:
 private:
     uint32_t m_points;
     uint16_t m_words;
-    uint8_t  m_level;
+    uint32_t  m_level;
 
 };
 
