@@ -23,6 +23,8 @@
 #include "wt_board.h"
 #include "wt_active_letter.h"
 
+#include "wt_string_utils.h"
+
 #define WINDOW( Policy )  WtDrawing<Policy>::instance()
 
 template<typename DrawingPolicy>
@@ -136,14 +138,30 @@ public:
      *************************/
     void draw_help_box( const std::string help )
     {
-        const size_t line_length = 30;
-        size_t line_count = (help.length() / line_length) + ( help.length() % line_length > 0 ? 1 : 0 );
-        for(size_t l_idx = 0; l_idx < line_count; l_idx++ )
+        WtDim sz( 379, 608 );
+        WtCoord pos( (ACTIVE_WINDOW_WIDTH - 379) / 2,
+                     (ACTIVE_WINDOW_HEIGHT / 2) - (608 / 2) );
+        DrawingPolicy::draw_image( pos,
+                                   sz,
+                                   "text_flow_box.bmp" );
+
+        std::vector<std::string> words = split( help );
+
+        WtCoord cursor_pos = pos;
+        cursor_pos.y += 20;
+        cursor_pos.x += 20;
+        WtDim sp_sz = DrawingPolicy::get_text_size( " " );
+        for(size_t w_idx = 0; w_idx < words.size(); w_idx++ )
         {
-            std::string line = help.substr( l_idx*line_length, line_length );
-            DrawingPolicy::draw_text( WtCoord( (ACTIVE_WINDOW_WIDTH / 2)-((static_cast<ssize_t>(line.length())*DrawingPolicy::get_font_size().w)/2), 
-                                               (ACTIVE_WINDOW_HEIGHT / 4)+(static_cast<ssize_t>(l_idx) * DrawingPolicy::get_font_size().h *2) ),
-                                      line );
+            WtDim w_sz = DrawingPolicy::get_text_size( words[w_idx] );
+            if ( (w_sz.w + cursor_pos.x) > ( sz.w + pos.x ) )
+            {
+                cursor_pos.y = cursor_pos.y + w_sz.h;
+                cursor_pos.x = pos.x + 20;
+            }
+            DrawingPolicy::draw_text( cursor_pos,
+                                      words[w_idx] );
+            cursor_pos.x += ( w_sz.w + sp_sz.w );
         }
     }
 

@@ -19,6 +19,7 @@
 #include "wt_string_utils.h"
 #include "wt_game_mode_if.h"
 #include "wt_utils.h"
+#include "wt_string_utils.h"
 #include "wt_wordlist.h"
 #include "wt_animation_builder.h"
 #include <locale>         // std::locale, std::tolower
@@ -451,16 +452,6 @@ private:
     }
 
 
-    /**************************
-     *
-     *************************/
-    std::vector<std::string> split( std::string board_str )
-    {
-        std::istringstream iss(board_str);
-        std::vector<std::string> result_list(std::istream_iterator<std::string>{iss},
-                                         std::istream_iterator<std::string>());
-        return result_list;
-    }
 
 
     /**************************

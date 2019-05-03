@@ -32,7 +32,7 @@ public:
         std::cout << "construct level up animation\n";
         WtCoord start_pos( 0, 0 );
 
-        for ( size_t y_idx = 0; y_idx < 500; y_idx++)
+        for ( ssize_t y_idx = 0; y_idx < 500; y_idx++)
         {
             start_pos.y = y_idx;
             WtTextAnimation::TextAnimationStep step( WtAnimatableText( start_pos,

@@ -16,7 +16,9 @@
 #ifndef _WT_STRING_UTILS_H_
 #define _WT_STRING_UTILS_H_
 
-#include <algorithm> 
+#include <algorithm>
+#include <sstream>
+#include <iterator>
 
 // trim from start
 inline std::string &ltrim(std::string &s) {
@@ -37,6 +39,16 @@ inline std::string &trim(std::string &s) {
     return ltrim(rtrim(s));
 }
 
+/**************************
+ *
+ *************************/
+inline std::vector<std::string> split( std::string str )
+{
+    std::istringstream iss(str);
+    std::vector<std::string> result_list(std::istream_iterator<std::string>{iss},
+                                     std::istream_iterator<std::string>());
+    return result_list;
+}
 
 #endif /* _WT_STRING_UTILS_H_ */
 
