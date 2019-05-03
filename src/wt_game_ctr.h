@@ -22,7 +22,7 @@
 #include "wt_active_letter.h"
 #include "wt_game_mode_if.h"
 #include "wt_game_mode_ctr.h"
-#include "wt_animations.h"
+#include "wt_animation_builder.h"
 #include "menus/wt_menu_pause.h"
 #include "menus/wt_menu_score_summary.h"
 #include "menus/wt_menu_game_mode_intro.h"
@@ -119,7 +119,8 @@ private:
     /**************************
      *
      *************************/
-    void play_animation( WtGridAnimation& animation )
+    template<typename Animation=WtGridAnimation>
+    void play_animation( Animation& animation )
     {
         if ( ! animation.empty() )
         {

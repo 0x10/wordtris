@@ -20,6 +20,7 @@
 #include "wt_game_mode_if.h"
 #include "wt_utils.h"
 #include "wt_wordlist.h"
+#include "wt_animation_builder.h"
 #include <locale>         // std::locale, std::tolower
 #include <algorithm>
 #include <sstream>
