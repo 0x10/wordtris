@@ -17,9 +17,13 @@
 #define _WT_MENU_GAME_MODE_INTRO_H_
 
 #include "wt_view_if.h"
+#include "widgets/wt_checkbox_button.h"
 
 class WtMenuGameModeIntro : public WtViewIf
 {
+    static const size_t offset_x = (ACTIVE_WINDOW_WIDTH / 2);
+    static const size_t offset_y = (ACTIVE_WINDOW_HEIGHT / 2) - (69+20);
+    const WtDim  m_standard_btn_size = WtDim( 328, 69 );
 public:
     WtMenuGameModeIntro() :
         WtViewIf( "bg_menu_pause.bmp", false ),
@@ -27,8 +31,14 @@ public:
                      WtDim(100, 100), 
                      "next_btn.bmp",
                      WT_BIND_EVENT_HANDLER( WtMenuGameModeIntro::leave ) ),
-        m_current_mode( nullptr )
+        m_current_mode( nullptr ),
+        m_show_next_time_btn( WtCoord( offset_x-164, offset_y + (20+((69 + 20)*3)) ),
+                              m_standard_btn_size,
+                              WtL10n_tr( "Show next time" ),
+                             /* STORAGE.get_settings().show_intro*/true,
+                              WT_BIND_EVENT_HANDLER_1( WtMenuGameModeIntro::show_next_time_changed ) )
     {
+        add_button( m_show_next_time_btn );
         add_button( m_leave_btn );
     }
     ~WtMenuGameModeIntro() {}
@@ -52,7 +62,7 @@ private: // no copy allowed
     {
         if ( nullptr != m_current_mode )
         {
-            ACTIVE_WINDOW.draw_message( m_current_mode->get_hint() );
+            ACTIVE_WINDOW.draw_help_box( m_current_mode->get_hint() );
         }
         else
         {
@@ -60,9 +70,18 @@ private: // no copy allowed
         }
     }
 
+    /**************************
+     *
+     *************************/
+    void show_next_time_changed( bool next_time_changed )
+    {
+
+    }
+
 private:
     WtButton        m_leave_btn;
     WtGameModeIf*   m_current_mode;
+    WtCheckboxButton m_show_next_time_btn;
 };
 
 #endif /* _WT_MENU_GAME_MODE_INTRO_H_ */

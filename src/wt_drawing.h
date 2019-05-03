@@ -18,6 +18,7 @@
 
 #include "widgets/wt_button.h"
 #include "widgets/wt_tristate_button.h"
+#include "widgets/wt_textbox.h"
 
 #include "wt_player.h"
 #include "wt_board.h"
@@ -162,6 +163,28 @@ public:
             DrawingPolicy::draw_text( cursor_pos,
                                       words[w_idx] );
             cursor_pos.x += ( w_sz.w + sp_sz.w );
+        }
+    }
+
+    /**************************
+     *
+     *************************/
+    void draw_text_box( const WtTextbox& textbox )
+    {
+        DrawingPolicy::draw_image( textbox.position(),
+                                   textbox.size(),
+                                   textbox.background() );
+
+        WtCoord text_pos = textbox.text_position();
+        std::vector<std::string> lines = textbox.lines();
+        for( size_t l_idx = 0; l_idx < lines.size(); l_idx++ )
+        {
+            WtDim t_sz = DrawingPolicy::get_text_size( lines[l_idx] );
+
+            DrawingPolicy::draw_text( text_pos,
+                                      lines[l_idx] );
+
+            text_pos.y += t_sz.h;
         }
     }
 
