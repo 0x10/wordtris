@@ -39,7 +39,8 @@ public:
                               WT_BIND_EVENT_HANDLER_1( WtMenuGameModeIntro::show_next_time_changed ) ),
         m_textbox( WtCoord( (ACTIVE_WINDOW_WIDTH - 379) / 2,
                             (ACTIVE_WINDOW_HEIGHT / 2) - (608 / 2) ),
-                   "", ACTIVE_WINDOW.get_text_font() )
+                   "", ACTIVE_WINDOW.get_text_font() ),
+        m_show_next_time( true )
     {
         add_button( m_show_next_time_btn );
         add_button( m_leave_btn );
@@ -64,7 +65,7 @@ private: // no copy allowed
      *************************/
     virtual void entered_view()
     {
-        if ( nullptr != m_current_mode )
+        if ( ( nullptr != m_current_mode ) && ( m_show_next_time ) )
         {
             m_textbox.set_text( m_current_mode->get_hint() );
         }
@@ -79,7 +80,7 @@ private: // no copy allowed
      *************************/
     void show_next_time_changed( bool next_time_changed )
     {
-
+        m_show_next_time = next_time_changed;
     }
 
 private:
@@ -87,6 +88,7 @@ private:
     WtGameModeIf*    m_current_mode;
     WtCheckboxButton m_show_next_time_btn;
     WtTextbox        m_textbox;
+    bool             m_show_next_time;
 };
 
 #endif /* _WT_MENU_GAME_MODE_INTRO_H_ */
