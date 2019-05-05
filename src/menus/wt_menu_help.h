@@ -16,6 +16,8 @@
 #ifndef _WT_MENU_HELP_H_
 #define _WT_MENU_HELP_H_
 
+#include "widgets/wt_textbox.h"
+
 #include "wt_view_if.h"
 #include "wt_game_mode_if.h"
 #include "wt_game_mode_ctr.h"
@@ -29,9 +31,13 @@ public:
         m_leave_btn( WtCoord( 105, 800 ), 
                      WtDim(100, 100), 
                      "back_btn.bmp",
-                     WT_BIND_EVENT_HANDLER( WtMenuHelp::leave ) )
+                     WT_BIND_EVENT_HANDLER( WtMenuHelp::leave ) ),
+        m_textbox( WtCoord( (ACTIVE_WINDOW_WIDTH - 379) / 2,
+                            (ACTIVE_WINDOW_HEIGHT / 2) - (608 / 2) ),
+                   "", ACTIVE_WINDOW.get_text_font() )
     {
         add_button( m_leave_btn );
+        add_textbox( m_textbox );
     }
 
     ~WtMenuHelp()
@@ -44,18 +50,18 @@ private: // no copy allowed
     /**************************
      * 
      *************************/
-    void update_view()
+    void entered_view()
     {
         WtGameModeIf* active_mode = GAME_MODE_CTR.mode_from_string( STORAGE.get_settings().game_mode );
         if ( active_mode != INVALID_GAME_MODE )
         {
-            ACTIVE_WINDOW.draw_help_box( active_mode->get_help() );
+            m_textbox.set_text( active_mode->get_help() );
         }
     }
 
 private:
-
-    WtButton      m_leave_btn;
+    WtButton  m_leave_btn;
+    WtTextbox m_textbox;
 };
 
 #endif /* _WT_MENU_GAME_MODE_SELECT_H_ */

@@ -16,7 +16,6 @@
 #ifndef _WT_TEXTBOX_H_
 #define _WT_TEXTBOX_H_
 
-#include "wt_drawing.h"
 #include "wt_string_utils.h"
 
 class WtTextbox
@@ -25,10 +24,12 @@ private:
     const char* m_textbox_bg = "text_flow_box.bmp";
 
 public:
-    WtTextbox( WtCoord pos,
-               std::string text ) :
+    WtTextbox( WtCoord     pos,
+               std::string text,
+               const WtSdlFont&  font ) :
         m_pos( pos ),
-        m_words( split( text ) )
+        m_words( split( text ) ),
+        m_font( font )
     {}
     ~WtTextbox() {}
     
@@ -85,10 +86,10 @@ public:
 
         WtCoord cursor_pos = m_pos;
         cursor_pos.x += 20;
-        WtDim sp_sz = ACTIVE_WINDOW.get_text_size( " " );
+        WtDim sp_sz = m_font.text_size( " " );
         for(size_t w_idx = 0; w_idx < m_words.size(); w_idx++ )
         {
-            WtDim w_sz = ACTIVE_WINDOW.get_text_size( m_words[w_idx] );
+            WtDim w_sz = m_font.text_size( m_words[w_idx] );
             if ( (w_sz.w + cursor_pos.x) > ( size().w + m_pos.x ) )
             {
                 cursor_pos.x = m_pos.x + 20;
@@ -112,8 +113,9 @@ private:
     WtTextbox& operator = (const WtTextbox&);
 
 private:
-    WtCoord     m_pos;
+    WtCoord                  m_pos;
     std::vector<std::string> m_words;
+    const WtSdlFont&         m_font;
 };
 
 #endif /* _WT_TEXTBOX_H */

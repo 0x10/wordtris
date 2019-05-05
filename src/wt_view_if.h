@@ -38,6 +38,7 @@ public:
         m_shall_exit( false ),
         m_bg( bg_img ),
         m_buttons(),
+        m_textboxes(),
         m_carousels(),
         m_fade( fade ),
         m_refresh_sleep_time( refresh_rate ),
@@ -51,6 +52,7 @@ public:
         m_shall_exit = rhs.m_shall_exit;
         m_bg = rhs.m_bg;
         m_buttons.clear();
+        m_textboxes.clear();
         m_carousels.clear();
         m_fade = rhs.m_fade;
         m_refresh_sleep_time = rhs.m_refresh_sleep_time;
@@ -63,6 +65,7 @@ public:
         m_shall_exit( rhs.m_shall_exit ),
         m_bg( rhs.m_bg ),
         m_buttons(),
+        m_textboxes(),
         m_carousels(),
         m_fade( rhs.m_fade ),
         m_refresh_sleep_time( rhs.m_refresh_sleep_time ),
@@ -177,6 +180,14 @@ protected:
     void leave()
     {
         m_shall_leave = true;
+    }
+
+    /**************************
+     *
+     *************************/
+    void add_textbox( WtTextbox& textbox )
+    {
+        m_textboxes.push_back( &textbox );
     }
 
     /**************************
@@ -368,10 +379,16 @@ private:
     {
         ACTIVE_WINDOW.clr();
 
+        for(size_t idx=0;idx<m_textboxes.size();idx++)
+        {
+            ACTIVE_WINDOW.draw_textbox( *(m_textboxes[idx]) );
+        }
+
         for(size_t idx=0;idx<m_buttons.size();idx++)
         {
             ACTIVE_WINDOW.draw_button( *(m_buttons[idx]) );
         }
+
         for(size_t idx=0;idx<m_carousels.size();idx++)
         {
             for( size_t c_idx = 0; c_idx < m_carousels[idx]->size(); c_idx++ )
@@ -390,6 +407,7 @@ private:
     bool                                    m_shall_exit;
     std::string                             m_bg;
     std::vector< WtButton* >                m_buttons;
+    std::vector< WtTextbox* >               m_textboxes;
     std::vector< WtHorizontalCarousel* >    m_carousels;
     bool                                    m_fade;
     WtTime::TimeType                        m_refresh_sleep_time;

@@ -295,7 +295,7 @@ public:
 
     /**************************
      *
-     *************************/   
+     *************************/
     WtDim get_font_size()
     {
         return m_text_font.size();
@@ -303,7 +303,15 @@ public:
 
     /**************************
      *
-     *************************/   
+     *************************/
+    const WtSdlFont& get_text_font()
+    {
+        return m_text_font;
+    }
+
+    /**************************
+     *
+     *************************/
     WtDim get_text_size( const std::string &str )
     {
         return m_text_font.text_size( str );

@@ -169,7 +169,7 @@ public:
     /**************************
      *
      *************************/
-    void draw_text_box( const WtTextbox& textbox )
+    void draw_textbox( const WtTextbox& textbox )
     {
         DrawingPolicy::draw_image( textbox.position(),
                                    textbox.size(),
