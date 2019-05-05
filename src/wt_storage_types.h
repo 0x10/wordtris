@@ -36,8 +36,8 @@ public:
         game_mode( "" ),
         difficulty( wt_difficulty_EASY ),
         active_theme( "default" ),
-        show_support_grid( false ),
-        show_next_stone( false )
+        show_support_grid( true ),
+        show_next_stone( true )
     {}
 
     virtual ~WtSettings() {}

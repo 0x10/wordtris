@@ -57,7 +57,7 @@ public:
         m_theme_select_btn( WtCoord( offset_x, offset_y + (69 + 20)*3 ),
                             m_standard_btn_size,
                             m_selectable_themes,
-                            0,
+                            1,
                             WT_BIND_EVENT_HANDLER_1( WtMenuSettings::theme_changed ) ),
         m_supporting_grid_btn( WtCoord( offset_x, offset_y + (69 + 20)*4 ),
                                m_standard_btn_size,

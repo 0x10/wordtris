@@ -39,7 +39,7 @@ public:
      *************************/
     WtGameModeIf* default_mode()
     {
-        return &m_demoMode;
+        return &m_wordtrisMode;
     }
 
     /**************************
@@ -48,15 +48,17 @@ public:
     size_t mode_idx_from_string( std::string mode_id )
     {
         size_t result = 0;
-        if ( ! mode_id.empty() )
+        if ( mode_id.empty() )
         {
-            for( size_t idx = 0; idx < m_available_modes.size(); idx++ )
+            mode_id = default_mode()->get_id_string();
+        }
+
+        for( size_t idx = 0; idx < m_available_modes.size(); idx++ )
+        {
+            if ( m_available_modes[idx]->get_id_string() == mode_id )
             {
-                if ( m_available_modes[idx]->get_id_string() == mode_id )
-                {
-                    result = idx;
-                    break;
-                }
+                result = idx;
+                break;
             }
         }
         return result;
@@ -68,17 +70,20 @@ public:
     WtGameModeIf* mode_from_string( std::string mode_id )
     {
         WtGameModeIf* result = default_mode();
-        if ( ! mode_id.empty() )
+        if ( mode_id.empty() )
         {
-            for( size_t idx = 0; idx < m_available_modes.size(); idx++ )
+            mode_id = default_mode()->get_id_string();
+        }
+
+        for( size_t idx = 0; idx < m_available_modes.size(); idx++ )
+        {
+            if ( m_available_modes[idx]->get_id_string() == mode_id )
             {
-                if ( m_available_modes[idx]->get_id_string() == mode_id )
-                {
-                    result = m_available_modes[idx];
-                    break;
-                }
+                result = m_available_modes[idx];
+                break;
             }
         }
+
         return result;
     }
 
@@ -109,9 +114,9 @@ private:
         m_wordtrisMode(),
         m_available_modes()
     {
-        m_available_modes.push_back( &m_demoMode );
+      //  m_available_modes.push_back( &m_demoMode );
         m_available_modes.push_back( &m_guessMode );
-        m_available_modes.push_back( &m_tetrisMode );
+      //  m_available_modes.push_back( &m_tetrisMode );
         m_available_modes.push_back( &m_abcMode );
         m_available_modes.push_back( &m_wordtrisMode );
     }
