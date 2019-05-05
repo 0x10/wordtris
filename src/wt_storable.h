@@ -28,6 +28,31 @@ public:
     /**************************
      *
      *************************/
+    template<typename unsignedtype>
+    static size_t get_storage_size_unsigned( const unsignedtype& )
+    {
+        return sizeof( unsignedtype );
+    }
+
+    /**************************
+     *
+     *************************/
+    static size_t get_storage_size( const std::string& s )
+    {
+        return strlen(s.c_str())+1;
+    }
+
+    /**************************
+     *
+     *************************/
+    static size_t get_storage_size( const bool& )
+    {
+        return 1;
+    }
+
+    /**************************
+     *
+     *************************/
     static void write_string( std::ofstream& of, const std::string& string )
     {
         const char* str = string.c_str();

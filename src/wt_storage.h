@@ -157,6 +157,7 @@ public:
             //load default
         }
 
+        std::cout << "settings.size() == " << m_storage_copy.data.settings.size() << std::endl;
         std::cout << "highscores.size() == " << m_storage_copy.data.highscores.size() << std::endl;
         std::cout << "settings.language == " << m_storage_copy.data.settings.language << std::endl;
         std::cout << "settings.game mode == " << m_storage_copy.data.settings.game_mode << std::endl;

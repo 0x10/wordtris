@@ -77,6 +77,21 @@ public:
 
         return ( ! was_eof );
     }
+
+    /**************************
+     *
+     *************************/
+    size_t size() const
+    {
+        size_t size = 0;
+        size += WtStorable::get_storage_size( language );
+        size += WtStorable::get_storage_size( game_mode );
+        size += WtStorable::get_storage_size( difficulty );
+        size += WtStorable::get_storage_size( active_theme );
+        size += WtStorable::get_storage_size( show_next_stone );
+        size += WtStorable::get_storage_size( show_support_grid );
+        return size;
+    }
 };
 
 
