@@ -192,16 +192,28 @@ public:
      *************************/
     virtual std::string get_hint()
     {
-        switch (get_difficulty())
-        {
-            default:
-            case wt_difficulty_EASY:
-                return WtL10n_tr("try to build 3+ letter words!");
-            case wt_difficulty_MEDIUM:
-                return WtL10n_tr("try to build 4+ letter words!");
-            case wt_difficulty_HARD:
-                return WtL10n_tr("try to build 5+ letter words!");
-        }
+        return WtL10n_tr("Build words of at least " + get_min_word_length() + 
+                         " letters by moving around and ordering the fallen letters." );
+    }
+
+    /**************************
+     *
+     *************************/
+    std::string get_min_word_length()
+    {
+        return std::to_string( min_word_length() );
+    }
+
+    /**************************
+     *
+     *************************/
+    virtual std::string get_help()
+    {
+        return WtL10n_tr("Construct words by placing the falling letters "
+                         "either vertical or horizontal. "
+                         "The longer the word, the more points you get. "
+                         "But you need to construct a word out of at least "
+                         + get_min_word_length() + " letters" );
     }
 
 

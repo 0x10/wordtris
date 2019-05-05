@@ -22,7 +22,7 @@ class WtTextbox
 {
 private:
     const char* m_textbox_bg = "text_flow_box.bmp";
-
+    const ssize_t m_text_margin = 20;
 public:
     WtTextbox( WtCoord     pos,
                std::string text,
@@ -55,8 +55,8 @@ public:
     WtCoord text_position() const
     {
         WtCoord pos = m_pos;
-        pos.x += 20;
-        pos.y += 20;
+        pos.x += m_text_margin;
+        pos.y += m_text_margin;
         return pos;
     }
 
@@ -85,14 +85,14 @@ public:
         std::string working_line = "";
 
         WtCoord cursor_pos = m_pos;
-        cursor_pos.x += 20;
+        cursor_pos.x += m_text_margin;
         WtDim sp_sz = m_font.text_size( " " );
         for(size_t w_idx = 0; w_idx < m_words.size(); w_idx++ )
         {
             WtDim w_sz = m_font.text_size( m_words[w_idx] );
-            if ( (w_sz.w + cursor_pos.x) > ( size().w + m_pos.x ) )
+            if ( (w_sz.w + cursor_pos.x) > ( ( size().w + m_pos.x ) - m_text_margin ) )
             {
-                cursor_pos.x = m_pos.x + 20;
+                cursor_pos.x = m_pos.x + m_text_margin;
                 text_lines.push_back( working_line );
                 working_line = "";
             }
