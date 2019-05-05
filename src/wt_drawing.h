@@ -137,38 +137,6 @@ public:
     /**************************
      *
      *************************/
-    void draw_help_box( const std::string help )
-    {
-        WtDim sz( 379, 608 );
-        WtCoord pos( (ACTIVE_WINDOW_WIDTH - 379) / 2,
-                     (ACTIVE_WINDOW_HEIGHT / 2) - (608 / 2) );
-        DrawingPolicy::draw_image( pos,
-                                   sz,
-                                   "text_flow_box.bmp" );
-
-        std::vector<std::string> words = split( help );
-
-        WtCoord cursor_pos = pos;
-        cursor_pos.y += 20;
-        cursor_pos.x += 20;
-        WtDim sp_sz = DrawingPolicy::get_text_size( " " );
-        for(size_t w_idx = 0; w_idx < words.size(); w_idx++ )
-        {
-            WtDim w_sz = DrawingPolicy::get_text_size( words[w_idx] );
-            if ( (w_sz.w + cursor_pos.x) > ( sz.w + pos.x ) )
-            {
-                cursor_pos.y = cursor_pos.y + w_sz.h;
-                cursor_pos.x = pos.x + 20;
-            }
-            DrawingPolicy::draw_text( cursor_pos,
-                                      words[w_idx] );
-            cursor_pos.x += ( w_sz.w + sp_sz.w );
-        }
-    }
-
-    /**************************
-     *
-     *************************/
     void draw_textbox( const WtTextbox& textbox )
     {
         DrawingPolicy::draw_image( textbox.position(),

@@ -36,10 +36,14 @@ public:
                               m_standard_btn_size,
                               WtL10n_tr( "Show next time" ),
                              /* STORAGE.get_settings().show_intro*/true,
-                              WT_BIND_EVENT_HANDLER_1( WtMenuGameModeIntro::show_next_time_changed ) )
+                              WT_BIND_EVENT_HANDLER_1( WtMenuGameModeIntro::show_next_time_changed ) ),
+        m_textbox( WtCoord( (ACTIVE_WINDOW_WIDTH - 379) / 2,
+                            (ACTIVE_WINDOW_HEIGHT / 2) - (608 / 2) ),
+                   "", ACTIVE_WINDOW.get_text_font() )
     {
         add_button( m_show_next_time_btn );
         add_button( m_leave_btn );
+        add_textbox( m_textbox );
     }
     ~WtMenuGameModeIntro() {}
 
@@ -58,11 +62,11 @@ private: // no copy allowed
     /**************************
      *
      *************************/
-    virtual void update_view()
+    virtual void entered_view()
     {
         if ( nullptr != m_current_mode )
         {
-            ACTIVE_WINDOW.draw_help_box( m_current_mode->get_hint() );
+            m_textbox.set_text( m_current_mode->get_hint() );
         }
         else
         {
@@ -79,9 +83,10 @@ private: // no copy allowed
     }
 
 private:
-    WtButton        m_leave_btn;
-    WtGameModeIf*   m_current_mode;
+    WtButton         m_leave_btn;
+    WtGameModeIf*    m_current_mode;
     WtCheckboxButton m_show_next_time_btn;
+    WtTextbox        m_textbox;
 };
 
 #endif /* _WT_MENU_GAME_MODE_INTRO_H_ */
