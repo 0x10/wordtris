@@ -210,10 +210,10 @@ public:
     virtual std::string get_help()
     {
         return WtL10n_tr("Construct words by placing the falling letters "
-                         "either vertical or horizontal. "
+                         "either vertical or horizontal.\\n\\n"
                          "The longer the word, the more points you get. "
                          "But you need to construct a word out of at least "
-                         + get_min_word_length() + " letters" );
+                         + get_min_word_length() + " letters." );
     }
 
 

@@ -27,7 +27,7 @@ public:
 
     WtButton( WtCoord pos, WtDim size,
               std::string button_image,
-              OnTapDelegate on_tap,
+              OnTapDelegate on_tap=nullptr,
               std::string label="",
               WtCoord label_pos=WtCoord(0,0) ) :
 
@@ -67,6 +67,14 @@ public:
     std::string label()
     {
         return WtL10n::translate(m_label);
+    }
+
+    /**************************
+     *
+     *************************/
+    void set_label( std::string s )
+    {
+        m_label = s;
     }
 
     /**************************

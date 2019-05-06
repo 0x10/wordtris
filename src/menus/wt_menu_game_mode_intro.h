@@ -17,7 +17,6 @@
 #define _WT_MENU_GAME_MODE_INTRO_H_
 
 #include "wt_view_if.h"
-#include "widgets/wt_checkbox_button.h"
 
 class WtMenuGameModeIntro : public WtViewIf
 {
@@ -32,13 +31,13 @@ public:
                      "next_btn.bmp",
                      WT_BIND_EVENT_HANDLER( WtMenuGameModeIntro::leave ) ),
         m_current_mode( nullptr ),
-        m_show_next_time_btn( WtCoord( offset_x-164, offset_y + (20+((69 + 20)*3)) ),
+        m_show_next_time_btn( WtCoord( offset_x-164, offset_y + (20+((69 + 20)*2)) ),
                               m_standard_btn_size,
                               WtL10n_tr( "Show next time" ),
                              /* STORAGE.get_settings().show_intro*/true,
                               WT_BIND_EVENT_HANDLER_1( WtMenuGameModeIntro::show_next_time_changed ) ),
         m_textbox( WtCoord( (ACTIVE_WINDOW_WIDTH - 379) / 2,
-                            (ACTIVE_WINDOW_HEIGHT / 2) - (608 / 2) ),
+                            ((ACTIVE_WINDOW_HEIGHT / 2) - (608 / 2)) - 50 ),
                    "", ACTIVE_WINDOW.get_text_font() ),
         m_show_next_time( true )
     {

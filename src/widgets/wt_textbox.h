@@ -28,9 +28,11 @@ public:
                std::string text,
                const WtSdlFont&  font ) :
         m_pos( pos ),
-        m_words( split( text ) ),
+        m_lines(),
         m_font( font )
-    {}
+    {
+        set_text( text );
+    }
     ~WtTextbox() {}
     
     /**************************
@@ -38,7 +40,47 @@ public:
      *************************/
     void set_text( const std::string& s )
     {
-        m_words = split( s );
+        m_lines.clear();
+
+        std::vector<std::string> words = split( s );
+        std::string working_line = "";
+
+        WtCoord cursor_pos = m_pos;
+        cursor_pos.x += m_text_margin;
+        for(size_t w_idx = 0; w_idx < words.size(); w_idx++ )
+        {
+            std::string word = words[w_idx];
+            size_t newline_pos = word.find("\\n");
+            while ( newline_pos != std::string::npos )
+            {
+                std::string subword = word.substr( 0, newline_pos );
+                std::cout << "subword found = " << subword << std::endl;
+                if (! subword.empty() )
+                {
+                    append_to_line( subword, working_line, cursor_pos );
+                }
+                m_lines.push_back( working_line );
+                working_line = "";
+
+                word = word.substr( newline_pos+2 );
+                std::cout << "process rest = " << word << std::endl;
+                newline_pos = word.find("\\n");
+            }
+
+            append_to_line( word, working_line, cursor_pos );
+
+            WtDim w_sz = m_font.text_size( word );
+            if ( w_idx < words.size() - 1 )
+            {
+                working_line.append( " " );
+                WtDim sp_sz = m_font.text_size( " " );
+                w_sz.w = ( w_sz.w + sp_sz.w );
+            }
+            cursor_pos.x += w_sz.w;
+        }
+
+        if ( ! working_line.empty() )
+            m_lines.push_back( working_line );
     }
 
     /**************************
@@ -81,40 +123,29 @@ public:
      *************************/
     std::vector<std::string> lines() const
     {
-        std::vector<std::string> text_lines;
-        std::string working_line = "";
-
-        WtCoord cursor_pos = m_pos;
-        cursor_pos.x += m_text_margin;
-        WtDim sp_sz = m_font.text_size( " " );
-        for(size_t w_idx = 0; w_idx < m_words.size(); w_idx++ )
-        {
-            WtDim w_sz = m_font.text_size( m_words[w_idx] );
-            if ( (w_sz.w + cursor_pos.x) > ( ( size().w + m_pos.x ) - m_text_margin ) )
-            {
-                cursor_pos.x = m_pos.x + m_text_margin;
-                text_lines.push_back( working_line );
-                working_line = "";
-            }
-            working_line.append( m_words[w_idx] );
-            if ( w_idx < m_words.size() - 1 )
-                working_line.append( " " );
-
-            cursor_pos.x += ( w_sz.w + sp_sz.w );
-        }
-
-        if ( ! working_line.empty() )
-            text_lines.push_back( working_line );
-
-        return text_lines;
+        return m_lines;
     }
 private:
     WtTextbox( const WtTextbox& ); 
     WtTextbox& operator = (const WtTextbox&);
 
+    /**************************
+     *
+     *************************/
+    void append_to_line( const std::string& str, std::string& line, WtCoord& cursor_pos )
+    {
+        WtDim w_sz = m_font.text_size( str );
+        if ( (w_sz.w + cursor_pos.x) > ( ( size().w + m_pos.x ) - m_text_margin ) )
+        {
+            cursor_pos.x = m_pos.x + m_text_margin;
+            m_lines.push_back( line );
+            line = "";
+        }
+        line.append( str );
+    }
 private:
     WtCoord                  m_pos;
-    std::vector<std::string> m_words;
+    std::vector<std::string> m_lines;
     const WtSdlFont&         m_font;
 };
 

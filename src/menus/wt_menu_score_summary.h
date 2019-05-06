@@ -27,9 +27,13 @@ public:
                      WtDim(100, 100), 
                      "next_btn.bmp",
                      WT_BIND_EVENT_HANDLER( WtMenuScoreSummary::leave ) ),
+        m_textbox( WtCoord( (ACTIVE_WINDOW_WIDTH - 379) / 2,
+                            ((ACTIVE_WINDOW_HEIGHT / 2) - (608 / 2)) - 50 ),
+                   "", ACTIVE_WINDOW.get_text_font() ),
         m_new_highscore( false )
     {
         add_button( m_leave_btn );
+        add_textbox( m_textbox );
     }
     ~WtMenuScoreSummary() {}
 
@@ -56,15 +60,15 @@ private: // no copy allowed
     /**************************
      *
      *************************/
-    virtual void update_view()
+    virtual void entered_view()
     {
         if ( m_new_highscore )
         {
-            ACTIVE_WINDOW.draw_message(WtL10n_tr("wow! new highscore"));
+            m_textbox.set_text(WtL10n_tr("wow! new highscore"));
         }
         else
         {
-            ACTIVE_WINDOW.draw_message(WtL10n_tr("you lost! :P"));
+            m_textbox.set_text(WtL10n_tr("you lost! :P"));
         }
     }
 
@@ -108,8 +112,9 @@ private: // no copy allowed
     }
 
 private:
-    WtButton m_leave_btn;
-    bool     m_new_highscore;
+    WtButton  m_leave_btn;
+    WtTextbox m_textbox;
+    bool      m_new_highscore;
 };
 
 #endif /* _WT_MENU_SCORE_SUMMARY_H_ */
