@@ -108,7 +108,7 @@ public:
 
                             {
                                 uint32_t current_level = player.get_current_level();
-                                player.word_solved( word.length() * (found_count + 1) );
+                                player.word_solved( word.length() * (found_count + 1), found_count+1 );
                                 if ( player.get_current_level() != current_level )
                                 {
                                     WtGridAnimationBuilder::construct_level_up_animation( blink );
@@ -153,7 +153,7 @@ public:
                             blink.push_back( step );
                         }
                         gs.animation = blink;
-                        player.word_solved( word.length() * (found_count + 1) );
+                        player.word_solved( word.length() * (found_count + 1), found_count+1 );
                         erase_from_col( c_idx, col_str, word, board );
                         something_found = true;
                         found_count++;

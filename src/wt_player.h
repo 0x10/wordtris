@@ -25,7 +25,7 @@ class WtPlayer
 public:
     WtPlayer() :
         m_points( 0 ),
-        m_words( 0 ),
+        m_words{0,0,0,0},
         m_level( 1 )
     {}
     ~WtPlayer() {}
@@ -38,13 +38,32 @@ public:
     /**************************
      *
      *************************/
-    void word_solved( size_t length=1, uint32_t base_points=PTS_P_WORD )
+    void word_solved( size_t length=1, size_t successive_idx=0, uint32_t base_points=PTS_P_WORD )
     {
-        m_words ++;
+        m_words[0] ++;
+        if (successive_idx != 0)
+        {
+            switch( successive_idx )
+            {
+                case 2:
+                    m_words[1] ++;
+                    break;
+                case 3:
+                    m_words[1] --;
+                    m_words[2] ++;
+                    break;
+                case 4:
+                    m_words[0] --;
+                    m_words[1] --;
+                    m_words[2] ++;
+                    break;
+                default: break;
+            }
+        }
 
         m_points += (static_cast<uint32_t>(length * base_points) * m_level);
 
-        uint8_t new_level = 1 + static_cast<uint32_t>(m_words / 10);
+        uint8_t new_level = 1 + static_cast<uint32_t>(m_words[0] / 10);
         if ( new_level > m_level )
             m_level = new_level;
     }
@@ -57,21 +76,6 @@ public:
         uint8_t solved_words = get_solved_word_count();
         uint8_t next_level_word_count = (( solved_words / 10 ) + 1 ) * 10;
         return 10 - ( next_level_word_count - solved_words );
-    }
-
-    /**************************
-     *
-     *************************/
-    void row_cleared( uint32_t new_points )
-    {
-        m_words ++;
-
-        m_points += new_points * m_level;
-
-        m_level = 1 + static_cast<uint32_t>((m_words - 1) / 10);
-        uint8_t new_level = 1 + static_cast<uint32_t>(m_words / 10);
-        if ( new_level > m_level )
-            m_level = new_level;
     }
 
     /**************************
@@ -92,7 +96,10 @@ public:
     void reset()
     {
         m_points = 0;
-        m_words = 0;
+        m_words[0] = 0;
+        m_words[1] = 0;
+        m_words[2] = 0;
+        m_words[3] = 0;
         m_level = 1;
     }
 
@@ -109,20 +116,20 @@ public:
      *************************/
     void set_words_offset( uint16_t words )
     {
-        m_words = words;
+        m_words[0] = words;
     }
 
     /**************************
      *
      *************************/
     uint32_t get_points() const            { return m_points; };
-    uint16_t get_solved_word_count() const { return m_words;  };
+    uint16_t get_solved_word_count( uint8_t successive=1 ) const { return m_words[successive-1];  };
     uint32_t get_current_level() const     { return m_level;  };
 
 private:
     uint32_t m_points;
-    uint16_t m_words;
-    uint32_t  m_level;
+    uint16_t m_words[4];
+    uint32_t m_level;
 
 };
 

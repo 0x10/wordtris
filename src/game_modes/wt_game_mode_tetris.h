@@ -42,7 +42,7 @@ public:
     /**************************
      *
      *************************/
-    virtual WtGameModeState eval_board( WtBoard& board, WtPlayer& player )
+    virtual WtGameModeState eval_board( WtBoard& board, WtPlayer& )
     {
         WtGameModeState gs( false,
                             WtGridAnimation::no_animation() );
@@ -78,7 +78,7 @@ public:
                 {
                     points += (words[w_idx].length() * words[w_idx].length()) * 20;
                 }
-                player.row_cleared( points );
+                //player.row_cleared( points );
                 /* drop remaining stones afterwards */
                 board.collapse_above( r_idx );
             }

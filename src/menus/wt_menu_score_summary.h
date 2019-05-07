@@ -30,7 +30,9 @@ public:
         m_textbox( WtCoord( (ACTIVE_WINDOW_WIDTH - 379) / 2,
                             ((ACTIVE_WINDOW_HEIGHT / 2) - (608 / 2)) - 50 ),
                    "", ACTIVE_WINDOW.get_text_font() ),
-        m_new_highscore( false )
+        m_new_highscore( false ),
+        m_last_points(0),
+        m_solved_words{0,0,0,0}
     {
         add_button( m_leave_btn );
         add_textbox( m_textbox );
@@ -50,7 +52,12 @@ public:
                                 player.get_points(),
                                 player.get_current_level() );
 
-        m_new_highscore = insert_entry( scores, new_entry );
+        m_new_highscore   = insert_entry( scores, new_entry );
+        m_last_points     = player.get_points();
+        m_solved_words[0] = player.get_solved_word_count();
+        m_solved_words[1] = player.get_solved_word_count(2);
+        m_solved_words[2] = player.get_solved_word_count(3);
+        m_solved_words[3] = player.get_solved_word_count(4);
     }
 
 private: // no copy allowed
@@ -62,13 +69,19 @@ private: // no copy allowed
      *************************/
     virtual void entered_view()
     {
+       std::string score_summary = "points = " + std::to_string( m_last_points ) + "\\n"
+                                   "words = " + std::to_string( static_cast<ssize_t>(m_solved_words[0]) ) + "\\n"
+                                   "words 2x = " + std::to_string( static_cast<ssize_t>(m_solved_words[1]) ) + "\\n"
+                                   "words 3x = " + std::to_string( static_cast<ssize_t>(m_solved_words[2]) ) + "\\n"
+                                   "words 4x = " + std::to_string( static_cast<ssize_t>(m_solved_words[3]) ) + "\\n";
         if ( m_new_highscore )
         {
-            m_textbox.set_text(WtL10n_tr("wow! new highscore"));
+
+            m_textbox.set_text(std::string("wow! new highscore!\\n").append(score_summary));
         }
         else
         {
-            m_textbox.set_text(WtL10n_tr("you lost! :P"));
+            m_textbox.set_text(std::string("you lost! :P\\n").append(score_summary));
         }
     }
 
@@ -115,6 +128,8 @@ private:
     WtButton  m_leave_btn;
     WtTextbox m_textbox;
     bool      m_new_highscore;
+    uint32_t  m_last_points;
+    uint16_t  m_solved_words[4];
 };
 
 #endif /* _WT_MENU_SCORE_SUMMARY_H_ */
