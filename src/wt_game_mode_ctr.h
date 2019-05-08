@@ -17,7 +17,7 @@
 #define _WT_GAME_MODE_CTR_H_
 
 #include "game_modes/wt_game_mode_guessing.h"
-#include "game_modes/wt_game_mode_tetris.h"
+//#include "game_modes/wt_game_mode_tetris.h"
 #include "game_modes/wt_game_mode_abc.h"
 #include "game_modes/wt_game_mode_wordtris.h"
 
@@ -109,7 +109,7 @@ private:
     WtGameModeCtr() :
         m_demoMode(),
         m_guessMode(),
-        m_tetrisMode(),
+//        m_tetrisMode(),
         m_abcMode(),
         m_wordtrisMode(),
         m_available_modes()
@@ -127,7 +127,7 @@ private:
 private:
     WtGameModeDemo              m_demoMode;
     WtGameModeGuessing          m_guessMode;
-    WtGameModeTetris            m_tetrisMode;
+//    WtGameModeTetris            m_tetrisMode;
     WtGameModeAbc               m_abcMode;
     WtGameModeWordtris          m_wordtrisMode;
     std::vector<WtGameModeIf*>  m_available_modes;

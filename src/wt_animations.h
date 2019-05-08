@@ -111,10 +111,9 @@ public:
     /**************************
      *
      *************************/
-    static const WtGridAnimation& no_animation()
+    static WtGridAnimation* no_animation()
     {
-        static const WtGridAnimation empty;
-        return empty;
+        return nullptr;
     }
 
 public:

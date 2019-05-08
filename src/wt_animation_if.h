@@ -46,7 +46,6 @@ template<typename animation_content>
 class WtAnimationIf : public WtViewIf
 {
 public:
-    using OnUpdateOverlayDelegate = std::function<void(void)>;
     typedef WtAnimationStep<animation_content> AnimationStep;
 
     /**************************
@@ -62,7 +61,6 @@ public:
     WtAnimationIf() :
         WtViewIf( "bg.bmp", false ),
         m_animation_steps(),
-        m_update_overlay( nullptr ),
         m_a_idx( 0 ) {}
     virtual ~WtAnimationIf() {}
 
@@ -90,13 +88,6 @@ public:
         return m_animation_steps.empty();
     }
 
-    /**************************
-     *
-     *************************/
-    void set_overlay_drawing( OnUpdateOverlayDelegate update_overlay )
-    {
-        m_update_overlay = update_overlay;
-    }
 
     /**************************
      *
@@ -119,7 +110,6 @@ public:
      *************************/
     virtual void update_view()
     {
-        if ( m_update_overlay ) m_update_overlay();
         if ( m_a_idx < m_animation_steps.size() )
         {
             draw_animation_step( m_animation_steps[m_a_idx] );
@@ -159,10 +149,105 @@ protected:
 
 private:
     std::vector< AnimationStep > m_animation_steps;
-    OnUpdateOverlayDelegate m_update_overlay;
     size_t m_a_idx;
 };
 
 
+/**************************
+ *
+ *************************/
+class WtAnimationPlaylist
+{
+public:
+    struct WtAnimationPlaylistEntry
+    {
+        size_t    title_idx;
+        WtViewIf* animation;
+    };
+    /**************************
+     *
+     *************************/
+    static WtAnimationPlaylistEntry new_entry( const size_t idx, WtViewIf* view )
+    {
+        WtAnimationPlaylistEntry e;
+        e.title_idx = idx;
+        e.animation = view;
+        return e;
+    }
+public:
+    WtAnimationPlaylist() :
+        m_playlist()
+    {}
+    WtAnimationPlaylist( const WtAnimationPlaylist& rhs ) :
+        m_playlist( rhs.m_playlist )
+    {}
+
+    ~WtAnimationPlaylist()
+    {
+        for ( size_t idx = 0; idx < m_playlist.size(); idx++ )
+        {
+            std::cout << "destroy animation...\n";
+            delete m_playlist[idx].animation;
+            m_playlist[idx].animation = nullptr;
+        }
+        m_playlist.clear();
+    }
+
+    /**************************
+     *
+     *************************/
+    void push_back( WtViewIf* view )
+    {
+        if ( nullptr != view )
+        {
+            if ( m_playlist.size() == 0 )
+            {
+                m_playlist.push_back( new_entry( 0, view ) );
+            }
+            else
+            {
+                m_playlist.push_back( new_entry( m_playlist.back().title_idx + 1 , view ) );
+            }
+        }
+    }
+
+    /**************************
+     *
+     *************************/
+    void push_back( WtAnimationPlaylistEntry& animation )
+    {
+        m_playlist.push_back( animation );
+    }
+
+    /**************************
+     *
+     *************************/
+    const WtAnimationPlaylistEntry& operator[]( const size_t idx ) const
+    {
+        return m_playlist[idx];
+    }
+
+    /**************************
+     *
+     *************************/
+    size_t size() const
+    {
+        return m_playlist.size();
+    }
+
+    /**************************
+     *
+     *************************/
+    bool empty() const
+    {
+        return m_playlist.empty();
+    }
+private:
+    WtAnimationPlaylist & operator = (const WtAnimationPlaylist &);
+
+
+private:
+    std::vector<WtAnimationPlaylistEntry> m_playlist;
+};
 
 #endif /* _WT_ANIMATION_IF_H_ */

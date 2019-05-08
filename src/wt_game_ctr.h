@@ -119,18 +119,14 @@ private:
     /**************************
      *
      *************************/
-    template<typename Animation=WtGridAnimation>
-    void play_animation( Animation& animation )
+    void play_animation( WtViewIf* animation )
     {
-        if ( ! animation.empty() )
-        {
-            wt_game_state old_state = m_game_state;
+        wt_game_state old_state = m_game_state;
 
-            m_game_state = GAME_ANIMATION_RUNNING; 
-            animation.set_overlay_drawing( WT_BIND_EVENT_HANDLER( WtGameCtr::update_window ) );
-            enter_child_menu( animation );
-            m_game_state = old_state;
-        }
+        m_game_state = GAME_ANIMATION_RUNNING; 
+        animation->set_overlay_drawing( WT_BIND_EVENT_HANDLER( WtGameCtr::update_window ) );
+        enter_child_menu( *animation );
+        m_game_state = old_state;
     }
 
     /**************************
@@ -152,16 +148,21 @@ private:
 
             m_grid_touch_control.set_direction_seperator_pos( ACTIVE_WINDOW.grid_pos_to_coord( WtBoard::row_count - 1, 5 ).x );
 
-            WtGameModeState eval_result = m_active_mode->eval_board( m_board,
-                                                                     m_player );
-
-            if ( !eval_result.animation.empty() )
             {
-                play_animation( eval_result.animation );
-                animation_played = true;
+                WtGameModeState eval_result( false,
+                                             nullptr );
+                m_active_mode->eval_board( m_board, m_player, eval_result );
+
+                if ( !eval_result.animations.empty() )
+                {
+                    for ( size_t a_idx = 0; a_idx < eval_result.animations.size(); a_idx++ )
+                        play_animation( eval_result.animations[a_idx].animation );
+                    animation_played = true;
+                }
+                game_over = eval_result.game_over;
             }
 
-            if ( !eval_result.game_over )
+            if ( !game_over )
             {
                 /* generate next stone */
                 m_active.get_next( m_active_mode->next_letter() );
@@ -170,10 +171,6 @@ private:
                 game_over = m_active_mode->stone_blocked( m_board,
                                                           m_active.current_row(),
                                                           m_active.current_column() );
-            }
-            else
-            {
-                game_over = true;
             }
         }
         else
@@ -353,7 +350,7 @@ private:
 
             case GAME_PAUSED:
                 m_game_state = GAME_STARTED;
-                play_animation( m_pause_end_animation );
+                play_animation( &m_pause_end_animation );
                 break;
 
             case GAME_TO_START:

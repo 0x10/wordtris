@@ -56,10 +56,8 @@ public:
     /**************************
      *
      *************************/
-    virtual WtGameModeState eval_board( WtBoard& board, WtPlayer& player )
+    virtual void eval_board( WtBoard& board, WtPlayer& player, WtGameModeState& )
     {
-        WtGameModeState gs( false,
-                            WtGridAnimation::no_animation() );
         if ( m_working_letters.empty() )
         {
             bool correct = true;
@@ -86,7 +84,6 @@ public:
             setup_sequences();
             show_sequence( board );
         }
-        return gs;
     }
 
     /**************************

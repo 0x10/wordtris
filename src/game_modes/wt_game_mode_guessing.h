@@ -54,11 +54,8 @@ public:
     /**************************
      *
      *************************/
-    WtGameModeState eval_board( WtBoard& board, WtPlayer& player )
+    virtual void eval_board( WtBoard& board, WtPlayer& player, WtGameModeState& )
     {
-        WtGameModeState gs( false,
-                            WtGridAnimation::no_animation() );
-
         if ( m_active_word_guessed.empty() )
         {
             bool found_word = false;
@@ -98,8 +95,6 @@ public:
                 get_next_word();
             }
         }
-
-        return gs;
     }
 
     /**************************

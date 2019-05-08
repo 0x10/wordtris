@@ -30,12 +30,22 @@
  *************************/
 struct WtGameModeState
 {
-    WtGameModeState( bool go, const WtGridAnimation& a ) :
+    WtGameModeState( bool go, WtGridAnimation* a ) :
         game_over( go ),
-        animation( a ) {}
+        animations()
+    {
+        animations.push_back( a );
+    }
+    /**************************
+     * 
+     *************************/
+    void add_animation( WtGridAnimation* a )
+    {
+        animations.push_back( a );
+    }
 
-    bool            game_over;
-    WtGridAnimation animation;
+    bool                game_over;
+    WtAnimationPlaylist animations;
 };
 
 /**************************
@@ -84,7 +94,7 @@ public:
     /**************************
      *
      *************************/
-    virtual WtGameModeState eval_board( WtBoard& board, WtPlayer& player )=0;
+    virtual void eval_board( WtBoard&, WtPlayer&, WtGameModeState& )=0;
 
     /**************************
      *
@@ -198,11 +208,8 @@ public:
     /**************************
      *
      *************************/
-    virtual WtGameModeState eval_board( WtBoard&, WtPlayer& )
+    virtual void eval_board( WtBoard&, WtPlayer&, WtGameModeState& )
     {
-        WtGameModeState gs( false,
-                             WtGridAnimation::no_animation() );
-        return gs;
     }
 
     /**************************

@@ -29,6 +29,7 @@ class WtViewIf
 {
 public:
     using OnKeyPressDelegate = std::function<void(wt_control)>;
+    using OnUpdateOverlayDelegate = std::function<void(void)>;
 public:
     WtViewIf( std::string bg_img="bg.bmp", 
               bool fade=true, 
@@ -43,6 +44,7 @@ public:
         m_fade( fade ),
         m_refresh_sleep_time( refresh_rate ),
         m_active_child( nullptr ),
+        m_update_overlay( nullptr ),
         m_on_key_press_handler( on_key_press_handler )
     {
     }
@@ -57,6 +59,7 @@ public:
         m_fade = rhs.m_fade;
         m_refresh_sleep_time = rhs.m_refresh_sleep_time;
         m_active_child = nullptr;
+        m_update_overlay = rhs.m_update_overlay;
         m_on_key_press_handler = rhs.m_on_key_press_handler;
         return *this;
     }
@@ -70,6 +73,7 @@ public:
         m_fade( rhs.m_fade ),
         m_refresh_sleep_time( rhs.m_refresh_sleep_time ),
         m_active_child( nullptr ),
+        m_update_overlay( nullptr ),
         m_on_key_press_handler( rhs.m_on_key_press_handler )
     {
     }
@@ -110,6 +114,15 @@ public:
 
         return m_shall_exit;
     }
+
+    /**************************
+     *
+     *************************/
+    void set_overlay_drawing( OnUpdateOverlayDelegate update_overlay )
+    {
+        m_update_overlay = update_overlay;
+    }
+
 protected:
     /**************************
      *
@@ -397,6 +410,7 @@ private:
             }
         }
 
+        if ( m_update_overlay ) m_update_overlay();
         update_view();
 
         draw_view();
@@ -412,6 +426,7 @@ private:
     bool                                    m_fade;
     WtTime::TimeType                        m_refresh_sleep_time;
     WtViewIf*                               m_active_child;
+    OnUpdateOverlayDelegate                 m_update_overlay;
     OnKeyPressDelegate                      m_on_key_press_handler;
 };
 
