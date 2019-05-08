@@ -194,19 +194,38 @@ public:
 
             if ( ! button.label().empty() )
             {
-                ssize_t text_center_w;
                 ssize_t button_center_x;
                 ssize_t button_center_y;
-
-                WtDim font_sz = DrawingPolicy::get_text_size( button.label() );
-
-                text_center_w = font_sz.w / 2;
                 button_center_x = ( ( button.width() / 2 ) + button.x() ) + button.label_pos().x;
                 button_center_y = ( ( button.height() / 2 ) + button.y() ) + button.label_pos().y;
 
-                DrawingPolicy::draw_text( WtCoord( button_center_x - text_center_w,
-                                                   button_center_y - (font_sz.h/2)  ),
-                                          button.label() );
+                std::string label = button.label();
+                if ( label.find_first_of("#@") != 0 )
+                {
+                    ssize_t text_center_w;
+
+                    WtDim font_sz = DrawingPolicy::get_text_size( label );
+
+                    text_center_w = font_sz.w / 2;
+                    button_center_x = ( ( button.width() / 2 ) + button.x() ) + button.label_pos().x;
+                    button_center_y = ( ( button.height() / 2 ) + button.y() ) + button.label_pos().y;
+
+                    DrawingPolicy::draw_text( WtCoord( button_center_x - text_center_w,
+                                                       button_center_y - (font_sz.h/2)  ),
+                                              label );
+                }
+                else
+                {
+                    WtDim sz( 60, 33 );
+
+                    if ( label[0] == '#' )
+                        label = label.substr(1);
+
+                    DrawingPolicy::draw_image( WtCoord( button_center_x - (sz.w/2), button_center_y - (sz.h/2) ),
+                                               sz,
+                                               label );
+                }
+
             }
         }
     }

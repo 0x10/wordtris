@@ -32,7 +32,11 @@ public:
                                             std::string   theme="default" )
     {
         SDL_Texture* result_texture = NULL;
-        std::string path = std::string(SDL_ASSETS).append(theme).append("/").append(fname);
+        std::string path = std::string(SDL_ASSETS);
+        if ( fname[0] != '@' )
+            path.append(theme).append("/").append(fname);
+        else
+            path.append(fname.substr(1));
         SDL_Surface* surface = SDL_LoadBMP(path.c_str());
         if (surface != 0)
         {

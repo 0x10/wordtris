@@ -66,7 +66,12 @@ public:
      *************************/
     std::string label()
     {
-        return WtL10n::translate(m_label);
+        if ( m_label[0] == '@' )
+        {
+            return m_label;
+        }
+        else
+            return WtL10n::translate(m_label);
     }
 
     /**************************

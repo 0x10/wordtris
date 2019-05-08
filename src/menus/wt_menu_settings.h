@@ -44,7 +44,7 @@ public:
                      WT_BIND_EVENT_HANDLER( WtMenuSettings::leave ) ),
         m_lang_select_btn( WtCoord( offset_x, offset_y + 69 + 20 ),
                            m_standard_btn_size,
-                           WtL10n::get_available_languages(),
+                           WtL10n::get_available_language_names(),
                            0,
                            WT_BIND_EVENT_HANDLER_1( WtMenuSettings::lang_changed ) ),
         m_diff_select_btn( WtCoord( offset_x, offset_y + (69 + 20)*2 ),
