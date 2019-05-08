@@ -121,7 +121,7 @@ public:
     /**************************
      *
      *************************/
-    std::vector<std::string> lines() const
+    std::vector<std::string>& lines()
     {
         return m_lines;
     }

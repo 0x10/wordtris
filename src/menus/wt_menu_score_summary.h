@@ -69,20 +69,35 @@ private: // no copy allowed
      *************************/
     virtual void entered_view()
     {
-       std::string score_summary = "points = " + std::to_string( m_last_points ) + "\\n"
-                                   "words = " + std::to_string( static_cast<ssize_t>(m_solved_words[0]) ) + "\\n"
-                                   "words 2x = " + std::to_string( static_cast<ssize_t>(m_solved_words[1]) ) + "\\n"
-                                   "words 3x = " + std::to_string( static_cast<ssize_t>(m_solved_words[2]) ) + "\\n"
-                                   "words 4x = " + std::to_string( static_cast<ssize_t>(m_solved_words[3]) ) + "\\n";
+        std::vector<std::string>& tb_lines = m_textbox.lines();
+
+        tb_lines.clear();
+        tb_lines.push_back("");
+        tb_lines.push_back("");
         if ( m_new_highscore )
         {
-
-            m_textbox.set_text(std::string("wow! new highscore!\\n").append(score_summary));
+            tb_lines.push_back("wow! new highscore!");
         }
         else
         {
-            m_textbox.set_text(std::string("you lost! :P\\n").append(score_summary));
+            tb_lines.push_back("you lost! :P");
         }
+        tb_lines.push_back("");
+        tb_lines.push_back("");
+        tb_lines.push_back("");
+
+        std::string score_summary = "points       " + std::to_string( m_last_points );
+        tb_lines.push_back( score_summary );
+        tb_lines.push_back("");
+        score_summary = "words        " + std::to_string( static_cast<ssize_t>(m_solved_words[0]) ); 
+        tb_lines.push_back( score_summary );
+        score_summary = "          2x     " + std::to_string( static_cast<ssize_t>(m_solved_words[1]) ); 
+        tb_lines.push_back( score_summary );
+        score_summary = "          3x     " + std::to_string( static_cast<ssize_t>(m_solved_words[2]) ); 
+        tb_lines.push_back( score_summary );
+        score_summary = "          4x     " + std::to_string( static_cast<ssize_t>(m_solved_words[3]) ); 
+        tb_lines.push_back( score_summary );
+
     }
 
     /**************************

@@ -137,14 +137,14 @@ public:
     /**************************
      *
      *************************/
-    void draw_textbox( const WtTextbox& textbox )
+    void draw_textbox( WtTextbox& textbox )
     {
         DrawingPolicy::draw_image( textbox.position(),
                                    textbox.size(),
                                    textbox.background() );
 
         WtCoord text_pos = textbox.text_position();
-        std::vector<std::string> lines = textbox.lines();
+        std::vector<std::string>& lines = textbox.lines();
         for( size_t l_idx = 0; l_idx < lines.size(); l_idx++ )
         {
             WtDim t_sz = DrawingPolicy::get_text_size( lines[l_idx] );
