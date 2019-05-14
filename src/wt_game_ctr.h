@@ -69,6 +69,9 @@ public:
         WtGridAnimationBuilder::construct_pause_animation( m_pause_end_animation );
 
         add_button( m_pause_btn );
+
+        if ( nullptr != m_active_mode )
+            m_active_mode->set_difficulty( STORAGE.get_settings().difficulty );
     }
 
     ~WtGameCtr() {}

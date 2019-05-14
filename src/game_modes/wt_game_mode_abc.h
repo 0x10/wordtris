@@ -63,10 +63,14 @@ public:
             bool correct = true;
             for( uint8_t c=0; c < WtBoard::col_count; c++ )
             {
-                if ( m_current_sequence_control[c] != board.get_cell( m_active_row, c ) )
+                char cell = board.get_cell( m_active_row, c );
+                if ( cell == WtBoard::empty_cell )
+                {
+                    board.set_cell( m_active_row, c, ' ' );
+                }
+                if ( m_current_sequence_control[c] != cell )
                 {
                     correct = false;
-                    break;
                 }
             }
 
