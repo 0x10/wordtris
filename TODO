@@ -12,7 +12,8 @@
 #           => internal type from char to utf8_char
 #           -> STOPPED by decision; general ui texts are utf8 but grid alphabet remains ascii for first version
 #   - naming / logo
-#   - (at least strategy) revenue system (ads, install-fee, whatever)
+#   - [DONE] (at least strategy) revenue system (ads, install-fee, whatever)
+#       -> free lite version and paid pro version
 #   - [DONE] scaleable ui / 16:9 fixed 
 #           => fixed using renderer logical size and overscan to eliminate letterboxes
 #           => should work fine for most nearly 16:9 aspect ratios; 16:10 hides some ui elements maybe fix later (see below)
@@ -67,6 +68,7 @@
 #
 # (architecture bugs)
 # - Drawing:
+#       - redraw only if needed in menu
 #       - support non 16:9 devices:
 #           - issue may be resolved to overscan hidden feature 
 #           - decide wether to modify it locally to have it fixed at the top
@@ -78,7 +80,6 @@
 # (others)
 # - android:
 #       - (config management) release build for apk incl. signed certificates
-#       - (business) eval income model: either ad based vs by app store payment vs freemium
 # - version tracking
 # - git optimization: store assets somewhere else?
 #       - e.g. on the deadlock server within an asset pack and refer within git to a specific sha/version/whatever

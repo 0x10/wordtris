@@ -114,10 +114,12 @@ private:
         m_wordtrisMode(),
         m_available_modes()
     {
+#ifdef WT_PRO_MODE
       //  m_available_modes.push_back( &m_demoMode );
         m_available_modes.push_back( &m_guessMode );
       //  m_available_modes.push_back( &m_tetrisMode );
         m_available_modes.push_back( &m_abcMode );
+#endif /* WT_PRO_MODE */
         m_available_modes.push_back( &m_wordtrisMode );
     }
     WtGameModeCtr( const WtGameModeCtr& ); 

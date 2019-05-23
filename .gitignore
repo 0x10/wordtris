@@ -3,6 +3,7 @@ org.libsdl.wordtris/app/.externalNativeBuild
 org.libsdl.wordtris/.gradle
 *.dat
 wordtris_sdl
+wordtris_sdl_lite
 wordtris_ncurses
 SDL2-2.0.9/build
 SDL2-2.0.9/Makefile

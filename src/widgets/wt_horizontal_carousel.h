@@ -73,35 +73,46 @@ public:
      *************************/
     WtButton operator[](size_t idx)
     {
-        if ( idx == m_selected )
+        if ( m_labels.size() > 1 )
         {
-            return WtButton( get_pos_of_item( 0 ),
-                             m_item_img_size,
-                             m_selected_img,
-                             [](){},
-                             m_labels[idx] );
-        }
-        else if ( idx == get_prev_idx( m_selected ) )
-        {
-            return WtButton( get_pos_of_item( -1 ),
-                             m_item_img_size,
-                             m_inactive_img,
-                             [](){},
-                             m_labels[idx] );
-        }
-        else if ( idx == get_next_idx( m_selected ) )
-        {
-            return WtButton( get_pos_of_item( 1 ),
-                             m_item_img_size,
-                             m_inactive_img,
-                             [](){},
-                             m_labels[idx] );
+            if ( idx == m_selected )
+            {
+                return WtButton( get_pos_of_item( 0 ),
+                                 m_item_img_size,
+                                 m_selected_img,
+                                 [](){},
+                                 m_labels[idx] );
+            }
+            else if ( idx == get_prev_idx( m_selected ) )
+            {
+                return WtButton( get_pos_of_item( -1 ),
+                                 m_item_img_size,
+                                 m_inactive_img,
+                                 [](){},
+                                 m_labels[idx] );
+            }
+            else if ( idx == get_next_idx( m_selected ) )
+            {
+                return WtButton( get_pos_of_item( 1 ),
+                                 m_item_img_size,
+                                 m_inactive_img,
+                                 [](){},
+                                 m_labels[idx] );
+            }
+            else
+            {
+                return WtButton( get_pos_of_item( 0 ),
+                                 WtDim( 0, 0 ),
+                                 m_inactive_img,
+                                 [](){},
+                                 m_labels[idx] );
+            }
         }
         else
         {
             return WtButton( get_pos_of_item( 0 ),
-                             WtDim( 0, 0 ),
-                             m_inactive_img,
+                             m_item_img_size,
+                             m_selected_img,
                              [](){},
                              m_labels[idx] );
         }
@@ -177,17 +188,20 @@ public:
      *************************/
     void on_pan( WtCoord& /*press_start_pos*/, WtCoord& /*active_pos*/, WtCoord& d_pos )
     {
-       // std::cout << "on pan ... " << press_start_pos << ";"<< active_pos << ";" << d_pos << std::endl;
-        m_selected_pos.x = m_selected_pos.x + d_pos.x;
-        if ( ( m_selected_pos.x + m_item_img_size.w ) >= m_size.w )
+        if ( m_labels.size() > 1 )
         {
-            m_selected = get_prev_idx( m_selected );
-            m_selected_pos.x = m_selected_pos.x - (m_item_img_size.w+m_item_padding);
-        }
-        if ( m_selected_pos.x <= ( m_size.w - ((2*m_item_img_size.w)+m_item_padding) ) )
-        {
-            m_selected = get_next_idx( m_selected );
-            m_selected_pos.x = m_selected_pos.x + (m_item_img_size.w+m_item_padding);
+           // std::cout << "on pan ... " << press_start_pos << ";"<< active_pos << ";" << d_pos << std::endl;
+            m_selected_pos.x = m_selected_pos.x + d_pos.x;
+            if ( ( m_selected_pos.x + m_item_img_size.w ) >= m_size.w )
+            {
+                m_selected = get_prev_idx( m_selected );
+                m_selected_pos.x = m_selected_pos.x - (m_item_img_size.w+m_item_padding);
+            }
+            if ( m_selected_pos.x <= ( m_size.w - ((2*m_item_img_size.w)+m_item_padding) ) )
+            {
+                m_selected = get_next_idx( m_selected );
+                m_selected_pos.x = m_selected_pos.x + (m_item_img_size.w+m_item_padding);
+            }
         }
     }
 

@@ -16,13 +16,14 @@ SDL_TTF_DIR=./SDL2_ttf-2.0.15
 
 TARGET_SDL=$(BUILD_DIR)/wordtris_sdl
 
-APK_PATH=./$(ANDROID_DIR)/app/build/outputs/apk/debug
-APK_TRG_NAME=wordtris.apk
+APK_PATH=./$(ANDROID_DIR)/app/build/outputs/apk
+APK_TRG_NAME=wordtris
 
 all: clean sdl
 
 sdl:
-	$(CXX) $(CXX_OPTIMIZATION) $(CXX_FLAGS) $(LD_FLAGS) $(INCLUDES) $(SRC_DIR)/wordtris.cpp $(LIBS) -o $(TARGET_SDL)
+	$(CXX) $(CXX_OPTIMIZATION) $(CXX_FLAGS) $(LD_FLAGS) $(INCLUDES) $(SRC_DIR)/wordtris.cpp $(LIBS) -o $(TARGET_SDL)_lite
+	$(CXX) $(CXX_OPTIMIZATION) $(CXX_FLAGS) $(LD_FLAGS) -DWT_PRO_MODE $(INCLUDES) $(SRC_DIR)/wordtris.cpp $(LIBS) -o $(TARGET_SDL)
 
 sdl-system:
 	$(CXX) -g $(CXX_FLAGS) $(LD_FLAGS) -DUSE_SYSTEM_SDL -I./pc_include -I$(SRC_DIR) $(SRC_DIR)/wordtris.cpp $(LIBS) -o $(TARGET_SDL)
@@ -34,19 +35,21 @@ system-run-sdl: sdl-system
 	./$(TARGET_SDL)
 
 debug-sdl:
-	$(CXX) $(CXX_DEBUG) $(CXX_FLAGS) $(LD_FLAGS) $(INCLUDES) $(SRC_DIR)/wordtris.cpp $(LIBS) -o $(TARGET_SDL)
+	$(CXX) $(CXX_DEBUG) $(CXX_FLAGS) $(LD_FLAGS) -DWT_PRO_MODE $(INCLUDES) $(SRC_DIR)/wordtris.cpp $(LIBS) -o $(TARGET_SDL)
 	LD_LIBRARY_PATH=$(SDL_DIR)/build/.libs:$(SDL_TTF_DIR)/build/.libs gdb ./$(TARGET_SDL)
 
 ncurses:
 	$(CXX) -g -Wall -I./pc_include -DRENDER_NCURSES $(SRC_DIR)/wordtris.cpp -lncurses -o $(BUILD_DIR)/wordtris_ncurses
 
 android-dbg:
-	cd $(ANDROID_DIR) && ./gradlew assembleDebug
+	cd $(ANDROID_DIR) && ./gradlew assembleLiteDebug assembleProDebug
 	cd -
 
 publish-dbg:
-	@cp $(APK_PATH)/app-debug.apk $(APK_PATH)/$(APK_TRG_NAME)
-	@curl -X POST -F 'file=@$(APK_PATH)/$(APK_TRG_NAME)' -F 'pruefe=SonneMondUndSterne' https://deadlock.cc/apk/upload.php
+	@cp $(APK_PATH)/lite/debug/app-lite-debug.apk $(APK_PATH)/lite/debug/$(APK_TRG_NAME)_lite.apk
+	@cp $(APK_PATH)/pro/debug/app-pro-debug.apk $(APK_PATH)/pro/debug/$(APK_TRG_NAME)_pro.apk
+	@curl -X POST -F 'file=@$(APK_PATH)/lite/debug/$(APK_TRG_NAME)_lite.apk' -F 'pruefe=SonneMondUndSterne' https://deadlock.cc/apk/upload.php
+	@curl -X POST -F 'file=@$(APK_PATH)/pro/debug/$(APK_TRG_NAME)_pro.apk' -F 'pruefe=SonneMondUndSterne' https://deadlock.cc/apk/upload.php
 
 clean:
 	rm -f $(TARGET_SDL)

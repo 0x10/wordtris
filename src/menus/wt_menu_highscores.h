@@ -44,8 +44,11 @@ public:
         m_selected_mode( 0 )
     {
         add_button( m_leave_btn );
-        add_button( m_left_btn );
-        add_button( m_right_btn );
+        if ( m_game_mode_titles.size() > 1 )
+        {
+            add_button( m_left_btn );
+            add_button( m_right_btn );
+        }
         add_button( m_title_btn );
     }
     ~WtMenuHighscores() {}
