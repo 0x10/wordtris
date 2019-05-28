@@ -11,7 +11,7 @@ android {
     compileSdkVersion 26
     defaultConfig {
         if (buildAsApplication) {
-            applicationId "org.libsdl.wordtris"
+            applicationId "cc.deadlock.squabbel"
         }
         minSdkVersion 19
         targetSdkVersion 26
@@ -36,13 +36,13 @@ android {
             dimension "versions"
             applicationIdSuffix ".lite"
             versionNameSuffix "-lite"
-            resValue "string", "app_name", "Wordtris Lite"
+            resValue "string", "app_name", "Squabbel Lite"
         }
         pro {
             dimension "versions"
             applicationIdSuffix ".pro"
             versionNameSuffix "-pro"
-            resValue "string", "app_name", "Wordtris Pro"
+            resValue "string", "app_name", "Squabbel Pro"
             externalNativeBuild {
                 ndkBuild {
                     arguments "APP_PLATFORM=android-19"
@@ -72,7 +72,7 @@ android {
             variant.outputs.each { output ->
                 def outputFile = output.outputFile
                 if (outputFile != null && outputFile.name.endsWith(".aar")) {
-                    def fileName = "org.libsdl.wordtris.aar";
+                    def fileName = "cc.deadlock.squabbel.aar";
                     output.outputFile = new File(outputFile.parent, fileName);
                 }
             }

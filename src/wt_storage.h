@@ -26,7 +26,7 @@
 #include <android/asset_manager_jni.h> 
 #include <android/log.h>
 
-#define APPNAME "wordtris"
+#define APPNAME "squabbel"
 #endif
 
 #define STORAGE  WtStorageCtr::instance()
@@ -70,7 +70,7 @@ private:
     // least significant word is fixed magic and most sig. word
     // may represent file structure
     static           const uint32_t m_header_magic = 0x0003ADDE;
-    static constexpr const char*    m_fname        = "wordtris.dat";
+    static constexpr const char*    m_fname        = "squabbel.dat";
 
 // singleton definition
 public:

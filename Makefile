@@ -14,10 +14,10 @@ BUILD_DIR=.
 SDL_DIR=./SDL2-2.0.9
 SDL_TTF_DIR=./SDL2_ttf-2.0.15
 
-TARGET_SDL=$(BUILD_DIR)/wordtris_sdl
+TARGET_SDL=$(BUILD_DIR)/squabbel
 
 APK_PATH=./$(ANDROID_DIR)/app/build/outputs/apk
-APK_TRG_NAME=wordtris
+APK_TRG_NAME=squabbel
 
 all: clean sdl
 

@@ -11,7 +11,8 @@
 #   - [STOPPED] utf8 / iso8859-1
 #           => internal type from char to utf8_char
 #           -> STOPPED by decision; general ui texts are utf8 but grid alphabet remains ascii for first version
-#   - naming / logo
+#   - logo
+#   - [DONE] naming
 #   - [DONE] (at least strategy) revenue system (ads, install-fee, whatever)
 #       -> free lite version and paid pro version
 #   - [DONE] scaleable ui / 16:9 fixed 
@@ -63,7 +64,7 @@
 #
 #
 # (design)
-# - Logo Design and Naming
+# - Logo Design
 # - get an ui design review
 #
 # (architecture bugs)
