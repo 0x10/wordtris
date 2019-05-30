@@ -28,6 +28,7 @@ public:
         m_active_word( "BlAcK" ),
         m_active_word_guessed(""),
         m_active_word_scrambled(""),
+        m_next(' '),
         m_wordlist("short.txt")
     {
     }
@@ -49,6 +50,8 @@ public:
     void init_game( WtBoard&, WtPlayer& )
     {
         get_next_word();
+        m_next = WtRandom::get_random_letter_of_word( m_active_word_guessed );
+        remove_letter( m_active_word_guessed, m_next );
     }
 
     /**************************
@@ -56,7 +59,7 @@ public:
      *************************/
     virtual void eval_board( WtBoard& board, WtPlayer& player, WtGameModeState& )
     {
-        if ( m_active_word_guessed.empty() )
+        if ( ( m_active_word_guessed.empty() ) && ( m_next == WtBoard::empty_cell ) )
         {
             bool found_word = false;
 
@@ -79,7 +82,6 @@ public:
                 {
                     for ( size_t c_idx = found_idx; c_idx < (m_active_word.length()+found_idx); c_idx++ )
                         board.set_cell( r_idx, static_cast<uint8_t>(c_idx), WtBoard::empty_cell );
-                    //TODO gravity bitch!
                     found_word = true;
                     break;
                 }
@@ -88,12 +90,11 @@ public:
             if ( found_word )
             {
                 player.word_solved();
-                get_next_word();
             }
-            else
-            {
-                get_next_word();
-            }
+
+            get_next_word();
+            m_next = WtRandom::get_random_letter_of_word( m_active_word_guessed );
+            remove_letter( m_active_word_guessed, m_next );
         }
     }
 
@@ -102,17 +103,30 @@ public:
      *************************/
     char next_letter()
     {
-        char next = '#';
+        char next = m_next;
         if ( ! m_active_word_guessed.empty() )
         {
-            next = WtRandom::get_random_letter_of_word( m_active_word_guessed );
-            remove_letter( m_active_word_guessed, next );
+            m_next = WtRandom::get_random_letter_of_word( m_active_word_guessed );
+            remove_letter( m_active_word_guessed, m_next );
+        }
+        else
+        {
+            m_next = WtBoard::empty_cell;
         }
         // else shall not happen -> game loop take care if eval_board checks for empty
         // and reloads whatever may next
 
         return next; 
     }
+
+    /**************************
+     *
+     *************************/
+    char letter_after_next()
+    {
+        return m_next;
+    }
+
 
     /**************************
      *
@@ -178,6 +192,7 @@ private:
     std::string m_active_word;
     std::string m_active_word_guessed;
     std::string m_active_word_scrambled;
+    char        m_next;
     WtWordList  m_wordlist;
 };
 
