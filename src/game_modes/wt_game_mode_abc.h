@@ -26,7 +26,8 @@ public:
     WtGameModeAbc() :
       WtGameModeIf( "ABC?E" ),
       m_working_letters(""),
-      m_active_row(0) 
+      m_active_row(0),
+      m_next(' ')
     {
     }
     ~WtGameModeAbc()
@@ -43,6 +44,10 @@ public:
         m_active_row = 0;
         setup_sequences();
         show_sequence( board );
+
+        m_next = WtRandom::get_random_letter_of_word( m_working_letters );
+        remove_letter( m_working_letters, m_next );
+
     }
 
     /**************************
@@ -58,7 +63,7 @@ public:
      *************************/
     virtual void eval_board( WtBoard& board, WtPlayer& player, WtGameModeState& )
     {
-        if ( m_working_letters.empty() )
+        if ( ( m_working_letters.empty() ) && ( m_next == WtBoard::empty_cell ) )
         {
             bool correct = true;
             for( uint8_t c=0; c < WtBoard::col_count; c++ )
@@ -87,6 +92,8 @@ public:
 
             setup_sequences();
             show_sequence( board );
+            m_next = WtRandom::get_random_letter_of_word( m_working_letters );
+            remove_letter( m_working_letters, m_next );
         }
     }
 
@@ -95,16 +102,28 @@ public:
      *************************/
     virtual char next_letter()
     {
-        char next = '#';
+        char next = m_next;
         if ( ! m_working_letters.empty() )
         {
-            next = WtRandom::get_random_letter_of_word( m_working_letters );
-            remove_letter( m_working_letters, next );
+            m_next = WtRandom::get_random_letter_of_word( m_working_letters );
+            remove_letter( m_working_letters, m_next );
+        }
+        else
+        {
+            m_next = WtBoard::empty_cell;
         }
         // else shall not happen -> game loop take care if eval_board checks for empty
         // and reloads whatever may next
 
         return next; 
+    }
+
+    /**************************
+     *
+     *************************/
+    char letter_after_next()
+    {
+        return m_next;
     }
 
     /**************************
@@ -210,6 +229,7 @@ private:
     WtBoard::RowSequence m_current_sequence_control;
     std::string          m_working_letters;
     uint8_t              m_active_row;
+    char                 m_next;
 };
 
 
