@@ -18,5 +18,6 @@
 
 #include "wt_sdl_drawing.h"
 #include "wt_sdl_input.h"
+#include "wt_sdl_sfx.h"
 
 #endif /* _WT_SDL_H */

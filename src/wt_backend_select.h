@@ -26,6 +26,7 @@
 #include "sdl/wt_sdl.h"
 #define ACTIVE_WINDOW        SDL_WINDOW
 #define ACTIVE_INPUT         SDL_INPUT
+#define ACTIVE_SFX           SDL_SFX
 #define ACTIVE_WINDOW_WIDTH  SDL_WIDTH
 #define ACTIVE_WINDOW_HEIGHT SDL_HEIGHT
 #endif

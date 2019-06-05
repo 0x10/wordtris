@@ -21,6 +21,7 @@
 #include "widgets/wt_horizontal_carousel.h"
 
 #include "wt_input.h"
+#include "wt_sfx.h"
 #include "wt_drawing.h"
 #include "wt_utils.h"
 

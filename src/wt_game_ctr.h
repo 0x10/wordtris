@@ -301,6 +301,7 @@ private:
      *************************/
     void leave_game()
     {
+        ACTIVE_SFX.stop_background_music();
         m_game_state = GAME_STOPPED;
         if ( m_player.get_points() > 0 )
         {
@@ -331,6 +332,8 @@ private:
             m_current_update_counter = get_current_update_counter( m_player );
             m_game_state = GAME_TO_START;
             m_grid_touch_control.set_direction_seperator_pos( ACTIVE_WINDOW.grid_pos_to_coord( m_active.current_row(), m_active.current_column() ).x );
+
+            ACTIVE_SFX.play_background_music();
         }
     }
 
