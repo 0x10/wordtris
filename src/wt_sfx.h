@@ -75,7 +75,7 @@ public:
      *************************/
     void play_background_music()
     {
-        play_sfx( "game_bg_music.wav", true );
+        play_sfx( "game_bg_music.ogg", true );
     }
 
     /**************************

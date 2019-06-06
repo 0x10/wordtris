@@ -47,7 +47,7 @@ public:
         bool success = true;
 
         //Initialize SDL_mixer
-        if( Mix_OpenAudio( 48000, AUDIO_F32, 2, 2048 ) < 0 )
+        if( Mix_OpenAudio( MIX_DEFAULT_FREQUENCY, AUDIO_S16, 2, 4096 ) < 0 )
         {
             std::cerr << "SDL_mixer could not initialize! SDL_mixer Error: " << Mix_GetError() << std::endl;
             success = false;

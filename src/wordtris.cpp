@@ -33,27 +33,31 @@ int main( int, char** )
         }
         if ( ACTIVE_WINDOW.open() )
         {
-            WtSettings settings = STORAGE.get_settings();
-            ACTIVE_WINDOW.set_theme( settings.active_theme );
-            WtL10n::set_language( settings.language );
-
-            ACTIVE_WINDOW.clr();
-            ACTIVE_WINDOW.draw_message(WtL10n_tr("Loading..."));
-            ACTIVE_WINDOW.update();
-
-            WtTime::TimePoint before = WtTime::get_time();
-            WtMenuCtr main_menu;
-            WtTime::TimePoint after = WtTime::get_time();
-
-            WtTime::TimeType elapsed = WtTime::get_time_elapsed( before, after );
-            if ( elapsed < WtTime::from_seconds(1) )
+            if ( ACTIVE_SFX.open() )
             {
-                WtTime::sleep( WtTime::from_seconds(1) - elapsed );
+                WtSettings settings = STORAGE.get_settings();
+                ACTIVE_WINDOW.set_theme( settings.active_theme );
+                WtL10n::set_language( settings.language );
+
+                ACTIVE_WINDOW.clr();
+                ACTIVE_WINDOW.draw_message(WtL10n_tr("Loading..."));
+                ACTIVE_WINDOW.update();
+
+                WtTime::TimePoint before = WtTime::get_time();
+                WtMenuCtr main_menu;
+                WtTime::TimePoint after = WtTime::get_time();
+
+                WtTime::TimeType elapsed = WtTime::get_time_elapsed( before, after );
+                if ( elapsed < WtTime::from_seconds(1) )
+                {
+                    WtTime::sleep( WtTime::from_seconds(1) - elapsed );
+                }
+
+                (void)main_menu.show();
+
+                ACTIVE_SFX.close();
+                ACTIVE_WINDOW.close();
             }
-
-            (void)main_menu.show();
-
-            ACTIVE_WINDOW.close();
         }
     }
     return 0;
