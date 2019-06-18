@@ -35,10 +35,12 @@ public:
     WtViewIf( std::string bg_img="bg.bmp", 
               bool fade=true, 
               WtTime::TimeType refresh_rate=WtTime::TimeType(0),
-              OnKeyPressDelegate on_key_press_handler = nullptr ) :
+              OnKeyPressDelegate on_key_press_handler = nullptr,
+              std::string bg_music="menu_bg_music.ogg" ) :
         m_shall_leave( false ),
         m_shall_exit( false ),
         m_bg( bg_img ),
+        m_bg_music( bg_music ),
         m_buttons(),
         m_textboxes(),
         m_carousels(),
@@ -54,6 +56,7 @@ public:
         m_shall_leave = rhs.m_shall_leave;
         m_shall_exit = rhs.m_shall_exit;
         m_bg = rhs.m_bg;
+        m_bg_music = rhs.m_bg_music;
         m_buttons.clear();
         m_textboxes.clear();
         m_carousels.clear();
@@ -68,6 +71,7 @@ public:
         m_shall_leave( rhs.m_shall_leave ),
         m_shall_exit( rhs.m_shall_exit ),
         m_bg( rhs.m_bg ),
+        m_bg_music( rhs.m_bg_music ),
         m_buttons(),
         m_textboxes(),
         m_carousels(),
@@ -85,9 +89,9 @@ public:
     /**************************
      *
      *************************/
-    bool show()
+    bool show( bool keep_music_running = false )
     {
-        open_view();
+        open_view( keep_music_running );
 
         while( !m_shall_leave )
         {
@@ -111,7 +115,7 @@ public:
             }
         }
 
-        close_view();
+        close_view( keep_music_running );
 
         return m_shall_exit;
     }
@@ -234,7 +238,7 @@ protected:
     /**************************
      *
      *************************/
-    void open_view()
+    void open_view( bool keep_music_running=false )
     {
         m_shall_leave = false;
         ACTIVE_WINDOW.set_bg( get_bg_img() );
@@ -251,14 +255,20 @@ protected:
             ACTIVE_INPUT.add_active_region( *(m_carousels[idx]) );
         }
 
+        if ( ! keep_music_running )
+            ACTIVE_SFX.play_background_music( get_bg_music() );
+
         entered_view();
     }
 
     /**************************
      *
      *************************/
-    void close_view()
+    void close_view( bool keep_music_running=false )
     {
+        if ( ! keep_music_running )
+            ACTIVE_SFX.stop_background_music();
+
         for (size_t idx=0;idx<m_buttons.size();idx++)
         {
             ACTIVE_INPUT.remove_active_region( *(m_buttons[idx]) );
@@ -278,15 +288,22 @@ protected:
      *************************/
     void enter_child_menu( WtViewIf& sub_view )
     {
-        close_view();
+        bool keep_music_running = false;
+
+        if ( sub_view.get_bg_music() == get_bg_music() )
+        {
+            keep_music_running = true;
+        }
+
+        close_view( keep_music_running );
 
         m_active_child = &sub_view;
-        m_shall_exit = sub_view.show();
+        m_shall_exit = sub_view.show( keep_music_running );
         m_active_child = nullptr;
 
         if ( !m_shall_exit )
         {
-            open_view();
+            open_view( keep_music_running );
         }
         else
         {
@@ -302,6 +319,14 @@ private:
     std::string get_bg_img()
     {
         return m_bg;
+    }
+
+    /**************************
+     *
+     *************************/
+    std::string get_bg_music()
+    {
+        return m_bg_music;
     }
 
     /**************************
@@ -421,6 +446,7 @@ private:
     bool                                    m_shall_leave;
     bool                                    m_shall_exit;
     std::string                             m_bg;
+    std::string                             m_bg_music;
     std::vector< WtButton* >                m_buttons;
     std::vector< WtTextbox* >               m_textboxes;
     std::vector< WtHorizontalCarousel* >    m_carousels;

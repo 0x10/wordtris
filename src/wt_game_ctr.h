@@ -43,7 +43,7 @@ private:
     } wt_game_state;
 public:
     WtGameCtr() :
-        WtViewIf( "bg.bmp", false, WtTime::TimeType(12500), WT_BIND_EVENT_HANDLER_1( WtGameCtr::on_key_press ) ),
+        WtViewIf( "bg.bmp", false, WtTime::TimeType(12500), WT_BIND_EVENT_HANDLER_1( WtGameCtr::on_key_press ), "game_bg_music.ogg" ),
         m_player(),
         m_active(),
         m_board(),
@@ -301,7 +301,6 @@ private:
      *************************/
     void leave_game()
     {
-        ACTIVE_SFX.stop_background_music();
         m_game_state = GAME_STOPPED;
         if ( m_player.get_points() > 0 )
         {
@@ -333,7 +332,6 @@ private:
             m_game_state = GAME_TO_START;
             m_grid_touch_control.set_direction_seperator_pos( ACTIVE_WINDOW.grid_pos_to_coord( m_active.current_row(), m_active.current_column() ).x );
 
-            ACTIVE_SFX.play_background_music();
         }
     }
 
@@ -374,6 +372,7 @@ private:
 
                         if ( game_over )
                         {
+                            ACTIVE_SFX.play_gameover_sound();
                             leave_game();
                         }
 

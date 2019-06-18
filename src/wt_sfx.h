@@ -34,7 +34,9 @@ public:
 private:
     WtSfx() :
         m_sfx_policy(),
-        m_mute( false )
+        m_mute( false ),
+        m_playing( false ),
+        m_active_file( "" )
     {
     }
     WtSfx( const WtSfx& ); 
@@ -55,6 +57,7 @@ public:
      *************************/
     void close()
     {
+        m_playing = false;
         m_sfx_policy.close();
     }
 
@@ -64,18 +67,16 @@ public:
     void toggle_mute()
     {
         m_mute = !m_mute;
-        if ( m_mute )
-        {
-            m_sfx_policy.stop_music();
-        }
+
+        m_sfx_policy.toggle_pause();
     }
 
     /**************************
      *
      *************************/
-    void play_background_music()
+    void play_background_music( const std::string mfile )
     {
-        play_sfx( "game_bg_music.ogg", true );
+        play_sfx( mfile, true );
     }
 
     /**************************
@@ -83,6 +84,8 @@ public:
      *************************/
     void stop_background_music()
     {
+        m_playing = false;
+        m_active_file = "";
         m_sfx_policy.stop_music();
     }
 
@@ -126,27 +129,45 @@ public:
         play_sfx( "", false );
     }
 
+
 private:
     /**************************
      *
      *************************/
     void play_sfx( const std::string filename, const bool is_music )
     {
-        if ( ! m_mute )
+        if ( ( ! m_mute ) && ( ! filename.empty() ) )
         {
-            if ( is_music )
+            bool already_active = false;
+            if ( m_playing )
             {
-                m_sfx_policy.play_music( filename );
+                if ( m_active_file == filename )
+                {
+                    already_active = true;
+                }
             }
-            else
+
+            if ( ! already_active )
             {
-                m_sfx_policy.play_effect( filename );
+                m_playing = true;
+                m_active_file = filename;
+
+                if ( is_music )
+                {
+                    m_sfx_policy.play_music( filename );
+                }
+                else
+                {
+                    m_sfx_policy.play_effect( filename );
+                }
             }
         }
     }
 private:
-    SfxPolicy m_sfx_policy;
-    bool      m_mute;
+    SfxPolicy   m_sfx_policy;
+    bool        m_mute;
+    bool        m_playing;
+    std::string m_active_file;
 };
 
 

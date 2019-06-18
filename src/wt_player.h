@@ -17,6 +17,7 @@
 #define _WT_PLAYER_H_
 
 #include "wt_board.h"
+#include "wt_sfx.h"
 
 #define PTS_P_WORD           (1000)
 
@@ -63,9 +64,16 @@ public:
 
         m_points += (static_cast<uint32_t>(length * base_points) * m_level);
 
+        ACTIVE_SFX.play_solved_sound();
+
         uint8_t new_level = 1 + static_cast<uint32_t>(m_words[0] / 10);
         if ( new_level > m_level )
+        {
             m_level = new_level;
+            ACTIVE_SFX.play_levelup_sound();
+        }
+
+        
     }
 
     /**************************
@@ -87,6 +95,8 @@ public:
         {
             uint32_t row_pts = static_cast<uint32_t>(row_diff);
             m_points += ( row_pts * ( 2 * m_level ) );
+
+            ACTIVE_SFX.play_drop_sound();
         }
     }
 
