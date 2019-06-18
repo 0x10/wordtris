@@ -180,6 +180,35 @@ public:
                                   msg );
     }
 
+    /**************************
+      *
+      *************************/   
+    bool draw_sine_scroller_text( std::string text, WtCoord pos )
+    {
+        bool restart_needed = true;
+        WtCoord working_pos = pos;
+        for ( size_t c_idx=0; c_idx < text.length(); c_idx++ )
+        {
+            const char& c = text[c_idx];
+            WtCoord c_pos = working_pos;
+            if ( c_idx > 0 )
+                c_pos.x += 20;
+
+            double max_width = ACTIVE_WINDOW_WIDTH;
+            double freq_pos = c_pos.x;
+
+            //c_pos.y = pos.y + ( sin( c_pos.x ) * 15 );
+            c_pos.y = cos(12.0 * freq_pos / max_width ) * 40.0 + pos.y;
+
+            DrawingPolicy::draw_text( c_pos, std::string( 1, c ) );
+
+            if ( ( c_pos.x >= 0 ) && ( c_pos.x <= ACTIVE_WINDOW_WIDTH ) )
+                restart_needed = false;
+
+            working_pos.x = c_pos.x;
+        }
+        return restart_needed;
+    }
 
     /**************************
       *
