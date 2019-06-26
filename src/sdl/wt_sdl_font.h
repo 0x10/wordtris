@@ -84,7 +84,7 @@ public:
                 m_font_data.clear();
             }
 
-            SDL_Texture* font_complete = WtSdlUtils::loadAssetToTexture( renderer, m_fname, theme );
+            SDL_Texture* font_complete = WtSdlUtils::load_asset_to_texture( renderer, m_fname, theme );
             // fonts are organized by ascii code...
             for(char i = m_start_symbol; i < '~'; i++ )
             {

@@ -102,7 +102,7 @@ public:
                         SDL_SetHint( SDL_HINT_RENDER_LOGICAL_SIZE_MODE, "1" );
                         SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "nearest" );
                         TTF_Init();
-                        set_bg("bg.bmp");
+                        set_bg("#182e4b");
 
                         m_grid_font.load_font_data( m_theme, m_renderer );
                         m_text_font.load_font_data( m_theme, m_renderer );
@@ -142,9 +142,18 @@ public:
         SDL_RenderClear(m_renderer);
 
         // draw bg
-        draw_image( WtCoord( 0, 0 ),
-                    WtDim( SDL_WIDTH, SDL_HEIGHT ),
-                    m_bg_img_path );
+        if ( m_bg_img_path[0] == '#' )
+        {
+            draw_color_plane( WtCoord( 0, 0 ),
+                              WtDim( SDL_WIDTH, SDL_HEIGHT ),
+                              m_bg_img_path );
+        }
+        else
+        {
+            draw_image( WtCoord( 0, 0 ),
+                        WtDim( SDL_WIDTH, SDL_HEIGHT ),
+                        m_bg_img_path );
+        }
     }
 
     /**************************
@@ -227,6 +236,23 @@ public:
     void set_bg( const std::string bg_img )
     {
         m_bg_img_path = bg_img;
+    }
+
+    /**************************
+      *
+      *************************/   
+    void draw_color_plane( const WtCoord     pos,
+                           const WtDim       size,
+                           const std::string fname )
+    {
+        SDL_Texture* plane = get_texture( fname );
+        SDL_Rect rect;
+        rect.x = pos.x;
+        rect.y = pos.y;
+        rect.w = size.w;
+        rect.h = size.h;
+
+        SDL_RenderCopy(m_renderer, plane, NULL, &rect);
     }
 
     /**************************
@@ -477,8 +503,29 @@ private:
             }
             else
             {
-                std::cout << "load from file.. " << fname << std::endl;
-                m_texture_cache[fname] = WtSdlUtils::loadAssetToTexture( m_renderer, fname, m_theme );
+                if ( fname[0] == '#' )
+                {
+                    std::cout << "load from color.. " << fname << std::endl;
+                    SDL_Color color = WtSdlUtils::get_color_from_string( fname );
+                    tex = SDL_CreateTexture( m_renderer,
+                                             SDL_PIXELFORMAT_RGBA8888, 
+                                             SDL_TEXTUREACCESS_TARGET, 
+                                             1, 1 );
+                    SDL_SetRenderTarget( m_renderer, tex );
+                    SDL_SetRenderDrawBlendMode( m_renderer, SDL_BLENDMODE_BLEND );
+                    SDL_SetTextureBlendMode( tex, SDL_BLENDMODE_BLEND );
+                    SDL_SetRenderDrawColor( m_renderer, color.r, color.g, color.b, 255 );
+                    SDL_RenderClear( m_renderer );
+                    SDL_RenderFillRect( m_renderer, NULL );
+                    SDL_SetRenderTarget( m_renderer, NULL );
+
+                    m_texture_cache[fname] = tex;
+                }
+                else
+                {
+                    std::cout << "load from file.. " << fname << std::endl;
+                    m_texture_cache[fname] = WtSdlUtils::load_asset_to_texture( m_renderer, fname, m_theme );
+                }
 
                 tex = m_texture_cache[fname];
             }

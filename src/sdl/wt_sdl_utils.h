@@ -27,9 +27,26 @@ public:
     /**************************
      *
      *************************/
-    static SDL_Texture* loadAssetToTexture( SDL_Renderer* renderer,
-                                            std::string   fname,
-                                            std::string   theme="default" )
+    static SDL_Color get_color_from_string( std::string color )
+    {
+        SDL_Color result;
+        unsigned int r,g,b;
+        if ( sscanf(color.c_str(), "#%02x%02x%02x", &r, &g, &b) != 3 )
+        {
+            std::cout << "color invalid...\n";
+        }
+        result.r = r;
+        result.g = g;
+        result.b = b;
+        return result;
+    }
+
+    /**************************
+     *
+     *************************/
+    static SDL_Texture* load_asset_to_texture( SDL_Renderer* renderer,
+                                               std::string   fname,
+                                               std::string   theme="default" )
     {
         SDL_Texture* result_texture = NULL;
         std::string path = std::string(SDL_ASSETS);
