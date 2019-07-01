@@ -16,8 +16,11 @@
 #ifndef _WT_SDL_CONFIG_H_
 #define _WT_SDL_CONFIG_H_
 
-#define SDL_WIDTH  (540)
-#define SDL_HEIGHT (960)
+#define SDL_WIDTH_PC  (720)
+#define SDL_HEIGHT_PC (1280)
+
+#define SDL_WIDTH  (720)
+#define SDL_HEIGHT (1280)
 
 #ifndef SDL_ASSETS
 #define SDL_ASSETS "" //used for android assets vs pc assets

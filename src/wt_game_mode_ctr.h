@@ -107,27 +107,33 @@ public:
     }
 private:
     WtGameModeCtr() :
-        m_demoMode(),
+        m_lockedMode(),
         m_guessMode(),
 //        m_tetrisMode(),
         m_abcMode(),
         m_wordtrisMode(),
         m_available_modes()
     {
-#ifdef WT_PRO_MODE
-      //  m_available_modes.push_back( &m_demoMode );
-        m_available_modes.push_back( &m_guessMode );
       //  m_available_modes.push_back( &m_tetrisMode );
+
+#ifdef WT_PRO_MODE
         m_available_modes.push_back( &m_abcMode );
+#else
+        m_available_modes.push_back( &m_lockedMode );
 #endif /* WT_PRO_MODE */
         m_available_modes.push_back( &m_wordtrisMode );
+#ifdef WT_PRO_MODE
+        m_available_modes.push_back( &m_guessMode );
+#else
+        m_available_modes.push_back( &m_lockedMode );
+#endif /* WT_PRO_MODE */
     }
     WtGameModeCtr( const WtGameModeCtr& ); 
     WtGameModeCtr & operator = (const WtGameModeCtr &);
 
 
 private:
-    WtGameModeDemo              m_demoMode;
+    WtGameModeDemo              m_lockedMode;
     WtGameModeGuessing          m_guessMode;
 //    WtGameModeTetris            m_tetrisMode;
     WtGameModeAbc               m_abcMode;

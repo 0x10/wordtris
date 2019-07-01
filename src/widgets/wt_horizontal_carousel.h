@@ -25,8 +25,8 @@ class WtHorizontalCarousel
 private:
     const char* m_inactive_img = "list_item_inactive.bmp";
     const char* m_selected_img = "list_item_active.bmp";
-    const WtDim m_item_img_size = WtDim( 328, 200 );
-    const uint8_t m_item_padding = 6;
+    const WtDim m_item_img_size = WtDim( 203, 297 );
+    const uint8_t m_item_padding = 24;
 
 public:
     using OnGameSelected = std::function<void(size_t)>;
@@ -35,7 +35,8 @@ public:
     WtHorizontalCarousel( WtCoord pos, WtDim size,
                           std::vector<std::string> labels,
                           size_t selected,
-                          OnGameSelected on_game_selected ) :
+                          OnGameSelected on_game_selected,
+                          bool scrollable ) :
 
         m_clickable( pos, size, 
                      WT_BIND_EVENT_HANDLER_1( WtHorizontalCarousel::on_click ),
@@ -46,6 +47,7 @@ public:
         m_labels( labels ),
         m_selected( selected ),
         m_selected_pos( (size.w - m_item_img_size.w) / 2, pos.y ),
+        m_scrollable( scrollable ),
         m_on_game_selected( on_game_selected )
     {
     }
@@ -73,37 +75,49 @@ public:
      *************************/
     WtButton operator[](size_t idx)
     {
-        if ( m_labels.size() > 1 )
+        if ( m_labels.size() > idx )
         {
-            if ( idx == m_selected )
+            if ( m_scrollable )
             {
-                return WtButton( get_pos_of_item( 0 ),
-                                 m_item_img_size,
-                                 m_selected_img,
-                                 [](){},
-                                 m_labels[idx] );
-            }
-            else if ( idx == get_prev_idx( m_selected ) )
-            {
-                return WtButton( get_pos_of_item( -1 ),
-                                 m_item_img_size,
-                                 m_inactive_img,
-                                 [](){},
-                                 m_labels[idx] );
-            }
-            else if ( idx == get_next_idx( m_selected ) )
-            {
-                return WtButton( get_pos_of_item( 1 ),
-                                 m_item_img_size,
-                                 m_inactive_img,
-                                 [](){},
-                                 m_labels[idx] );
+                if ( idx == m_selected )
+                {
+                    return WtButton( get_pos_of_item( 0 ),
+                                     m_item_img_size,
+                                     m_selected_img,
+                                     [](){},
+                                     m_labels[idx] );
+                }
+                else if ( idx == get_prev_idx( m_selected ) )
+                {
+                    return WtButton( get_pos_of_item( -1 ),
+                                     m_item_img_size,
+                                     m_inactive_img,
+                                     [](){},
+                                     m_labels[idx] );
+                }
+                else if ( idx == get_next_idx( m_selected ) )
+                {
+                    return WtButton( get_pos_of_item( 1 ),
+                                     m_item_img_size,
+                                     m_inactive_img,
+                                     [](){},
+                                     m_labels[idx] );
+                }
+                else
+                {
+                    return WtButton( get_pos_of_item( 0 ),
+                                     WtDim( 0, 0 ),
+                                     m_inactive_img,
+                                     [](){},
+                                     m_labels[idx] );
+                }
             }
             else
             {
-                return WtButton( get_pos_of_item( 0 ),
-                                 WtDim( 0, 0 ),
-                                 m_inactive_img,
+                ssize_t normalized_id = static_cast<ssize_t>(idx % m_labels.size()) - (m_labels.size() == 1 ? 0 : 1);
+                return WtButton( get_pos_of_item( normalized_id ),
+                                 m_item_img_size,
+                                 ( idx == m_selected ? m_selected_img : m_inactive_img ),
                                  [](){},
                                  m_labels[idx] );
             }
@@ -114,7 +128,7 @@ public:
                              m_item_img_size,
                              m_selected_img,
                              [](){},
-                             m_labels[idx] );
+                             "NoLabel" );
         }
     }
 
@@ -126,6 +140,14 @@ public:
         return m_labels.size();
     }
 
+
+    /**************************
+     *
+     *************************/
+    size_t selected() const
+    {
+        return m_selected;
+    }
 private:
     /**************************
      *
@@ -164,21 +186,44 @@ public:
      *************************/
     void on_click( WtCoord& pos )
     {
-        if ( pos.in_region( m_selected_pos, m_item_img_size ) )
+        if ( m_scrollable )
         {
-            if ( m_on_game_selected ) m_on_game_selected( m_selected );
-        }
-        else
-        {
-            if ( pos.x > ( m_selected_pos.x + m_item_img_size.w ) )
+            if ( pos.in_region( m_selected_pos, m_item_img_size ) )
             {
-                m_selected = get_next_idx( m_selected );
-                m_selected_pos.x = (m_size.w - m_item_img_size.w) / 2;
+                if ( m_on_game_selected ) m_on_game_selected( m_selected );
             }
             else
             {
-                m_selected = get_prev_idx( m_selected );
-                m_selected_pos.x = (m_size.w - m_item_img_size.w) / 2;
+                if ( pos.x > ( m_selected_pos.x + m_item_img_size.w ) )
+                {
+                    m_selected = get_next_idx( m_selected );
+                    m_selected_pos.x = (m_size.w - m_item_img_size.w) / 2;
+                }
+                else
+                {
+                    m_selected = get_prev_idx( m_selected );
+                    m_selected_pos.x = (m_size.w - m_item_img_size.w) / 2;
+                }
+            }
+        }
+        else
+        {
+            for( size_t item_idx = 0; item_idx < m_labels.size(); item_idx++ )
+            {
+                ssize_t normalized_id = static_cast<ssize_t>(item_idx) - 1;
+                if ( pos.in_region( get_pos_of_item ( normalized_id ), m_item_img_size ) )
+                {
+                    if ( item_idx == m_selected )
+                    {
+                        if ( m_on_game_selected ) m_on_game_selected( m_selected );
+                    }
+                    else
+                    {
+                        m_selected = item_idx;
+                    }
+
+                    break;
+                }
             }
         }
     }
@@ -188,7 +233,7 @@ public:
      *************************/
     void on_pan( WtCoord& /*press_start_pos*/, WtCoord& /*active_pos*/, WtCoord& d_pos )
     {
-        if ( m_labels.size() > 1 )
+        if ( ( m_scrollable ) && ( m_labels.size() > 1 ) )
         {
            // std::cout << "on pan ... " << press_start_pos << ";"<< active_pos << ";" << d_pos << std::endl;
             m_selected_pos.x = m_selected_pos.x + d_pos.x;
@@ -218,6 +263,7 @@ private:
     std::vector<std::string> m_labels;
     size_t                   m_selected;
     WtCoord                  m_selected_pos;
+    bool                     m_scrollable;
 
     OnGameSelected  m_on_game_selected;
 };

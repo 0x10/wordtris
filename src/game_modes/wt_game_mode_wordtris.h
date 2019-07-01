@@ -47,7 +47,7 @@ public:
      *************************/
     virtual std::string get_title()
     {
-        return WtL10n_tr("Classic Mode");
+        return "@dark/label_mode_classic.bmp";
     }
 
     /**************************

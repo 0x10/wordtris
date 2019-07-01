@@ -55,7 +55,7 @@ public:
      *************************/
     virtual std::string get_title()
     {
-        return WtL10n_tr("ABC?E");
+        return "@dark/label_mode_alphabet.bmp";
     }
 
     /**************************

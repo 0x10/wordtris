@@ -245,11 +245,10 @@ public:
                 }
                 else
                 {
-                    WtDim sz( 60, 33 );
-
                     if ( label[0] == '#' )
                         label = label.substr(1);
 
+                    WtDim sz = DrawingPolicy::get_image_size( label );
                     DrawingPolicy::draw_image( WtCoord( button_center_x - (sz.w/2), button_center_y - (sz.h/2) ),
                                                sz,
                                                label );

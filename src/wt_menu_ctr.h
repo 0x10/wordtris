@@ -27,32 +27,48 @@ class WtMenuCtr : public WtViewIf
 {
 public:
     WtMenuCtr() :
-        WtViewIf( "bg.bmp", true, WtTime::TimeType(0), WT_BIND_EVENT_HANDLER_1( WtMenuCtr::handle_key_press ) ),
+        WtViewIf( "#172d4a", true, WtTime::TimeType(0), WT_BIND_EVENT_HANDLER_1( WtMenuCtr::handle_key_press ) ),
         m_drag_start_pos(0,0),
         m_was_drag(false),
         m_drag_button_id(0),
         m_settings(),
         m_scores(),
         m_game_ctr(),
-        m_score_btn( WtCoord( 105, 800 ), 
-                     WtDim( 100, 100 ), 
+        m_score_btn( WtCoord( 24, 0 ), 
+                     WtDim( 80, 80 ), 
                      "score_btn.bmp",
                      WT_BIND_EVENT_HANDLER( WtMenuCtr::enter_score_menu ) ),
-        m_setting_btn( WtCoord( 332, 800 ),
-                       WtDim( 100, 100 ),
+        m_setting_btn( WtCoord( (ACTIVE_WINDOW_WIDTH-80)-24, 0 ),
+                       WtDim( 80, 80 ),
                        "settings_btn.bmp",
                        WT_BIND_EVENT_HANDLER( WtMenuCtr::enter_settings_menu ) ),
-        m_game_selection( WtCoord( 0, 493 ),
-                          WtDim( ACTIVE_WINDOW_WIDTH, 200 ),
+        m_start_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (138 / 2), (ACTIVE_WINDOW_HEIGHT - (ACTIVE_WINDOW_HEIGHT / 4))+(124/2) ),
+                       WtDim( 138, 124 ),
+                       "start_btn.bmp",
+                       WT_BIND_EVENT_HANDLER( WtMenuCtr::game_mode_selected ) ),
+        m_select_label( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (340 / 2), (ACTIVE_WINDOW_HEIGHT / 4)-(56/2) ),
+                       WtDim( 340, 56 ),
+                       "label_select.bmp",
+                       [](){} ),
+        m_settings_bg( WtCoord( 0, 0 ),
+                       WtDim( ACTIVE_WINDOW_WIDTH, 80 ),
+                       "#112238",
+                       [](){} ),
+        m_game_selection( WtCoord( 0, (ACTIVE_WINDOW_HEIGHT / 2) - (297 / 2) ),
+                          WtDim( ACTIVE_WINDOW_WIDTH, 297 ),
                           GAME_MODE_CTR.get_available_mode_titles(),
                           GAME_MODE_CTR.mode_idx_from_string( STORAGE.get_settings().game_mode ),
-                          WT_BIND_EVENT_HANDLER_1( WtMenuCtr::game_mode_selected ) )
+                          [](size_t){},
+                          false )
     {
         ACTIVE_INPUT.register_key_press_delegate( WT_BIND_EVENT_HANDLER_1( WtMenuCtr::on_key_press ) );
         m_game_ctr.set_game_mode( GAME_MODE_CTR.mode_from_string( STORAGE.get_settings().game_mode ) );
 
+        add_button( m_settings_bg );
         add_button( m_score_btn );
         add_button( m_setting_btn );
+        add_button( m_start_btn );
+        add_button( m_select_label );
         add_horizontal_carousel( m_game_selection );
     }
 
@@ -80,20 +96,29 @@ private:
     /**************************
      *
      *************************/
-    void game_mode_selected( size_t idx )
+    void game_mode_selected()
     {
+    	size_t idx = m_game_selection.selected();
         std::cout << "selected = " << idx << std::endl;
         WtGameModeIf* mode = GAME_MODE_CTR.get_available_modes()[idx];
-        WtSettings settings = STORAGE.get_settings();
-        
-        if ( settings.game_mode != mode->get_id_string() )
-        {
-            settings.game_mode = mode->get_id_string();
-            STORAGE.store_settings( settings );
-        }
 
-        m_game_ctr.set_game_mode( mode );
-        enter_child_menu( m_game_ctr );
+        if ( mode->get_id_string() != "LOCKED" )
+        {
+	        WtSettings settings = STORAGE.get_settings();
+	        
+	        if ( settings.game_mode != mode->get_id_string() )
+	        {
+	            settings.game_mode = mode->get_id_string();
+	            STORAGE.store_settings( settings );
+	        }
+
+	        m_game_ctr.set_game_mode( mode );
+	        enter_child_menu( m_game_ctr );
+    	}
+    	else
+    	{
+    		//TODO show popup
+    	}
     }
 
     /**************************
@@ -118,6 +143,9 @@ private:
 
     WtButton         m_score_btn;
     WtButton         m_setting_btn;
+    WtButton         m_start_btn;
+    WtButton         m_select_label;
+    WtButton         m_settings_bg;
 
     WtHorizontalCarousel m_game_selection;
 };

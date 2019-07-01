@@ -27,6 +27,35 @@ public:
     /**************************
      *
      *************************/
+    static WtDim get_image_size( std::string fname,
+                                 std::string theme="default" )
+    {
+        WtDim image_size(0,0);
+        std::string path = std::string(SDL_ASSETS);
+        if ( fname[0] != '@' )
+            path.append(theme).append("/").append(fname);
+        else
+            path.append(fname.substr(1));
+        SDL_Surface* surface = SDL_LoadBMP(path.c_str());
+
+        if (surface != 0)
+        {
+            image_size.w = surface->w;
+            image_size.h = surface->h;
+            SDL_FreeSurface(surface);
+        }
+        else
+        {
+            std::cout<<"could not load "<<path<<std::endl;
+        }
+
+        return image_size;
+    }
+
+
+    /**************************
+     *
+     *************************/
     static SDL_Color get_color_from_string( std::string color )
     {
         SDL_Color result;

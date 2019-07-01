@@ -40,7 +40,10 @@ int main( int, char** )
                 WtL10n::set_language( settings.language );
 
                 ACTIVE_WINDOW.clr();
-                ACTIVE_WINDOW.draw_message(WtL10n_tr("Loading..."));
+                //ACTIVE_WINDOW.draw_message(WtL10n_tr("Loading..."));
+                ACTIVE_WINDOW.draw_button( WtButton( WtCoord( (ACTIVE_WINDOW_WIDTH/2)-(347/2), (ACTIVE_WINDOW_HEIGHT / 2) - (202/2)), 
+                                                     WtDim(347,202), 
+                                                     "splash_logo.bmp") );
                 ACTIVE_WINDOW.update();
 
                 WtTime::TimePoint before = WtTime::get_time();
@@ -48,9 +51,9 @@ int main( int, char** )
                 WtTime::TimePoint after = WtTime::get_time();
 
                 WtTime::TimeType elapsed = WtTime::get_time_elapsed( before, after );
-                if ( elapsed < WtTime::from_seconds(1) )
+                if ( elapsed < WtTime::from_seconds(3) )
                 {
-                    WtTime::sleep( WtTime::from_seconds(1) - elapsed );
+                    WtTime::sleep( WtTime::from_seconds(3) - elapsed );
                 }
 
                 (void)main_menu.show();

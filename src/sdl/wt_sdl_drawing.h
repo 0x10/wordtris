@@ -80,7 +80,7 @@ public:
                 std::cout << "const w/h = (" << SDL_WIDTH << "," << SDL_HEIGHT << ")" << std::endl;
                 std::cout << "dm w/h = (" << dm.w << "," << dm.h << ")" << std::endl;
 
-                m_window = SDL_CreateWindow( "main", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SDL_WIDTH, SDL_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS  );
+                m_window = SDL_CreateWindow( "main", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SDL_WIDTH_PC, SDL_HEIGHT_PC, SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS  );
                 
                 if ( NULL == m_window ) {
                     SDL_Quit();
@@ -102,7 +102,7 @@ public:
                         SDL_SetHint( SDL_HINT_RENDER_LOGICAL_SIZE_MODE, "1" );
                         SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "nearest" );
                         TTF_Init();
-                        set_bg("#182e4b");
+                        set_bg("#112238");
 
                         m_grid_font.load_font_data( m_theme, m_renderer );
                         m_text_font.load_font_data( m_theme, m_renderer );
@@ -258,6 +258,26 @@ public:
     /**************************
       *
       *************************/   
+    WtDim get_image_size( const std::string fname )
+    {
+        std::string fname_real = fname;
+        if ( fname == "right.bmp" )
+        {
+            fname_real = "left.bmp";
+        }
+        if ( fname == "next_btn.bmp" )
+        {
+            fname_real = "back_btn.bmp";
+        }
+
+
+        return WtSdlUtils::get_image_size( fname_real, m_theme );
+    }
+
+
+    /**************************
+      *
+      *************************/   
     void draw_image( const WtCoord     pos,
                      const WtDim       size,
                      const std::string fname )
@@ -291,6 +311,7 @@ public:
             SDL_RenderCopy(m_renderer, button_img, NULL, &rect);
         }
     }
+
     /**************************
       *
       *************************/   

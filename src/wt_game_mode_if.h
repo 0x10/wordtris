@@ -173,7 +173,7 @@ class WtGameModeDemo : public WtGameModeIf
 {
 public:
     WtGameModeDemo() :
-        WtGameModeIf( "Demo" ),
+        WtGameModeIf( "LOCKED" ),
         m_active_wordbase( "12340()()()()#@abcdEFGK" )
     {
     }
@@ -184,17 +184,9 @@ public:
     /**************************
      * 
      *************************/
-    virtual void init_game( WtBoard& board, WtPlayer& player )
+    virtual void init_game( WtBoard&, WtPlayer& )
     {
-        for( size_t r_idx = 0; r_idx < WtBoard::row_count/2+1; r_idx++ )
-            for( size_t c_idx = 0; c_idx < WtBoard::col_count; c_idx++ )
-            {
-                uint8_t dice = WtRandom::roll_dice(6);
-                if ( dice > 5 )
-                    board.set_cell( r_idx, c_idx, WtRandom::get_random_letter_of_word( m_active_wordbase ) );
-            }
 
-        player.set_level_offset(9);
     }
 
     /**************************
@@ -202,7 +194,7 @@ public:
      *************************/
     virtual std::string get_title()
     {
-        return "Demö";
+        return "Locked! Buy Pro";
     }
 
     /**************************
@@ -215,9 +207,19 @@ public:
     /**************************
      *
      *************************/
+    virtual bool stone_blocked( WtBoard&,
+                                uint8_t,
+                                uint8_t )
+    {
+        return true;
+    }
+
+    /**************************
+     *
+     *************************/
     virtual char next_letter()
     {
-        return WtRandom::get_random_letter_of_word( m_active_wordbase ); 
+        return ' '; 
     }
 
     /**************************
@@ -225,7 +227,7 @@ public:
      *************************/
     virtual std::string get_hint()
     {
-        std::string s_hint( "dEmO MoDe" );
+        std::string s_hint( "Upgrade to Pro\nand enjoy more exciting game modes!" );
         return s_hint;
     }
 private:

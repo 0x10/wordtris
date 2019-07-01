@@ -41,7 +41,7 @@ public:
      *************************/
     std::string get_title()
     {
-        return WtL10n_tr("Guess it!");
+        return "@dark/label_mode_guessing.bmp";
     }
 
     /**************************
