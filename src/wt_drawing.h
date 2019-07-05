@@ -94,20 +94,31 @@ public:
                 }
                 else
                 {
-                    std::string cell_background = "grid.bmp";
-                    if ( ( show_support_grid ) && ( i != active.current_row() ) && ( j == active.current_column() ) )
+                    if ( show_support_grid )
                     {
-                        cell_background = "grid_font_helper.bmp";
+                        std::string cell_background = "grid.bmp";
+                        DrawingPolicy::draw_custom_cell_bg( WtBoard::row_count-i, j, cell_background );
+                        if ( ( i < active.current_row() ) && ( j == active.current_column() ) )
+                        {
+                            cell_background = "grid_font_helper.bmp";
+                            uint16_t alpha_diff = 40 * (active.current_row() - i);
+                            DrawingPolicy::draw_custom_cell_bg( WtBoard::row_count-i, j, cell_background, ( alpha_diff < 255 ? 255 - alpha_diff : 0 ) );
+                        }
                     }
-
-                    DrawingPolicy::draw_custom_cell_bg( WtBoard::row_count-i, j, cell_background );
+                    if ( ( i > active.current_row() ) && ( j == active.current_column() ) )
+                    {
+                        std::string cell_background = "grid_font_helper.bmp";
+                        uint16_t alpha_diff = 40 * (i - active.current_row());
+                        DrawingPolicy::draw_custom_cell_bg( WtBoard::row_count-i, j, cell_background, ( alpha_diff < 255 ? 255 - alpha_diff : 0 ) );
+                    }
                 }
             }
         }
 
         DrawingPolicy::draw_at_grid( WtBoard::row_count - active.current_row(),
                                      active.current_column(),
-                                     active.current_value() );
+                                     active.current_value(),
+                                     "active_grid" );
     }
 
 

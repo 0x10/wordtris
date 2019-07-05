@@ -32,7 +32,7 @@ class WtDrawingPolicySdl
 {
 private:
     static const uint8_t TEXT_FONT_SIZE = 24;
-    static const uint8_t GRID_FONT_SIZE = 37;
+    static const uint8_t GRID_FONT_SIZE = 56;
     static const uint8_t GRID_OFFSET_X = 78;
     static const uint8_t GRID_OFFSET_Y = 127-GRID_FONT_SIZE;
 
@@ -175,11 +175,13 @@ public:
      *************************/
     void draw_custom_cell_bg( uint8_t     row,
                               uint8_t     col,
-                              std::string image )
+                              std::string image,
+                              uint8_t     alpha=255 )
     {
         draw_image( grid_pos_to_screen_pos( row, col, &m_grid_font ),
                     m_grid_font.size(),
-                    image );
+                    image,
+                    alpha );
     }
 
     /**************************
@@ -204,15 +206,26 @@ public:
             else
             {
                 std::string font_bg = "grid_font_bg.bmp";
-                SDL_Color font_col = {255, 255, 255, 255};
+                SDL_Color font_col = {0, 0, 0, 255};
 
                 if ( font != "grid" )
                 {
-                    font_bg = "grid_font_bg_inverse.bmp";
-                    font_col.r = 0;
-                    font_col.g = 0;
-                    font_col.b = 0;
-                    font_col.a = 255;
+                    if ( font == "active_grid" )
+                    {
+                        font_bg = "grid_font_bg_active.bmp";
+                        font_col.r = 0;
+                        font_col.g = 0;
+                        font_col.b = 0;
+                        font_col.a = 255;
+                    }
+                    else
+                    {
+                        font_bg = "grid_font_bg_inverse.bmp";
+                        font_col.r = 0;
+                        font_col.g = 0;
+                        font_col.b = 0;
+                        font_col.a = 255;
+                    }
                 }
 
                 draw_custom_cell_bg( row, col, font_bg );
@@ -280,7 +293,8 @@ public:
       *************************/   
     void draw_image( const WtCoord     pos,
                      const WtDim       size,
-                     const std::string fname )
+                     const std::string fname,
+                     uint8_t           alpha=255 )
     {
         bool mirror_vertical = false;
         std::string fname_real = fname;
@@ -302,6 +316,10 @@ public:
         rect.y = pos.y;
         rect.w = size.w;
         rect.h = size.h;
+        if ( alpha != 255 )
+        {
+            SDL_SetTextureAlphaMod( button_img, alpha );
+        }
         if (mirror_vertical)
         {
             SDL_RenderCopyEx(m_renderer, button_img, NULL, &rect, 180, NULL, SDL_FLIP_VERTICAL);
@@ -336,7 +354,7 @@ public:
 
             draw_image( pos, m_grid_font.size(), "grid_font_bg.bmp" );
 
-            puts_fb( screen_pos.x, screen_pos.y, text, &m_grid_font );
+            puts_fb( screen_pos.x, screen_pos.y, text, &m_grid_font, {0,0,0,255}  );
         }
     }
 
