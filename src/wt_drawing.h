@@ -129,7 +129,7 @@ public:
     {
         if ( show_letter_after_next )
         {
-            DrawingPolicy::draw_text( WtCoord( 308, 46 ),
+            DrawingPolicy::draw_text( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (DrawingPolicy::get_grid_font_size().w / 2), 10 ),
                                       std::string(1, letter_after_next ),
                                       "grid" );
         }

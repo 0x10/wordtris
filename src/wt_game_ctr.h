@@ -57,10 +57,14 @@ public:
                               WT_BIND_EVENT_HANDLER( WtGameCtr::notify_left ),
                               WT_BIND_EVENT_HANDLER( WtGameCtr::notify_right ),
                               WT_BIND_EVENT_HANDLER( WtGameCtr::notify_drop ) ),
-        m_pause_btn( WtCoord( 393, 32 ),
-                     WtDim( 65, 65 ),
-                     "pause_btn.bmp",
+        m_pause_btn( WtCoord( (ACTIVE_WINDOW_WIDTH-80)-24, 0 ),
+                     WtDim( 80, 80 ),
+                     "settings_btn.bmp",
                      WT_BIND_EVENT_HANDLER( WtGameCtr::enter_pause ) ),
+        m_settings_bg( WtCoord( 0, 0 ),
+                       WtDim( ACTIVE_WINDOW_WIDTH, 80 ),
+                       "#112238",
+                       [](){} ),
         m_pause_end_animation(),
         m_current_update_counter(48),
         m_game_state( GAME_STOPPED )
@@ -68,7 +72,9 @@ public:
 
         WtGridAnimationBuilder::construct_pause_animation( m_pause_end_animation );
 
+        add_button( m_settings_bg );
         add_button( m_pause_btn );
+        
 
         if ( nullptr != m_active_mode )
             m_active_mode->set_difficulty( STORAGE.get_settings().difficulty );
@@ -420,6 +426,7 @@ private:
 
     WtGridTouchOverlay  m_grid_touch_control;
     WtButton            m_pause_btn;
+    WtButton            m_settings_bg;
 
     WtGridAnimation     m_pause_end_animation; 
 

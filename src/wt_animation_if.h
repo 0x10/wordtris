@@ -59,7 +59,7 @@ public:
 
 public:
     WtAnimationIf() :
-        WtViewIf( "bg.bmp", false ),
+        WtViewIf( "#172d4a", false ),
         m_animation_steps(),
         m_a_idx( 0 ) {}
     virtual ~WtAnimationIf() {}

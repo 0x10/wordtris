@@ -369,6 +369,14 @@ public:
     /**************************
      *
      *************************/
+    WtDim get_grid_font_size()
+    {
+        return m_grid_font.size();
+    }
+
+    /**************************
+     *
+     *************************/
     const WtSdlFont& get_text_font()
     {
         return m_text_font;

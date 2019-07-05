@@ -32,7 +32,7 @@ public:
     using OnKeyPressDelegate = std::function<void(wt_control)>;
     using OnUpdateOverlayDelegate = std::function<void(void)>;
 public:
-    WtViewIf( std::string bg_img="bg.bmp", 
+    WtViewIf( std::string bg_img="#172d4a", 
               bool fade=true, 
               WtTime::TimeType refresh_rate=WtTime::TimeType(0),
               OnKeyPressDelegate on_key_press_handler = nullptr,
