@@ -49,27 +49,46 @@ private:
 
 // api defintion
 public:
+    /**************************
+     *
+     *************************/
+    std::string points_to_string( uint32_t points )
+    { 
+        if ( points < 1000 )
+        {
+            
+        }
+        return std::to_string( points );
+    }
 
     /**************************
      *
      *************************/
     void draw_player_stat( const WtPlayer& player )
     {
-        WtCoord base_pos( 79,32 );
-
+       // WtCoord base_pos( 79,32 );
+        WtCoord base_pos( 20,8 );
+        DrawingPolicy::draw_image( base_pos,
+                                   WtDim( 65, 65 ),
+                                   "level_progress_bg.bmp" );
+/*
         std::string player_stat = "";
         player_stat.append( std::to_string( player.get_current_level() ) );
+        */
         std::string player_scores = "";
-        player_scores.append( std::to_string( player.get_points() ) );
+        player_scores.append( points_to_string( player.get_points() ) );
 
-        DrawingPolicy::draw_image( base_pos,
-                                   WtDim( 317, 65 ),
-                                   "label_bg.bmp" );
+/*
         WtDim font_sz = DrawingPolicy::get_text_size( player_stat );
         DrawingPolicy::draw_text( WtCoord( (79+33)-(font_sz.w/2), (32+33)-((font_sz.h/2)+2) ),
                                   player_stat );
-        font_sz = DrawingPolicy::get_text_size( player_scores );
-        DrawingPolicy::draw_text( WtCoord( 160, (32+(65/2))-((font_sz.h/2)+2) ),
+        */
+        WtDim font_sz = DrawingPolicy::get_text_size( player_scores );
+        WtCoord score_pos = base_pos;
+        score_pos.x = (score_pos.x + 65/2)-((font_sz.w/2)+2);
+        score_pos.y = (score_pos.y+(65/2))-((font_sz.h/2)+2);
+        // shorten number to three digits 1000 -> 1k; 1500 -> 1.5k
+        DrawingPolicy::draw_text( /*WtCoord( 160, (32+(65/2))-((font_sz.h/2)+2) )*/score_pos,
                                   player_scores );
 
         draw_level_up_indicator( player, base_pos );
@@ -129,7 +148,7 @@ public:
     {
         if ( show_letter_after_next )
         {
-            DrawingPolicy::draw_text( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (DrawingPolicy::get_grid_font_size().w / 2), 10 ),
+            DrawingPolicy::draw_text( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (DrawingPolicy::get_grid_font_size().w / 2), 12 ),
                                       std::string(1, letter_after_next ),
                                       "grid" );
         }
