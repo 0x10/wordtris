@@ -25,7 +25,7 @@
 #include "wt_animation_builder.h"
 #include "menus/wt_menu_pause.h"
 #include "menus/wt_menu_score_summary.h"
-#include "menus/wt_menu_game_mode_intro.h"
+//#include "menus/wt_menu_game_mode_intro.h"
 
 #include "widgets/wt_grid_touch_overlay.h"
 
@@ -51,7 +51,7 @@ public:
         m_pause_menu( WT_BIND_EVENT_HANDLER( WtGameCtr::restart ), 
                       WT_BIND_EVENT_HANDLER( WtGameCtr::return_to_menu ) ),
         m_score_summary(),
-        m_game_mode_intro(),
+        //m_game_mode_intro(),
         m_grid_touch_control( WtCoord( 0, 100 ),
                               WtDim( ACTIVE_WINDOW_WIDTH, ACTIVE_WINDOW_HEIGHT-100 ),
                               WT_BIND_EVENT_HANDLER( WtGameCtr::notify_left ),
@@ -99,7 +99,7 @@ public:
                 mode->set_difficulty( STORAGE.get_settings().difficulty );
             }
             m_active_mode = mode;
-            m_game_mode_intro.set_game_mode( m_active_mode );
+//            m_game_mode_intro.set_game_mode( m_active_mode );
         }
     }
 
@@ -364,7 +364,7 @@ private:
                 break;
 
             case GAME_TO_START:
-                enter_child_menu( m_game_mode_intro );
+                //enter_child_menu( m_game_mode_intro );
                 m_game_state = GAME_STARTED;
                 break;
 
@@ -422,7 +422,7 @@ private:
 
     WtMenuPause         m_pause_menu;
     WtMenuScoreSummary  m_score_summary;
-    WtMenuGameModeIntro m_game_mode_intro;
+    //WtMenuGameModeIntro m_game_mode_intro;
 
     WtGridTouchOverlay  m_grid_touch_control;
     WtButton            m_pause_btn;

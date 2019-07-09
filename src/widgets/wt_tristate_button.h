@@ -21,11 +21,12 @@
 class WtTriStateButton 
 {
 private:
-    const char* m_tri_state_frame           =   "tri_state_btn.bmp";
-    const char* m_tri_state_selected_img[3] = { "tri_state_btn_select0.bmp", 
+    const char* m_tri_state_frame           =   "";
+    const char* m_tri_state_selected_imgs[3] = { "tri_state_btn_select0.bmp", 
                                                 "tri_state_btn_select1.bmp", 
                                                 "tri_state_btn_select2.bmp" };
-    const char* m_tri_state_unselected_img  =   "";
+    const char* m_tri_state_selected_img  =   "tri_state_btn_selected.bmp";
+    const char* m_tri_state_unselected_img  =   "tri_state_btn_unselected.bmp";
 
 public:
     using OnItemTapDelegate = std::function<void(size_t)>;
@@ -39,21 +40,24 @@ public:
 
         m_buttons{ 
             WtButton( pos, size, m_tri_state_frame, nullptr, "" ),
-            WtButton( WtCoord( (pos.x + 1) + (0*((size.w - 1) / 3)), pos.y + 1 ),
-                      WtDim( (size.w - 1) / 3, size.h - 2 ),
-                      ( selected == 0 ? m_tri_state_selected_img[0] : m_tri_state_unselected_img ),
+            WtButton( WtCoord( (pos.x ) + (0*((size.w ) / 3)), pos.y  ),
+                      WtDim( 60,60 ),
+                      ( selected == 0 ? m_tri_state_selected_img : m_tri_state_unselected_img ),
                       WT_BIND_EVENT_HANDLER( WtTriStateButton::on_item_clicked<0> ),
-                      label[0] ),
-            WtButton( WtCoord( (pos.x + 1) + (1*((size.w - 1) / 3)), pos.y + 1 ),
-                      WtDim( (size.w - 1) / 3, size.h - 2 ),
-                      ( selected == 1 ? m_tri_state_selected_img[1] : m_tri_state_unselected_img ),
+                      label[0],
+                      WtCoord( 0, -60 ) ),
+            WtButton( WtCoord( (pos.x ) + (1*((size.w ) / 3)), pos.y  ),
+                      WtDim( 60,60 ),
+                      ( selected == 1 ? m_tri_state_selected_img : m_tri_state_unselected_img ),
                       WT_BIND_EVENT_HANDLER( WtTriStateButton::on_item_clicked<1> ),
-                      label[1] ),
-            WtButton( WtCoord( (pos.x + 1) + (2*((size.w - 1) / 3)), pos.y + 1 ),
-                      WtDim( (size.w - 1) / 3, size.h - 2 ),
-                      ( selected == 2 ? m_tri_state_selected_img[2] : m_tri_state_unselected_img ),
+                      label[1],
+                      WtCoord( 0, -60 ) ),
+            WtButton( WtCoord( (pos.x ) + (2*((size.w ) / 3)), pos.y  ),
+                      WtDim( 60,60 ),
+                      ( selected == 2 ? m_tri_state_selected_img : m_tri_state_unselected_img ),
                       WT_BIND_EVENT_HANDLER( WtTriStateButton::on_item_clicked<2> ),
-                      label[2] )
+                      label[2],
+                      WtCoord( 0, -60 ) )
         },
 
         m_selected( selected ),
@@ -97,9 +101,9 @@ private:
      *************************/
     void update_images()
     {
-        m_buttons[1].set_image( ( m_selected == 0 ? m_tri_state_selected_img[0] : m_tri_state_unselected_img ) );
-        m_buttons[2].set_image( ( m_selected == 1 ? m_tri_state_selected_img[1] : m_tri_state_unselected_img ) );
-        m_buttons[3].set_image( ( m_selected == 2 ? m_tri_state_selected_img[2] : m_tri_state_unselected_img ) );
+        m_buttons[1].set_image( ( m_selected == 0 ? m_tri_state_selected_img : m_tri_state_unselected_img ) );
+        m_buttons[2].set_image( ( m_selected == 1 ? m_tri_state_selected_img : m_tri_state_unselected_img ) );
+        m_buttons[3].set_image( ( m_selected == 2 ? m_tri_state_selected_img : m_tri_state_unselected_img ) );
     }
 
     /**************************

@@ -27,9 +27,10 @@ class WtMenuHelp : public WtViewIf
 {
 public:
     WtMenuHelp() :
-        WtViewIf( "bg_menu_pause.bmp", false ),
-        m_leave_btn( WtCoord( 105, 800 ), 
-                     WtDim(100, 100), 
+        WtViewIf( "#172d4a", false ),
+        m_leave_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (138 / 2), (ACTIVE_WINDOW_HEIGHT - (ACTIVE_WINDOW_HEIGHT / 4))+(124/2) ), 
+                     //WtDim(100, 100), 
+                     WtDim(138, 124), 
                      "back_btn.bmp",
                      WT_BIND_EVENT_HANDLER( WtMenuHelp::leave ) ),
         m_textbox( WtCoord( (ACTIVE_WINDOW_WIDTH - 379) / 2,

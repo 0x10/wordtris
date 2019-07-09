@@ -26,8 +26,8 @@
 class WtMenuSettings : public WtViewIf
 {
 private:
-    static const size_t offset_x = (ACTIVE_WINDOW_WIDTH - 328) / 2;
-    static const size_t offset_y = (ACTIVE_WINDOW_HEIGHT / 8);
+    static const ssize_t offset_x = (ACTIVE_WINDOW_WIDTH / 2) - (280 / 2);
+    static const ssize_t offset_y = (ACTIVE_WINDOW_HEIGHT / 8) + (ACTIVE_WINDOW_HEIGHT / 8);
 
     const WtDim                      m_standard_btn_size = WtDim( 328, 69 );
     const std::array<const char*, 3> m_selectable_themes { "light",
@@ -38,34 +38,33 @@ public:
     WtMenuSettings() :
         WtViewIf(),
         m_current_diff(0),
-        m_leave_btn( WtCoord( 105, 800 ), 
-                     WtDim(100, 100), 
+        m_leave_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (138 / 2), (ACTIVE_WINDOW_HEIGHT - (ACTIVE_WINDOW_HEIGHT / 4))+(124/2) ), 
+                     //WtDim(100, 100), 
+                     WtDim(138, 124), 
                      "back_btn.bmp",
                      WT_BIND_EVENT_HANDLER( WtMenuSettings::leave ) ),
-        m_lang_select_btn( WtCoord( offset_x, offset_y + 69 + 20 ),
+        m_lang_select_btn( WtCoord( offset_x, offset_y + m_standard_btn_size.h ),
                            m_standard_btn_size,
                            WtL10n::get_available_language_names(),
                            0,
                            WT_BIND_EVENT_HANDLER_1( WtMenuSettings::lang_changed ) ),
-        m_diff_select_btn( WtCoord( offset_x, offset_y + (69 + 20)*2 ),
+        m_diff_select_btn( WtCoord( offset_x, offset_y + (m_standard_btn_size.h * 3 ) ),
                            m_standard_btn_size,
                            std::array<const char*, 3>{{ WtGameModeIf::get_available_difficulties()[0].second,
                                                         WtGameModeIf::get_available_difficulties()[1].second,
                                                         WtGameModeIf::get_available_difficulties()[2].second }},
                            0,
                            WT_BIND_EVENT_HANDLER_1( WtMenuSettings::diff_changed ) ),
-        m_theme_select_btn( WtCoord( offset_x, offset_y + (69 + 20)*3 ),
+        m_theme_select_btn( WtCoord( offset_x, offset_y + (m_standard_btn_size.h * 4 ) ),
                             m_standard_btn_size,
                             m_selectable_themes,
                             1,
                             WT_BIND_EVENT_HANDLER_1( WtMenuSettings::theme_changed ) ),
-        m_supporting_grid_btn( WtCoord( offset_x, offset_y + (69 + 20)*4 ),
-                               m_standard_btn_size,
+        m_supporting_grid_btn( WtCoord( offset_x, offset_y + (m_standard_btn_size.h *5 ) ),
                                WtL10n_tr( "Supporting Grid" ),
                                STORAGE.get_settings().show_support_grid,
                                WT_BIND_EVENT_HANDLER_1( WtMenuSettings::supporting_grid_changed ) ),
-        m_next_stone_btn( WtCoord( offset_x, offset_y + (69 + 20)*5 ),
-                          m_standard_btn_size,
+        m_next_stone_btn( WtCoord( offset_x, offset_y + (m_standard_btn_size.h * 6 ) +20 ),
                           WtL10n_tr( "Show next stone" ),
                           STORAGE.get_settings().show_next_stone,
                           WT_BIND_EVENT_HANDLER_1( WtMenuSettings::show_next_stone_changed ) )
@@ -110,7 +109,7 @@ public:
         add_button( m_leave_btn );
         add_tristate_button( m_lang_select_btn );
         add_tristate_button( m_diff_select_btn );
-        add_tristate_button( m_theme_select_btn );
+        //add_tristate_button( m_theme_select_btn );
         add_button( m_supporting_grid_btn );
         add_button( m_next_stone_btn );
     }

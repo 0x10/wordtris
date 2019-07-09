@@ -28,16 +28,15 @@ private:
 public:
     using OnTapDelegate = std::function<void(bool)>;
 
-    WtCheckboxButton( WtCoord pos, 
-                      WtDim size,
+    WtCheckboxButton( WtCoord pos,
                       std::string label,
                       bool checked,
                       OnTapDelegate on_tap ) :
-        m_button( pos, size,
+        m_button( pos, WtDim( 60, 60 ),
                   ( checked ? m_checkbox_btn_checked : m_checkbox_btn_unchecked ),
                   WT_BIND_EVENT_HANDLER( WtCheckboxButton::on_click ),
                   label,
-                  WtCoord( -1 * (size.w / 6),0)),
+                  WtCoord( 120,0)),
         m_checked( checked ),
         m_on_tap( on_tap )
     {

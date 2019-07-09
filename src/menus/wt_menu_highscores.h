@@ -23,8 +23,9 @@ class WtMenuHighscores : public WtViewIf
 public:
     WtMenuHighscores() :
         WtViewIf(),
-        m_leave_btn( WtCoord( 105, 800 ), 
-                     WtDim(100, 100), 
+        m_leave_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (138 / 2), (ACTIVE_WINDOW_HEIGHT - (ACTIVE_WINDOW_HEIGHT / 4))+(124/2) ), 
+                     //WtDim(100, 100), 
+                     WtDim(138, 124), 
                      "back_btn.bmp",
                      WT_BIND_EVENT_HANDLER( WtMenuHighscores::leave ) ),
         m_left_btn( WtCoord( 25, (ACTIVE_WINDOW_HEIGHT/2)-50 ), 

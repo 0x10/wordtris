@@ -24,7 +24,8 @@ public:
     WtMenuScoreSummary() :
         WtViewIf( "bg_menu_pause.bmp", false ),
         m_leave_btn( WtCoord( (ACTIVE_WINDOW_WIDTH-105) - 100, 800 ), 
-                     WtDim(100, 100), 
+                     //WtDim(100, 100), 
+                     WtDim(138, 124), 
                      "next_btn.bmp",
                      WT_BIND_EVENT_HANDLER( WtMenuScoreSummary::leave ) ),
         m_textbox( WtCoord( (ACTIVE_WINDOW_WIDTH - 379) / 2,
