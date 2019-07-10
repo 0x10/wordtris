@@ -195,7 +195,7 @@ public:
         }
         else
         {
-            SDL_Color text_color = { 200, 200, 200, 0 };
+            SDL_Color text_color = { 0x4a, 0x90, 0xe2, 0 };
             SDL_Surface* text_surface = TTF_RenderUTF8_Blended( m_ttf_font, std::string( &ch, 1 ).c_str(), text_color );
             if ( NULL != text_surface )
             {

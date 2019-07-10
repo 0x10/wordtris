@@ -53,6 +53,9 @@ private:
     const std::array<const char*, 3> m_available_language_names{ { "@flag_en.bmp",
                                                                    "@flag_de.bmp",
                                                                    "@flag_fr.bmp" } };
+    const std::array<const char*, 3> m_selected_language_names{ { "@flag_en_active.bmp",
+                                                                   "@flag_de_active.bmp",
+                                                                   "@flag_fr_active.bmp" } };
 public:
     using LangChangedDelegate = std::function<void(void)>;
 
@@ -70,6 +73,14 @@ public:
     static const std::array<const char*, 3>& get_available_language_names()
     {
         return WtL10n::instance().get_language_names();
+    }
+
+    /**************************
+     *
+     *************************/
+    static const std::array<const char*, 3>& get_selected_language_names()
+    {
+        return WtL10n::instance().get_language_names_selected();
     }
 
     /**************************
@@ -189,6 +200,14 @@ private:
     const std::array<const char*, 3>& get_language_names()
     {
         return m_available_language_names;
+    }
+
+    /**************************
+     *
+     *************************/
+    const std::array<const char*, 3>& get_language_names_selected()
+    {
+        return m_selected_language_names;
     }
 
     /**************************

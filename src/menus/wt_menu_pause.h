@@ -29,11 +29,11 @@ public:
 private:
     static const size_t offset_x = (ACTIVE_WINDOW_WIDTH / 2);
     static const size_t offset_y = (ACTIVE_WINDOW_HEIGHT / 2) - (69+20);
-           const WtDim  m_standard_btn_size = WtDim( 328, 69 );
+           const WtDim  m_standard_btn_size = WtDim( 500, 69 );
 public:
     WtMenuPause( OnRestartDelegate restart_handler,
                  OnQuitDelegate    quit_handler ) :
-        WtViewIf( "#172d4a", false ),
+        WtViewIf( "#122339", false ),
         m_help(),
         m_leave_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (138 / 2), (ACTIVE_WINDOW_HEIGHT - (ACTIVE_WINDOW_HEIGHT / 4))+(124/2) ), 
                      //WtDim(100, 100), 
@@ -52,11 +52,11 @@ public:
                     WtDim(100, 100),
                     "help_btn.bmp",
                     WT_BIND_EVENT_HANDLER( WtMenuPause::help_pressed ) ),
-        m_supporting_grid_btn( WtCoord( offset_x-164, offset_y + (20+((69 + 20)*2)) ),
+        m_supporting_grid_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) + ((m_standard_btn_size.w / 2)-100), offset_y + (20+((69 + 20)*2)) ),
                                WtL10n_tr( "Supporting Grid" ),
                                STORAGE.get_settings().show_support_grid,
                                WT_BIND_EVENT_HANDLER_1( WtMenuPause::supporting_grid_changed ) ),
-        m_next_stone_btn( WtCoord( offset_x-164, offset_y + (20+((69 + 20)*3)) ),
+        m_next_stone_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) + ((m_standard_btn_size.w / 2)-100), offset_y + (20+((69 + 20)*3)) ),
                           WtL10n_tr( "Show next stone" ),
                           STORAGE.get_settings().show_next_stone,
                           WT_BIND_EVENT_HANDLER_1( WtMenuPause::show_next_stone_changed ) ),

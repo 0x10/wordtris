@@ -445,7 +445,7 @@ private:
     /**************************
      *
      *************************/
-    void puts_fb( ssize_t x, ssize_t y, const std::string str, WtSdlFont* font, SDL_Color font_color={255,255,255,255} )
+    void puts_fb( ssize_t x, ssize_t y, const std::string str, WtSdlFont* font, SDL_Color font_color={0x4a, 0x90, 0xe2,255} )
     {
         if ( NULL != font )
         {
