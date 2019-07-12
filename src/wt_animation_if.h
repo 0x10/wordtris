@@ -59,7 +59,10 @@ public:
 
 public:
     WtAnimationIf() :
-        WtViewIf( "#172d4a", false ),
+        WtViewIf( "#172d4a", false,
+                  WtTime::TimeType(0),
+                  nullptr,
+                  "game_bg_music.ogg" ),
         m_animation_steps(),
         m_a_idx( 0 ) {}
     virtual ~WtAnimationIf() {}

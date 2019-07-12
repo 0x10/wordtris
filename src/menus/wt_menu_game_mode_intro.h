@@ -25,7 +25,7 @@ class WtMenuGameModeIntro : public WtViewIf
     const WtDim  m_standard_btn_size = WtDim( 328, 69 );
 public:
     WtMenuGameModeIntro() :
-        WtViewIf( "bg_menu_pause.bmp", false ),
+        WtViewIf( "#122339", false ),
         m_leave_btn( WtCoord( (ACTIVE_WINDOW_WIDTH-105) - 100, 800 ), 
                      //WtDim(100, 100), 
                      WtDim(138, 124), 

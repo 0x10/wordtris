@@ -144,15 +144,19 @@ public:
     /**************************
      *
      *************************/
-    void draw_hint( const std::string hint, const char letter_after_next, bool show_letter_after_next )
+    void draw_hint( const char letter_after_next )
     {
-        if ( show_letter_after_next )
-        {
-            DrawingPolicy::draw_text( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (DrawingPolicy::get_grid_font_size().w / 2), 12 ),
-                                      std::string(1, letter_after_next ),
-                                      "grid" );
-        }
+        DrawingPolicy::draw_text( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (DrawingPolicy::get_grid_font_size().w / 2), 12 ),
+                                  std::string(1, letter_after_next ),
+                                  "grid" );
+    }
 
+
+    /**************************
+     *
+     *************************/
+    void draw_help( const std::string hint )
+    {
         const size_t line_length = 30;
         size_t line_count = (hint.length() / line_length) + ( hint.length() % line_length > 0 ? 1 : 0 );
         for(size_t l_idx = 0; l_idx < line_count; l_idx++ )
@@ -163,6 +167,7 @@ public:
                                       line );
         }
     }
+
 
     /**************************
      *

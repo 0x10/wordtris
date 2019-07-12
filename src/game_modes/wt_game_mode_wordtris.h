@@ -121,7 +121,8 @@ public:
                             erase_from_row( r_idx, row_str, word, board );
                             something_found = true;
                             found_count++;
-
+                            for (uint8_t w_idx =  0; w_idx<word.length();w_idx++)
+                                stone_removed();
                             break;
                         }
                     }
@@ -162,6 +163,8 @@ public:
                         player.word_solved( word.length() * (found_count + 1), found_count+1 );
                         erase_from_col( c_idx, col_str, word, board );
                         something_found = true;
+                        for (uint8_t w_idx = 0; w_idx<word.length();w_idx++)
+                            stone_removed();
                         found_count++;
 
                         break;
@@ -269,6 +272,7 @@ public:
                 {
                     board.set_cell( row-1, col, WtBoard::empty_cell );
                 }
+                stone_removed();
             }
         }
         else
@@ -299,6 +303,7 @@ public:
             {
                 board.set_cell( row, col, value );
             }
+            stone_added();
         }
     }
 

@@ -56,7 +56,8 @@ class WtGameModeIf
 public:
     WtGameModeIf( std::string id_string ) :
         m_current_diff( wt_difficulty_EASY ),
-        m_id_string( id_string )
+        m_id_string( id_string ),
+        m_cell_occupied_count(0)
         {}
     virtual ~WtGameModeIf() {}
 
@@ -157,13 +158,49 @@ public:
                                   uint8_t  col,
                                   char     value )
     {
+        if ( ( value != WtBoard::empty_cell ) && ( value != ' ' ) )
+        {
+            stone_added();
+        }
+        else
+        {
+            stone_removed();
+        }
         board.set_cell( row, col, value );
     }
 
 
+    /**************************
+     *
+     *************************/
+    uint16_t get_occupied_cell_count() const
+    {
+        return m_cell_occupied_count;    
+    }
+
+protected:
+    /**************************
+     *
+     *************************/
+    void stone_added()
+    {
+        m_cell_occupied_count++;
+    }
+
+
+    /**************************
+     *
+     *************************/
+    void stone_removed()
+    {
+        if ( m_cell_occupied_count > 0 )
+            m_cell_occupied_count--;
+    }
+
 private:
     wt_difficulty     m_current_diff;
     const std::string m_id_string;
+    uint16_t          m_cell_occupied_count;
 };
 
 /*****************************************

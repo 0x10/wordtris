@@ -67,7 +67,8 @@ public:
                        [](){} ),
         m_pause_end_animation(),
         m_current_update_counter(48),
-        m_game_state( GAME_STOPPED )
+        m_game_state( GAME_STOPPED ),
+        m_hide_hint( false )
     {
 
         WtGridAnimationBuilder::construct_pause_animation( m_pause_end_animation );
@@ -116,10 +117,22 @@ private:
         ACTIVE_WINDOW.draw_board( m_board, 
                                   m_active,
                                   STORAGE.get_settings().show_support_grid );
+        if ( STORAGE.get_settings().show_next_stone )
+            ACTIVE_WINDOW.draw_hint( m_active_mode->letter_after_next() );
+
         ACTIVE_WINDOW.draw_player_stat( m_player );
-        ACTIVE_WINDOW.draw_hint( m_active_mode->get_hint(), 
-                                 m_active_mode->letter_after_next(), 
-                                 STORAGE.get_settings().show_next_stone );
+
+        if ( m_active_mode->get_occupied_cell_count() < 5 )
+        {
+            if ( ! m_hide_hint )
+            {
+                ACTIVE_WINDOW.draw_help( m_active_mode->get_hint() );
+            }
+        }
+        else
+        {
+            m_hide_hint = true;
+        }
 
         if ( m_game_state == GAME_ANIMATION_RUNNING ) // get dirty...
             ACTIVE_WINDOW.draw_button( m_pause_btn );
@@ -307,6 +320,7 @@ private:
      *************************/
     void leave_game()
     {
+        m_hide_hint = false;
         m_game_state = GAME_STOPPED;
         if ( m_player.get_points() > 0 )
         {
@@ -432,6 +446,7 @@ private:
 
     uint8_t             m_current_update_counter;
     wt_game_state       m_game_state;
+    bool                m_hide_hint;
 };
 
 
