@@ -343,18 +343,24 @@ public:
         }
         else
         {
-            WtCoord screen_pos(0,0);
-            ssize_t in_cell_x_offset = 0;
-            ssize_t in_cell_y_offset = 0;
-            WtDim c_size = m_grid_font.text_size( text );
-            in_cell_x_offset = (static_cast<ssize_t>(m_grid_font.width())/2)-(c_size.w/2);
-            in_cell_y_offset = ((c_size.h - static_cast<ssize_t>(m_grid_font.height())) / 2) + 1;
-            screen_pos.x = pos.x + in_cell_x_offset;
-            screen_pos.y = pos.y - in_cell_y_offset;
+            WtCoord working_pos = pos;
+            for ( size_t c_idx = 0; c_idx < text.length(); c_idx++ )
+            {
+                std::string t = std::string(1, text[c_idx] );
+                WtCoord screen_pos(0,0);
+                ssize_t in_cell_x_offset = 0;
+                ssize_t in_cell_y_offset = 0;
+                WtDim c_size = m_grid_font.text_size( t );
+                in_cell_x_offset = (static_cast<ssize_t>(m_grid_font.width())/2)-(c_size.w/2);
+                in_cell_y_offset = ((c_size.h - static_cast<ssize_t>(m_grid_font.height())) / 2) + 1;
+                screen_pos.x = working_pos.x + in_cell_x_offset;
+                screen_pos.y = working_pos.y - in_cell_y_offset;
 
-            draw_image( pos, m_grid_font.size(), "grid_font_bg.bmp" );
+                draw_image( working_pos, m_grid_font.size(), "grid_font_bg.bmp" );
 
-            puts_fb( screen_pos.x, screen_pos.y, text, &m_grid_font, {0,0,0,255}  );
+                puts_fb( screen_pos.x, screen_pos.y, t, &m_grid_font, {0,0,0,255}  );
+                working_pos.x = working_pos.x + m_grid_font.size().w + 2;
+            }
         }
     }
 

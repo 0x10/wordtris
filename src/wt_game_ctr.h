@@ -126,7 +126,12 @@ private:
         {
             if ( ! m_hide_hint )
             {
-                ACTIVE_WINDOW.draw_help( m_active_mode->get_hint() );
+                WtCoord hint_pos = WtCoord( 130, 890 );
+                if ( m_active_mode->get_id_string() != "WordtrisClassic" )
+                {
+                    hint_pos = WtCoord( 130, 400 );
+                }
+                ACTIVE_WINDOW.draw_help( hint_pos, m_active_mode->get_hint() );
             }
         }
         else
@@ -134,7 +139,7 @@ private:
             m_hide_hint = true;
         }
 
-        if ( m_game_state == GAME_ANIMATION_RUNNING ) // get dirty...
+        if ( m_game_state == GAME_ANIMATION_RUNNING )
             ACTIVE_WINDOW.draw_button( m_pause_btn );
     }
 

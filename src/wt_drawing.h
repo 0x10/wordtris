@@ -144,10 +144,10 @@ public:
     /**************************
      *
      *************************/
-    void draw_hint( const char letter_after_next )
+    void draw_hint( const std::string letter_after_next )
     {
-        DrawingPolicy::draw_text( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (DrawingPolicy::get_grid_font_size().w / 2), 12 ),
-                                  std::string(1, letter_after_next ),
+        DrawingPolicy::draw_text( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - ((static_cast<ssize_t>(letter_after_next.length()) * (DrawingPolicy::get_grid_font_size().w+2)) / 2), 12 ),
+                                  letter_after_next,
                                   "grid" );
     }
 
@@ -155,15 +155,23 @@ public:
     /**************************
      *
      *************************/
-    void draw_help( const std::string hint )
+    void draw_help( const WtCoord pos, const std::string hint )
     {
-        const size_t line_length = 30;
+        WtDim icon_info_size = WtDim(60, 60);
+        WtCoord icon_info_pos = pos; //WtCoord( 79, 890 );
+
+        DrawingPolicy::draw_image( pos,
+                                   icon_info_size,
+                                   "icon_info.bmp" );
+
+        const size_t line_length = 40;
         size_t line_count = (hint.length() / line_length) + ( hint.length() % line_length > 0 ? 1 : 0 );
         for(size_t l_idx = 0; l_idx < line_count; l_idx++ )
         {
             std::string line = hint.substr( l_idx*line_length, line_length );
-            DrawingPolicy::draw_text( WtCoord( 79,
-                                               890+(static_cast<ssize_t>(l_idx) * DrawingPolicy::get_font_size().h *2) ),
+            ssize_t line_offset = (static_cast<ssize_t>(l_idx) * DrawingPolicy::get_font_size().h * 2);
+            DrawingPolicy::draw_text( WtCoord( icon_info_pos.x + icon_info_size.w + 10,
+                                               (icon_info_pos.y + 5) + /*(icon_info_size.h / 2 - (DrawingPolicy::get_font_size().h / 2))) +*/ line_offset  ),
                                       line );
         }
     }

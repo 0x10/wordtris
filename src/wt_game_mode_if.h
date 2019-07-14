@@ -135,9 +135,9 @@ public:
     /**************************
      *
      *************************/
-    virtual char letter_after_next()
+    virtual std::string letter_after_next()
     {
-        return WtBoard::empty_cell;
+        return std::string( 1, WtBoard::empty_cell );
     }
 
     /**************************

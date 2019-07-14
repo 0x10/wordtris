@@ -122,9 +122,9 @@ public:
     /**************************
      *
      *************************/
-    char letter_after_next()
+    virtual std::string letter_after_next()
     {
-        return m_next;
+        return m_active_word_scrambled;
     }
 
 
@@ -133,7 +133,7 @@ public:
      *************************/
     std::string get_hint()
     {
-        return std::string( WtL10n_tr("Guess the word: ") ).append(m_active_word_scrambled);
+        return WtL10n_tr("Try to solve the puzzled word by placing the stones in correct order.");
     }
 
 private:

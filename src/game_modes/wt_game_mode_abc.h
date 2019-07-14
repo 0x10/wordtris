@@ -94,6 +94,8 @@ public:
             show_sequence( board );
             m_next = WtRandom::get_random_letter_of_word( m_working_letters );
             remove_letter( m_working_letters, m_next );
+            stone_added();
+            stone_added();
         }
     }
 
@@ -121,9 +123,9 @@ public:
     /**************************
      *
      *************************/
-    char letter_after_next()
+    virtual std::string letter_after_next()
     {
-        return m_next;
+        return std::string(1, m_next);
     }
 
     /**************************
@@ -131,7 +133,7 @@ public:
      *************************/
     virtual std::string get_hint()
     {
-        return WtL10n::translate( WtL10n_tr("Complete the sequence!") );
+        return WtL10n::translate( WtL10n_tr("Try to place the falling letters at the correct position of the given sequence.") );
     }
 
     /**************************

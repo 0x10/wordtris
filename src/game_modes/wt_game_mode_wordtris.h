@@ -189,9 +189,9 @@ public:
     /**************************
      *
      *************************/
-    virtual char letter_after_next()
+    virtual std::string letter_after_next()
     {
-        return m_next_letter;
+        return std::string(1, m_next_letter);
     }
 
 
