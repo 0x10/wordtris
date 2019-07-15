@@ -38,6 +38,7 @@ int main( int, char** )
                 WtSettings settings = STORAGE.get_settings();
                 ACTIVE_WINDOW.set_theme( settings.active_theme );
                 WtL10n::set_language( settings.language );
+                ACTIVE_SFX.toggle_mute( settings.enable_audio );
 
                 ACTIVE_WINDOW.clr();
                 //ACTIVE_WINDOW.draw_message(WtL10n_tr("Loading..."));

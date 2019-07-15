@@ -36,6 +36,7 @@ private:
         m_sfx_policy(),
         m_mute( false ),
         m_playing( false ),
+        m_is_music( false ),
         m_active_file( "" )
     {
     }
@@ -57,18 +58,32 @@ public:
      *************************/
     void close()
     {
+        m_sfx_policy.stop_music();
         m_playing = false;
+        m_is_music = false;
+        m_active_file = "";
         m_sfx_policy.close();
     }
 
     /**************************
      *
      *************************/
-    void toggle_mute()
+    void toggle_mute( bool play_audio )
     {
-        m_mute = !m_mute;
+        m_mute = !play_audio;
 
-        m_sfx_policy.toggle_pause();
+        if ( m_playing )
+        {
+            m_playing = false;
+            m_sfx_policy.toggle_pause( m_mute );
+        }
+        else
+        {
+            if ( m_mute == false)
+            {
+                play_sfx( m_active_file, m_is_music );
+            }
+        }
     }
 
     /**************************
@@ -85,6 +100,7 @@ public:
     void stop_background_music()
     {
         m_playing = false;
+        m_is_music = false;
         m_active_file = "";
         m_sfx_policy.stop_music();
     }
@@ -136,29 +152,24 @@ private:
      *************************/
     void play_sfx( const std::string filename, const bool is_music )
     {
-        if ( ( ! m_mute ) && ( ! filename.empty() ) )
+        if ( ! filename.empty() )
         {
-            bool already_active = false;
-            if ( m_playing )
+            if ( ! ( ( m_playing ) && ( m_active_file == filename ) ) )
             {
-                if ( m_active_file == filename )
-                {
-                    already_active = true;
-                }
-            }
-
-            if ( ! already_active )
-            {
-                m_playing = true;
                 m_active_file = filename;
+                m_is_music = is_music;
 
-                if ( is_music )
+                if ( ! m_mute ) 
                 {
-                    m_sfx_policy.play_music( filename );
-                }
-                else
-                {
-                    m_sfx_policy.play_effect( filename );
+                    m_playing = true;
+                    if ( is_music )
+                    {
+                        m_sfx_policy.play_music( filename );
+                    }
+                    else
+                    {
+                        m_sfx_policy.play_effect( filename );
+                    }
                 }
             }
         }
@@ -167,6 +178,7 @@ private:
     SfxPolicy   m_sfx_policy;
     bool        m_mute;
     bool        m_playing;
+    bool        m_is_music;
     std::string m_active_file;
 };
 

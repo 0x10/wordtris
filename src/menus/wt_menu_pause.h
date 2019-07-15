@@ -60,6 +60,10 @@ public:
                           WtL10n_tr( "Show next stone" ),
                           STORAGE.get_settings().show_next_stone,
                           WT_BIND_EVENT_HANDLER_1( WtMenuPause::show_next_stone_changed ) ),
+        m_enable_audio_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) + ((m_standard_btn_size.w / 2)-100), offset_y + (20+((69 + 20)*4)) ),
+                            WtL10n_tr( "Play music and sounds" ),
+                            STORAGE.get_settings().enable_audio,
+                            WT_BIND_EVENT_HANDLER_1( WtMenuPause::enable_audio_changed ) ),
         m_restart_handler( restart_handler ),
         m_quit_handler( quit_handler )
     {
@@ -69,6 +73,7 @@ public:
         add_button( m_help_btn );
         add_button( m_supporting_grid_btn );
         add_button( m_next_stone_btn );
+        add_button( m_enable_audio_btn );
     }
 
     ~WtMenuPause()
@@ -133,6 +138,24 @@ private: // no copy allowed
         }
     }
 
+
+    /**************************
+     *
+     *************************/
+    void enable_audio_changed( bool enable )
+    {
+        std::cout << "audio " << ( enable ? "active" : "inactive" ) << std::endl;
+        WtSettings settings = STORAGE.get_settings();
+        if ( settings.enable_audio != enable )
+        {
+            settings.enable_audio = enable;
+            STORAGE.store_settings( settings );
+
+            ACTIVE_SFX.toggle_mute( settings.enable_audio );
+        }
+    }
+
+
     /**************************
      * signal
      *************************/
@@ -140,6 +163,7 @@ private: // no copy allowed
     {
         m_supporting_grid_btn.set_checked( STORAGE.get_settings().show_support_grid );
         m_next_stone_btn.set_checked( STORAGE.get_settings().show_next_stone );
+        m_enable_audio_btn.set_checked( STORAGE.get_settings().enable_audio );
     }
 
 private:
@@ -151,6 +175,7 @@ private:
     WtButton            m_help_btn;
     WtCheckboxButton    m_supporting_grid_btn;
     WtCheckboxButton    m_next_stone_btn;
+    WtCheckboxButton    m_enable_audio_btn;
 
     OnRestartDelegate   m_restart_handler;
     OnQuitDelegate      m_quit_handler;

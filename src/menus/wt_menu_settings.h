@@ -64,20 +64,28 @@ public:
                             1,
                             WT_BIND_EVENT_HANDLER_1( WtMenuSettings::theme_changed ),
                             m_selectable_themes ),
-        m_supporting_grid_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) + ((m_standard_btn_size.w / 2)-100), offset_y + (m_standard_btn_size.h *6 ) ),
-                               WtL10n_tr( "Supporting Grid" ),
+        m_supporting_grid_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) + ((m_standard_btn_size.w / 2)-100), offset_y + (m_standard_btn_size.h *6 ) - 20 ),
+                               WtL10n_tr( "Show supporting grid" ),
                                STORAGE.get_settings().show_support_grid,
                                WT_BIND_EVENT_HANDLER_1( WtMenuSettings::supporting_grid_changed ) ),
-        m_next_stone_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) + ((m_standard_btn_size.w / 2)-100), offset_y + (m_standard_btn_size.h * 7 ) +20 ),
+        m_next_stone_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) + ((m_standard_btn_size.w / 2)-100), offset_y + (m_standard_btn_size.h * 7 )  ),
                           WtL10n_tr( "Show next stone" ),
                           STORAGE.get_settings().show_next_stone,
                           WT_BIND_EVENT_HANDLER_1( WtMenuSettings::show_next_stone_changed ) ),
+        m_enable_audio_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) + ((m_standard_btn_size.w / 2)-100), offset_y + (m_standard_btn_size.h * 8 ) +20 ),
+                            WtL10n_tr( "Play music and sounds" ),
+                            STORAGE.get_settings().enable_audio,
+                            WT_BIND_EVENT_HANDLER_1( WtMenuSettings::enable_audio_changed ) ),
         m_seperator0( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (m_standard_btn_size.w / 2), offset_y + (m_standard_btn_size.h * 2) + (m_standard_btn_size.h / 2) ),
                       WtDim( m_standard_btn_size.w, 1 ),
                       "#182e4b" ),
         m_seperator1( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (m_standard_btn_size.w / 2), offset_y + (m_standard_btn_size.h * 5)  ),
                       WtDim( m_standard_btn_size.w, 1 ),
-                      "#182e4b" )
+                      "#182e4b" ),
+        m_settings_bg( WtCoord( 0, 0 ),
+                       WtDim( ACTIVE_WINDOW_WIDTH, 80 ),
+                       "#172d4a",
+                       [](){} )
     {
         for ( size_t idx = 0; idx < WtL10n::get_available_languages().size(); idx++ )
         {
@@ -114,13 +122,14 @@ public:
             }
         }
 
-
+        //add_button( m_settings_bg );
         add_button( m_leave_btn );
         add_tristate_button( m_lang_select_btn );
         add_tristate_button( m_diff_select_btn );
         //add_tristate_button( m_theme_select_btn );
         add_button( m_supporting_grid_btn );
         add_button( m_next_stone_btn );
+        add_button( m_enable_audio_btn );
         add_button( m_seperator0 );
         add_button( m_seperator1 );
     }
@@ -212,12 +221,29 @@ private: // no copy allowed
     }
 
     /**************************
+     *
+     *************************/
+    void enable_audio_changed( bool enable )
+    {
+        std::cout << "audio " << ( enable ? "active" : "inactive" ) << std::endl;
+        WtSettings settings = STORAGE.get_settings();
+        if ( settings.enable_audio != enable )
+        {
+            settings.enable_audio = enable;
+            STORAGE.store_settings( settings );
+
+            ACTIVE_SFX.toggle_mute( settings.enable_audio );
+        }
+    }
+
+    /**************************
      * signal
      *************************/
     void entered_view()
     {
         m_supporting_grid_btn.set_checked( STORAGE.get_settings().show_support_grid );
         m_next_stone_btn.set_checked( STORAGE.get_settings().show_next_stone );
+        m_enable_audio_btn.set_checked( STORAGE.get_settings().enable_audio );
     }
 
     /**************************
@@ -263,8 +289,10 @@ private:
     WtTriStateButton m_theme_select_btn;
     WtCheckboxButton m_supporting_grid_btn;
     WtCheckboxButton m_next_stone_btn;
+    WtCheckboxButton m_enable_audio_btn;
     WtButton         m_seperator0;
     WtButton         m_seperator1;
+    WtButton         m_settings_bg;
 };
 
 #endif /* _WT_MENU_SETTINGS_H_ */

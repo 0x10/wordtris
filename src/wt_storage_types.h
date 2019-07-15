@@ -37,7 +37,8 @@ public:
         difficulty( wt_difficulty_EASY ),
         active_theme( "default" ),
         show_support_grid( true ),
-        show_next_stone( true )
+        show_next_stone( true ),
+        enable_audio( true )
     {}
 
     virtual ~WtSettings() {}
@@ -47,6 +48,7 @@ public:
     std::string   active_theme;
     bool          show_support_grid;
     bool          show_next_stone;
+    bool          enable_audio;
 
     /**************************
      *
@@ -59,6 +61,7 @@ public:
         WtStorable::write_string( of, active_theme );
         WtStorable::write_boolean( of, show_support_grid );
         WtStorable::write_boolean( of, show_next_stone );
+        WtStorable::write_boolean( of, enable_audio );
     }
 
     /**************************
@@ -74,6 +77,7 @@ public:
         active_theme = WtStorable::read_string( inf, was_eof );
         show_support_grid = WtStorable::read_boolean( inf, was_eof );
         show_next_stone = WtStorable::read_boolean( inf, was_eof );
+        enable_audio = WtStorable::read_boolean( inf, was_eof );
 
         return ( ! was_eof );
     }
@@ -90,6 +94,7 @@ public:
         size += WtStorable::get_storage_size( active_theme );
         size += WtStorable::get_storage_size( show_next_stone );
         size += WtStorable::get_storage_size( show_support_grid );
+        size += WtStorable::get_storage_size( enable_audio );
         return size;
     }
 };

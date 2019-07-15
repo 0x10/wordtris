@@ -109,17 +109,20 @@ public:
     /**************************
      *
      *************************/
-    void toggle_pause()
+    void toggle_pause( bool pause_active )
     {
-        if( Mix_PlayingMusic() != 0 )
+        if ( Mix_PlayingMusic() != 0 )
         {
-            if( Mix_PausedMusic() != 0 )
+            if ( pause_active )
             {
-                Mix_ResumeMusic();
+                Mix_PauseMusic();
             }
             else
             {
-                Mix_PauseMusic();
+                if ( Mix_PausedMusic() != 0 )
+                {
+                    Mix_ResumeMusic();
+                }
             }
         }
     }
