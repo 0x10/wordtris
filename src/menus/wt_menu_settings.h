@@ -85,6 +85,10 @@ public:
         m_settings_bg( WtCoord( 0, 0 ),
                        WtDim( ACTIVE_WINDOW_WIDTH, 80 ),
                        "#172d4a",
+                       [](){} ),
+        m_settings_logo( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (133 / 2), 128 ),
+                       WtDim( 133, 133 ),
+                       "settings_btn.bmp",
                        [](){} )
     {
         for ( size_t idx = 0; idx < WtL10n::get_available_languages().size(); idx++ )
@@ -132,6 +136,7 @@ public:
         add_button( m_enable_audio_btn );
         add_button( m_seperator0 );
         add_button( m_seperator1 );
+        add_button( m_settings_logo );
     }
 
     ~WtMenuSettings()
@@ -293,6 +298,7 @@ private:
     WtButton         m_seperator0;
     WtButton         m_seperator1;
     WtButton         m_settings_bg;
+    WtButton         m_settings_logo;
 };
 
 #endif /* _WT_MENU_SETTINGS_H_ */

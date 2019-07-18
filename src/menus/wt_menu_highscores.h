@@ -137,14 +137,23 @@ private: // no copy allowed
     {
         size_t score_entry = 1;
 
-        for( size_t e_idx=0; (e_idx < m_scores.size()) && (score_entry <= 10); e_idx++ )
+        if ( m_scores.size() > 0 )
         {
-            WtScoreEntry entry =  m_scores[e_idx];
-            if ( entry.game_mode == m_game_mode_titles[m_selected_mode] )
+            for( size_t e_idx=0; (e_idx < m_scores.size()) && (score_entry <= 10); e_idx++ )
             {
-                draw_entry( score_entry, entry );
-                score_entry++;
+                WtScoreEntry entry =  m_scores[e_idx];
+                if ( entry.game_mode == m_game_mode_titles[m_selected_mode] )
+                {
+                    draw_entry( score_entry, entry );
+                    score_entry++;
+                }
             }
+        }
+        else
+        {
+            std::string text = "no highscore entries available";
+            WtDim text_font_size = ACTIVE_WINDOW.get_text_size( text );
+            ACTIVE_WINDOW.draw_text( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (text_font_size.w / 2), (ACTIVE_WINDOW_HEIGHT / 2) - (50) ), text ); 
         }
     }
 
