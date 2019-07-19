@@ -145,7 +145,29 @@ public:
         play_sfx( "", false );
     }
 
+    /**************************
+     *
+     *************************/
+    void play_sound( std::string sfx_name )
+    {
+        play_sfx( sfx_name.append(".ogg"), false );
+    }
 
+    /**************************
+     *
+     *************************/
+    void play_countdown1_sound()
+    {
+        play_sfx( "countdown_1.ogg", false );
+    }
+
+    /**************************
+     *
+     *************************/
+    void play_countdown32_sound()
+    {
+        play_sfx( "countdown_32.ogg", false );
+    }
 private:
     /**************************
      *
@@ -154,23 +176,30 @@ private:
     {
         if ( ! filename.empty() )
         {
-            if ( ! ( ( m_playing ) && ( m_active_file == filename ) ) )
+            if ( is_music )
             {
-                m_active_file = filename;
-                m_is_music = is_music;
-
-                if ( ! m_mute ) 
+                if ( ! ( ( m_playing ) && ( m_active_file == filename ) ) )
                 {
-                    m_playing = true;
-                    if ( is_music )
+                    m_active_file = filename;
+                    m_is_music = is_music;
+
+                    if ( ! m_mute ) 
                     {
+                        m_playing = true;
                         m_sfx_policy.play_music( filename );
                     }
-                    else
-                    {
-                        m_sfx_policy.play_effect( filename );
-                    }
                 }
+            }
+            else
+            {
+                if ( m_playing )
+                    m_sfx_policy.toggle_pause( true );
+
+                if ( ! m_mute ) 
+                    m_sfx_policy.play_effect( filename );
+
+                if ( m_playing )
+                    m_sfx_policy.toggle_pause( false );
             }
         }
     }

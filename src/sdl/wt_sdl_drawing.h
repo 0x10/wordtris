@@ -229,7 +229,15 @@ public:
                 }
 
                 draw_custom_cell_bg( row, col, font_bg );
-                puts_fb( pos.x, pos.y, std::string(1, value), selected_font, font_col );
+                if ( value == '*' )
+                {
+                    draw_custom_cell_bg( row, col,
+                                         "bomb.bmp" );
+                }
+                else
+                {
+                    puts_fb( pos.x, pos.y, std::string(1, value), selected_font, font_col );
+                }
             }
         }
     }
@@ -357,8 +365,14 @@ public:
                 screen_pos.y = working_pos.y - in_cell_y_offset;
 
                 draw_image( working_pos, m_grid_font.size(), "grid_font_bg.bmp" );
-
-                puts_fb( screen_pos.x, screen_pos.y, t, &m_grid_font, {0,0,0,255}  );
+                if ( text == "*" )
+                {
+                    draw_image( working_pos, m_grid_font.size(), "bomb.bmp" );
+                }
+                else
+                {
+                    puts_fb( screen_pos.x, screen_pos.y, t, &m_grid_font, {0,0,0,255}  );
+                }
                 working_pos.x = working_pos.x + m_grid_font.size().w + 2;
             }
         }

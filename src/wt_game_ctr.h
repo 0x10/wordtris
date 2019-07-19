@@ -68,7 +68,8 @@ public:
         m_pause_end_animation(),
         m_current_update_counter(48),
         m_game_state( GAME_STOPPED ),
-        m_hide_hint( false )
+        m_hide_hint( false ),
+        m_bomb_dropped(false)
     {
 
         WtGridAnimationBuilder::construct_pause_animation( m_pause_end_animation );
@@ -167,6 +168,14 @@ private:
                                            m_active.current_row() - 1,
                                            m_active.current_column() ) )
         {
+            if (m_active.current_value() == '*')
+            {
+                if ( ! m_bomb_dropped )
+                {
+                    ACTIVE_SFX.play_sound("bomb");
+                }
+                m_bomb_dropped = false;
+            }
             /* commit ACTIVE to board */
             m_active_mode->insert_stone_at( m_board, 
                                             m_active.current_row(), 
@@ -253,6 +262,14 @@ private:
 
         m_player.letter_dropped( m_active.current_row() - new_row );
         m_active.drop_at( new_row );
+        if (m_active.current_value() == '*')
+        {
+            if ( ! m_bomb_dropped )
+            {
+                ACTIVE_SFX.play_sound("bomb");
+                m_bomb_dropped = true;
+            }
+        }
     }
 
     /**************************
@@ -452,6 +469,7 @@ private:
     uint8_t             m_current_update_counter;
     wt_game_state       m_game_state;
     bool                m_hide_hint;
+    bool                m_bomb_dropped;
 };
 
 

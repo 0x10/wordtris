@@ -109,7 +109,14 @@ public:
                 char val = board.get_cell( i, j );
                 if ( val != WtBoard::empty_cell )
                 {
-                    DrawingPolicy::draw_at_grid( WtBoard::row_count-i, j, val );
+                    if ( val == '*')
+                    {
+                        DrawingPolicy::draw_at_grid( WtBoard::row_count-i, j, val );
+                    }
+                    else
+                    {
+                        DrawingPolicy::draw_at_grid( WtBoard::row_count-i, j, val );
+                    }                    
                 }
                 else
                 {
