@@ -53,7 +53,8 @@ public:
             success = false;
         }
 
-        Mix_VolumeMusic( MIX_MAX_VOLUME );
+        Mix_Volume(-1, MIX_MAX_VOLUME);
+        Mix_VolumeMusic( MIX_MAX_VOLUME-(MIX_MAX_VOLUME/4) );
 
         return success;
     }

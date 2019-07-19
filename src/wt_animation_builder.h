@@ -60,9 +60,10 @@ public:
                                                                                                            true,
                                                                                                             "Level  Up!", 
                                                                             "grid_inverse" ) ),
-                                                 WtTime::from_milliseconds(200), 2 );
+                                                 WtTime::from_milliseconds(200), 2, "levelup" );
         animation.push_back( step );
         step.content.font = "grid";
+        step.initial_sfx = "";
         animation.push_back( step );
         step.content.font = "grid_inverse";
         animation.push_back( step );

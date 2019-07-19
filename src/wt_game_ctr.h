@@ -141,7 +141,10 @@ private:
         }
 
         if ( m_game_state == GAME_ANIMATION_RUNNING )
+        {
             ACTIVE_WINDOW.draw_button( m_pause_btn );
+            ACTIVE_WINDOW.draw_button( m_settings_bg );
+        }
     }
 
     /**************************
