@@ -76,7 +76,8 @@ public:
                                              std::vector<char> letter_data,
                                              const uint8_t drop_until_row,
                                              const uint8_t col_offset,
-                                             WtTime::TimeType speed_per_row )
+                                             WtTime::TimeType speed_per_row,
+                                             std::string init_sfx="" )
     {
         const std::string font = "grid_inverse";
         for ( size_t draw_idx = 1;
@@ -91,15 +92,33 @@ public:
                 std::vector<char> row_cells(it, letter_data.end());
 
                 WtAnimatableGridContent step_content( 1, col_offset, draw_idx, col_count, font, row_cells );
-                WtGridAnimation::GridAnimationStep step_next( step_content, speed_per_row);
-                animation.push_back( step_next );
+                if ( draw_idx == 1 )
+                {
+                    WtGridAnimation::GridAnimationStep step_next( step_content, speed_per_row, 0, init_sfx );
+                    animation.push_back( step_next );
+                }
+                else
+                {
+                    WtGridAnimation::GridAnimationStep step_next( step_content, speed_per_row );
+                    animation.push_back( step_next );
+                }
+                
+                
             }
             else
             {
                 WtAnimatableGridContent letter( draw_idx-row_count, col_offset, row_count, col_count,
                                                      font, letter_data );
-                WtGridAnimation::GridAnimationStep step_next( letter, speed_per_row);
-                animation.push_back( step_next );
+                if ( draw_idx == 1 )
+                {
+                    WtGridAnimation::GridAnimationStep step_next( letter, speed_per_row, 0, init_sfx );
+                    animation.push_back( step_next );
+                }
+                else
+                {
+                    WtGridAnimation::GridAnimationStep step_next( letter, speed_per_row );
+                    animation.push_back( step_next );
+                }
             }
         }
     }
@@ -160,7 +179,7 @@ public:
                                             row_count, col_count_3,
                                             cells_three,
                                             final_row, 0,
-                                            WtTime::from_milliseconds(30) );
+                                            WtTime::from_milliseconds(30), "countdown_32" );
 
         WtAnimatableGridContent three( final_row, 0, row_count, WtBoard::col_count,
                                        font, cells_three );
@@ -173,11 +192,11 @@ public:
                                             row_count, col_count_2,
                                             cells_two,
                                             final_row, 1,
-                                            WtTime::from_milliseconds(30) );
+                                            WtTime::from_milliseconds(30), "countdown_32" );
 
         WtAnimatableGridContent two( final_row, 1, row_count, WtBoard::col_count-2,
                                      font, cells_two );
-        WtGridAnimation::GridAnimationStep step_two( two, WtTime::from_milliseconds(300));
+        WtGridAnimation::GridAnimationStep step_two( two, WtTime::from_milliseconds(300), 0 );
         pause_animation.push_back( step_two );
 
 
@@ -186,11 +205,11 @@ public:
                                             row_count, col_count_1,
                                             cells_one,
                                             final_row, 2,
-                                            WtTime::from_milliseconds(30) );
+                                            WtTime::from_milliseconds(30), "countdown_1" );
 
         WtAnimatableGridContent one( final_row, 2, row_count, WtBoard::col_count-4,
                                      font, cells_one );
-        WtGridAnimation::GridAnimationStep step_one( one, WtTime::from_milliseconds(300));
+        WtGridAnimation::GridAnimationStep step_one( one, WtTime::from_milliseconds(300), 0 );
 
         pause_animation.push_back( step_one );
     }

@@ -25,10 +25,11 @@ template<typename animation_content>
 class WtAnimationStep
 {
 public:
-    WtAnimationStep( animation_content c, const WtTime::TimeType duration, const size_t rep_count=0 ) :
+    WtAnimationStep( animation_content c, const WtTime::TimeType duration, const size_t rep_count=0, const std::string initsfx="") :
         content( c ),
         step_duration( duration ),
-        repeat_count( rep_count )
+        repeat_count( rep_count ),
+        initial_sfx(initsfx)
     {}
 
     ~WtAnimationStep() {}
@@ -37,6 +38,7 @@ public:
     animation_content content;
     WtTime::TimeType  step_duration;
     size_t            repeat_count;
+    std::string       initial_sfx;
 };
 
 /**************************
@@ -58,11 +60,11 @@ public:
     }
 
 public:
-    WtAnimationIf() :
+    WtAnimationIf( std::string bg_music="game_bg_music.ogg" ) :
         WtViewIf( "#172d4a", false,
                   WtTime::TimeType(0),
                   nullptr,
-                  "game_bg_music.ogg" ),
+                  bg_music ),
         m_animation_steps(),
         m_a_idx( 0 ) {}
     virtual ~WtAnimationIf() {}
@@ -115,6 +117,10 @@ public:
     {
         if ( m_a_idx < m_animation_steps.size() )
         {
+            if ( m_animation_steps[m_a_idx].initial_sfx != "" )
+            {
+                ACTIVE_SFX.play_sound(m_animation_steps[m_a_idx].initial_sfx);
+            }
             draw_animation_step( m_animation_steps[m_a_idx] );
 
             ACTIVE_WINDOW.update();

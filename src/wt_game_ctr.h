@@ -65,7 +65,7 @@ public:
                        WtDim( ACTIVE_WINDOW_WIDTH, 80 ),
                        "#112238",
                        [](){} ),
-        m_pause_end_animation(),
+        m_pause_end_animation(""),
         m_current_update_counter(48),
         m_game_state( GAME_STOPPED ),
         m_hide_hint( false ),

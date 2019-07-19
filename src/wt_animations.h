@@ -117,8 +117,8 @@ public:
     }
 
 public:
-    WtGridAnimation() :
-        WtAnimationIf<WtAnimatableGridContent>()
+    WtGridAnimation( std::string bg_music="game_bg_music.ogg" ) :
+        WtAnimationIf<WtAnimatableGridContent>( bg_music )
     {
     }
     ~WtGridAnimation() {}
