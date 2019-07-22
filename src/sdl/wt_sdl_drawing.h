@@ -44,8 +44,8 @@ protected:
         m_renderer( 0 ),
         m_bg_img_path( ""),
         m_theme("default"),
-        m_grid_font( "grid", GRID_FONT_SIZE, GRID_FONT_SIZE, SDL_ASSETS"SourceSansPro-Light.ttf", true ),
-        m_text_font( "text", TEXT_FONT_SIZE, TEXT_FONT_SIZE, SDL_ASSETS"SourceSansPro-Light.ttf", true ),
+        m_grid_font( "grid", GRID_FONT_SIZE, GRID_FONT_SIZE, SDL_ASSETS"Muli-Bold.ttf", 42, true ),
+        m_text_font( "text", TEXT_FONT_SIZE, TEXT_FONT_SIZE, SDL_ASSETS"Muli.ttf", TEXT_FONT_SIZE, true ),
         m_texture_cache()
     {
 
@@ -453,8 +453,8 @@ private:
             if ( c != '\0' )
             {
                 WtDim c_size = font->text_size( std::string(1, c) );
-                in_cell_x_offset = (static_cast<ssize_t>(font->width())/2)-(c_size.w/2);
-                in_cell_y_offset = ((c_size.h - static_cast<ssize_t>(font->height())) / 2) + 1;
+                in_cell_x_offset = (static_cast<ssize_t>(font->width())/2)-(c_size.w/2) - 1;
+                in_cell_y_offset = ((c_size.h - static_cast<ssize_t>(font->height())) / 2) + 4;
             }
             screen_pos.x = screen_pos.x + in_cell_x_offset;
             screen_pos.y = screen_pos.y - in_cell_y_offset;

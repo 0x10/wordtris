@@ -31,6 +31,7 @@ public:
                size_t w=0,
                size_t h=0,
                std::string filename="",
+               size_t font_size =0,
                bool is_ttf=false ) :
         m_name( name ),
         m_font_w( w ),
@@ -38,7 +39,8 @@ public:
         m_fname( filename ),
         m_font_data(),
         m_is_ttf( is_ttf ),
-        m_ttf_font(NULL)
+        m_ttf_font(NULL),
+        m_font_size(font_size)
     {
     }
     ~WtSdlFont()
@@ -98,7 +100,7 @@ public:
             if ( m_ttf_font == NULL )
             {
                 std::cout << "load font\n";
-                m_ttf_font = TTF_OpenFont( m_fname.c_str(), m_font_w ); 
+                m_ttf_font = TTF_OpenFont( m_fname.c_str(), m_font_size ); 
                 if( m_ttf_font == NULL ) 
                 { 
                     std::cerr << "Failed to load font: " << TTF_GetError() << std::endl;
@@ -272,6 +274,7 @@ private:
     std::vector<SDL_Texture*>   m_font_data;
     bool                        m_is_ttf;
     TTF_Font*                   m_ttf_font;
+    size_t                      m_font_size;
 };
 
 #endif /* _WT_SDL_FONT_H_ */

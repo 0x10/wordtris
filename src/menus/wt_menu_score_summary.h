@@ -26,7 +26,7 @@ public:
         m_leave_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (138 / 2), (ACTIVE_WINDOW_HEIGHT - (ACTIVE_WINDOW_HEIGHT / 4))+(124/2) ), 
                      //WtDim(100, 100), 
                      WtDim(138, 124), 
-                     "next_btn.bmp",
+                     "finish_btn.bmp",
                      WT_BIND_EVENT_HANDLER( WtMenuScoreSummary::leave ) ),
         m_textbox( WtCoord( (ACTIVE_WINDOW_WIDTH - 379) / 2,
                             ((ACTIVE_WINDOW_HEIGHT / 2) - (608 / 2)) - 50 ),

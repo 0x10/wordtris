@@ -118,6 +118,13 @@ private:
         ACTIVE_WINDOW.draw_board( m_board, 
                                   m_active,
                                   STORAGE.get_settings().show_support_grid );
+
+        if ( m_game_state == GAME_ANIMATION_RUNNING )
+        {
+            ACTIVE_WINDOW.draw_button( m_settings_bg );
+            ACTIVE_WINDOW.draw_button( m_pause_btn );
+        }
+        
         if ( STORAGE.get_settings().show_next_stone )
             ACTIVE_WINDOW.draw_hint( m_active_mode->letter_after_next() );
 
@@ -138,12 +145,6 @@ private:
         else
         {
             m_hide_hint = true;
-        }
-
-        if ( m_game_state == GAME_ANIMATION_RUNNING )
-        {
-            ACTIVE_WINDOW.draw_button( m_pause_btn );
-            ACTIVE_WINDOW.draw_button( m_settings_bg );
         }
     }
 
