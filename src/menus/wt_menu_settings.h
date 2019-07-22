@@ -22,6 +22,7 @@
 #include "widgets/wt_tristate_button.h"
 #include "widgets/wt_checkbox_button.h"
 
+#include "menus/wt_menu_credits.h"
 
 class WtMenuSettings : public WtViewIf
 {
@@ -89,7 +90,9 @@ public:
         m_settings_logo( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (133 / 2), 128 ),
                        WtDim( 133, 133 ),
                        "settings_btn.bmp",
-                       [](){} )
+                       [](){} ),
+        m_info_btn( WtCoord( (ACTIVE_WINDOW_WIDTH - 60) - 10, 10 ), WtDim(60,60), "icon_info.bmp", WT_BIND_EVENT_HANDLER( WtMenuSettings::enter_credits )),
+        m_credits_menu()
     {
         for ( size_t idx = 0; idx < WtL10n::get_available_languages().size(); idx++ )
         {
@@ -137,6 +140,7 @@ public:
         add_button( m_seperator0 );
         add_button( m_seperator1 );
         add_button( m_settings_logo );
+        add_button( m_info_btn );
     }
 
     ~WtMenuSettings()
@@ -242,6 +246,14 @@ private: // no copy allowed
     }
 
     /**************************
+     *
+     *************************/
+    void enter_credits()
+    {
+        enter_child_menu( m_credits_menu );
+    }
+
+    /**************************
      * signal
      *************************/
     void entered_view()
@@ -299,6 +311,8 @@ private:
     WtButton         m_seperator1;
     WtButton         m_settings_bg;
     WtButton         m_settings_logo;
+    WtButton         m_info_btn;
+    WtMenuCredits    m_credits_menu;
 };
 
 #endif /* _WT_MENU_SETTINGS_H_ */
