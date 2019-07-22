@@ -100,7 +100,7 @@ public:
                         SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
                         SDL_SetRenderDrawBlendMode(m_renderer, SDL_BLENDMODE_BLEND);
                         SDL_SetHint( SDL_HINT_RENDER_LOGICAL_SIZE_MODE, "1" );
-                        SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "nearest" );
+                        SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "best" );
                         TTF_Init();
                         set_bg("#112238");
 
