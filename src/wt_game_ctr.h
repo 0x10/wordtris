@@ -125,7 +125,7 @@ private:
             ACTIVE_WINDOW.draw_button( m_pause_btn );
         }
         
-        if ( STORAGE.get_settings().show_next_stone )
+        if (( STORAGE.get_settings().show_next_stone ) || ( m_active_mode->get_id_string() == "Guess it" ))
             ACTIVE_WINDOW.draw_hint( m_active_mode->letter_after_next() );
 
         ACTIVE_WINDOW.draw_player_stat( m_player );

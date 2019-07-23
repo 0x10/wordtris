@@ -109,14 +109,7 @@ public:
                 char val = board.get_cell( i, j );
                 if ( val != WtBoard::empty_cell )
                 {
-                    if ( val == '*')
-                    {
-                        DrawingPolicy::draw_at_grid( WtBoard::row_count-i, j, val );
-                    }
-                    else
-                    {
-                        DrawingPolicy::draw_at_grid( WtBoard::row_count-i, j, val );
-                    }                    
+                    DrawingPolicy::draw_at_grid( WtBoard::row_count-i, j, val );
                 }
                 else
                 {
@@ -171,7 +164,7 @@ public:
                                    icon_info_size,
                                    "icon_info.bmp" );
 
-        const size_t line_length = 40;
+        const size_t line_length = 30;
         size_t line_count = (hint.length() / line_length) + ( hint.length() % line_length > 0 ? 1 : 0 );
         for(size_t l_idx = 0; l_idx < line_count; l_idx++ )
         {

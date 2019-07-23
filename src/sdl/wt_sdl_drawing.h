@@ -206,24 +206,24 @@ public:
             else
             {
                 std::string font_bg = "grid_font_bg.bmp";
-                SDL_Color font_col = {0, 0, 0, 255};
+                SDL_Color font_col = {0x12, 0x23, 0x39, 255};
 
                 if ( font != "grid" )
                 {
                     if ( font == "active_grid" )
                     {
                         font_bg = "grid_font_bg_active.bmp";
-                        font_col.r = 0;
-                        font_col.g = 0;
-                        font_col.b = 0;
+                        font_col.r = 0x12;
+                        font_col.g = 0x23;
+                        font_col.b = 0x39;
                         font_col.a = 255;
                     }
                     else
                     {
                         font_bg = "grid_font_bg_inverse.bmp";
-                        font_col.r = 0;
-                        font_col.g = 0;
-                        font_col.b = 0;
+                        font_col.r = 0x12;
+                        font_col.g = 0x23;
+                        font_col.b = 0x39;
                         font_col.a = 255;
                     }
                 }
@@ -371,7 +371,7 @@ public:
                 }
                 else
                 {
-                    puts_fb( screen_pos.x, screen_pos.y, t, &m_grid_font, {0,0,0,255}  );
+                    puts_fb( screen_pos.x, screen_pos.y, t, &m_grid_font, {0x12, 0x23, 0x39, 255}  );
                 }
                 working_pos.x = working_pos.x + m_grid_font.size().w + 2;
             }

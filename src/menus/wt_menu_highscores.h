@@ -22,7 +22,7 @@ class WtMenuHighscores : public WtViewIf
 {
 public:
     WtMenuHighscores() :
-        WtViewIf(),
+        WtViewIf("#122339"),
         m_leave_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (138 / 2), (ACTIVE_WINDOW_HEIGHT - (ACTIVE_WINDOW_HEIGHT / 4))+(124/2) ), 
                      //WtDim(100, 100), 
                      WtDim(138, 124), 
@@ -45,11 +45,13 @@ public:
         m_selected_mode( 0 )
     {
         add_button( m_leave_btn );
+#ifdef WT_PRO_MODE
         if ( m_game_mode_titles.size() > 1 )
         {
             add_button( m_left_btn );
             add_button( m_right_btn );
         }
+#endif
         add_button( m_title_btn );
     }
     ~WtMenuHighscores() {}
@@ -126,7 +128,11 @@ private: // no copy allowed
      *************************/
     void entered_view()
     {
+#ifdef WT_PRO_MODE
         m_selected_mode = GAME_MODE_CTR.mode_idx_from_string( STORAGE.get_settings().game_mode );
+#else
+        m_selected_mode = GAME_MODE_CTR.mode_idx_from_string( "WordtrisClassic" );
+#endif
         m_title_btn.set_label( m_game_mode_titles[m_selected_mode] );
     }
 

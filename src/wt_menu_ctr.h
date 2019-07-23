@@ -57,7 +57,11 @@ public:
         m_game_selection( WtCoord( 0, (ACTIVE_WINDOW_HEIGHT / 2) - (297 / 2) ),
                           WtDim( ACTIVE_WINDOW_WIDTH, 297 ),
                           GAME_MODE_CTR.get_available_mode_titles(),
+#ifdef WT_PRO_MODE
                           GAME_MODE_CTR.mode_idx_from_string( STORAGE.get_settings().game_mode ),
+#else
+                          GAME_MODE_CTR.mode_idx_from_string( "WordtrisClassic" ),                     
+#endif
                           [](size_t){},
                           false )
     {

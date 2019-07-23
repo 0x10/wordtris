@@ -268,34 +268,34 @@ private: // no copy allowed
      *************************/
     virtual void update_view()
     {
-        std::string credits = "Credits === "
-                              "Game Design / Idea === "
-                              "Christian Kranz +++ "
-                              "Witold Krzeslowski === "
-                              "Coding === "
-                              "Christian Kranz === "
-                              "Android Support === "
-                              "Witold Krzeslowski === "
-                              "UI Design === "
-                              "Svenja Dittrich === "
-                              "Music === "
-                              "LittleRobotSoundFactory @ freesound.org +++ "
-                              "Valo @ freesound.org +++ "
-                              "Christian Kranz ==="
-                              "        "
-                              "Special thanks to: "
-                              "       A.          "
-                              " and all family and friends."
-                              "                   ";
-        static int32_t pos = ACTIVE_WINDOW_WIDTH;
-        if ( ACTIVE_WINDOW.draw_sine_scroller_text( credits, WtCoord( pos, 60 ) ) )
-        {
-            pos = ACTIVE_WINDOW_WIDTH;
-        }
-        else
-        {
-            pos = (pos - 1);
-        }
+        // std::string credits = "Credits === "
+        //                       "Game Design / Idea === "
+        //                       "Christian Kranz +++ "
+        //                       "Witold Krzeslowski === "
+        //                       "Coding === "
+        //                       "Christian Kranz === "
+        //                       "Android Support === "
+        //                       "Witold Krzeslowski === "
+        //                       "UI Design === "
+        //                       "Svenja Dittrich === "
+        //                       "Music === "
+        //                       "LittleRobotSoundFactory @ freesound.org +++ "
+        //                       "Valo @ freesound.org +++ "
+        //                       "Christian Kranz ==="
+        //                       "        "
+        //                       "Special thanks to: "
+        //                       "       A.          "
+        //                       " and all family and friends."
+        //                       "                   ";
+        // static int32_t pos = ACTIVE_WINDOW_WIDTH;
+        // if ( ACTIVE_WINDOW.draw_sine_scroller_text( credits, WtCoord( pos, 60 ) ) )
+        // {
+        //     pos = ACTIVE_WINDOW_WIDTH;
+        // }
+        // else
+        // {
+        //     pos = (pos - 1);
+        // }
     }
 
 private:
