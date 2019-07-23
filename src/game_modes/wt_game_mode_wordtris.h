@@ -209,7 +209,17 @@ public:
      *************************/
     std::string get_min_word_length()
     {
-        return std::to_string( min_word_length() );
+        std::string result = std::to_string( min_word_length() );
+
+        switch( min_word_length() )
+        {
+            case 3: result = WtL10n_tr("three"); break;
+            case 4: result = WtL10n_tr("four"); break;
+            case 5: result = WtL10n_tr("five"); break;
+            default: break;
+        }
+
+        return result;
     }
 
     /**************************

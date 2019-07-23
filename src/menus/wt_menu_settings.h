@@ -87,9 +87,9 @@ public:
                        WtDim( ACTIVE_WINDOW_WIDTH, 80 ),
                        "#172d4a",
                        [](){} ),
-        m_settings_logo( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (133 / 2), 128 ),
-                       WtDim( 133, 133 ),
-                       "settings_btn.bmp",
+        m_settings_logo( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (134 / 2), 128 ),
+                       WtDim( 134, 134 ),
+                       "settings_logo.bmp",
                        [](){} ),
         m_info_btn( WtCoord( (ACTIVE_WINDOW_WIDTH - 60) - 10, 10 ), WtDim(60,60), "icon_info.bmp", WT_BIND_EVENT_HANDLER( WtMenuSettings::enter_credits )),
         m_credits_menu()

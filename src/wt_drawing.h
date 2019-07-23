@@ -26,6 +26,8 @@
 
 #include "wt_string_utils.h"
 
+
+
 #define WINDOW( Policy )  WtDrawing<Policy>::instance()
 
 template<typename DrawingPolicy>
@@ -164,15 +166,24 @@ public:
                                    icon_info_size,
                                    "icon_info.bmp" );
 
-        const size_t line_length = 30;
-        size_t line_count = (hint.length() / line_length) + ( hint.length() % line_length > 0 ? 1 : 0 );
-        for(size_t l_idx = 0; l_idx < line_count; l_idx++ )
+        const ssize_t line_length = (icon_info_pos.x + icon_info_size.w)+350;
+        
+        std::vector<std::string> hint_words = split(hint);
+        WtCoord cursor_pos(icon_info_pos.x + icon_info_size.w, icon_info_pos.y + 5);
+        for ( size_t w_idx = 0; w_idx<hint_words.size(); w_idx++)
         {
-            std::string line = hint.substr( l_idx*line_length, line_length );
-            ssize_t line_offset = (static_cast<ssize_t>(l_idx) * DrawingPolicy::get_font_size().h * 2);
-            DrawingPolicy::draw_text( WtCoord( icon_info_pos.x + icon_info_size.w + 10,
-                                               (icon_info_pos.y + 5) + /*(icon_info_size.h / 2 - (DrawingPolicy::get_font_size().h / 2))) +*/ line_offset  ),
-                                      line );
+            std::string word = hint_words[w_idx];
+            word.append(" ");
+            WtDim w_sz = DrawingPolicy::get_text_size( word );
+           // std::cout << "word = " << word << " sz = " << w_sz.w << " cursor_pos = " << cursor_pos << std::endl;
+            if ( (cursor_pos.x + w_sz.w) > line_length )
+            {
+                cursor_pos.x = icon_info_pos.x + icon_info_size.w;
+                cursor_pos.y += (DrawingPolicy::get_font_size().h * 2);
+            }
+            DrawingPolicy::draw_text( cursor_pos,
+                                      word );
+            cursor_pos.x += w_sz.w;
         }
     }
 
