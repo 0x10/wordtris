@@ -29,7 +29,8 @@ public:
               std::string button_image,
               OnTapDelegate on_tap=nullptr,
               std::string label="",
-              WtCoord label_pos=WtCoord(0,0) ) :
+              WtCoord label_pos=WtCoord(0,0),
+              WtFont font=WtFont() ) :
 
         m_clickable( pos, size,
                      WT_BIND_EVENT_HANDLER_1( WtButton::on_click ) ),
@@ -39,7 +40,8 @@ public:
         m_img( button_image ),
         m_label( label ),
         m_label_pos( label_pos ),
-        m_on_tap( on_tap )
+        m_label_font(font),
+        m_on_tap( on_tap )        
     {
     }
     
@@ -88,6 +90,15 @@ public:
     WtCoord label_pos()
     {
         return m_label_pos;
+    }
+
+
+    /**************************
+     *
+     *************************/
+    WtFont label_font()
+    {
+        return m_label_font;
     }
 
     /**************************
@@ -186,8 +197,10 @@ private:
     std::string m_img;
     std::string m_label;
     WtCoord m_label_pos;
+    WtFont m_label_font;
 
     OnTapDelegate m_on_tap;
+
 };
 
 #endif /* _WT_BUTTON_H_ */

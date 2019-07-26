@@ -32,6 +32,7 @@ class WtDrawingPolicySdl
 {
 private:
     static const uint8_t TEXT_FONT_SIZE = 24;
+    static const uint8_t TINY_TEXT_FONT_SIZE = 9;
     static const uint8_t GRID_FONT_SIZE = 56;
     static const uint8_t GRID_OFFSET_X = 78;
     static const uint8_t GRID_OFFSET_Y = 127-GRID_FONT_SIZE;
@@ -46,6 +47,7 @@ protected:
         m_theme("default"),
         m_grid_font( "grid", GRID_FONT_SIZE, GRID_FONT_SIZE, SDL_ASSETS"Muli-Bold.ttf", 42, true ),
         m_text_font( "text", TEXT_FONT_SIZE, TEXT_FONT_SIZE, SDL_ASSETS"Muli.ttf", TEXT_FONT_SIZE, true ),
+        m_text_font_tiny( "text_tiny", TINY_TEXT_FONT_SIZE, TINY_TEXT_FONT_SIZE, SDL_ASSETS"Muli.ttf", TINY_TEXT_FONT_SIZE, true ),
         m_texture_cache()
     {
 
@@ -105,6 +107,7 @@ public:
                         set_bg("#112238");
 
                         m_grid_font.load_font_data( m_theme, m_renderer );
+                        m_text_font_tiny.load_font_data( m_theme, m_renderer );
                         m_text_font.load_font_data( m_theme, m_renderer );
                         success = true;
                     }
@@ -123,6 +126,7 @@ public:
         std::cout << "destroy sdl..\n";
 
         m_text_font.close();
+        m_text_font_tiny.close();
         m_grid_font.close();
 
         clear_texture_cache();
@@ -164,6 +168,7 @@ public:
         // todo base class themeable
         m_grid_font.set_theme( name, m_renderer );
         m_text_font.set_theme( name, m_renderer );
+        m_text_font_tiny.set_theme( name, m_renderer );
         m_theme = name;
         // TODO check if available and if not keep old
         
@@ -343,11 +348,16 @@ public:
       *************************/   
     void draw_text( const WtCoord     pos,
                     const std::string text,
-                    const std::string font="text")
+                    const std::string font="text",
+                    const std::string font_color="#4a90e2" )
     {
         if ( font == "text" )
         {
-            puts_fb( pos.x, pos.y, text, &m_text_font );
+            puts_fb( pos.x, pos.y, text, &m_text_font, WtSdlUtils::get_color_from_string( font_color ) );
+        }
+        else if ( font == "text_tiny" )
+        {
+            puts_fb( pos.x, pos.y, text, &m_text_font_tiny, WtSdlUtils::get_color_from_string( font_color ) );
         }
         else
         {
@@ -405,9 +415,22 @@ public:
     /**************************
      *
      *************************/
-    WtDim get_text_size( const std::string &str )
+    const WtSdlFont& get_text_font_tiny()
     {
-        return m_text_font.text_size( str );
+        return m_text_font_tiny;
+    }
+
+    /**************************
+     *
+     *************************/
+    WtDim get_text_size( const std::string &str, const std::string font="text" )
+    {
+        if ( font == "text" )
+            return m_text_font.text_size( str );
+        else if ( font == "text_tiny" )
+            return m_text_font_tiny.text_size( str );
+        else
+            return m_grid_font.text_size( str );
     }
 
     /**************************
@@ -645,6 +668,7 @@ private:
 
     WtSdlFont     m_grid_font;
     WtSdlFont     m_text_font;
+    WtSdlFont     m_text_font_tiny;
 
     SDL_TextureCache m_texture_cache;
 };

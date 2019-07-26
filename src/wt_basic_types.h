@@ -144,4 +144,20 @@ std::ostream & operator << (std::ostream &out, const WtCoord &c)
 
 
 
+
+/**************************
+ *
+ *************************/
+class WtFont
+{
+public:
+    WtFont( std::string icolor="#4a90e2", std::string ifontname="text" ) :
+        color(icolor),
+        fontname(ifontname) {}
+
+    std::string color;
+    std::string fontname;
+};
+
+
 #endif /* _WT_BASIC_TYPES_H */

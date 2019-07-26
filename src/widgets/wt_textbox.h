@@ -125,6 +125,14 @@ public:
     {
         return m_lines;
     }
+
+    /**************************
+     *
+     *************************/
+    const std::string font() const
+    {
+        return m_font.name();
+    }
 private:
     WtTextbox( const WtTextbox& ); 
     WtTextbox& operator = (const WtTextbox&);

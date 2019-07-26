@@ -28,7 +28,7 @@ public:
     using OnRestartDelegate = std::function<void(void)>;
 private:
     static const size_t offset_x = (ACTIVE_WINDOW_WIDTH / 2);
-    static const ssize_t offset_y = (ACTIVE_WINDOW_HEIGHT / 4) + 150;
+    static const ssize_t offset_y = (ACTIVE_WINDOW_HEIGHT / 8);
            const WtDim  m_standard_btn_size = WtDim( 500, 69 );
 public:
     WtMenuPause( OnRestartDelegate restart_handler,
@@ -40,14 +40,18 @@ public:
                      WtDim(138, 124), 
                      "back_btn.bmp",
                      WT_BIND_EVENT_HANDLER( WtMenuPause::leave ) ),
-        m_redo_btn( WtCoord(ACTIVE_WINDOW_WIDTH / 4, offset_y), 
+        m_redo_btn( WtCoord(ACTIVE_WINDOW_WIDTH / 4, (ACTIVE_WINDOW_HEIGHT / 2)+100 ), 
                     WtDim(100, 100),
                     "redo_btn.bmp",
-                    WT_BIND_EVENT_HANDLER( WtMenuPause::restart_pressed ) ),
-        m_quit_btn( WtCoord(ACTIVE_WINDOW_WIDTH - (ACTIVE_WINDOW_WIDTH / 4) - 100, offset_y),
+                    WT_BIND_EVENT_HANDLER( WtMenuPause::restart_pressed ),
+                    WtL10n_tr("RESTART"),
+                    WtCoord( 0, 100 ) ),
+        m_quit_btn( WtCoord(ACTIVE_WINDOW_WIDTH - (ACTIVE_WINDOW_WIDTH / 4) - 100, (ACTIVE_WINDOW_HEIGHT / 2)+100),
                     WtDim(100, 100),
                     "quit_btn.bmp",
-                    WT_BIND_EVENT_HANDLER( WtMenuPause::quit_pressed ) ),
+                    WT_BIND_EVENT_HANDLER( WtMenuPause::quit_pressed ),
+                    WtL10n_tr("EXIT GAME"),
+                    WtCoord( 0, 100 ) ),
         m_help_btn( WtCoord(offset_x - 158, offset_y+50),
                     WtDim(100, 100),
                     "help_btn.bmp",
@@ -67,9 +71,9 @@ public:
                             WtL10n_tr( "Play music and sounds" ),
                             STORAGE.get_settings().enable_audio,
                             WT_BIND_EVENT_HANDLER_1( WtMenuPause::enable_audio_changed ) ),
-        m_pause_label( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (340 / 2), (ACTIVE_WINDOW_HEIGHT / 4) - 100 ),
-                       WtDim( 340, 56 ),
-                       "label_select.bmp",
+        m_pause_label( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (297 / 2), (ACTIVE_WINDOW_HEIGHT / 8) ),
+                       WtDim( 297, 74 ),
+                       "label_pause.bmp",
                        [](){} ),
         m_restart_handler( restart_handler ),
         m_quit_handler( quit_handler )
@@ -77,7 +81,7 @@ public:
         add_button( m_leave_btn );
         add_button( m_redo_btn );
         add_button( m_quit_btn );
-        add_button( m_seperator0 );
+        //add_button( m_seperator0 );
         //add_button( m_help_btn );
         add_button( m_supporting_grid_btn );
         add_button( m_next_stone_btn );

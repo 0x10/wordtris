@@ -58,7 +58,7 @@ public:
      *************************/
     static SDL_Color get_color_from_string( std::string color )
     {
-        SDL_Color result;
+        SDL_Color result={0x4a, 0x90, 0xe2,255};
         unsigned int r,g,b;
         if ( sscanf(color.c_str(), "#%02x%02x%02x", &r, &g, &b) != 3 )
         {
