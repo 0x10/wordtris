@@ -286,16 +286,21 @@ public:
                 std::string label = button.label();
                 if ( label.find_first_of("#@") != 0 )
                 {
-                    ssize_t text_center_w;
-
                     WtDim font_sz = DrawingPolicy::get_text_size( label );
+                    WtCoord label_pos( button.x() + button.label_pos().x, button.y() + button.label_pos().y);
+                    if ( button.label_centered() )
+                    {
+                        ssize_t text_center_w;
 
-                    text_center_w = font_sz.w / 2;
-                    button_center_x = ( ( button.width() / 2 ) + button.x() ) + button.label_pos().x;
+                        text_center_w = font_sz.w / 2;
+                        button_center_x = ( ( button.width() / 2 ) + button.x() ) + button.label_pos().x;
+                        label_pos.x = button_center_x - text_center_w;                        
+                    }
+
                     button_center_y = ( ( button.height() / 2 ) + button.y() ) + button.label_pos().y;
+                    label_pos.y = button_center_y - (font_sz.h/2);
 
-                    DrawingPolicy::draw_text( WtCoord( button_center_x - text_center_w,
-                                                       button_center_y - (font_sz.h/2)  ),
+                    DrawingPolicy::draw_text( label_pos,
                                               label,
                                               button.label_font().fontname,
                                               button.label_font().color );

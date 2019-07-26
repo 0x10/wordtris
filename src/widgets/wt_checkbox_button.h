@@ -36,7 +36,9 @@ public:
                   ( checked ? m_checkbox_btn_checked : m_checkbox_btn_unchecked ),
                   WT_BIND_EVENT_HANDLER( WtCheckboxButton::on_click ),
                   label,
-                  WtCoord( -300,0)),
+                  WtCoord( -350,0),
+                  WtFont(),
+                  false ),
         m_checked( checked ),
         m_on_tap( on_tap )
     {

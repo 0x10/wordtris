@@ -30,7 +30,8 @@ public:
               OnTapDelegate on_tap=nullptr,
               std::string label="",
               WtCoord label_pos=WtCoord(0,0),
-              WtFont font=WtFont() ) :
+              WtFont font=WtFont(),
+              bool label_centered=true ) :
 
         m_clickable( pos, size,
                      WT_BIND_EVENT_HANDLER_1( WtButton::on_click ) ),
@@ -41,6 +42,7 @@ public:
         m_label( label ),
         m_label_pos( label_pos ),
         m_label_font(font),
+        m_label_centered(label_centered),
         m_on_tap( on_tap )        
     {
     }
@@ -100,6 +102,16 @@ public:
     {
         return m_label_font;
     }
+
+
+    /**************************
+     *
+     *************************/
+    bool label_centered()
+    {
+        return m_label_centered;
+    }
+
 
     /**************************
      *
@@ -198,6 +210,7 @@ private:
     std::string m_label;
     WtCoord m_label_pos;
     WtFont m_label_font;
+    bool m_label_centered;
 
     OnTapDelegate m_on_tap;
 
