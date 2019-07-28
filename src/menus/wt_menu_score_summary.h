@@ -23,11 +23,13 @@ class WtMenuScoreSummary : public WtViewIf
 public:
     WtMenuScoreSummary() :
         WtViewIf( "#122339", false ),
-        m_leave_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (138 / 2), (ACTIVE_WINDOW_HEIGHT - (ACTIVE_WINDOW_HEIGHT / 4))+(124/2) ), 
-                     //WtDim(100, 100), 
-                     WtDim(138, 124), 
-                     "finish_btn.bmp",
-                     WT_BIND_EVENT_HANDLER( WtMenuScoreSummary::leave ) ),
+        m_leave_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (138 / 2), (ACTIVE_WINDOW_HEIGHT - (ACTIVE_WINDOW_HEIGHT / 4))+(124/2) ),
+                     WtDim( 138, 124 ),
+                     "start_btn.bmp",
+                     WT_BIND_EVENT_HANDLER( WtMenuScoreSummary::leave ),
+                     WtL10n_tr( "D O N E"),
+                     WtCoord( -20, 25 ),
+                     WtFont( "#498fe1", "text_big" ) ),
         m_textbox( WtCoord( (ACTIVE_WINDOW_WIDTH - 379) / 2,
                             ((ACTIVE_WINDOW_HEIGHT / 2) - (608 / 2)) - 50 ),
                    "", ACTIVE_WINDOW.get_text_font() ),
