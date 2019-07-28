@@ -26,6 +26,7 @@
 #include <sstream>
 
 #include <algorithm> 
+#include <regex>
 #include <functional> 
 #include <cctype>
 #include <locale>
@@ -143,6 +144,66 @@ public:
     {
         WtL10n::instance().m_language_observer.push_back( lco );
     }
+
+    /**************************
+     *
+     *************************/
+    static std::string localize_specials( const std::string sequence )
+    {
+        std::string locale_seq = sequence;
+
+        std::string lang = WtL10n::get_language_code();
+        if ( lang == "de" )
+        {
+//        m_special_letters_de(",.:"), //ae, oe, ue
+            const std::string ae = "Ä";
+            const std::string oe = "Ö";
+            const std::string ue = "Ü";
+            locale_seq = std::regex_replace(locale_seq, std::regex(","), ae );
+            locale_seq = std::regex_replace(locale_seq, std::regex("\\."), oe );
+            locale_seq = std::regex_replace(locale_seq, std::regex(":"), ue );
+        }
+        else if ( lang == "fr" )
+        {
+//        m_special_letters_fr("=+-;@!<>/'#$%^"), //é, à, è, ù, â, ê, î, ô, û, ë, ï, ü, ÿ, ç            
+            const std::string e_acute = "É";
+            const std::string a_grave = "À";
+            const std::string e_grave = "È";
+            const std::string u_grave = "Ù";
+            const std::string a_circ = "Â";
+            const std::string e_circ = "Ê";
+            const std::string i_circ = "Î";
+            const std::string o_circ = "Ô";
+            const std::string u_circ = "û";
+            const std::string e_dia = "Ë";
+            const std::string i_dia = "Ï";
+            const std::string u_dia = "Ü";
+            const std::string y_dia = "Ÿ";
+            const std::string c_ced = "Ç";
+            locale_seq = std::regex_replace(locale_seq, std::regex("="), e_acute );
+            locale_seq = std::regex_replace(locale_seq, std::regex("\\+"), a_grave );
+            locale_seq = std::regex_replace(locale_seq, std::regex("-"), e_grave );
+            locale_seq = std::regex_replace(locale_seq, std::regex(";"), u_grave );
+            locale_seq = std::regex_replace(locale_seq, std::regex("@"), a_circ );
+            locale_seq = std::regex_replace(locale_seq, std::regex("!"), e_circ );
+            locale_seq = std::regex_replace(locale_seq, std::regex("<"), i_circ );
+            locale_seq = std::regex_replace(locale_seq, std::regex(">"), o_circ );
+            locale_seq = std::regex_replace(locale_seq, std::regex("/"), u_circ );
+            locale_seq = std::regex_replace(locale_seq, std::regex("'"), e_dia );
+            locale_seq = std::regex_replace(locale_seq, std::regex("#"), i_dia );
+            locale_seq = std::regex_replace(locale_seq, std::regex("\\$"), u_dia );
+            locale_seq = std::regex_replace(locale_seq, std::regex("%"), y_dia );
+            locale_seq = std::regex_replace(locale_seq, std::regex("\\^"), c_ced );
+        }
+        else
+        {
+            // nothing to do
+        }
+
+        return locale_seq;
+    }
+
+
 
     ~WtL10n() {}
 private:

@@ -33,6 +33,8 @@ public:
     WtGameModeWordtris() :
         WtGameModeIf( "WordtrisClassic" ),
         m_letters( "ETAOINSRHDLUCMFYWGPBVKXQJZ" ),
+        m_special_letters_de(",.:"), //ae, oe, ue
+        m_special_letters_fr("=+-;@!<>/'#$%^"), //é, à, è, ù, â, ê, î, ô, û, ë, ï, ü, ÿ, ç
         m_wordlist(),
         m_next_letter(generate_letter())
     {
@@ -486,15 +488,43 @@ private:
 
 
 
+
     /**************************
      *
      *************************/
     char generate_letter()
     {
-                                                   // E  T A O I N S R H D L U C M F Y W G P B V K X Q J Z,?,*
-        std::discrete_distribution<int> distribution {12,9,8,8,7,7,6,6,6,4,4,3,3,2,2,2,2,2,2,1,1,1,1,1,1,1,5,5 };
-        return WtRandom::get_random_letter_of_weight_seq( std::string(m_letters).append("?*"),
-                                                          distribution ); 
+        std::discrete_distribution<int>* distribution;
+        std::string lang = WtL10n::get_language_code();
+
+                                                      // E  T A O I N S R H D L U C M F Y W G P B V K X Q J Z,?,*
+        std::discrete_distribution<int> distribution_en {12,9,8,8,7,7,6,6,6,4,4,3,3,2,2,2,2,2,2,1,1,1,1,1,1,1,5,5 };
+                                                      // E  T A O I N S R H D L U C M F Y W G P B V K X Q J Z,Ä,Ö,Ü,?,*
+        std::discrete_distribution<int> distribution_de {12,9,8,8,7,7,6,6,6,4,4,3,3,2,2,2,2,2,2,1,1,1,1,1,1,1,3,3,3,5,5 };
+                                                      // E  T A O I N S R H D L U C M F Y W G P B V K X Q J Z,é,à,è,ù,â,ê,î,ô,û,ë,ï,ü,ÿ,ç,?,*        
+        std::discrete_distribution<int> distribution_fr {12,9,8,8,7,7,6,6,6,4,4,3,3,2,2,2,2,2,2,1,1,1,1,1,1,1,3,2,2,2,1,1,1,1,1,1,1,1,1,1,5,5 };
+
+
+        std::string letters = m_letters;
+        if ( lang == "de" )
+        {
+            letters.append( m_special_letters_de );
+            distribution = &distribution_de;
+        }
+        else if ( lang == "fr" )
+        {            
+            letters.append( m_special_letters_fr );
+            distribution = &distribution_fr;
+        }
+        else
+        {
+            distribution = &distribution_en;
+        }
+        letters.append("?*");
+
+
+        return WtRandom::get_random_letter_of_weight_seq( letters,
+                                                          *distribution ); 
     }
 
     /**************************
@@ -516,6 +546,8 @@ private:
 
 private:
    const std::string m_letters;
+   const std::string m_special_letters_de;
+   const std::string m_special_letters_fr;
    WtWordList        m_wordlist;
    char              m_next_letter;
 };

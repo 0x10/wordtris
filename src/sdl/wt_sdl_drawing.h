@@ -202,7 +202,8 @@ public:
 
         if ( value >= selected_font->start_symbol() )
         {
-            WtCoord pos = grid_pos_to_screen_pos_text( row, col, value, selected_font );
+            std::string val_str = WtL10n::localize_specials( std::string(1, value) );
+            WtCoord pos = grid_pos_to_screen_pos_text( row, col, val_str, selected_font );
 
             if ( value == ' ' )
             {
@@ -242,7 +243,7 @@ public:
                 }
                 else
                 {
-                    puts_fb( pos.x, pos.y, std::string(1, value), selected_font, font_col );
+                    puts_fb( pos.x, pos.y, val_str, selected_font, font_col );
                 }
             }
         }
@@ -365,7 +366,7 @@ public:
             WtCoord working_pos = pos;
             for ( size_t c_idx = 0; c_idx < text.length(); c_idx++ )
             {
-                std::string t = std::string(1, text[c_idx] );
+                std::string t = WtL10n::localize_specials( std::string(1, text[c_idx] ) );
                 WtCoord screen_pos(0,0);
                 ssize_t in_cell_x_offset = 0;
                 ssize_t in_cell_y_offset = 0;
@@ -466,7 +467,7 @@ private:
     /**************************
      *
      *************************/   
-    WtCoord grid_pos_to_screen_pos_text( uint8_t row, uint8_t col, char c,
+    WtCoord grid_pos_to_screen_pos_text( uint8_t row, uint8_t col, std::string c,
                                     WtSdlFont* font )
     {
         WtCoord screen_pos = grid_pos_to_screen_pos( row, col, font );
@@ -474,9 +475,9 @@ private:
         {
             ssize_t in_cell_x_offset = 0;
             ssize_t in_cell_y_offset = 0;
-            if ( c != '\0' )
+            if ( c != "" )
             {
-                WtDim c_size = font->text_size( std::string(1, c) );
+                WtDim c_size = font->text_size( c );
                 in_cell_x_offset = (static_cast<ssize_t>(font->width())/2)-(c_size.w/2) - 1;
                 in_cell_y_offset = ((c_size.h - static_cast<ssize_t>(font->height())) / 2) + 4;
             }
@@ -496,6 +497,7 @@ private:
             if ( font->is_ttf() )
             {
                 WtCoord pos( x, y );
+
                 WtDim size = font->text_size( str );
                 SDL_Texture* text_tex = nullptr;
                 std::string index = str;

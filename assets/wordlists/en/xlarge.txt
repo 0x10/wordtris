@@ -865,6 +865,7 @@ from
 fuck
 fuel
 full
+fume
 fund
 funk
 fury
