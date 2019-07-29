@@ -32,6 +32,7 @@ class WtDrawingPolicySdl
 {
 private:
     static const uint8_t TEXT_FONT_SIZE = 24;
+    static const uint8_t SMALL_TEXT_FONT_SIZE = 18;
     static const uint8_t TINY_TEXT_FONT_SIZE = 9;
     static const uint8_t BIG_TEXT_FONT_SIZE = 32;
     static const uint8_t GRID_FONT_SIZE = 56;
@@ -50,6 +51,7 @@ protected:
         m_text_font( "text", TEXT_FONT_SIZE, TEXT_FONT_SIZE, SDL_ASSETS"Muli.ttf", TEXT_FONT_SIZE, true ),
         m_text_font_tiny( "text_tiny", TINY_TEXT_FONT_SIZE, TINY_TEXT_FONT_SIZE, SDL_ASSETS"Muli.ttf", TINY_TEXT_FONT_SIZE, true ),
         m_text_font_big( "text_big", BIG_TEXT_FONT_SIZE, BIG_TEXT_FONT_SIZE, SDL_ASSETS"Muli-Bold.ttf", BIG_TEXT_FONT_SIZE, true ),
+        m_text_font_small( "text_small", SMALL_TEXT_FONT_SIZE, SMALL_TEXT_FONT_SIZE, SDL_ASSETS"Muli.ttf", SMALL_TEXT_FONT_SIZE, true ),
         m_texture_cache()
     {
 
@@ -112,6 +114,7 @@ public:
                         m_grid_font.load_font_data( m_theme, m_renderer );
                         m_text_font_tiny.load_font_data( m_theme, m_renderer );
                         m_text_font_big.load_font_data( m_theme, m_renderer );
+                        m_text_font_small.load_font_data( m_theme, m_renderer );
                         m_text_font.load_font_data( m_theme, m_renderer );
                         success = true;
                     }
@@ -132,6 +135,7 @@ public:
         m_text_font.close();
         m_text_font_tiny.close();
         m_text_font_big.close();
+        m_text_font_small.close();
         m_grid_font.close();
 
         clear_texture_cache();
@@ -175,6 +179,7 @@ public:
         m_text_font.set_theme( name, m_renderer );
         m_text_font_tiny.set_theme( name, m_renderer );
         m_text_font_big.set_theme( name, m_renderer );
+        m_text_font_small.set_theme( name, m_renderer );
         m_theme = name;
         // TODO check if available and if not keep old
         
@@ -370,6 +375,10 @@ public:
         {
             puts_fb( pos.x, pos.y, text, &m_text_font_big, WtSdlUtils::get_color_from_string( font_color ) );
         }
+        else if ( font == "text_small" )
+        {
+            puts_fb( pos.x, pos.y, text, &m_text_font_small, WtSdlUtils::get_color_from_string( font_color ) );
+        }
         else
         {
             WtCoord working_pos = pos;
@@ -441,7 +450,9 @@ public:
         else if ( font == "text_tiny" )
             return m_text_font_tiny.text_size( str );
         else if ( font == "text_big" )
-            return m_text_font_big.text_size( str );        
+            return m_text_font_big.text_size( str );
+        else if ( font == "text_small" )
+            return m_text_font_small.text_size( str );
         else
             return m_grid_font.text_size( str );
     }
@@ -684,6 +695,7 @@ private:
     WtSdlFont     m_text_font;
     WtSdlFont     m_text_font_tiny;
     WtSdlFont     m_text_font_big;
+    WtSdlFont     m_text_font_small;
 
     SDL_TextureCache m_texture_cache;
 };

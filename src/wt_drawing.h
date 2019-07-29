@@ -68,30 +68,35 @@ public:
      *************************/
     void draw_player_stat( const WtPlayer& player )
     {
-       // WtCoord base_pos( 79,32 );
-        WtCoord base_pos( 20,8 );
-        DrawingPolicy::draw_image( base_pos,
-                                   WtDim( 65, 65 ),
-                                   "level_progress_bg.bmp" );
-/*
-        std::string player_stat = "";
-        player_stat.append( std::to_string( player.get_current_level() ) );
-        */
-        std::string player_scores = "";
-        player_scores.append( points_to_string( player.get_points() ) );
+        
+        DrawingPolicy::draw_image( WtCoord( 20, 2 ),
+                                   WtDim( 65, 75 ),
+                                   "level_progress_bg_neu.bmp" );
 
-/*
-        WtDim font_sz = DrawingPolicy::get_text_size( player_stat );
-        DrawingPolicy::draw_text( WtCoord( (79+33)-(font_sz.w/2), (32+33)-((font_sz.h/2)+2) ),
-                                  player_stat );
-        */
-        WtDim font_sz = DrawingPolicy::get_text_size( player_scores );
-        WtCoord score_pos = base_pos;
-        score_pos.x = (score_pos.x + 65/2)-((font_sz.w/2)+2);
-        score_pos.y = (score_pos.y+(65/2))-((font_sz.h/2)+2);
-        // shorten number to three digits 1000 -> 1k; 1500 -> 1.5k
-        DrawingPolicy::draw_text( /*WtCoord( 160, (32+(65/2))-((font_sz.h/2)+2) )*/score_pos,
-                                  player_scores );
+        std::string player_scores = "";
+        uint32_t points = player.get_points();
+        player_scores.append( points_to_string( points ) );
+        WtCoord base_pos( 22,8 );
+        if ( points < 100000 )
+        {
+            WtDim font_sz = DrawingPolicy::get_text_size( player_scores );
+            WtCoord score_pos = base_pos;
+            score_pos.x = (score_pos.x + 65/2)-((font_sz.w/2)+2);
+            score_pos.y = (score_pos.y+(65/2))-((font_sz.h/2)+2);
+            
+            DrawingPolicy::draw_text( score_pos,
+                                      player_scores );          
+        }
+        else
+        {
+            WtDim font_sz = DrawingPolicy::get_text_size( player_scores, "text_small" );
+            WtCoord score_pos = base_pos;
+            score_pos.x = (score_pos.x + 65/2)-((font_sz.w/2)+2);
+            score_pos.y = (score_pos.y+(65/2))-((font_sz.h/2)+2);
+            
+            DrawingPolicy::draw_text( score_pos,
+                                      player_scores, "text_small" );          
+        }
 
         draw_level_up_indicator( player, base_pos );
      }

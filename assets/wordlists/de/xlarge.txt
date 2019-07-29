@@ -149,6 +149,7 @@ Lob
 Log
 Lok
 Lot
+Los
 Lug
 Lux
 Mai
@@ -183,6 +184,7 @@ Opi
 Ork
 Ort
 Ost
+Pat
 Phi
 Pik
 Pin
@@ -218,6 +220,7 @@ son
 Spa
 Sud
 S:d
+Tip
 Tab
 Tag
 Tal
@@ -1523,6 +1526,7 @@ Rang
 Raps
 Rast
 Rate
+R,te
 Ratz
 Raub
 rauf
