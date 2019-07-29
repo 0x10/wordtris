@@ -85,7 +85,7 @@ public:
             score_pos.y = (score_pos.y+(65/2))-((font_sz.h/2)+2);
             
             DrawingPolicy::draw_text( score_pos,
-                                      player_scores );          
+                                      player_scores, "text", "#00bafa" );
         }
         else
         {
@@ -95,10 +95,10 @@ public:
             score_pos.y = (score_pos.y+(65/2))-((font_sz.h/2)+2);
             
             DrawingPolicy::draw_text( score_pos,
-                                      player_scores, "text_small" );          
+                                      player_scores, "text_small", "#00bafa" );
         }
 
-        draw_level_up_indicator( player, base_pos );
+        draw_level_up_indicator( player, WtCoord( 20, 2 ) );
      }
 
 
@@ -331,32 +331,31 @@ private:
       *************************/   
     void draw_level_up_indicator( const WtPlayer& player, const WtCoord& base_pos )
     {
-        const WtDim indicator_bar_sizes[10] = {
-            {37, 7}, {49, 6}, {59, 7}, {61, 6}, {63, 6}, {63, 7}, {61, 6}, {57, 7}, {47, 6}, {31, 5}
-        };
-        std::string fname = "hud_level_progress_";
-        WtCoord word_fill_pos = base_pos + WtCoord( 14, 57 );
-
         size_t w_count = static_cast<size_t>(player.words_since_levelup());
         if ( w_count > 0 )
         {
+            const WtDim indicator_bar_sizes[10] = {
+                {11, 16}, {12, 8}, {12, 2}, {12, 9}, {10, 15}, {9, 13}, {12, 9}, {12, 2}, {12, 8}, {10, 14}
+            };
+            const WtCoord indicator_bar_pos[10] = {
+                {4, 13}, {15, 8}, {27, 8}, {39, 8}, {51, 14}, {51, 48}, {39, 58}, {27, 65}, {15, 59}, {5, 48}
+            };
+            std::string fname = "hud_level_progress_";
+
             if ( w_count >= 1 )
             {
-                DrawingPolicy::draw_image( word_fill_pos,
+                DrawingPolicy::draw_image( base_pos + indicator_bar_pos[0],
                                            indicator_bar_sizes[0],
                                            std::string( fname ).append("1").append(".bmp") );
             }
 
             if ( w_count > 1 )
             {
-                WtCoord working_pos = word_fill_pos;
                 for ( size_t w_count_idx = 2; w_count_idx <= w_count; w_count_idx++ )
                 {
-                    WtCoord next_pos = working_pos + WtCoord( (indicator_bar_sizes[w_count_idx - 2].w - indicator_bar_sizes[w_count_idx - 1].w)/2, -indicator_bar_sizes[w_count_idx - 1].h );
-                    DrawingPolicy::draw_image( next_pos,
+                    DrawingPolicy::draw_image( base_pos + indicator_bar_pos[w_count_idx - 1],
                                                indicator_bar_sizes[w_count_idx - 1],
                                                std::string( fname ).append( std::to_string(w_count_idx) ).append(".bmp") );
-                    working_pos = next_pos;
                 }
             }
         }
