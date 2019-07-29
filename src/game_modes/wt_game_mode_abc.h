@@ -61,7 +61,7 @@ public:
     /**************************
      *
      *************************/
-    virtual void eval_board( WtBoard& board, WtPlayer& player, WtGameModeState& )
+    virtual void eval_board( WtBoard& board, WtPlayer& player, WtGameModeState& gs )
     {
         if ( ( m_working_letters.empty() ) && ( m_next == WtBoard::empty_cell ) )
         {
@@ -80,8 +80,31 @@ public:
             }
 
             if ( correct )
-            {                
-                player.word_solved();
+            {
+                WtGridAnimation* blink = new WtGridAnimation();
+
+                {
+                    WtGridAnimation::GridAnimationStep step( WtGridAnimation::fromGridText( WtGridAnimation::GridText( WtBoard::row_count-m_active_row,
+                                                                                        0,
+                                                                                        true,
+                                                                                        m_current_sequence_control, 
+                                                                                        "grid_inverse" ) ),
+                                                             WtTime::from_milliseconds(200) );
+                    blink->push_back( step );
+                    step.content.font = "grid";
+                    blink->push_back( step );
+                    step.content.font = "grid_inverse";
+                    blink->push_back( step );
+                }
+                {
+                    uint32_t current_level = player.get_current_level();
+                    player.word_solved();
+                    if ( player.get_current_level() != current_level )
+                    {
+                        WtGridAnimationBuilder::construct_level_up_animation( *blink );
+                    }
+                }
+                gs.add_animation( blink ); // will handle destruction
                 
                 board.collapse_above( m_active_row );
             }

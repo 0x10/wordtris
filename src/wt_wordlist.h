@@ -91,7 +91,10 @@ public:
         m_words(),
         m_list_fname(input_list_name),
         m_conv( conv ),
-        m_list()
+        m_list(),
+        m_cache_min_len(0),
+        m_cache_max_len(0),
+        m_list_cache()
     {
         if ( ! input_list_name.empty() )
             load_from_list( input_list_name, conv );
@@ -108,6 +111,39 @@ public:
     operator const std::vector<std::string>&()
     {
         return m_list;
+    }
+
+    /**************************************
+     *
+     *************************************/
+    const std::vector<std::string>& get_word_list( const size_t min_len, const size_t max_len )
+    {
+        if ( ( m_cache_min_len == min_len ) && ( m_cache_max_len == max_len ) )
+        {
+            // nothing to do
+            std::cout << "cache hit word list request << (" << min_len << ", " << max_len << ")\n";
+        }
+        else
+        {
+            m_list_cache.clear();
+            for( size_t i = 0; i < m_list.size(); i++ )
+            {
+                if (( m_list[i].length() >= min_len ) && ( m_list[i].length() < max_len ))
+                {
+                    m_list_cache.push_back( m_list[i] );
+                }
+            }
+            std::cout << "cache miss word list request << ("<< m_list_cache.size()  << ")\n";
+            m_cache_max_len = max_len;
+            m_cache_min_len = min_len;
+        }
+
+        if ( m_list_cache.size() == 0 )
+        {
+            m_list_cache = m_list;
+        }
+
+        return m_list_cache;
     }
 
     /**************************************
@@ -213,6 +249,9 @@ private:
     std::string              m_list_fname;
     EConvertChars            m_conv;
     std::vector<std::string> m_list;
+    size_t                   m_cache_min_len;
+    size_t                   m_cache_max_len;
+    std::vector<std::string> m_list_cache;
 };
 
 

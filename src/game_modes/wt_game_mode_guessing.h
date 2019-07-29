@@ -19,6 +19,7 @@
 #include "wt_game_mode_if.h"
 #include "wt_utils.h"
 #include "wt_wordlist.h"
+#include "wt_animation_builder.h"
 
 class WtGameModeGuessing : public WtGameModeIf
 {
@@ -57,14 +58,10 @@ public:
     /**************************
      *
      *************************/
-    virtual void eval_board( WtBoard& board, WtPlayer& player, WtGameModeState& )
+    virtual void eval_board( WtBoard& board, WtPlayer& player, WtGameModeState& gs )
     {
         if ( ( m_active_word_guessed.empty() ) && ( m_next == WtBoard::empty_cell ) )
         {
-            bool found_word = false;
-
-            // search rows for word
-            //TODO: use DEA instead of string construction
             for ( uint8_t r_idx = 0; r_idx < WtBoard::row_count; r_idx++ )
             {
                 std::string row = std::string("");
@@ -80,16 +77,39 @@ public:
                 size_t found_idx = row.find( m_active_word );
                 if ( found_idx != std::string::npos )
                 {
+                    // found! finish
+                    WtGridAnimation* blink = new WtGridAnimation();
+
+                    {
+                        WtGridAnimation::GridAnimationStep step( WtGridAnimation::fromGridText( WtGridAnimation::GridText( WtBoard::row_count-r_idx,
+                                                                                            found_idx,
+                                                                                            true,
+                                                                                            m_active_word, 
+                                                                                            "grid_inverse" ) ),
+                                                                 WtTime::from_milliseconds(200) );
+                        blink->push_back( step );
+                        step.content.font = "grid";
+                        blink->push_back( step );
+                        step.content.font = "grid_inverse";
+                        blink->push_back( step );
+                    }
+
+                    {
+                        uint32_t current_level = player.get_current_level();
+                        player.word_solved();
+                        if ( player.get_current_level() != current_level )
+                        {
+                            WtGridAnimationBuilder::construct_level_up_animation( *blink );
+                        }
+                    }
+
+                    gs.add_animation( blink ); // will handle destruction
                     for ( size_t c_idx = found_idx; c_idx < (m_active_word.length()+found_idx); c_idx++ )
                         board.set_cell( r_idx, static_cast<uint8_t>(c_idx), WtBoard::empty_cell );
-                    found_word = true;
+
+                    // found! finish
                     break;
                 }
-            }
-
-            if ( found_word )
-            {
-                player.word_solved();
             }
 
             get_next_word();
@@ -146,9 +166,19 @@ private:
      *************************/
     void get_next_word()
     {
+        wt_difficulty diff = get_difficulty();
+        size_t min_len = 0;
+        size_t max_len = 4;
+        switch( diff )
+        {
+            case wt_difficulty_EASY:   break;
+            case wt_difficulty_MEDIUM: min_len = 4; max_len = 7; break;
+            case wt_difficulty_HARD:   min_len = 6; max_len = 9; break;
+            default: break;
+        }
         size_t idx = 0;
         uint8_t buf;
-        const std::vector<std::string>& guess_list = m_wordlist;
+        const std::vector<std::string>& guess_list = m_wordlist.get_word_list( min_len, max_len );
         if ( WtRandom::getrandom( &buf, 1 ) <= 1 )
         {
             idx = (buf % guess_list.size());

@@ -8,6 +8,7 @@ squabbel_lite
 wordtris_sdl_lite
 wordtris_ncurses
 SDL2-2.0.9/build
+SDL2_mixer-2.0.4/build
 SDL2-2.0.9/Makefile
 SDL2-2.0.9/Makefile.rules
 SDL2-2.0.9/config.log
