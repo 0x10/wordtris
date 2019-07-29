@@ -418,11 +418,6 @@ private:
     {
         ACTIVE_WINDOW.clr();
 
-        for(size_t idx=0;idx<m_textboxes.size();idx++)
-        {
-            ACTIVE_WINDOW.draw_textbox( *(m_textboxes[idx]) );
-        }
-
         for(size_t idx=0;idx<m_buttons.size();idx++)
         {
             ACTIVE_WINDOW.draw_button( *(m_buttons[idx]) );
@@ -434,6 +429,11 @@ private:
             {
                 ACTIVE_WINDOW.draw_button( (*(m_carousels[idx]))[c_idx] );
             }
+        }
+
+        for(size_t idx=0;idx<m_textboxes.size();idx++)
+        {
+            ACTIVE_WINDOW.draw_textbox( *(m_textboxes[idx]) );
         }
 
         if ( m_update_overlay ) m_update_overlay();

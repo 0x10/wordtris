@@ -51,11 +51,11 @@ public:
                       WtCoord(0, -20),
                       WtFont( "#00bafa" ) ),
         m_text_olf1( WtCoord(ACTIVE_WINDOW_WIDTH/2, offset_y + (offset_content * 7) + (1*25+0*10)), WtDim( 1, 1 ), "", nullptr, "Version 1.1 - 26 February 2007"),
-        m_text_ofl( WtCoord( 0, offset_y + (offset_content * 7) + (1*25+0*10) ),
+        m_text_ofl( WtCoord( 0, offset_y + (offset_content * 7) + (1*25+0*10) ), WtDim( 0, 0 ),
                    "", ACTIVE_WINDOW.get_text_font_tiny() ),
-        m_text_ofl1( WtCoord( ACTIVE_WINDOW_WIDTH/2, offset_y + (offset_content * 7) + (1*25+0*10) ),
+        m_text_ofl1( WtCoord( ACTIVE_WINDOW_WIDTH/2, offset_y + (offset_content * 7) + (1*25+0*10) ), WtDim( 0, 0 ),
                    "", ACTIVE_WINDOW.get_text_font_tiny() ),
-        m_text_ofl2( WtCoord( (ACTIVE_WINDOW_WIDTH/2)-(ACTIVE_WINDOW_WIDTH/4), offset_y + 700 ),
+        m_text_ofl2( WtCoord( (ACTIVE_WINDOW_WIDTH/2)-(ACTIVE_WINDOW_WIDTH/4), offset_y + 700 ), WtDim( 0, 0 ),
                    "", ACTIVE_WINDOW.get_text_font_tiny() )
     {
 

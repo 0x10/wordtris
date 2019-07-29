@@ -21,13 +21,15 @@
 class WtTextbox
 {
 private:
-    const char* m_textbox_bg = "text_flow_box.bmp";
+    const char* m_textbox_bg = "#182e4b";
     const ssize_t m_text_margin = 20;
 public:
     WtTextbox( WtCoord     pos,
+               WtDim       size,
                std::string text,
                const WtSdlFont&  font ) :
         m_pos( pos ),
+        m_size( size ),
         m_lines(),
         m_font( font )
     {
@@ -107,7 +109,7 @@ public:
      *************************/
     WtDim size() const
     {
-        return WtDim( 379, 608 );
+        return m_size;
     }
 
     /**************************
@@ -115,7 +117,7 @@ public:
      *************************/
     std::string background() const
     {
-        return std::string( m_textbox_bg );
+        return m_textbox_bg;
     }
 
     /**************************
@@ -153,6 +155,7 @@ private:
     }
 private:
     WtCoord                  m_pos;
+    WtDim                    m_size;
     std::vector<std::string> m_lines;
     const WtSdlFont&         m_font;
 };

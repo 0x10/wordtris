@@ -17,7 +17,7 @@
 #define _WT_MENU_PAUSE_H_
 
 #include "wt_view_if.h"
-#include "menus/wt_menu_help.h"
+//#include "menus/wt_menu_help.h"
 #include "widgets/wt_checkbox_button.h"
 #include "wt_game_mode_if.h"
 
@@ -34,7 +34,7 @@ public:
     WtMenuPause( OnRestartDelegate restart_handler,
                  OnQuitDelegate    quit_handler ) :
         WtViewIf( "#122339", false ),
-        m_help(),
+        //m_help(),
         m_leave_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (138 / 2), (ACTIVE_WINDOW_HEIGHT - (ACTIVE_WINDOW_HEIGHT / 4))+(124/2) ), 
                      WtDim(138, 124),
                      "back_btn.bmp",
@@ -124,7 +124,7 @@ private: // no copy allowed
      *************************/
     void help_pressed()
     {
-        enter_child_menu( m_help );
+        //enter_child_menu( m_help );
     }
 
     /**************************
@@ -184,7 +184,7 @@ private: // no copy allowed
     }
 
 private:
-    WtMenuHelp          m_help;
+    //WtMenuHelp          m_help;
 
     WtButton            m_leave_btn;
     WtButton            m_redo_btn;
