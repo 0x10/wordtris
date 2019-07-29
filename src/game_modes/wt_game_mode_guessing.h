@@ -77,10 +77,10 @@ public:
                 size_t found_idx = row.find( m_active_word );
                 if ( found_idx != std::string::npos )
                 {
-                    // found! finish
-                    WtGridAnimation* blink = new WtGridAnimation();
+                    // found! finish                    
 
                     {
+                        WtGridAnimation* blink = new WtGridAnimation("wordsolved.ogg");
                         WtGridAnimation::GridAnimationStep step( WtGridAnimation::fromGridText( WtGridAnimation::GridText( WtBoard::row_count-r_idx,
                                                                                             found_idx,
                                                                                             true,
@@ -92,6 +92,7 @@ public:
                         blink->push_back( step );
                         step.content.font = "grid_inverse";
                         blink->push_back( step );
+                        gs.add_animation( blink ); // will handle destruction
                     }
 
                     {
@@ -99,11 +100,13 @@ public:
                         player.word_solved();
                         if ( player.get_current_level() != current_level )
                         {
+                            WtGridAnimation* blink = new WtGridAnimation("levelup.ogg");
                             WtGridAnimationBuilder::construct_level_up_animation( *blink );
+                            gs.add_animation( blink ); // will handle destruction
                         }
                     }
 
-                    gs.add_animation( blink ); // will handle destruction
+                    
                     for ( size_t c_idx = found_idx; c_idx < (m_active_word.length()+found_idx); c_idx++ )
                         board.set_cell( r_idx, static_cast<uint8_t>(c_idx), WtBoard::empty_cell );
 

@@ -92,10 +92,10 @@ public:
                         std::string word = contains_word( sequences[s_idx], min_word_length() );
                         if ( !word.empty() ) 
                         {
-                            std::cout << "new animation...\n";
-                            WtGridAnimation* blink = new WtGridAnimation();
-
+                            
                             {
+                                std::cout << "new animation...\n";
+                                WtGridAnimation* blink = new WtGridAnimation("wordsolved.ogg");
                                 WtGridAnimation::GridAnimationStep step( WtGridAnimation::fromGridText( WtGridAnimation::GridText( WtBoard::row_count-r_idx,
                                                                                                     row_str.find( word ),
                                                                                                     true,
@@ -107,6 +107,8 @@ public:
                                 blink->push_back( step );
                                 step.content.font = "grid_inverse";
                                 blink->push_back( step );
+
+                                gs.add_animation( blink ); // will handle destruction
                             }
 
                             {
@@ -114,11 +116,12 @@ public:
                                 player.word_solved( word.length() * (found_count + 1), found_count+1 );
                                 if ( player.get_current_level() != current_level )
                                 {
+                                    WtGridAnimation* blink = new WtGridAnimation("levelup.ogg");
                                     WtGridAnimationBuilder::construct_level_up_animation( *blink );
+                                    gs.add_animation( blink ); // will handle destruction
                                 }
                             }
 
-                            gs.add_animation( blink ); // will handle destruction
 
                             erase_from_row( r_idx, row_str, word, board );
                             something_found = true;
@@ -143,11 +146,9 @@ public:
                     std::string word = contains_word( trimmed, min_word_length() );
                     if ( !word.empty() ) 
                     {
-                        std::cout << "new animation...\n";
-                        WtGridAnimation* blink = new WtGridAnimation();
-
-
                         {
+                            std::cout << "new animation...\n";
+                            WtGridAnimation* blink = new WtGridAnimation("wordsolved.ogg");
                             WtGridAnimation::GridAnimationStep step( WtGridAnimation::fromGridText( WtGridAnimation::GridText( col_str.find( word ),
                                                                                                 c_idx,
                                                                                                 false,
@@ -159,6 +160,8 @@ public:
                             blink->push_back( step );
                             step.content.font = "grid_inverse";
                             blink->push_back( step );
+
+                            gs.add_animation( blink ); // will handle destruction
                         }
 
                         
@@ -167,11 +170,12 @@ public:
                             player.word_solved( word.length() * (found_count + 1), found_count+1 );
                             if ( player.get_current_level() != current_level )
                             {
+                                WtGridAnimation* blink = new WtGridAnimation("levelup.ogg");
                                 WtGridAnimationBuilder::construct_level_up_animation( *blink );
+                                gs.add_animation( blink ); // will handle destruction
                             }
                         }
                         
-                        gs.add_animation( blink ); // will handle destruction
 
                         erase_from_col( c_idx, col_str, word, board );
                         something_found = true;

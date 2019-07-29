@@ -81,9 +81,9 @@ public:
 
             if ( correct )
             {
-                WtGridAnimation* blink = new WtGridAnimation();
-
+                
                 {
+                    WtGridAnimation* blink = new WtGridAnimation("wordsolved.ogg");
                     WtGridAnimation::GridAnimationStep step( WtGridAnimation::fromGridText( WtGridAnimation::GridText( WtBoard::row_count-m_active_row,
                                                                                         0,
                                                                                         true,
@@ -95,16 +95,22 @@ public:
                     blink->push_back( step );
                     step.content.font = "grid_inverse";
                     blink->push_back( step );
+                    gs.add_animation( blink ); // will handle destruction
                 }
+                
+                
+
                 {
                     uint32_t current_level = player.get_current_level();
                     player.word_solved();
                     if ( player.get_current_level() != current_level )
                     {
+                        WtGridAnimation* blink = new WtGridAnimation("levelup.ogg");
                         WtGridAnimationBuilder::construct_level_up_animation( *blink );
+                        gs.add_animation( blink ); // will handle destruction
                     }
                 }
-                gs.add_animation( blink ); // will handle destruction
+                
                 
                 board.collapse_above( m_active_row );
             }
