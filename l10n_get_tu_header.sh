@@ -29,7 +29,7 @@ const std::vector<WtTranslationTexts> wt_translations = {';
 
 
 
-grep -Proh "WtL10n_tr\(.+?\)" | grep -Po \".+?\" | sort | uniq | sed 's#"\(.*\)"#    { "\1",\n       { ""/* en */,\n         ""/* de */,\n         ""/* fr */ }\n    },#g'
+grep -Proh "WtL10n_tr\(.+?\)" ./src | grep -Po \".+?\" | sort | uniq | sed 's#"\(.*\)"#    { "\1",\n       { ""/* en */,\n         ""/* de */,\n         ""/* fr */ }\n    },#g'
 
 
 

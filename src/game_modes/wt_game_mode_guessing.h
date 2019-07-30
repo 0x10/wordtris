@@ -50,7 +50,7 @@ public:
      *************************/
     std::string get_name()
     {
-        return WtL10n_tr("Guess the word");
+        return WtL10n::translate( WtL10n_tr("Guess the word") );
     }
 
     /**************************
@@ -164,7 +164,7 @@ public:
      *************************/
     std::string get_hint()
     {
-        return WtL10n_tr("Try to solve the puzzled word by placing the stones in correct order.");
+        return WtL10n::translate( WtL10n_tr("Try to solve the puzzled word by placing the stones in correct order.") );
     }
 
 private:

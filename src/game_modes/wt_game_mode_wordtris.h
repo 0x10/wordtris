@@ -57,7 +57,7 @@ public:
      *************************/
     std::string get_name()
     {
-        return WtL10n_tr("Classic");
+        return WtL10n::translate( WtL10n_tr("Classic") );
     }
 
     /**************************
@@ -224,8 +224,8 @@ public:
      *************************/
     virtual std::string get_hint()
     {
-        return WtL10n_tr("Build words of at least " + get_min_word_length() + 
-                         " letters by moving around and ordering the fallen letters." );
+        return WtL10n::translate( WtL10n_tr("Build words of at least " ) ) + get_min_word_length() + 
+                         WtL10n::translate( WtL10n_tr(" letters by moving around and ordering the fallen letters." ) );
     }
 
     /**************************
@@ -237,9 +237,9 @@ public:
 
         switch( min_word_length() )
         {
-            case 3: result = WtL10n_tr("three"); break;
-            case 4: result = WtL10n_tr("four"); break;
-            case 5: result = WtL10n_tr("five"); break;
+            case 3: result = WtL10n::translate( WtL10n_tr("three") ); break;
+            case 4: result = WtL10n::translate( WtL10n_tr("four") ); break;
+            case 5: result = WtL10n::translate( WtL10n_tr("five") ); break;
             default: break;
         }
 
@@ -251,11 +251,11 @@ public:
      *************************/
     virtual std::string get_help()
     {
-        return WtL10n_tr("Construct words by placing the falling letters "
+        return WtL10n::translate( WtL10n_tr("Construct words by placing the falling letters "
                          "either vertical or horizontal.\\n\\n"
                          "The longer the word, the more points you get. "
-                         "But you need to construct a word out of at least "
-                         + get_min_word_length() + " letters." );
+                         "But you need to construct a word out of at least " ) )
+                         + get_min_word_length() +WtL10n::translate( WtL10n_tr( " letters." ) );
     }
 
 

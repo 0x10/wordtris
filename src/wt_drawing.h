@@ -218,29 +218,6 @@ public:
 
 
     /**************************
-     *
-     *************************/   
-    void draw_message( const std::string msg )
-    {
-        //todo replace with proper message box
-        WtDim sz( 328, 69 );
-        WtCoord pos( (ACTIVE_WINDOW_WIDTH - 328) / 2,
-                     (ACTIVE_WINDOW_HEIGHT / 2) - (69 / 2) );
-        DrawingPolicy::draw_image( pos,
-                                   sz,
-                                   "menu_btn.bmp" );
-        WtDim font_sz = DrawingPolicy::get_text_size( msg );
-
-        ssize_t text_center_w = font_sz.w / 2;
-        ssize_t button_center_x = ( sz.w / 2 + pos.x );
-        ssize_t button_center_y = ( sz.h / 2 + pos.y );
-
-        DrawingPolicy::draw_text( WtCoord( button_center_x - text_center_w, 
-                                           button_center_y - (font_sz.h/2) ),
-                                  msg );
-    }
-
-    /**************************
       *
       *************************/   
     bool draw_sine_scroller_text( std::string text, WtCoord pos )
@@ -291,6 +268,7 @@ public:
                 std::string label = button.label();
                 if ( label.find_first_of("#@") != 0 )
                 {
+                    label = WtL10n::translate( label );
                     WtDim font_sz = DrawingPolicy::get_text_size( label );
                     WtCoord label_pos( button.x() + button.label_pos().x, button.y() + button.label_pos().y);
                     if ( button.label_centered() )

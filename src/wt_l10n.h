@@ -48,9 +48,9 @@ class WtL10n
 private:
     typedef std::map< std::string, std::vector<std::string> > LocaleMap;
 
-    const std::array<const char*, 3> m_available_languages{ { "en",
-                                                              "de",
-                                                              "fr" } };
+    const std::array<const char*, 3> m_available_languages{ { WtL10n_tr("en"),
+                                                              WtL10n_tr("de"),
+                                                              WtL10n_tr("fr") } };
     const std::array<const char*, 3> m_available_language_names{ { "@flag_en.bmp",
                                                                    "@flag_de.bmp",
                                                                    "@flag_fr.bmp" } };

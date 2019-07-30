@@ -63,7 +63,7 @@ public:
      *************************/
     std::string get_name()
     {
-        return WtL10n_tr("Alphabet Challenge");
+        return WtL10n::translate( WtL10n_tr("Alphabet Challenge") );
     }
 
 
