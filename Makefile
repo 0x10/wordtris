@@ -1,6 +1,7 @@
 CXX=g++
 CXX_OPTIMIZATION=-Os
-CXX_WARNINGS=-Wpedantic -pedantic-errors -Wall -Wextra -Wcast-align -Wcast-qual -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs -Wnoexcept -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-null-sentinel -Wstrict-overflow=5 -Wundef -Weffc++ -Wuseless-cast -Wnull-dereference -Wduplicated-branches -Wduplicated-cond -Wstack-protector
+CXX_WARNINGS=-Wpedantic -Wall -Wextra -Wcast-align -Wcast-qual -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs -Wnoexcept -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-null-sentinel -Wstrict-overflow=5 -Wundef -Weffc++ -Wuseless-cast -Wnull-dereference -Wduplicated-branches -Wduplicated-cond -Wstack-protector
+#-pedantic-errors 
 CXX_DEBUG=-g
 CXX_FLAGS=-std=c++11 -fPIE -fstack-protector-all -pipe $(CXX_WARNINGS)#-D_FORTIFY_SOURCE=2
 LD_FLAGS=-Wl,-z,defs -Wl,-z,now -Wl,-z,relro -Wl,-z,noexecstack

@@ -68,6 +68,8 @@ public:
                           [](size_t){},
                           false )
     {
+        WtL10n::register_lang_change_obsever( WT_BIND_EVENT_HANDLER( WtMenuCtr::language_changed ) );
+
         ACTIVE_INPUT.register_key_press_delegate( WT_BIND_EVENT_HANDLER_1( WtMenuCtr::on_key_press ) );
         m_game_ctr.set_game_mode( GAME_MODE_CTR.mode_from_string( STORAGE.get_settings().game_mode ) );
 
@@ -98,6 +100,14 @@ private:
     void enter_settings_menu()
     {
         enter_child_menu( m_settings );
+    }
+
+    /**************************
+     *
+     *************************/
+    void language_changed()
+    {
+        m_game_selection.set_labels(GAME_MODE_CTR.get_available_mode_titles());
     }
 
     /**************************

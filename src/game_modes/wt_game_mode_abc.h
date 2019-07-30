@@ -61,6 +61,15 @@ public:
     /**************************
      *
      *************************/
+    std::string get_name()
+    {
+        return WtL10n_tr("Alphabet Challenge");
+    }
+
+
+    /**************************
+     *
+     *************************/
     virtual void eval_board( WtBoard& board, WtPlayer& player, WtGameModeState& gs )
     {
         if ( ( m_working_letters.empty() ) && ( m_next == WtBoard::empty_cell ) )

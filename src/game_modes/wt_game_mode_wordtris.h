@@ -53,6 +53,14 @@ public:
     }
 
     /**************************
+     *
+     *************************/
+    std::string get_name()
+    {
+        return WtL10n_tr("Classic");
+    }
+
+    /**************************
      * 
      *************************/
     virtual void init_game( WtBoard& board, WtPlayer& player )

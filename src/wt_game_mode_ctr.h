@@ -98,6 +98,18 @@ public:
     /**************************
      *
      *************************/
+    const std::vector<std::string> get_available_mode_names() const
+    {
+        std::vector<std::string> result;
+        for ( size_t idx = 0; idx < m_available_modes.size(); idx++ )
+            result.push_back( m_available_modes[idx]->get_name() );
+        return result;
+    }
+
+
+    /**************************
+     *
+     *************************/
     const std::vector<std::string> get_available_mode_titles() const
     {
         std::vector<std::string> result;

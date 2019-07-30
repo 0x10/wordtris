@@ -22,7 +22,7 @@ class WtMenuHighscores : public WtViewIf
 {
 public:
     WtMenuHighscores() :
-        WtViewIf("#122339"),
+        WtViewIf("#182e4b"),
         m_leave_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (138 / 2), (ACTIVE_WINDOW_HEIGHT - (ACTIVE_WINDOW_HEIGHT / 4))+(124/2) ), 
                      WtDim(138, 124),
                      "back_btn.bmp",
@@ -30,31 +30,39 @@ public:
                      WtL10n_tr( "B A C K"),
                      WtCoord( -20, 25 ),
                      WtFont( "#498fe1", "text_big" ) ),
-        m_left_btn( WtCoord( 25, (ACTIVE_WINDOW_HEIGHT/2)-50 ), 
+        m_left_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 8)-(40/2), ((ACTIVE_WINDOW_HEIGHT / 8)+130)-(10) ), 
                     WtDim(40, 40), 
                     "left.bmp",
                     WT_BIND_EVENT_HANDLER( WtMenuHighscores::show_prev_mode ) ),
-        m_right_btn( WtCoord( (ACTIVE_WINDOW_WIDTH-25)-40, (ACTIVE_WINDOW_HEIGHT/2)-50 ), 
+        m_right_btn( WtCoord( (ACTIVE_WINDOW_WIDTH-(ACTIVE_WINDOW_WIDTH / 8))-(40/2), ((ACTIVE_WINDOW_HEIGHT / 8)+130)-(10) ), 
                      WtDim(40, 40), 
                      "right.bmp",
                      WT_BIND_EVENT_HANDLER( WtMenuHighscores::show_next_mode ) ),
-        m_title_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2)-(379 / 2),
-                              (ACTIVE_WINDOW_HEIGHT / 8)  ),
-                     WtDim( 379, 100 ),
-                     "score_header.bmp" ),
+        m_title_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (188 / 2), (ACTIVE_WINDOW_HEIGHT / 8)-(134/2) ),
+                       WtDim( 188, 134 ),
+                       "label_score.bmp",
+                       [](){},
+                       "",
+                       WtCoord( -18, 130 ),
+                       WtFont( "#00bafa", "text_big" ) ),
+        m_list_bg( WtCoord(0, (ACTIVE_WINDOW_HEIGHT / 4)+50), WtDim(ACTIVE_WINDOW_WIDTH, 540), "#122338" ),
         m_scores( STORAGE.get_scores() ),
         m_game_mode_titles( GAME_MODE_CTR.get_available_mode_titles() ),
+        m_game_mode_names( GAME_MODE_CTR.get_available_mode_names() ),
         m_selected_mode( 0 )
     {
+        WtL10n::register_lang_change_obsever( WT_BIND_EVENT_HANDLER( WtMenuHighscores::language_changed ) );
+
         add_button( m_leave_btn );
 #ifdef WT_PRO_MODE
-        if ( m_game_mode_titles.size() > 1 )
+        if ( m_game_mode_names.size() > 1 )
         {
             add_button( m_left_btn );
             add_button( m_right_btn );
         }
 #endif
         add_button( m_title_btn );
+        add_button( m_list_bg );
     }
     ~WtMenuHighscores() {}
 private: // no copy allowed
@@ -68,13 +76,13 @@ private: // no copy allowed
     {
         if ( m_selected_mode == 0 )
         {
-            m_selected_mode = m_game_mode_titles.size() - 1;
+            m_selected_mode = m_game_mode_names.size() - 1;
         }
         else
         {
             m_selected_mode--;
         }
-        m_title_btn.set_label( m_game_mode_titles[m_selected_mode] );
+        m_title_btn.set_label( m_game_mode_names[m_selected_mode] );
     }
 
     /**************************
@@ -82,8 +90,17 @@ private: // no copy allowed
      *************************/
     void show_next_mode()
     {
-        m_selected_mode = ( m_selected_mode + 1 ) % m_game_mode_titles.size();
-        m_title_btn.set_label( m_game_mode_titles[m_selected_mode] );
+        m_selected_mode = ( m_selected_mode + 1 ) % m_game_mode_names.size();
+        m_title_btn.set_label( m_game_mode_names[m_selected_mode] );
+    }
+
+    /**************************
+     *
+     *************************/
+    void language_changed()
+    {
+        m_game_mode_names = GAME_MODE_CTR.get_available_mode_names();
+        m_title_btn.set_label( m_game_mode_names[m_selected_mode] );
     }
 
     /**************************
@@ -92,36 +109,39 @@ private: // no copy allowed
     void draw_entry( size_t index, WtScoreEntry& entry )
     {
         WtDim   font_size = ACTIVE_WINDOW.get_font_size();
-        WtCoord entry_pos ( 100,
-                            ((ACTIVE_WINDOW_HEIGHT / 8) + (5*font_size.h)) );
+        WtCoord entry_pos ( (ACTIVE_WINDOW_WIDTH / 4) ,
+                            (((ACTIVE_WINDOW_HEIGHT / 4)) + (font_size.h + (font_size.h / 2))) );
 
-        entry_pos.y = entry_pos.y + ( static_cast<ssize_t>(index) * (font_size.h + (font_size.h/2)) );
+        entry_pos.y = entry_pos.y + ( static_cast<ssize_t>(index) * (font_size.h + (font_size.h)) );
 
         {
             std::stringstream ss;
             ss << index;
-            ACTIVE_WINDOW.draw_text( entry_pos, ss.str() ); 
+            ACTIVE_WINDOW.draw_text( entry_pos, ss.str(), "text", "#00bafa" ); 
         }
 
-        entry_pos.x = entry_pos.x + (font_size.w * 4);
-
+        if ( entry.score > 0 )
         {
-            std::string level_label = "Level ";
-            WtDim text_font_size = ACTIVE_WINDOW.get_text_size( level_label );
+            entry_pos.x = entry_pos.x + (font_size.w * 4);
 
-            ACTIVE_WINDOW.draw_text( entry_pos, level_label );
-            entry_pos.x = entry_pos.x + text_font_size.w;
-            std::stringstream ss;
-            ss << entry.level;
-            ACTIVE_WINDOW.draw_text( entry_pos, ss.str() ); 
-        }
+            {
+                std::string level_label = "Level ";
+                WtDim text_font_size = ACTIVE_WINDOW.get_text_size( level_label );
 
-        {
-            std::stringstream ss;
-            ss << entry.score;
-            WtDim text_font_size = ACTIVE_WINDOW.get_text_size( ss.str() );
-            entry_pos.x = (ACTIVE_WINDOW_WIDTH - 100) - (text_font_size.w);
-            ACTIVE_WINDOW.draw_text( entry_pos, ss.str() ); 
+                ACTIVE_WINDOW.draw_text( entry_pos, level_label );
+                entry_pos.x = entry_pos.x + text_font_size.w;
+                std::stringstream ss;
+                ss << entry.level;
+                ACTIVE_WINDOW.draw_text( entry_pos, ss.str() ); 
+            }
+
+            {
+                std::stringstream ss;
+                ss << entry.score;
+                WtDim text_font_size = ACTIVE_WINDOW.get_text_size( ss.str() );
+                entry_pos.x = (ACTIVE_WINDOW_WIDTH - (ACTIVE_WINDOW_WIDTH / 4)) - (text_font_size.w);
+                ACTIVE_WINDOW.draw_text( entry_pos, ss.str() ); 
+            }
         }
     }
 
@@ -135,7 +155,7 @@ private: // no copy allowed
 #else
         m_selected_mode = GAME_MODE_CTR.mode_idx_from_string( "WordtrisClassic" );
 #endif
-        m_title_btn.set_label( m_game_mode_titles[m_selected_mode] );
+        m_title_btn.set_label( m_game_mode_names[m_selected_mode] );
     }
 
     /**************************
@@ -145,23 +165,23 @@ private: // no copy allowed
     {
         size_t score_entry = 1;
 
-        if ( m_scores.size() > 0 )
+        for( size_t e_idx=0; (e_idx < m_scores.size()) && (score_entry <= 10); e_idx++ )
         {
-            for( size_t e_idx=0; (e_idx < m_scores.size()) && (score_entry <= 10); e_idx++ )
+            WtScoreEntry entry =  m_scores[e_idx];
+#warning change me to mode_id after presentation; renable pendantic errors in makefile
+            if ( entry.game_mode == m_game_mode_titles[m_selected_mode] )
             {
-                WtScoreEntry entry =  m_scores[e_idx];
-                if ( entry.game_mode == m_game_mode_titles[m_selected_mode] )
-                {
-                    draw_entry( score_entry, entry );
-                    score_entry++;
-                }
+                draw_entry( score_entry, entry );
+                score_entry++;
             }
         }
-        else
+        if ( score_entry <= 10 )
         {
-            std::string text = "no highscore entries available";
-            WtDim text_font_size = ACTIVE_WINDOW.get_text_size( text );
-            ACTIVE_WINDOW.draw_text( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (text_font_size.w / 2), (ACTIVE_WINDOW_HEIGHT / 2) - (50) ), text ); 
+            WtScoreEntry entry;
+            for(; score_entry <= 10; score_entry++ )
+            {
+                draw_entry( score_entry, entry );
+            }
         }
     }
 
@@ -170,8 +190,10 @@ private:
     WtButton                       m_left_btn;
     WtButton                       m_right_btn;
     WtButton                       m_title_btn;
+    WtButton                       m_list_bg;
     WtHighscores&                  m_scores;
     const std::vector<std::string> m_game_mode_titles;
+    std::vector<std::string>       m_game_mode_names;
     size_t                         m_selected_mode;
 };
 

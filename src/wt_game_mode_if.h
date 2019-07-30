@@ -95,6 +95,11 @@ public:
     /**************************
      *
      *************************/
+    virtual std::string get_name()=0;
+
+    /**************************
+     *
+     *************************/
     virtual void eval_board( WtBoard&, WtPlayer&, WtGameModeState& )=0;
 
     /**************************
@@ -231,7 +236,15 @@ public:
      *************************/
     virtual std::string get_title()
     {
-        return "Locked! Buy Pro";
+        return WtL10n_tr("Locked! Buy Pro");
+    }
+
+    /**************************
+     *
+     *************************/
+    virtual std::string get_name()
+    {
+        return WtL10n_tr("Locked! Buy Pro");
     }
 
     /**************************

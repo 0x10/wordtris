@@ -22,7 +22,7 @@ class WtMenuScoreSummary : public WtViewIf
 {
 public:
     WtMenuScoreSummary() :
-        WtViewIf( "#122339", false ),
+        WtViewIf( "#182e4b", false ),
         m_leave_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (138 / 2), (ACTIVE_WINDOW_HEIGHT - (ACTIVE_WINDOW_HEIGHT / 4))+(124/2) ),
                      WtDim( 138, 124 ),
                      "start_btn.bmp",
@@ -38,7 +38,7 @@ public:
                        WtCoord( -50, 200 ),
                        WtFont( "#498fe1", "text_big" ) ),
         m_textbox_bg( WtCoord( 0,(ACTIVE_WINDOW_HEIGHT / 2) - 150 ),
-                      WtDim( ACTIVE_WINDOW_WIDTH, 300 ), "#182e4b" ),
+                      WtDim( ACTIVE_WINDOW_WIDTH, 300 ), "#122338" ),
         m_textbox0( WtCoord( ACTIVE_WINDOW_WIDTH / 8, (ACTIVE_WINDOW_HEIGHT / 2) - 150),
                     WtDim( 0, 0 ),
                    "", ACTIVE_WINDOW.get_text_font() ),

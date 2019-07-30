@@ -144,6 +144,19 @@ public:
     /**************************
      *
      *************************/
+    void set_labels( std::vector<std::string> labels )
+    {
+        if ( labels.size() == m_labels.size() )
+        {
+            m_labels.clear();
+            m_labels = labels;
+        }
+    }
+
+
+    /**************************
+     *
+     *************************/
     size_t selected() const
     {
         return m_selected;

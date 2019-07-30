@@ -42,7 +42,15 @@ public:
      *************************/
     std::string get_title()
     {
-        return "@dark/label_mode_guessing.bmp";
+        return "@dark/label_mode_guessing_" + WtL10n::get_language_code() + ".bmp";
+    }
+
+    /**************************
+     *
+     *************************/
+    std::string get_name()
+    {
+        return WtL10n_tr("Guess the word");
     }
 
     /**************************
