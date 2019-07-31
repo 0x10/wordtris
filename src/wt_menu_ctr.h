@@ -27,7 +27,7 @@ class WtMenuCtr : public WtViewIf
 {
 public:
     WtMenuCtr() :
-        WtViewIf( "#172d4a", true, WtTime::TimeType(0), WT_BIND_EVENT_HANDLER_1( WtMenuCtr::handle_key_press ) ),
+        WtViewIf( "#172d4a", -1, -1, WtTime::TimeType(0), WT_BIND_EVENT_HANDLER_1( WtMenuCtr::handle_key_press ) ),
         m_drag_start_pos(0,0),
         m_was_drag(false),
         m_drag_button_id(0),
@@ -91,7 +91,9 @@ private:
      *************************/
     void enter_score_menu()
     {
+        set_fading( 1, 1 );
         enter_child_menu( m_scores );
+        set_fading( -1, -1 );
     }
 
     /**************************

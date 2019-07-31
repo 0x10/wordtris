@@ -43,7 +43,7 @@ private:
     } wt_game_state;
 public:
     WtGameCtr() :
-        WtViewIf( "#172d4a", false, WtTime::TimeType(12500), WT_BIND_EVENT_HANDLER_1( WtGameCtr::on_key_press ), "game_bg_music.ogg" ),
+        WtViewIf( "#172d4a", 0, 0, WtTime::TimeType(12500), WT_BIND_EVENT_HANDLER_1( WtGameCtr::on_key_press ), "game_bg_music.ogg" ),
         m_player(),
         m_active(),
         m_board(),

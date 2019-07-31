@@ -22,7 +22,7 @@ class WtMenuScoreSummary : public WtViewIf
 {
 public:
     WtMenuScoreSummary() :
-        WtViewIf( "#182e4b", false ),
+        WtViewIf( "#182e4b", 0, 1 ),
         m_leave_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (138 / 2), (ACTIVE_WINDOW_HEIGHT - (ACTIVE_WINDOW_HEIGHT / 4))+(124/2) ),
                      WtDim( 138, 124 ),
                      "start_btn.bmp",

@@ -32,7 +32,7 @@ private:
     static const ssize_t offset_content = 20;
 public:
     WtMenuCredits() :
-        WtViewIf("#122339"),
+        WtViewIf("#122339", 1),
         m_leave_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (138 / 2), (ACTIVE_WINDOW_HEIGHT - (ACTIVE_WINDOW_HEIGHT / 4))+(124/2) ), 
                      WtDim(138, 124),
                      "back_btn.bmp",
@@ -139,7 +139,9 @@ public:
      *************************/
     void enter_legal()
     {
+        set_fading( -1, -1 );
         enter_child_menu( m_legal_menu );
+        set_fading( 1, 1 );
     }
 
 private: // no copy allowed

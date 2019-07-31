@@ -38,7 +38,7 @@ private:
 
 public:
     WtMenuSettings() :
-        WtViewIf("#122339"),
+        WtViewIf("#122339", 1 ),
         m_current_diff(0),
         m_leave_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (138 / 2), (ACTIVE_WINDOW_HEIGHT - (ACTIVE_WINDOW_HEIGHT / 4))+(124/2) ), 
                      WtDim(138, 124), 
@@ -252,7 +252,9 @@ private: // no copy allowed
      *************************/
     void enter_credits()
     {
+        set_fading( -1, -1 );
         enter_child_menu( m_credits_menu );
+        set_fading( 1, 1 );
     }
 
     /**************************

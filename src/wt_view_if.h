@@ -33,7 +33,7 @@ public:
     using OnUpdateOverlayDelegate = std::function<void(void)>;
 public:
     WtViewIf( std::string bg_img="#172d4a", 
-              bool fade=true, 
+              ssize_t fade_in=-1,ssize_t fade_out=-1,
               WtTime::TimeType refresh_rate=WtTime::TimeType(0),
               OnKeyPressDelegate on_key_press_handler = nullptr,
               std::string bg_music="menu_bg_music.ogg" ) :
@@ -44,7 +44,8 @@ public:
         m_buttons(),
         m_textboxes(),
         m_carousels(),
-        m_fade( fade ),
+        m_fade_in( fade_in ),
+        m_fade_out( fade_out ),
         m_refresh_sleep_time( refresh_rate ),
         m_active_child( nullptr ),
         m_update_overlay( nullptr ),
@@ -60,7 +61,8 @@ public:
         m_buttons.clear();
         m_textboxes.clear();
         m_carousels.clear();
-        m_fade = rhs.m_fade;
+        m_fade_in = rhs.m_fade_in;
+        m_fade_out = rhs.m_fade_out;
         m_refresh_sleep_time = rhs.m_refresh_sleep_time;
         m_active_child = nullptr;
         m_update_overlay = rhs.m_update_overlay;
@@ -75,7 +77,8 @@ public:
         m_buttons(),
         m_textboxes(),
         m_carousels(),
-        m_fade( rhs.m_fade ),
+        m_fade_in( rhs.m_fade_in ),
+        m_fade_out( rhs.m_fade_out ),
         m_refresh_sleep_time( rhs.m_refresh_sleep_time ),
         m_active_child( nullptr ),
         m_update_overlay( nullptr ),
@@ -244,7 +247,7 @@ protected:
         ACTIVE_WINDOW.set_bg( get_bg_img() );
         ACTIVE_INPUT.register_on_quit_handler( WT_BIND_EVENT_HANDLER( WtViewIf::do_exit ) );
 
-        if ( m_fade ) fade_in();
+        if ( m_fade_in != 0 ) fade_in();
 
         for(size_t idx=0;idx<m_buttons.size();idx++)
         {
@@ -278,7 +281,7 @@ protected:
             ACTIVE_INPUT.remove_active_region( *(m_carousels[idx]) );
         }
 
-        if ( m_fade ) fade_out();
+        if ( m_fade_out != 0 ) fade_out();
 
         left_view();
     }
@@ -309,6 +312,17 @@ protected:
         {
             leave();
         }
+    }
+
+
+
+    /**************************
+     *
+     *************************/
+    void set_fading( ssize_t fade_in, ssize_t fade_out )
+    {
+        m_fade_in = fade_in;
+        m_fade_out = fade_out;
     }
 
 
@@ -343,9 +357,10 @@ private:
             button_fading.push_back( *m_buttons[idx] );
         }
 
+        ssize_t start_x = (m_fade_in * 800);
         for(size_t idx=0;idx<button_fading.size();idx++)
         {
-            button_fading[idx].set_x( button_fading[idx].x()-800 );
+            button_fading[idx].set_x( button_fading[idx].x() + start_x );
         }
         
         while( !done )
@@ -366,7 +381,7 @@ private:
             {
                 ssize_t dest_x = m_buttons[idx]->x();
 
-                button_fading[idx].set_x( button_fading[idx].x() + 80);
+                button_fading[idx].set_x( button_fading[idx].x() - ( 80 * m_fade_in ) );
                 if ( button_fading[idx].x() != dest_x )
                     done = false;
             }
@@ -402,9 +417,9 @@ private:
             done = true;
             for(size_t idx=0;idx<button_fading.size();idx++)
             {
-                ssize_t dest_x = m_buttons[idx]->x() - 800;
+                ssize_t dest_x = m_buttons[idx]->x() + (m_fade_out*800);
 
-                button_fading[idx].set_x( button_fading[idx].x() - 80);
+                button_fading[idx].set_x( button_fading[idx].x() + ( 80 * m_fade_out ) );
                 if ( button_fading[idx].x() != dest_x )
                     done = false;
             }
@@ -450,7 +465,8 @@ private:
     std::vector< WtButton* >                m_buttons;
     std::vector< WtTextbox* >               m_textboxes;
     std::vector< WtHorizontalCarousel* >    m_carousels;
-    bool                                    m_fade;
+    ssize_t                                 m_fade_in;
+    ssize_t                                 m_fade_out;
     WtTime::TimeType                        m_refresh_sleep_time;
     WtViewIf*                               m_active_child;
     OnUpdateOverlayDelegate                 m_update_overlay;

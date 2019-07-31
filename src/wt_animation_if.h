@@ -61,7 +61,7 @@ public:
 
 public:
     WtAnimationIf( std::string bg_music="game_bg_music.ogg" ) :
-        WtViewIf( "#172d4a", false,
+        WtViewIf( "#172d4a", 0, 0,
                   WtTime::TimeType(0),
                   nullptr,
                   bg_music ),

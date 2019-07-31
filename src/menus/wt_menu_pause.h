@@ -33,7 +33,7 @@ private:
 public:
     WtMenuPause( OnRestartDelegate restart_handler,
                  OnQuitDelegate    quit_handler ) :
-        WtViewIf( "#122339", false ),
+        WtViewIf( "#122339", 0, 0 ),
         //m_help(),
         m_leave_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (138 / 2), (ACTIVE_WINDOW_HEIGHT - (ACTIVE_WINDOW_HEIGHT / 4))+(124/2) ), 
                      WtDim(138, 124),
