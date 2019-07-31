@@ -77,7 +77,7 @@ public:
         uint32_t points = player.get_points();
         player_scores.append( points_to_string( points ) );
         WtCoord base_pos( 22,8 );
-        if ( points < 100000 )
+        if ( points < 1000 )
         {
             WtDim font_sz = DrawingPolicy::get_text_size( player_scores );
             WtCoord score_pos = base_pos;

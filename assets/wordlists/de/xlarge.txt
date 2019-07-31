@@ -1167,6 +1167,7 @@ Lauf
 Laus
 Lava
 Lech
+leer
 Leda
 Lehl
 Lehm
@@ -1615,6 +1616,8 @@ Schi
 Sech
 Seil
 Seim
+seid
+seit
 Sekt
 Selb
 Selm
@@ -1890,6 +1893,7 @@ Weck
 Weda
 Weed
 Weft
+Wert
 Wehe
 Wehr
 Weib
@@ -6610,6 +6614,7 @@ D:ppel
 d:rfen
 D:ssel
 d:ster
+dunkel
 ebenda
 ebenso
 echoen
