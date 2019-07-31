@@ -130,7 +130,7 @@ private:
 
         ACTIVE_WINDOW.draw_player_stat( m_player );
 
-        if ( m_active_mode->get_occupied_cell_count() < 5 )
+        if ( m_active_mode->get_occupied_cell_count() < 3 )
         {
             if ( ! m_hide_hint )
             {

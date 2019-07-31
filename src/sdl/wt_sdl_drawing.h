@@ -215,7 +215,7 @@ public:
             std::string val_str = WtL10n::localize_specials( std::string(1, value) );
             WtCoord pos = grid_pos_to_screen_pos_text( row, col, val_str, selected_font );
 
-            if ( value == ' ' )
+            if ( ( value == ' ' ) && ( font == "grid" ) )
             {
                 draw_custom_cell_bg( row, col,
                                      "grid_font_bg_space.bmp" );
