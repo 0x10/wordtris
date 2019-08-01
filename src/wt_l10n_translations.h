@@ -81,9 +81,9 @@ const std::vector<WtTranslationTexts> wt_translations = {
          "F I N I"/* fr */ }
     },
     { "EXIT GAME",
-       { "EXIT GAME"/* en */,
-         "SPIEL ENDE"/* de */,
-         "QUITTER"/* fr */ }
+       { "E X I T"/* en */,
+         "E N D E"/* de */,
+         "Q U I T T E R"/* fr */ }
     },
     { "Fill Rows",
        { "Fill Rows"/* en */,
@@ -131,9 +131,9 @@ const std::vector<WtTranslationTexts> wt_translations = {
          "Activer les sons et la musique"/* fr */ }
     },
     { "RESTART",
-       { "RESTART"/* en */,
-         "NEUSTART"/* de */,
-         "REDÉMARRER"/* fr */ }
+       { "R E S T A R T"/* en */,
+         "N E U S T A R T"/* de */,
+         "R E D É M A R R E R"/* fr */ }
     },
     { "S T A R T",
        { "S T A R T"/* en */,

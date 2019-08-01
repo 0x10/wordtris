@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="144px" height="144px" viewBox="0 0 144 144" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>Logo1</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Logo1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="Rectangle-Copy-9" fill="#122339" x="0" y="0" width="144" height="144" rx="12"></rect>
+        <g id="Group" transform="translate(23.000000, 11.000000)">
+            <rect id="Rectangle-Copy" stroke-opacity="0.2245684" stroke="#00BAFA" x="25.5" y="0.5" width="23" height="23" rx="2"></rect>
+            <rect id="Rectangle-Copy" stroke-opacity="0.609265734" stroke="#00BAFA" x="25.5" y="23.5" width="23" height="23" rx="2"></rect>
+            <rect id="Rectangle-Copy-3" stroke-opacity="0" stroke="#FFFFFF" fill="#388CFF" x="50.5" y="71.5" width="23" height="23" rx="2"></rect>
+            <rect id="Rectangle-Copy-3" stroke-opacity="0" stroke="#FFFFFF" fill="#388CFF" x="50.5" y="71.5" width="23" height="23" rx="2"></rect>
+            <rect id="Rectangle-Copy-4" stroke-opacity="0" stroke="#FFFFFF" fill="#388CFF" opacity="0.653785342" x="75.5" y="71.5" width="23" height="23" rx="2"></rect>
+            <text id="U" font-family="Muli-Bold, Muli" font-size="18" font-weight="bold" fill="#2B2B2B">
+                <tspan x="55.3686523" y="92">U</tspan>
+            </text>
+            <text id="A" font-family="Muli-Bold, Muli" font-size="18" font-weight="bold" fill="#2B2B2B">
+                <tspan x="80.5927734" y="92">A</tspan>
+            </text>
+            <rect id="Rectangle-Copy-3" stroke-opacity="0" stroke="#FFFFFF" fill="#388CFF" x="0.5" y="71.5" width="23" height="23" rx="2"></rect>
+            <rect id="Rectangle-Copy-3" stroke-opacity="0" stroke="#FFFFFF" fill="#00BAFA" x="25.5" y="46.5" width="23" height="23" rx="2"></rect>
+            <text id="Q" font-family="Muli-Bold, Muli" font-size="18" font-weight="bold" fill="#2B2B2B">
+                <tspan x="29.6567383" y="67">Q</tspan>
+            </text>
+            <text id="S" font-family="Muli-Bold, Muli" font-size="18" font-weight="bold" fill="#2B2B2B">
+                <tspan x="6.48046875" y="92">S</tspan>
+            </text>
+        </g>
+    </g>
+</svg>
