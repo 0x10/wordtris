@@ -70,7 +70,7 @@ public:
         // if true add player at correct position
         std::cout << "highscore entry: Lvl " << player.get_current_level() << " at " << player.get_points() << " within mode \"" << mode->get_title() << "\"" << std::endl;
 
-        WtScoreEntry new_entry( mode->get_title(),
+        WtScoreEntry new_entry( mode->get_id_string(),
                                 player.get_points(),
                                 player.get_current_level() );
 

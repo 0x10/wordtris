@@ -106,6 +106,17 @@ public:
         return result;
     }
 
+    /**************************
+     *
+     *************************/
+    const std::vector<std::string> get_available_mode_ids() const
+    {
+        std::vector<std::string> result;
+        for ( size_t idx = 0; idx < m_available_modes.size(); idx++ )
+            result.push_back( m_available_modes[idx]->get_id_string() );
+        return result;
+    }
+
 
     /**************************
      *

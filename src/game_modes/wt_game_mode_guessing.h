@@ -216,15 +216,22 @@ private:
      *************************/
     std::string scramble( std::string word )
     {
-        std::string word_copy = word;
-        std::string result = std::string("");
-
-        while ( ! word_copy.empty() )
+        std::string result = "";
+        uint8_t tries = 3;
+        
+        do
         {
-            char next = WtRandom::get_random_letter_of_word( word_copy );
-            result.push_back( next );
-            remove_letter( word_copy, next );
-        }
+            result = "";
+            std::string word_copy = word;
+
+            while ( ! word_copy.empty() )
+            {
+                char next = WtRandom::get_random_letter_of_word( word_copy );
+                result.push_back( next );
+                remove_letter( word_copy, next );
+            }
+            tries--;
+        } while (( result == word ) && (tries > 0));
 
         return result;
     }

@@ -47,7 +47,7 @@ public:
                        WtFont( "#00bafa", "text_big" ) ),
         m_list_bg( WtCoord(0, (ACTIVE_WINDOW_HEIGHT / 4)+50), WtDim(ACTIVE_WINDOW_WIDTH, 540), "#122338" ),
         m_scores( STORAGE.get_scores() ),
-        m_game_mode_titles( GAME_MODE_CTR.get_available_mode_titles() ),
+        m_game_mode_ids( GAME_MODE_CTR.get_available_mode_ids() ),
         m_game_mode_names( GAME_MODE_CTR.get_available_mode_names() ),
         m_selected_mode( 0 )
     {
@@ -168,8 +168,8 @@ private: // no copy allowed
         for( size_t e_idx=0; (e_idx < m_scores.size()) && (score_entry <= 10); e_idx++ )
         {
             WtScoreEntry entry =  m_scores[e_idx];
-#warning change me to mode_id after presentation; renable pendantic errors in makefile
-            if ( entry.game_mode == m_game_mode_titles[m_selected_mode] )
+
+            if ( entry.game_mode == m_game_mode_ids[m_selected_mode] )
             {
                 draw_entry( score_entry, entry );
                 score_entry++;
@@ -192,7 +192,7 @@ private:
     WtButton                       m_title_btn;
     WtButton                       m_list_bg;
     WtHighscores&                  m_scores;
-    const std::vector<std::string> m_game_mode_titles;
+    const std::vector<std::string> m_game_mode_ids;
     std::vector<std::string>       m_game_mode_names;
     size_t                         m_selected_mode;
 };
