@@ -25,7 +25,7 @@ public:
         WtViewIf("#182e4b"),
         m_leave_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (138 / 2), (ACTIVE_WINDOW_HEIGHT - (ACTIVE_WINDOW_HEIGHT / 4))+(124/2) ), 
                      WtDim(138, 124),
-                     "back_btn.bmp",
+                     "next_btn.bmp",
                      WT_BIND_EVENT_HANDLER( WtMenuHighscores::leave ),
                      WtL10n_tr( "B A C K"),
                      WtCoord( -20, 25 ),

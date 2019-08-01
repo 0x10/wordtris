@@ -390,7 +390,7 @@ public:
                 ssize_t in_cell_y_offset = 0;
                 WtDim c_size = m_grid_font.text_size( t );
                 in_cell_x_offset = (static_cast<ssize_t>(m_grid_font.width())/2)-(c_size.w/2);
-                in_cell_y_offset = ((c_size.h - static_cast<ssize_t>(m_grid_font.height())) / 2) + 1;
+                in_cell_y_offset = (static_cast<ssize_t>(m_grid_font.height())/2)-((c_size.h/2) - 10);
                 screen_pos.x = working_pos.x + in_cell_x_offset;
                 screen_pos.y = working_pos.y - in_cell_y_offset;
 
