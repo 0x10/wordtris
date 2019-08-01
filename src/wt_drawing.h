@@ -269,7 +269,7 @@ public:
                 if ( label.find_first_of("#@") != 0 )
                 {
                     label = WtL10n::translate( label );
-                    WtDim font_sz = DrawingPolicy::get_text_size( label );
+                    WtDim font_sz = DrawingPolicy::get_text_size( label, button.label_font().fontname );
                     WtCoord label_pos( button.x() + button.label_pos().x, button.y() + button.label_pos().y);
                     if ( button.label_centered() )
                     {

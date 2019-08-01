@@ -32,7 +32,7 @@ public:
                      "back_btn.bmp",
                      WT_BIND_EVENT_HANDLER( WtMenuLegal::leave ),
                      WtL10n_tr( "B A C K"),
-                     WtCoord( -20, 25 ),
+                     WtCoord( 0, 25 ),
                      WtFont( "#498fe1", "text_big" ) ),
         m_text_cc0( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (m_standard_btn_size.w / 2), offset_y ),
                       WtDim( m_standard_btn_size.w, 1 ),

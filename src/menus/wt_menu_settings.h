@@ -45,7 +45,7 @@ public:
                      "back_btn.bmp",
                      WT_BIND_EVENT_HANDLER( WtMenuSettings::leave ),
                      WtL10n_tr( "B A C K"),
-                     WtCoord( -20, 25 ),
+                     WtCoord( 0, 25 ),
                      WtFont( "#498fe1", "text_big" ) ),
         m_lang_select_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - ((74+74+74+(m_standard_btn_size.w/3-74)*2) / 2), offset_y + m_standard_btn_size.h/2 ),
                            m_standard_btn_size,

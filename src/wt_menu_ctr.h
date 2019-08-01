@@ -47,7 +47,7 @@ public:
                      "next_btn.bmp",
                      WT_BIND_EVENT_HANDLER( WtMenuCtr::game_mode_selected ),
                      WtL10n_tr( "S T A R T"),
-                     WtCoord( -20, 25 ),
+                     WtCoord( 0, 25 ),
                      WtFont( "#498fe1", "text_big" ) ),
         m_select_label( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (366 / 2), (ACTIVE_WINDOW_HEIGHT / 4)-(70/2) ),
                        WtDim( 366, 70 ),
