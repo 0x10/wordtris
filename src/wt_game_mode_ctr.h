@@ -119,7 +119,8 @@ public:
     }
 private:
     WtGameModeCtr() :
-        m_lockedMode(),
+        m_lockedModeAlpha("label_mode_alphabet"),
+        m_lockedModeGuess("label_mode_guessing"),
         m_guessMode(),
 //        m_tetrisMode(),
         m_abcMode(),
@@ -131,13 +132,13 @@ private:
 #ifdef WT_PRO_MODE
         m_available_modes.push_back( &m_abcMode );
 #else
-        m_available_modes.push_back( &m_lockedMode );
+        m_available_modes.push_back( &m_lockedModeAlpha );
 #endif /* WT_PRO_MODE */
         m_available_modes.push_back( &m_wordtrisMode );
 #ifdef WT_PRO_MODE
         m_available_modes.push_back( &m_guessMode );
 #else
-        m_available_modes.push_back( &m_lockedMode );
+        m_available_modes.push_back( &m_lockedModeGuess );
 #endif /* WT_PRO_MODE */
     }
     WtGameModeCtr( const WtGameModeCtr& ); 
@@ -145,7 +146,8 @@ private:
 
 
 private:
-    WtGameModeDemo              m_lockedMode;
+    WtGameModeDemo              m_lockedModeAlpha;
+    WtGameModeDemo              m_lockedModeGuess;
     WtGameModeGuessing          m_guessMode;
 //    WtGameModeTetris            m_tetrisMode;
     WtGameModeAbc               m_abcMode;

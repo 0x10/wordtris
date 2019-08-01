@@ -214,9 +214,9 @@ private:
 class WtGameModeDemo : public WtGameModeIf
 {
 public:
-    WtGameModeDemo() :
+    WtGameModeDemo( std::string title ) :
         WtGameModeIf( "LOCKED" ),
-        m_active_wordbase( "12340()()()()#@abcdEFGK" )
+        m_title(title)
     {
     }
     ~WtGameModeDemo()
@@ -236,7 +236,7 @@ public:
      *************************/
     virtual std::string get_title()
     {
-        return WtL10n_tr("Locked! Buy Pro");
+        return "@dark/"+ m_title+ "_"+ WtL10n::get_language_code() +"_locked.bmp";
     }
 
     /**************************
@@ -244,7 +244,7 @@ public:
      *************************/
     virtual std::string get_name()
     {
-        return WtL10n_tr("Locked! Buy Pro");
+        return "";
     }
 
     /**************************
@@ -287,7 +287,7 @@ private:
 
 
 private:
-    std::string m_active_wordbase;
+    std::string m_title;
 };
 
 
