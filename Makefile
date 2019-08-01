@@ -9,7 +9,7 @@ LD_FLAGS=-Wl,-z,defs -Wl,-z,now -Wl,-z,relro -Wl,-z,noexecstack
 LIBS=-L$(SDL_DIR)/build/.libs -lSDL2 -L$(SDL_TTF_DIR)/build/.libs -lSDL2_ttf -L$(SDL_MIXER_DIR)/build/.libs -lSDL2_mixer
 INCLUDES=-I./pc_include -I$(BUILD_DIR) -I$(SRC_DIR) -I$(SDL_DIR)/include -I$(SDL_TTF_DIR) -I$(SDL_MIXER_DIR)
 
-ANDROID_DIR=org.libsdl.wordtris
+ANDROID_DIR=cc.deadlock.squabbel
 SRC_DIR=./src
 BUILD_DIR=.
 SDL_DIR=./SDL2-2.0.9

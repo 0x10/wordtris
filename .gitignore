@@ -1,12 +1,7 @@
-org.libsdl.wordtris/app/build
-org.libsdl.wordtris/app/.externalNativeBuild
-org.libsdl.wordtris/.gradle
+cc.deadlock.squabbel/app/build
+cc.deadlock.squabbel/app/.externalNativeBuild
+cc.deadlock.squabbel/.gradle
 *.dat
-squabbel
-wordtris_sdl
-squabbel_lite
-wordtris_sdl_lite
-wordtris_ncurses
 SDL2-2.0.9/build
 SDL2_mixer-2.0.4/build
 SDL2-2.0.9/Makefile
