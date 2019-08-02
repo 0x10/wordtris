@@ -223,6 +223,9 @@ private:
      *************************************/
     void language_changed()
     {
+        m_cache_min_len = 0;
+        m_cache_max_len = 0;
+        m_list_cache.clear();
         load_from_list( m_list_fname, m_conv );
     }
 
