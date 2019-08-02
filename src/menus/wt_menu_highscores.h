@@ -30,11 +30,11 @@ public:
                      WtL10n_tr( "B A C K"),
                      WtCoord( 0, 25 ),
                      WtFont( "#498fe1", "text_big" ) ),
-        m_left_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 8)-(80/2), ((ACTIVE_WINDOW_HEIGHT / 8)+130)-(10) ), 
+        m_left_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 8)-(80/2), ((ACTIVE_WINDOW_HEIGHT / 8)+150)-(10) ), 
                     WtDim(80, 42), 
                     "left.bmp",
                     WT_BIND_EVENT_HANDLER( WtMenuHighscores::show_prev_mode ) ),
-        m_right_btn( WtCoord( (ACTIVE_WINDOW_WIDTH-(ACTIVE_WINDOW_WIDTH / 8))-(80/2), ((ACTIVE_WINDOW_HEIGHT / 8)+130)-(10) ), 
+        m_right_btn( WtCoord( (ACTIVE_WINDOW_WIDTH-(ACTIVE_WINDOW_WIDTH / 8))-(80/2), ((ACTIVE_WINDOW_HEIGHT / 8)+150)-(10) ), 
                      WtDim(80, 42), 
                      "right.bmp",
                      WT_BIND_EVENT_HANDLER( WtMenuHighscores::show_next_mode ) ),
@@ -43,9 +43,9 @@ public:
                        "label_score.bmp",
                        [](){},
                        "",
-                       WtCoord( 0, 135 ),
+                       WtCoord( 0, 160 ),
                        WtFont( "#00bafa", "text_big" ) ),
-        m_list_bg( WtCoord(0, (ACTIVE_WINDOW_HEIGHT / 4)+50), WtDim(ACTIVE_WINDOW_WIDTH, 540), "#122338" ),
+        m_list_bg( WtCoord(0, (ACTIVE_WINDOW_HEIGHT / 4)-50), WtDim(ACTIVE_WINDOW_WIDTH, 650), "#122338" ),
         m_scores( STORAGE.get_scores() ),
         m_game_mode_ids( GAME_MODE_CTR.get_available_mode_ids() ),
         m_game_mode_names( GAME_MODE_CTR.get_available_mode_names() ),
@@ -53,6 +53,7 @@ public:
     {
         WtL10n::register_lang_change_obsever( WT_BIND_EVENT_HANDLER( WtMenuHighscores::language_changed ) );
 
+        add_button( m_list_bg );
         add_button( m_leave_btn );
 #ifdef WT_PRO_MODE
         if ( m_game_mode_names.size() > 1 )
@@ -62,7 +63,7 @@ public:
         }
 #endif
         add_button( m_title_btn );
-        add_button( m_list_bg );
+        
     }
     ~WtMenuHighscores() {}
 private: // no copy allowed

@@ -347,6 +347,7 @@ private:
     void leave_game()
     {
         m_hide_hint = false;
+        m_active_mode->clear_occupied_cell_count();
         m_game_state = GAME_STOPPED;
         if ( m_player.get_points() > 0 )
         {

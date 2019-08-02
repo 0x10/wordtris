@@ -183,6 +183,14 @@ public:
         return m_cell_occupied_count;    
     }
 
+    /**************************
+     *
+     *************************/
+    void clear_occupied_cell_count()
+    {
+        m_cell_occupied_count = 0;
+    }
+
 protected:
     /**************************
      *

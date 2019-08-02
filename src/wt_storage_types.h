@@ -32,7 +32,7 @@ class WtSettings
 {
 public:
     WtSettings() :
-        language( "en" ),
+        language( "de" ),
         game_mode( "" ),
         difficulty( wt_difficulty_EASY ),
         active_theme( "default" ),
