@@ -128,7 +128,7 @@ public:
             m_list_cache.clear();
             for( size_t i = 0; i < m_list.size(); i++ )
             {
-                if (( m_list[i].length() >= min_len ) && ( m_list[i].length() < max_len ))
+                if (( m_list[i].length() >= min_len ) && ( m_list[i].length() <= max_len ))
                 {
                     m_list_cache.push_back( m_list[i] );
                 }

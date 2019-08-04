@@ -47,6 +47,10 @@ android-dbg:
 	cd $(ANDROID_DIR) && ./gradlew assembleLiteDebug assembleProDebug
 	cd -
 
+android-release:
+	cd $(ANDROID_DIR) && ./gradlew assembleLiteRelease assembleProRelease
+	cd -
+
 publish-dbg:
 	@cp $(APK_PATH)/lite/debug/app-lite-debug.apk $(APK_PATH)/lite/debug/$(APK_TRG_NAME)_lite.apk
 	@cp $(APK_PATH)/pro/debug/app-pro-debug.apk $(APK_PATH)/pro/debug/$(APK_TRG_NAME)_pro.apk
