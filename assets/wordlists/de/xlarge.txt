@@ -723,6 +723,8 @@ Fenz
 fern
 Feta
 Fete
+Fett
+Fette
 Fick
 fies
 FIFA
@@ -1567,6 +1569,7 @@ Roch
 Rock
 Rohr
 Rose
+rosa
 Ross
 Rost
 Rota
@@ -2429,6 +2432,7 @@ Borte
 Boson
 Bosse
 Botin
+Boote
 Bowle
 Bowls
 Boxer
@@ -3368,6 +3372,7 @@ iahen
 Ibiza
 Idaho
 ident
+ideal
 Idiom
 Idiot
 Idist

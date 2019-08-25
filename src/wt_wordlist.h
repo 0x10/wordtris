@@ -87,6 +87,8 @@ public:
         eNone,
     } EConvertChars;
 
+    typedef std::map<std::string, std::vector<std::string> > SequenceCache;
+
     WtWordList( const std::string input_list_name="", EConvertChars conv=eNone ) :
         m_words(),
         m_list_fname(input_list_name),
@@ -94,7 +96,8 @@ public:
         m_list(),
         m_cache_min_len(0),
         m_cache_max_len(0),
-        m_list_cache()
+        m_list_cache(),
+        m_sequence_cache()
     {
         if ( ! input_list_name.empty() )
             load_from_list( input_list_name, conv );
@@ -196,22 +199,31 @@ public:
      *************************************/
     std::vector<std::string> get_contained_words( const std::string sequence, const size_t min_length )
     {
+        SequenceCache::const_iterator it = m_sequence_cache.find( sequence );
         std::vector<std::string> found_words;
-        for( size_t idx = 0; idx<sequence.length(); idx++ )
+        if ( it != m_sequence_cache.end() )
         {
+            found_words = (*it).second;
+        }
+        else
+        {
+            for( size_t idx = 0; idx<sequence.length(); idx++ )
+            {
+                for( size_t w_idx = 0; w_idx < m_words.size(); w_idx++ )
+                {
+        //                std::cout << idx << " update on " << m_words[w_idx].as_string() << std::endl;
+                    m_words[w_idx].search_update( sequence[idx] );
+                }
+            }
             for( size_t w_idx = 0; w_idx < m_words.size(); w_idx++ )
             {
-//                std::cout << idx << " update on " << m_words[w_idx].as_string() << std::endl;
-                m_words[w_idx].search_update( sequence[idx] );
+                if ( m_words[w_idx].search_found() && ( m_words[w_idx].as_string().length() >= min_length ) )
+                {
+                    found_words.push_back( m_words[w_idx].as_string() );
+                }
+                m_words[w_idx].search_reset();
             }
-        }
-        for( size_t w_idx = 0; w_idx < m_words.size(); w_idx++ )
-        {
-            if ( m_words[w_idx].search_found() && ( m_words[w_idx].as_string().length() >= min_length ) )
-            {
-                found_words.push_back( m_words[w_idx].as_string() );
-            }
-            m_words[w_idx].search_reset();
+            m_sequence_cache[sequence] = found_words;
         }
         return found_words;
     }
@@ -226,6 +238,7 @@ private:
         m_cache_min_len = 0;
         m_cache_max_len = 0;
         m_list_cache.clear();
+        m_sequence_cache.clear();
         load_from_list( m_list_fname, m_conv );
     }
 
@@ -255,6 +268,7 @@ private:
     size_t                   m_cache_min_len;
     size_t                   m_cache_max_len;
     std::vector<std::string> m_list_cache;
+    SequenceCache            m_sequence_cache;
 };
 
 
