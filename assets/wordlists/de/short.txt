@@ -14,6 +14,7 @@ Beruf
 Bildschirm
 Bus
 Computer
+Dampfer
 Dezember
 Dienstag
 Durst
@@ -39,6 +40,7 @@ Herr
 Himmel
 Hut
 Hunger
+Jahr
 Januar
 Juli
 Juni
@@ -71,7 +73,8 @@ Passant
 Platz
 Projektor
 Pullover
-Radiergummi
+Radierer
+Rahmen
 Regen
 Rock
 Schinken
@@ -102,6 +105,7 @@ Wunsch
 Zeiger
 Zucker
 Zug
+Zugf:hrer
 Zuschauer
 Adresse
 Apfelsine
@@ -137,12 +141,12 @@ Gr.sse
 Hilfe
 Hose
 H:tte
-Information
+Info
 Kasse
 Kassette
 Kirche
 Krawatte
-Kreditkarte
+Kredit
 Kreide
 K:che
 Kultur
@@ -174,11 +178,10 @@ Reparatur
 Sache
 Sahne
 Schule
-SMS
 Socke
 Sonne
 Strasse
-Strassenbahn
+Tram
 Tasche
 Tasse
 Toilette
@@ -207,7 +210,7 @@ Bier
 Bild
 Br.tchen
 Buch
-Café
+Kaffee
 Fahrrad
 Fest
 Flugzeug
@@ -253,3 +256,5 @@ Warenhaus
 Wasser
 Wetter
 Wunder 
+Zeichen
+Weiche

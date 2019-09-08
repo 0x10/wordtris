@@ -463,7 +463,6 @@ Born
 Boss
 Bote
 brav
-Brač
 Brei
 Brie
 Brom
@@ -496,7 +495,6 @@ B:ro
 B:si
 B:tt
 Caen
-Café
 Calw
 Caló
 Camp
@@ -964,7 +962,6 @@ Iker
 Ikon
 Ilex
 Ilse
-IMAP
 Imme
 Imst
 Inch
@@ -974,10 +971,6 @@ Inro
 Inti
 Inuk
 Iota
-Iowa
-iPod
-Irak
-Iran
 Iren
 Irin
 Iris
@@ -1378,6 +1371,7 @@ Nord
 Norm
 Note
 Nova
+Null
 Nuss
 Nute
 Nuuk
