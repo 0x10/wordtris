@@ -68,6 +68,7 @@ public:
 
         clear_sfx_cache();
 
+        Mix_CloseAudio();
         Mix_Quit();
     }
 
