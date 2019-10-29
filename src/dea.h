@@ -51,21 +51,19 @@ struct dea_input_symbol_t
 };
 
 
-class TDeaState;
-
 /*******************************************************************************
  *
  ******************************************************************************/
-class TDeaTransition
+class DeaTransition
 {
 public:
-    TDeaTransition( size_t             trg,
+    DeaTransition( size_t             trg,
                     dea_input_symbol_t input_symbol ) :
         m_input_symbol( input_symbol ),
         m_next_state( trg )
     {
     }
-    ~TDeaTransition()
+    ~DeaTransition()
     {
     }
 
@@ -100,8 +98,6 @@ public:
                     if ( 0 != verbose ) 
                         printf("\t FAIL");
                 }
-                if ( 0 != verbose ) 
-                    printf("\n");
                 break;
             case CHAR:
                 if ( symbol == m_input_symbol.symbol )
@@ -112,6 +108,8 @@ public:
             default: 
                 break;
         }
+        if ( 0 != verbose ) 
+           printf("\n");
 
         return matching;
     }
@@ -123,7 +121,14 @@ public:
     {
         return m_next_state;
     }
-
+    
+    /**************************************************************************
+     *
+     **************************************************************************/
+    dea_input_symbol_t get_transition_symbol()
+    {
+        return m_input_symbol;
+    }
 private:
     /**************************************************************************
      *
@@ -166,19 +171,21 @@ private:
     size_t             m_next_state;
 };
 
+
 /*******************************************************************************
  *
  ******************************************************************************/
-class TDeaState
+class DeaStateImproved
 {
 public:
-    TDeaState( bool is_accepting ) :
-        m_is_accepting( is_accepting ),
+    DeaStateImproved( ssize_t accepting_index ) :
+        m_accepting_index( accepting_index ),
         m_transitions()
     {
+        new_transition( 0, dea_input_symbol_t( ANY_SYMBOL, SPECIAL ) );
     }
 
-    ~TDeaState()
+    ~DeaStateImproved()
     {
     }
 
@@ -188,8 +195,25 @@ public:
      **************************************************************************/
     bool is_accepting()
     {
-        return m_is_accepting;
+        return (m_accepting_index >= 0);
     }
+
+    /**************************************************************************
+     *
+     **************************************************************************/
+    ssize_t accepting_index()
+    {
+        return m_accepting_index;
+    }
+
+    /**************************************************************************
+     *
+     **************************************************************************/
+    DeaTransition& transition( size_t at )
+    {
+        return m_transitions[at];
+    }
+
 
     /**************************************************************************
      *
@@ -202,9 +226,17 @@ public:
     /**************************************************************************
      *
      **************************************************************************/
+    std::vector<DeaTransition>& transitions()
+    {
+        return m_transitions;
+    }
+
+    /**************************************************************************
+     *
+     **************************************************************************/
     void print( size_t idx, bool is_current )
     {
-        printf("     |--> [%zd @ %p] is_accepting == %d", idx, static_cast<void*>(this), m_is_accepting );
+        printf("     |--> [%zd @ %p] is_accepting == %ld", idx, static_cast<void*>(this), m_accepting_index );
         if ( false != is_current ) printf(" {*}\n");
         else printf("\n");
 
@@ -220,7 +252,10 @@ public:
     void new_transition( size_t             trg,
                          dea_input_symbol_t input_symbol )
     {
-        m_transitions.push_back( TDeaTransition( trg, input_symbol ) );
+        std::vector<DeaTransition>::iterator it;
+
+        it = m_transitions.begin();
+        m_transitions.insert( it, DeaTransition( trg, input_symbol ) );
     }
 
     /**************************************************************************
@@ -247,35 +282,24 @@ public:
     }
 
 private:
-    bool                        m_is_accepting;
-    std::vector<TDeaTransition> m_transitions;
+    ssize_t                     m_accepting_index;
+    std::vector<DeaTransition> m_transitions;
 };
+
 
 /*******************************************************************************
  *
  ******************************************************************************/
-class TDea
+class DeaImproved
 {
 public:
-    TDea() :
+    DeaImproved() :
         m_states(),
         m_current_state(0)
     {
-        m_states.push_back( TDeaState( false ) );
+        m_states.push_back( DeaStateImproved( -1 ) );
     }
-    TDea( size_t state_count ) :
-        m_states(),
-        m_current_state(0)
-    {
-        m_states.resize( state_count, TDeaState( false ) );
-    }
-    TDea( std::string contains_word ) :
-        m_states(),
-        m_current_state(0)
-    {
-        new_contains( contains_word );
-    }
-    ~TDea()
+    ~DeaImproved()
     {
     }
 
@@ -313,21 +337,47 @@ public:
     /**************************************************************************
      *
      **************************************************************************/
-    bool verify_input( std::string input )
+    std::vector<ssize_t> find_in_string( std::string input )
     {
-        bool result = false;
+        std::vector<ssize_t> result;
 
         size_t input_len = input.length();
-        printf("input(%zd) = %s\n", input_len, input.c_str() );
+        //printf("input(%zd) = %s\n", input_len, input.c_str() );
+        
+        init();
+
         for ( size_t input_idx = 0; input_idx < input_len; input_idx++ )
         {
-            process_symbol( input[input_idx], 1 );
+            m_current_state = m_states[m_current_state].process_symbol( m_current_state, input[input_idx], 0 );
+            if ( m_states[m_current_state].accepting_index() >= 0 )
+            {
+                result.push_back(m_states[m_current_state].accepting_index());
+            }
         }
-
-        result = m_states[m_current_state].is_accepting();
+        //printf("\n");
 
         return result;
     }
+
+    /**************************************************************************
+     *
+     **************************************************************************/
+    std::vector<ssize_t> find_in_string_multipass( std::string input )
+    {
+        std::vector<ssize_t> result;
+
+        std::vector<ssize_t> working = find_in_string(input);
+        result.insert(result.end(), working.begin(), working.end());
+
+        for ( size_t input_idx = 1; input_idx < input.length(); input_idx++ )
+        {
+            working = find_in_string( input.substr(input_idx) );
+            result.insert(result.end(), working.begin(), working.end());
+        }        
+
+        return result;
+    }
+
 
     /**************************************************************************
      *
@@ -336,17 +386,26 @@ public:
     {
         return m_states[m_current_state].is_accepting();
     }
-private:
+
+
     /**************************************************************************
      *
      **************************************************************************/
-    void new_contains( std::string w )
+    ssize_t accepting_index()
+    {
+        return m_states[m_current_state].accepting_index();
+    }
+
+    /**************************************************************************
+     *
+     **************************************************************************/
+    void new_contains( std::string w, size_t index )
     {
         if ( w.length() > 0 )
         {
             m_states.clear();
-            m_states.resize( w.length(), TDeaState( false ) );
-            m_states.push_back( TDeaState( true ) );
+            m_states.resize( w.length(), DeaStateImproved( -1 ) );
+            m_states.push_back( DeaStateImproved( static_cast<ssize_t>(index) ) );
 
             m_states[0].new_transition( 1, dea_input_symbol_t( w[0], CHAR ) );
 
@@ -356,6 +415,87 @@ private:
                 m_states[i].new_transition( 1,   dea_input_symbol_t( w[0], CHAR ) );
                 m_states[i].new_transition( 0,   dea_input_symbol_t( ANY_SYMBOL, SPECIAL ) );
             }
+        }
+    }
+
+
+    /**************************************************************************
+     *
+     **************************************************************************/
+    void else_contains( std::string w, size_t index )
+    {
+        if ( w.length() > 0 )
+        {
+            if ( m_states[0].transition_count() > 0 )
+            {
+                size_t current_state = 0;
+                size_t word_starting_state = 0;
+
+                for (size_t i=0; i<w.length(); i++ )
+                {
+                    size_t found_idx = 0;
+                    while(    ( found_idx < m_states[current_state].transition_count() )
+                           && ( ( m_states[current_state].transition(found_idx).get_transition_symbol().symbol != w[i] )
+                                || (m_states[current_state].transition(found_idx).get_transition_symbol().type == SPECIAL) ) )
+                    {
+                        found_idx++;
+                    }
+
+                    if ( found_idx == m_states[current_state].transition_count() )
+                    {
+                        ssize_t accepting_index = -1;
+                        // not found -> add new
+                        if ( i == (w.length() - 1) )
+                        {
+                            accepting_index = static_cast<ssize_t>(index);
+                        }
+                        else
+                        {
+                            accepting_index = -1;
+                        }
+                        m_states.push_back( DeaStateImproved( accepting_index ) );
+                        size_t dst_state = m_states.size() - 1;
+                        
+                        if ( i == 0 )
+                        {
+                            word_starting_state = dst_state;
+                        }
+                        else
+                        {
+                            if ( ! m_states[current_state].is_accepting() )
+                            {
+                                size_t end_found_idx=0;
+                                while (    ( end_found_idx < m_states[current_state].transition_count() )
+                                        && ( m_states[current_state].transition(end_found_idx).get_transition_symbol().symbol != w[0] )
+                                        && ( m_states[current_state].transition(end_found_idx).get_next_state() == word_starting_state )
+                                      ) 
+                                {
+                                    end_found_idx++;
+                                }
+                                if ( end_found_idx == m_states[current_state].transition_count() )
+                                    m_states[current_state].new_transition( word_starting_state, dea_input_symbol_t( w[0], CHAR ) );
+                            }
+                        }
+
+                        m_states[current_state].new_transition( dst_state, dea_input_symbol_t( w[i], CHAR ) );
+
+                        current_state = dst_state;
+                    }
+                    else
+                    {
+                        // found
+                        current_state = m_states[current_state].transition(found_idx).get_next_state();
+                        word_starting_state = current_state;
+                        //std::cout << "found prefix " << std::string(w[i], 1) << " ..skip\n";
+                    }
+
+                }
+
+            }
+            else
+            {
+                new_contains( w, index );
+            }
 
             init();
         }
@@ -364,8 +504,10 @@ private:
 
 
 private:
-    std::vector<TDeaState> m_states;
-    size_t                 m_current_state;
+    std::vector<DeaStateImproved> m_states;
+    size_t                        m_current_state;
 };
+
+
 
 #endif /* __DEA_H_ */
