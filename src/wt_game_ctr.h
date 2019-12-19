@@ -28,6 +28,7 @@
 //#include "menus/wt_menu_game_mode_intro.h"
 
 #include "widgets/wt_grid_touch_overlay.h"
+#include "widgets/wt_numpad.h"
 
 
 class WtGameCtr : public WtViewIf
@@ -52,10 +53,12 @@ public:
                       WT_BIND_EVENT_HANDLER( WtGameCtr::return_to_menu ) ),
         m_score_summary(),
         //m_game_mode_intro(),
-        m_grid_touch_control( WtCoord( 0, 0 ),
+        m_grid_touch_control( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - ((76*WtBoard::col_count) / 2), 100 ),
                               WtDim( WtBoard::col_count * 76, WtBoard::row_count * 76 ),
                               WtDim( 76, 76 ),
                               WT_BIND_EVENT_HANDLER_1( WtGameCtr::notify_click ) ),
+        m_numpad( WtCoord( 0, (WtBoard::row_count * 76) + 100 ), WtDim(ACTIVE_WINDOW_WIDTH, 100 ), 0, 
+                  WT_BIND_EVENT_HANDLER_1( WtGameCtr::notify_num_click ) ),
         m_pause_btn( WtCoord( (ACTIVE_WINDOW_WIDTH-65)-24, (80-65)/2 ),
                      WtDim( 65, 65 ),
                      "settings_logo.bmp",
@@ -67,15 +70,14 @@ public:
         m_pause_end_animation(""),
         m_current_update_counter(48),
         m_game_state( GAME_STOPPED ),
-        m_hide_hint( false ),
-        m_bomb_dropped(false)
+        m_hide_hint( false )
     {
 
         WtGridAnimationBuilder::construct_pause_animation( m_pause_end_animation );
 
         add_button( m_settings_bg );
         add_button( m_pause_btn );
-        
+        add_numpad( m_numpad );
 
         if ( nullptr != m_active_mode )
             m_active_mode->set_difficulty( STORAGE.get_settings().difficulty );
@@ -153,14 +155,7 @@ private:
                                            m_active.current_row() - 1,
                                            m_active.current_column() ) )
         {
-            if (m_active.current_value() == '*')
-            {
-                if ( ! m_bomb_dropped )
-                {
-                    ACTIVE_SFX.play_sound("bomb");
-                }
-                m_bomb_dropped = false;
-            }
+
             /* commit ACTIVE to board */
             m_active_mode->insert_stone_at( m_board, 
                                             m_active.current_row(), 
@@ -217,7 +212,6 @@ private:
                 break;
 
             case wt_control_DROP:
-                notify_drop();
                 break;
             case wt_control_LEFT:
                 notify_left();
@@ -243,27 +237,22 @@ private:
     /**************************
      *
      *************************/
-    void notify_drop()
+    void notify_num_click( size_t number )
     {
-        uint8_t new_row = m_active.current_row() - 1;
-        while ( ! m_active_mode->stone_blocked( m_board,
-                                                new_row,
-                                                m_active.current_column() ) )
+        std::cout << "num pad clicked at " << number << std::endl;
+        if ( number == 0 )
         {
-            new_row --;
+            m_board.set_cell( m_active.current_row(),
+                              m_active.current_column(),
+                              WtBoard::empty_cell );
         }
-        new_row++;
+        else
+        {
+            m_board.set_cell( m_active.current_row(),
+                              m_active.current_column(),
+                              number + 0x30 );
+        }
 
-        m_player.letter_dropped( m_active.current_row() - new_row );
-        m_active.drop_at( new_row );
-        if (m_active.current_value() == '*')
-        {
-            if ( ! m_bomb_dropped )
-            {
-                ACTIVE_SFX.play_sound("bomb");
-                m_bomb_dropped = true;
-            }
-        }
     }
 
     /**************************
@@ -456,6 +445,7 @@ private:
     //WtMenuGameModeIntro m_game_mode_intro;
 
     WtGridTouchOverlay  m_grid_touch_control;
+    WtNumPad            m_numpad;
     WtButton            m_pause_btn;
     WtButton            m_settings_bg;
 
@@ -464,7 +454,6 @@ private:
     uint8_t             m_current_update_counter;
     wt_game_state       m_game_state;
     bool                m_hide_hint;
-    bool                m_bomb_dropped;
 };
 
 

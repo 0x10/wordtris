@@ -26,7 +26,7 @@
 #include "wt_sdl_utils.h"
 #include "wt_sdl_font.h"
 #include "wt_sdl_config.h"
-
+#include "wt_board.h"
 #define SDL_WINDOW WINDOW( WtDrawingPolicySdl )
 class WtDrawingPolicySdl
 {
@@ -37,7 +37,7 @@ private:
     static const uint8_t BIG_TEXT_FONT_SIZE = 32;
     static const uint8_t GRID_FONT_SIZE = 76;
     static const uint8_t GRID_OFFSET_X = /*78*/0;
-    static const uint8_t GRID_OFFSET_Y = 0/*127-GRID_FONT_SIZE*/;
+    static const uint8_t GRID_OFFSET_Y = 100/*127-GRID_FONT_SIZE*/;
 
     typedef std::map<std::string, SDL_Texture*> SDL_TextureCache;
 // policy use only
@@ -480,7 +480,8 @@ private:
         WtCoord screen_pos(0,0);
         if ( NULL != font )
         {
-            screen_pos.x = (((col*static_cast<ssize_t>(font->width()))+col)+GRID_OFFSET_X);
+            uint8_t gridoffset_x = (SDL_WIDTH / 2) - (( WtBoard::col_count * GRID_FONT_SIZE ) / 2 );
+            screen_pos.x = (((col*static_cast<ssize_t>(font->width()))+col)+/*GRID_OFFSET_X*/gridoffset_x);
             screen_pos.y = (((row*static_cast<ssize_t>(font->height()))+row)+GRID_OFFSET_Y);
         }
         return screen_pos;

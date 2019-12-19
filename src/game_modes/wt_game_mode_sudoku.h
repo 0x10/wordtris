@@ -49,8 +49,9 @@ public:
     /**************************
      * 
      *************************/
-    void init_game( WtBoard&, WtPlayer& )
+    void init_game( WtBoard& board, WtPlayer& )
     {
+        board.set_cell( 1, 1, '1' );
     }
 
     /**************************
@@ -66,7 +67,7 @@ public:
      *************************/
     char next_letter()
     {
-        return '1';
+        return ' ';
     }
 
     /**************************
@@ -74,7 +75,7 @@ public:
      *************************/
     virtual std::string letter_after_next()
     {
-        return "1";
+        return " ";
     }
 
 

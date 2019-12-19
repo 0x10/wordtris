@@ -19,6 +19,7 @@
 #include "widgets/wt_button.h"
 #include "widgets/wt_tristate_button.h"
 #include "widgets/wt_horizontal_carousel.h"
+#include "widgets/wt_numpad.h"
 
 #include "wt_input.h"
 #include "wt_sfx.h"
@@ -230,6 +231,22 @@ protected:
         m_buttons.push_back( &button.item<3>() );
     }
 
+    /**************************
+     *
+     *************************/
+    void add_numpad( WtNumPad& button )
+    {
+        m_buttons.push_back( &button.item<0>() );
+        m_buttons.push_back( &button.item<1>() );
+        m_buttons.push_back( &button.item<2>() );
+        m_buttons.push_back( &button.item<3>() );
+        m_buttons.push_back( &button.item<4>() );
+        m_buttons.push_back( &button.item<5>() );
+        m_buttons.push_back( &button.item<6>() );
+        m_buttons.push_back( &button.item<7>() );
+        m_buttons.push_back( &button.item<8>() );
+        m_buttons.push_back( &button.item<9>() );
+    }
     /**************************
      *
      *************************/

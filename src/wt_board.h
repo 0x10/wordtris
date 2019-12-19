@@ -146,7 +146,7 @@ public:
      *************************/   
     bool value_valid( char val ) const
     {
-        return (( val >= 0x30 ) && ( val <= 0x39 ));
+        return ( val == WtBoard::empty_cell || (( val >= 0x30 ) && ( val <= 0x39 )));
     }
 
     /**************************
