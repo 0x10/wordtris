@@ -149,7 +149,12 @@ private:
         animation_played = false;
 
         if ( m_board.is_full() )
-            game_over = true;
+        {
+            WtGameModeState eval_result( false,
+                                         nullptr );
+            m_active_mode->eval_board( m_board, m_player, eval_result );
+            game_over = eval_result.game_over;
+        }
 #if 0
         if ( m_active_mode->stone_blocked( m_board,
                                            m_active.current_row() - 1,
