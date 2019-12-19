@@ -130,6 +130,7 @@ public:
      *************************/
     static void construct_pause_animation( WtGridAnimation& pause_animation )
     {
+#if 0
         const char x = WtBoard::empty_cell;
         const uint8_t final_row = 5;
         const uint8_t row_count = 12;
@@ -213,6 +214,7 @@ public:
         WtGridAnimation::GridAnimationStep step_one( one, WtTime::from_milliseconds(300), 0 );
 
         pause_animation.push_back( step_one );
+#endif
     }
 
 };

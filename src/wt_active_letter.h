@@ -22,7 +22,7 @@ class WtLetter
 {
 public:
     WtLetter() :
-        m_col( 5 ),
+        m_col( 1 ),
         m_row( WtBoard::row_count - 1 ),
         m_value( '\0' )
     {}
@@ -38,7 +38,7 @@ public:
      *************************/
     void init( char init_letter )
     {
-        m_col = 5;
+        m_col = 1;
         m_row = (WtBoard::row_count - 1);
         m_value = init_letter;
     }
@@ -49,7 +49,7 @@ public:
     void get_next( char next_letter )
     {
         m_value = next_letter;
-        m_col = 5;
+        m_col = 1;
         m_row = (WtBoard::row_count - 1);
     }
 
@@ -95,6 +95,12 @@ public:
     uint8_t current_column() const { return m_col; };
     uint8_t current_row()    const { return m_row; };
     char    current_value()  const { return m_value; };
+
+    void set_pos( uint8_t r, uint8_t c )
+    {
+        m_row = r;
+        m_col = c;
+    }
 private:
     uint8_t m_col;
     uint8_t m_row;

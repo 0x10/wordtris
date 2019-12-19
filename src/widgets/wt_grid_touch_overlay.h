@@ -23,15 +23,12 @@
 class WtGridTouchOverlay
 {
 public:
-    using OnLeftDetected = std::function<void(void)>;
-    using OnRightDetected = std::function<void(void)>;
-    using OnDropDetected = std::function<void(void)>;
+    using OnClickDetected = std::function<void(WtCoord)>;
 
 
     WtGridTouchOverlay( WtCoord pos, WtDim size,
-                        OnLeftDetected on_left,
-                        OnRightDetected on_right,
-                        OnDropDetected on_drop ) :
+                        WtDim grid_item_size,
+                        OnClickDetected on_click ) :
 
         m_clickable( pos, size,
                      WT_BIND_EVENT_HANDLER_1( WtGridTouchOverlay::on_click ),
@@ -39,15 +36,8 @@ public:
 
         m_pos( pos ),
         m_size( size ),
-        m_pos_left( pos ),
-        m_pos_right( size.w / 2, pos.y ),
-        m_pos_drop( pos.x, (pos.y + size.h) - (size.h / 4) ),
-        m_size_left( size.w / 2, ( size.h - ( size.h / 4 ) ) ),
-        m_size_right( size.w / 2, ( size.h - ( size.h / 4 ) ) ),
-        m_size_drop( size.w, size.h / 4 ),
-        m_on_left( on_left ),
-        m_on_right( on_right ),
-        m_on_drop( on_drop )
+        m_grid_item_size( grid_item_size ),
+        m_on_click( on_click )
     {
     }
     
@@ -69,15 +59,6 @@ public:
         return m_clickable;
     }
 
-    /**************************
-     *
-     *************************/
-    void set_direction_seperator_pos( ssize_t x_pos )
-    {
-        m_size_left.w = x_pos;
-        m_pos_right.x = x_pos;
-        m_size_right.w = m_size.w - x_pos;
-    }
 
 public:
     /**************************
@@ -85,45 +66,34 @@ public:
      *************************/
     void on_click( WtCoord& pos )
     {
-        WtCoord middle( m_size_left.w - 15, 100 );
-        WtDim mid_sz( 37, m_size.h-100 );
-        if ( ! pos.in_region( middle, mid_sz ) )
-        {
-            if ( pos.in_region( m_pos_left, m_size_left ) )
-            {
-                if ( m_on_left ) m_on_left();
-            }
-            else if ( pos.in_region( m_pos_right, m_size_right ) )
-            {
-               // std::cout << "click right\n";
-                if ( m_on_right ) m_on_right();
-            }
-            else if ( pos.in_region( m_pos_drop, m_size_drop ) )
-            {
-                if ( m_on_drop ) m_on_drop();
-            }
-            else
-            {}
-        }
+        if ( pos.in_region( m_pos, m_size ) )
+            if ( m_on_click ) m_on_click( pos_to_grid_index( pos ) );
     }
 
+    /**************************
+     *
+     *************************/
+    WtCoord pos_to_grid_index( WtCoord& pos )
+    {
+        WtCoord local_pos = pos - m_pos;
+        WtCoord grid_pos = local_pos / m_grid_item_size;
+        return grid_pos;
+    }
 
     /**************************
      *
      *************************/
     void on_pan( WtCoord& press_start_pos, WtCoord& active_pos, WtCoord& /*d_pos*/ )
     {
-        if ( (active_pos.x+30) < press_start_pos.x )
+        if ( !active_pos.in_region( m_pos, m_size ) )
+            return;
+        if ( (active_pos.x+m_grid_item_size.w) < press_start_pos.x )
         {
-            press_start_pos = active_pos;
-            //std::cout << "motion left\n";
-            if ( m_on_left ) m_on_left();
+            if ( m_on_click ) m_on_click( pos_to_grid_index( active_pos ) );
         }
-        if ( (active_pos.x-30) > press_start_pos.x )
+        if ( (active_pos.x-m_grid_item_size.w) > press_start_pos.x )
         {
-            press_start_pos = active_pos;
-           // std::cout << "motion right\n";
-            if ( m_on_right ) m_on_right();
+            if ( m_on_click ) m_on_click( pos_to_grid_index( active_pos ) );
         }
     }
 
@@ -133,17 +103,9 @@ private:
 
     const WtCoord   m_pos;
     const WtDim     m_size;
+    const WtDim     m_grid_item_size;
 
-    WtCoord   m_pos_left;
-    WtCoord   m_pos_right;
-    const WtCoord   m_pos_drop;
-    WtDim     m_size_left;
-    WtDim     m_size_right;
-    const WtDim     m_size_drop;
-
-    OnLeftDetected  m_on_left;
-    OnRightDetected m_on_right;
-    OnDropDetected  m_on_drop;
+    OnClickDetected  m_on_click;
 };
 
 #endif /* _WT_BUTTON_H_ */

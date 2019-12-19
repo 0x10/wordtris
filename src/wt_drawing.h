@@ -116,32 +116,23 @@ public:
                 char val = board.get_cell( i, j );
                 if ( val != WtBoard::empty_cell )
                 {
-                    DrawingPolicy::draw_at_grid( WtBoard::row_count-i, j, val );
+                    DrawingPolicy::draw_at_grid( i, j, val );
                 }
                 else
                 {
-                    if ( show_support_grid )
+                    std::string cell_background = "grid.bmp";
+                    DrawingPolicy::draw_custom_cell_bg( i, j, cell_background );
+                    if (( j == active.current_column() ) || ( i == active.current_row() ))
                     {
-                        std::string cell_background = "grid.bmp";
-                        DrawingPolicy::draw_custom_cell_bg( WtBoard::row_count-i, j, cell_background );
-                        if ( ( i < active.current_row() ) && ( j == active.current_column() ) )
-                        {
-                            cell_background = "grid_font_helper.bmp";
-                            uint16_t alpha_diff = 40 * (active.current_row() - i);
-                            DrawingPolicy::draw_custom_cell_bg( WtBoard::row_count-i, j, cell_background, ( alpha_diff < 255 ? 255 - alpha_diff : 0 ) );
-                        }
-                    }
-                    if ( ( i > active.current_row() ) && ( j == active.current_column() ) )
-                    {
-                        std::string cell_background = "grid_font_helper.bmp";
-                        uint16_t alpha_diff = 40 * (i - active.current_row());
-                        DrawingPolicy::draw_custom_cell_bg( WtBoard::row_count-i, j, cell_background, ( alpha_diff < 255 ? 255 - alpha_diff : 0 ) );
+                        cell_background = "grid_font_helper.bmp";
+                        uint16_t alpha_diff = 20 * std::abs(active.current_row() - i);
+                        DrawingPolicy::draw_custom_cell_bg( i, j, cell_background, ( alpha_diff < 255 ? 255 - alpha_diff : 0 ) );
                     }
                 }
             }
         }
 
-        DrawingPolicy::draw_at_grid( WtBoard::row_count - active.current_row(),
+        DrawingPolicy::draw_at_grid( active.current_row(),
                                      active.current_column(),
                                      active.current_value(),
                                      "active_grid" );

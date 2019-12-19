@@ -24,7 +24,7 @@ APK_TRG_NAME=squabbel
 all: clean sdl
 
 sdl:
-	$(CXX) $(CXX_OPTIMIZATION) $(CXX_FLAGS) $(LD_FLAGS) $(INCLUDES) $(SRC_DIR)/wordtris.cpp $(LIBS) -o $(TARGET_SDL)_lite
+#	$(CXX) $(CXX_OPTIMIZATION) $(CXX_FLAGS) $(LD_FLAGS) $(INCLUDES) $(SRC_DIR)/wordtris.cpp $(LIBS) -o $(TARGET_SDL)_lite
 	$(CXX) $(CXX_OPTIMIZATION) $(CXX_FLAGS) $(LD_FLAGS) -DWT_PRO_MODE $(INCLUDES) $(SRC_DIR)/wordtris.cpp $(LIBS) -o $(TARGET_SDL)
 
 sdl-system:

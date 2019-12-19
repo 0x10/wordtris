@@ -16,10 +16,7 @@
 #ifndef _WT_GAME_MODE_CTR_H_
 #define _WT_GAME_MODE_CTR_H_
 
-#include "game_modes/wt_game_mode_guessing.h"
-//#include "game_modes/wt_game_mode_tetris.h"
-#include "game_modes/wt_game_mode_abc.h"
-#include "game_modes/wt_game_mode_wordtris.h"
+#include "game_modes/wt_game_mode_sudoku.h"
 
 #define GAME_MODE_CTR  WtGameModeCtr::instance()
 class WtGameModeCtr
@@ -39,7 +36,7 @@ public:
      *************************/
     WtGameModeIf* default_mode()
     {
-        return &m_wordtrisMode;
+        return &m_modeSudoku;
     }
 
     /**************************
@@ -132,25 +129,11 @@ private:
     WtGameModeCtr() :
         m_lockedModeAlpha("label_mode_alphabet"),
         m_lockedModeGuess("label_mode_guessing"),
-        m_guessMode(),
-//        m_tetrisMode(),
-        m_abcMode(),
-        m_wordtrisMode(),
+        m_modeSudoku(),
         m_available_modes()
     {
-      //  m_available_modes.push_back( &m_tetrisMode );
 
-#ifdef WT_PRO_MODE
-        m_available_modes.push_back( &m_abcMode );
-#else
-        m_available_modes.push_back( &m_lockedModeAlpha );
-#endif /* WT_PRO_MODE */
-        m_available_modes.push_back( &m_wordtrisMode );
-#ifdef WT_PRO_MODE
-        m_available_modes.push_back( &m_guessMode );
-#else
-        m_available_modes.push_back( &m_lockedModeGuess );
-#endif /* WT_PRO_MODE */
+        m_available_modes.push_back( &m_modeSudoku );
     }
     WtGameModeCtr( const WtGameModeCtr& ); 
     WtGameModeCtr & operator = (const WtGameModeCtr &);
@@ -159,10 +142,7 @@ private:
 private:
     WtGameModeDemo              m_lockedModeAlpha;
     WtGameModeDemo              m_lockedModeGuess;
-    WtGameModeGuessing          m_guessMode;
-//    WtGameModeTetris            m_tetrisMode;
-    WtGameModeAbc               m_abcMode;
-    WtGameModeWordtris          m_wordtrisMode;
+    WtGameModeSudoku            m_modeSudoku;
     std::vector<WtGameModeIf*>  m_available_modes;
 };
 

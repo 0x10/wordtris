@@ -16,19 +16,17 @@
 #ifndef _WT_BOARD_H_
 #define _WT_BOARD_H_
 
-#define ROW_COUNT            (20)
-#define COL_COUNT            (10)
-
 class WtBoard
 {
 public:
-    static const uint8_t row_count = ROW_COUNT;
-    static const uint8_t col_count = COL_COUNT;
+    static constexpr uint8_t row_count = 9;
+    static constexpr uint8_t col_count = 9;
+    static const char empty_cell = '\0';
+    
     typedef char RowSequence[WtBoard::col_count];
 
     WtBoard()
     {
-
     }
     ~WtBoard() {}
 private:
@@ -37,18 +35,15 @@ private:
 
 // api defintion
 public:
-    static const char empty_cell = '\0';
-
     /**************************
      *
      *************************/
     void init()
     {
-        for( uint8_t r = 0; r<ROW_COUNT; r++ )
-            for( uint8_t c = 0; c<COL_COUNT; c++ )
+        for( uint8_t r = 0; r<row_count; r++ )
+            for( uint8_t c = 0; c<col_count; c++ )
                 set_cell( r, c, empty_cell );
     }
-    
 
     /**************************
      *
@@ -62,11 +57,26 @@ public:
     /**************************
      *
      *************************/
+    bool is_full() const
+    {
+        bool full = true;
+
+        for( uint8_t r = 0; r<row_count; r++ )
+            for( uint8_t c = 0; c<col_count; c++ )
+                full = (cell_occupied( r, c ) && full);
+
+        return full;
+    }
+
+    /**************************
+     *
+     *************************/
     void set_cell( uint8_t r,
                    uint8_t c,
                    char    val )
     {
-        m_board[r][c] = val;
+        if ( value_valid( val ) && index_valid( r, c ) )
+            m_board[r][c] = val;
     }
 
     /**************************
@@ -74,7 +84,7 @@ public:
      *************************/
     char get_cell( uint8_t r, uint8_t c ) const
     {
-        if ( ( r >= ROW_COUNT ) || ( c >= COL_COUNT ) )
+        if ( ! index_valid( r, c ) )
             return ' ';
 
         return m_board[r][c];
@@ -85,7 +95,7 @@ public:
      *************************/
     const RowSequence& get_row_sequence( uint8_t r ) const
     {
-        if ( r >= ROW_COUNT )
+        if ( ! index_valid( r, 0 ) )
             return m_board[0];
 
         return m_board[r];
@@ -96,7 +106,7 @@ public:
      *************************/
     std::string get_row_string( uint8_t r ) const
     {
-        if ( r >= ROW_COUNT )
+        if ( ! index_valid( r, 0 ) )
             return "";
 
         std::string row("");
@@ -109,8 +119,6 @@ public:
         }
 
         return row;
-
-//        return std::string( get_row_sequence( r ) );
     }
 
     /**************************
@@ -118,7 +126,7 @@ public:
      *************************/
     std::string get_col_string( uint8_t c ) const
     {
-        if ( c >= COL_COUNT )
+        if ( ! index_valid( 0, c ) )
             return "";
 
         std::string col("");
@@ -135,54 +143,21 @@ public:
 
     /**************************
      *
-     *************************/
-    void collapse_above( uint8_t r, uint8_t c, char carry=WtBoard::empty_cell )
+     *************************/   
+    bool value_valid( char val ) const
     {
-        /* drop remaining stones afterwards */
-        for( uint8_t row=r; row < WtBoard::row_count-1; row++ )
-        {
-            set_cell( row, c,
-                      get_cell( row+1, c ) );
-        }
-        set_cell( WtBoard::row_count-1, c, carry );
+        return (( val >= 0x30 ) && ( val <= 0x39 ));
     }
 
     /**************************
      *
-     *************************/
-    void collapse_below( uint8_t r, uint8_t c, char carry=WtBoard::empty_cell )
+     *************************/   
+    bool index_valid( uint8_t r, uint8_t c ) const
     {
-        /* drop remaining stones afterwards */
-        for( uint8_t row=r; row > 0; row-- )
-        {
-            set_cell( row, c,
-                      get_cell( row-1, c ) );
-        }
-        set_cell( 0, c, carry );
+        return ( ( r < WtBoard::row_count ) && ( c < WtBoard::col_count ) );
     }
-
-    /**************************
-     *
-     *************************/
-    void collapse_above( uint8_t r, char carry=WtBoard::empty_cell )
-    {
-        /* drop remaining stones afterwards */
-        for( uint8_t row=r; row < WtBoard::row_count-1; row++ )
-        {
-            for( uint8_t c=0; c < WtBoard::col_count; c++ )
-            {
-                set_cell( row, c,
-                          get_cell( row+1, c ) );
-            }
-        }
-        for( uint8_t c=0; c < WtBoard::col_count; c++ )
-        {
-           set_cell( WtBoard::row_count-1, c, carry );
-        }
-    }
-
 private:
-    char m_board[ROW_COUNT][COL_COUNT]; 
+    char m_board[WtBoard::row_count][WtBoard::col_count]; 
 };
 
 

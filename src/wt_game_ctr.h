@@ -52,11 +52,10 @@ public:
                       WT_BIND_EVENT_HANDLER( WtGameCtr::return_to_menu ) ),
         m_score_summary(),
         //m_game_mode_intro(),
-        m_grid_touch_control( WtCoord( 0, 100 ),
-                              WtDim( ACTIVE_WINDOW_WIDTH, ACTIVE_WINDOW_HEIGHT-100 ),
-                              WT_BIND_EVENT_HANDLER( WtGameCtr::notify_left ),
-                              WT_BIND_EVENT_HANDLER( WtGameCtr::notify_right ),
-                              WT_BIND_EVENT_HANDLER( WtGameCtr::notify_drop ) ),
+        m_grid_touch_control( WtCoord( 0, 0 ),
+                              WtDim( WtBoard::col_count * 76, WtBoard::row_count * 76 ),
+                              WtDim( 76, 76 ),
+                              WT_BIND_EVENT_HANDLER_1( WtGameCtr::notify_click ) ),
         m_pause_btn( WtCoord( (ACTIVE_WINDOW_WIDTH-65)-24, (80-65)/2 ),
                      WtDim( 65, 65 ),
                      "settings_logo.bmp",
@@ -117,34 +116,12 @@ private:
     {
         ACTIVE_WINDOW.draw_board( m_board, 
                                   m_active,
-                                  STORAGE.get_settings().show_support_grid );
+                                  true );
 
         if ( m_game_state == GAME_ANIMATION_RUNNING )
         {
             ACTIVE_WINDOW.draw_button( m_settings_bg );
             ACTIVE_WINDOW.draw_button( m_pause_btn );
-        }
-        
-        if (( STORAGE.get_settings().show_next_stone ) || ( m_active_mode->get_id_string() == "Guess it" ))
-            ACTIVE_WINDOW.draw_hint( m_active_mode->letter_after_next() );
-
-        ACTIVE_WINDOW.draw_player_stat( m_player );
-
-        if ( m_active_mode->get_occupied_cell_count() < 3 )
-        {
-            if ( ! m_hide_hint )
-            {
-                WtCoord hint_pos = WtCoord( 130, 890 );
-                if ( m_active_mode->get_id_string() != "WordtrisClassic" )
-                {
-                    hint_pos = WtCoord( 130, 400 );
-                }
-                ACTIVE_WINDOW.draw_help( hint_pos, m_active_mode->get_hint() );
-            }
-        }
-        else
-        {
-            m_hide_hint = true;
         }
     }
 
@@ -168,6 +145,10 @@ private:
     {
         bool game_over = false;
         animation_played = false;
+
+        if ( m_board.is_full() )
+            game_over = true;
+#if 0
         if ( m_active_mode->stone_blocked( m_board,
                                            m_active.current_row() - 1,
                                            m_active.current_column() ) )
@@ -217,6 +198,7 @@ private:
         {
             m_active.single_drop();
         }
+#endif
         return game_over;
     }
 
@@ -248,6 +230,14 @@ private:
                 enter_pause();
                 break;
         }
+    }
+
+    /**************************
+     *
+     *************************/
+    void notify_click( WtCoord pos )
+    {
+        m_active.set_pos( pos.y, pos.x );
     }
 
     /**************************
@@ -286,7 +276,7 @@ private:
                                              m_active.current_column() - 1 ) )
         {
             m_active.move_left();
-            m_grid_touch_control.set_direction_seperator_pos( ACTIVE_WINDOW.grid_pos_to_coord( m_active.current_row(), m_active.current_column() ).x );
+            //m_grid_touch_control.set_direction_seperator_pos( ACTIVE_WINDOW.grid_pos_to_coord( m_active.current_row(), m_active.current_column() ).x );
         }
     }
 
@@ -300,7 +290,7 @@ private:
                                              m_active.current_column() + 1 ) )
         {
             m_active.move_right(); 
-            m_grid_touch_control.set_direction_seperator_pos( ACTIVE_WINDOW.grid_pos_to_coord( m_active.current_row(), m_active.current_column() ).x );
+            //m_grid_touch_control.set_direction_seperator_pos( ACTIVE_WINDOW.grid_pos_to_coord( m_active.current_row(), m_active.current_column() ).x );
         }
     }
 
@@ -377,7 +367,7 @@ private:
             m_active.init( m_active_mode->next_letter() );
             m_current_update_counter = get_current_update_counter( m_player );
             m_game_state = GAME_TO_START;
-            m_grid_touch_control.set_direction_seperator_pos( ACTIVE_WINDOW.grid_pos_to_coord( m_active.current_row(), m_active.current_column() ).x );
+            //m_grid_touch_control.set_direction_seperator_pos( ACTIVE_WINDOW.grid_pos_to_coord( m_active.current_row(), m_active.current_column() ).x );
 
         }
     }

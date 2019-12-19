@@ -35,9 +35,9 @@ private:
     static const uint8_t SMALL_TEXT_FONT_SIZE = 18;
     static const uint8_t TINY_TEXT_FONT_SIZE = 9;
     static const uint8_t BIG_TEXT_FONT_SIZE = 32;
-    static const uint8_t GRID_FONT_SIZE = 56;
-    static const uint8_t GRID_OFFSET_X = 78;
-    static const uint8_t GRID_OFFSET_Y = 127-GRID_FONT_SIZE;
+    static const uint8_t GRID_FONT_SIZE = 76;
+    static const uint8_t GRID_OFFSET_X = /*78*/0;
+    static const uint8_t GRID_OFFSET_Y = 0/*127-GRID_FONT_SIZE*/;
 
     typedef std::map<std::string, SDL_Texture*> SDL_TextureCache;
 // policy use only
