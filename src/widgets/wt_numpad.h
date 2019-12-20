@@ -20,45 +20,89 @@
 
 class WtNumPad
 {
-#define NUM_BUTTON( ID ) \
-            WtButton( WtCoord( (pos.x ) + (ID*((size.w ) / 10)), pos.y  ),              \
-                      item_image_size,                                                  \
-                      ( selected == 0 ? item_image_selected : item_image_unselected ),  \
-                      WT_BIND_EVENT_HANDLER( WtNumPad::on_item_clicked<ID> ),           \
-                      label[ID],                                                        \
-                      WtCoord( 0, item_image_size.h ) )
 public:
     using OnItemTapDelegate = std::function<void(size_t)>;
 
     WtNumPad( WtCoord pos, 
                       WtDim size,
-                      size_t selected,
                       OnItemTapDelegate on_item_tap,
-                      const char* item_image_selected = "tri_state_btn_selected.bmp",
-                      const char* item_image_unselected = "tri_state_btn_unselected.bmp",
-                      const WtDim item_image_size = WtDim( 60, 60 ),
+                      const char* item_image_selected = "",
+                      const char* item_image_unselected = "",
+                      const WtDim item_image_size = WtDim( 200, 100 ),
                       const std::array<const char*, 10>& label = std::array<const char*, 10>{{ "C", "1", "2", "3", "4", "5", "6", "7", "8", "9"}},
                       const std::string frame_image = "" ) :
 
         m_item_image_selected(item_image_selected),
         m_item_image_unselected(item_image_unselected),
         m_buttons{ 
-            NUM_BUTTON( 0 ),
-            NUM_BUTTON( 1 ),
-            NUM_BUTTON( 2 ),
-            NUM_BUTTON( 3 ),
-            NUM_BUTTON( 4 ),
-            NUM_BUTTON( 5 ),
-            NUM_BUTTON( 6 ),
-            NUM_BUTTON( 7 ),
-            NUM_BUTTON( 8 ),
-            NUM_BUTTON( 9 ),
+            WtButton( WtCoord( pos.x + (( size.w / 2 ) - ( (size.w / 3) / 2)), pos.y + 3*(item_image_size.h+2) ),
+                      WtDim( size.w / 3, item_image_size.h ),
+                      item_image_unselected,
+                      WT_BIND_EVENT_HANDLER( WtNumPad::on_item_clicked<0> ),
+                      label[0],
+                      WtCoord(0,0), WtFont("#4a90e2","text_big")),
+            WtButton( WtCoord( ( pos.x + ( (size.w / 3)/2 - ((size.w/3)/2) ) ) + (((1-1)%3)*(size.w / 3)), pos.y ),
+                      WtDim( size.w / 3-2, item_image_size.h ),
+                      item_image_unselected,
+                      WT_BIND_EVENT_HANDLER( WtNumPad::on_item_clicked<1> ),
+                      label[1],
+                      WtCoord(0,0), WtFont("#4a90e2","text_big") ),
+            WtButton( WtCoord( ( pos.x + ( (size.w / 3)/2 - ((size.w/3)/2) ) ) + (((2-1)%3)*(size.w / 3)), pos.y ),
+                      WtDim( size.w / 3, item_image_size.h ),
+                      item_image_unselected,
+                      WT_BIND_EVENT_HANDLER( WtNumPad::on_item_clicked<2> ),
+                      label[2],
+                      WtCoord(0,0), WtFont("#4a90e2","text_big") ),
+            WtButton( WtCoord( ( pos.x + ( (size.w / 3)/2 - ((size.w/3)/2) ) ) + (((3-1)%3)*(size.w / 3+1)), pos.y ),
+                      WtDim( size.w / 3, item_image_size.h ),
+                      item_image_unselected,
+                      WT_BIND_EVENT_HANDLER( WtNumPad::on_item_clicked<3> ),
+                      label[3],
+                      WtCoord(0,0), WtFont("#4a90e2","text_big") ),
+            WtButton( WtCoord( ( pos.x + ( (size.w / 3)/2 - ((size.w/3)/2) ) ) + (((4-1)%3)*(size.w / 3)), pos.y + item_image_size.h + 2 ),
+                      WtDim( size.w / 3-2, item_image_size.h ),
+                      item_image_unselected,
+                      WT_BIND_EVENT_HANDLER( WtNumPad::on_item_clicked<4> ),
+                      label[4],
+                      WtCoord(0,0), WtFont("#4a90e2","text_big") ),
+            WtButton( WtCoord( ( pos.x + ( (size.w / 3)/2 - ((size.w/3)/2) ) ) + (((5-1)%3)*(size.w / 3)), pos.y + item_image_size.h + 2 ),
+                      WtDim( size.w / 3, item_image_size.h ),
+                      item_image_unselected,
+                      WT_BIND_EVENT_HANDLER( WtNumPad::on_item_clicked<5> ),
+                      label[5],
+                      WtCoord(0,0), WtFont("#4a90e2","text_big") ),
+            WtButton( WtCoord( ( pos.x + ( (size.w / 3)/2 - ((size.w/3)/2) ) ) + (((6-1)%3)*(size.w / 3+1)), pos.y + item_image_size.h + 2 ),
+                      WtDim( size.w / 3, item_image_size.h ),
+                      item_image_unselected,
+                      WT_BIND_EVENT_HANDLER( WtNumPad::on_item_clicked<6> ),
+                      label[6],
+                      WtCoord(0,0), WtFont("#4a90e2","text_big") ),
+            WtButton( WtCoord( ( pos.x + ( (size.w / 3)/2 - ((size.w/3)/2) ) ) + (((7-1)%3)*(size.w / 3)), pos.y + 2*(item_image_size.h+2) ),
+                      WtDim( size.w / 3-2, item_image_size.h ),
+                      item_image_unselected,
+                      WT_BIND_EVENT_HANDLER( WtNumPad::on_item_clicked<7> ),
+                      label[7],
+                      WtCoord(0,0), WtFont("#4a90e2","text_big") ),
+            WtButton( WtCoord( ( pos.x + ( (size.w / 3)/2 - ((size.w/3)/2) ) ) + (((8-1)%3)*(size.w / 3)), pos.y + 2*(item_image_size.h+2) ),
+                      WtDim( size.w / 3, item_image_size.h ),
+                      item_image_unselected,
+                      WT_BIND_EVENT_HANDLER( WtNumPad::on_item_clicked<8> ),
+                      label[8],
+                      WtCoord(0,0), WtFont("#4a90e2","text_big") ),
+            WtButton( WtCoord( ( pos.x + ( (size.w / 3)/2 - ((size.w/3)/2) ) ) + (((9-1)%3)*(size.w / 3+1)), pos.y + 2*(item_image_size.h+2) ),
+                      WtDim( size.w / 3, item_image_size.h ),
+                      item_image_unselected,
+                      WT_BIND_EVENT_HANDLER( WtNumPad::on_item_clicked<9> ),
+                      label[9],
+                      WtCoord(0,0), WtFont("#4a90e2","text_big") ),
             WtButton( pos, size, frame_image, nullptr, "" )
         },
 
-        m_selected( selected ),
         m_on_item_tap( on_item_tap )
     {
+
+    
+
     }
     
     ~WtNumPad() {}
@@ -78,18 +122,9 @@ public:
     /**************************
      *
      *************************/
-    void select( uint8_t id )
+    void select( uint8_t idx )
     {
-        if ( id < 10 )
-        {
-            m_buttons[m_selected].set_image( m_item_image_unselected );
-            m_selected = id;
-            m_buttons[m_selected].set_image( m_item_image_selected );
-        }
-        else
-        {
-            std::cout << "id out of range\n";
-        }
+
     }
 
 private:
@@ -99,13 +134,8 @@ private:
     template<size_t const idx>
     void on_item_clicked()
     {
-        if ( m_selected != idx )
-        { 
-            m_buttons[m_selected].set_image( m_item_image_unselected );
-            m_selected = idx;
-            m_buttons[m_selected].set_image( m_item_image_selected );
-        }
-        if ( m_on_item_tap ) m_on_item_tap( m_selected );
+
+        if ( m_on_item_tap ) m_on_item_tap( idx );
     }
 
 private:
@@ -117,7 +147,6 @@ private:
     const char*       m_item_image_unselected;
 
     WtButton          m_buttons[11];
-    size_t            m_selected;
     OnItemTapDelegate m_on_item_tap;
 };
 
