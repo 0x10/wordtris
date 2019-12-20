@@ -16,15 +16,14 @@
 #ifndef _WT_LETTER_H_
 #define _WT_LETTER_H_
 
-#include "wt_board.h"
 
 class WtLetter
 {
 public:
     WtLetter() :
-        m_col( 1 ),
-        m_row( WtBoard::row_count - 1 ),
-        m_value( '\0' )
+        m_col( 0 ),
+        m_row( 0 ),
+        m_value( ' ' )
     {}
     ~WtLetter() {}
 private: // no copy allowed
@@ -38,8 +37,8 @@ public:
      *************************/
     void init( char init_letter )
     {
-        m_col = 1;
-        m_row = (WtBoard::row_count - 1);
+        m_col = 0;
+        m_row = 0;
         m_value = init_letter;
     }
 
@@ -49,8 +48,8 @@ public:
     void get_next( char next_letter )
     {
         m_value = next_letter;
-        m_col = 1;
-        m_row = (WtBoard::row_count - 1);
+        m_col = 0;
+        m_row = 0;
     }
 
     /**************************
@@ -65,9 +64,9 @@ public:
     /**************************
      *
      *************************/
-    void move_right()
+    void move_right( const uint8_t max )
     {
-        if ( m_col < ( WtBoard::col_count - 1 ) )
+        if ( m_col < ( max - 1 ) )
             m_col ++;
     }
 
@@ -78,15 +77,6 @@ public:
     {
         if ( m_row > 0 )
             m_row --;
-    }
-
-    /**************************
-     *
-     *************************/
-    void drop_at( uint8_t r )
-    {
-        if ( r < WtBoard::row_count )
-            m_row = r;
     }
 
     /**************************

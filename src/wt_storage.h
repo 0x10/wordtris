@@ -16,9 +16,11 @@
 #ifndef _WT_STORAGE_H_
 #define _WT_STORAGE_H_
 
+#include "global.h"
+#include "wt_storage_types.h"
+
 #include <fstream>
 #include <unistd.h>
-#include "wt_storage_types.h"
 #include "SDL.h"
 
 #ifdef __ANDROID__
@@ -69,7 +71,7 @@ private:
     typedef std::map< std::string, std::vector<uint8_t> > SimpleFileCache;
     // least significant word is fixed magic and most sig. word
     // may represent file structure
-    static           const uint32_t m_header_magic = 0x0003ADDE;
+    static           const uint32_t m_header_magic = 0x0004ADDE;
     static constexpr const char*    m_fname        = "squabbel.dat";
 
 // singleton definition
@@ -162,7 +164,7 @@ public:
         std::cout << "settings.language == " << m_storage_copy.data.settings.language << std::endl;
         std::cout << "settings.game mode == " << m_storage_copy.data.settings.game_mode << std::endl;
         std::cout << "settings.diff == " << static_cast<size_t>(m_storage_copy.data.settings.difficulty) << std::endl;
-        std::cout << "settings.active_theme == " << m_storage_copy.data.settings.active_theme << std::endl;
+        std::cout << "settings.gridsize == " << m_storage_copy.data.settings.gridsize << std::endl;
         // distribute
         //
         return read_successful;

@@ -109,9 +109,9 @@ public:
                      const WtLetter& active,
                      const bool show_support_grid )
     {
-        for( uint8_t i=0 ; i < WtBoard::row_count; i++ )
+        for( uint8_t i=0 ; i < board.row_count(); i++ )
         {
-            for( uint8_t j=0; j < WtBoard::col_count; j++ )
+            for( uint8_t j=0; j < board.col_count(); j++ )
             {
                 char val = board.get_cell( i, j );
                 if ( val != WtBoard::empty_cell )
@@ -122,19 +122,24 @@ public:
                 {
                     std::string cell_background = "grid.bmp";
                     DrawingPolicy::draw_custom_cell_bg( i, j, cell_background );
-                    if (( j == active.current_column() ) || ( i == active.current_row() ))
+                    if ( show_support_grid )
                     {
-                        cell_background = "grid_font_helper.bmp";
-                        uint16_t alpha_diff = 20 * std::abs(active.current_row() - i);
-                        DrawingPolicy::draw_custom_cell_bg( i, j, cell_background, ( alpha_diff < 255 ? 255 - alpha_diff : 0 ) );
+                        if (( j == active.current_column() ) || ( i == active.current_row() ))
+                        {
+                            cell_background = "grid_font_helper.bmp";
+                            uint16_t alpha_diff = 20 * std::abs(active.current_row() - i);
+                            DrawingPolicy::draw_custom_cell_bg( i, j, cell_background, ( alpha_diff < 255 ? 255 - alpha_diff : 0 ) );
+                        }
                     }
                 }
             }
         }
+        
+        char at_active = board.get_cell( active.current_row(), active.current_column() );
 
         DrawingPolicy::draw_at_grid( active.current_row(),
                                      active.current_column(),
-                                     active.current_value(),
+                                     ( at_active == WtBoard::empty_cell ? ' ' : at_active ),
                                      "active_grid" );
     }
 

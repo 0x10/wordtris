@@ -38,7 +38,8 @@ public:
         active_theme( "default" ),
         show_support_grid( true ),
         show_next_stone( true ),
-        enable_audio( true )
+        enable_audio( true ),
+        gridsize(9)
     {}
 
     virtual ~WtSettings() {}
@@ -49,7 +50,7 @@ public:
     bool          show_support_grid;
     bool          show_next_stone;
     bool          enable_audio;
-
+    uint8_t       gridsize;
     /**************************
      *
      *************************/
@@ -62,6 +63,7 @@ public:
         WtStorable::write_boolean( of, show_support_grid );
         WtStorable::write_boolean( of, show_next_stone );
         WtStorable::write_boolean( of, enable_audio );
+        WtStorable::write_unsigned<uint8_t>( of, gridsize );
     }
 
     /**************************
@@ -78,6 +80,7 @@ public:
         show_support_grid = WtStorable::read_boolean( inf, was_eof );
         show_next_stone = WtStorable::read_boolean( inf, was_eof );
         enable_audio = WtStorable::read_boolean( inf, was_eof );
+        gridsize = WtStorable::read_unsigned<uint8_t>( inf, was_eof );
 
         return ( ! was_eof );
     }
@@ -95,6 +98,7 @@ public:
         size += WtStorable::get_storage_size( show_next_stone );
         size += WtStorable::get_storage_size( show_support_grid );
         size += WtStorable::get_storage_size( enable_audio );
+        size += WtStorable::get_storage_size( gridsize );
         return size;
     }
 };

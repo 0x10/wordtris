@@ -26,7 +26,6 @@
 #include "wt_sdl_utils.h"
 #include "wt_sdl_font.h"
 #include "wt_sdl_config.h"
-#include "wt_board.h"
 #define SDL_WINDOW WINDOW( WtDrawingPolicySdl )
 class WtDrawingPolicySdl
 {
@@ -224,7 +223,7 @@ public:
             {
                 std::string font_bg = "grid_font_bg.bmp";
                 SDL_Color font_col = {0x12, 0x23, 0x39, 255};
-
+                uint8_t bg_alpha = 255;
                 if ( font != "grid" )
                 {
                     if ( font == "active_grid" )
@@ -234,6 +233,8 @@ public:
                         font_col.g = 0x23;
                         font_col.b = 0x39;
                         font_col.a = 255;
+                        if ( value == ' ' )
+                            bg_alpha = 75;
                     }
                     else
                     {
@@ -245,7 +246,7 @@ public:
                     }
                 }
 
-                draw_custom_cell_bg( row, col, font_bg );
+                draw_custom_cell_bg( row, col, font_bg, bg_alpha );
                 if ( value == '*' )
                 {
                     draw_custom_cell_bg( row, col,
@@ -480,7 +481,7 @@ private:
         WtCoord screen_pos(0,0);
         if ( NULL != font )
         {
-            uint8_t gridoffset_x = (SDL_WIDTH / 2) - (( WtBoard::col_count * GRID_FONT_SIZE ) / 2 );
+            uint8_t gridoffset_x = (SDL_WIDTH / 2) - (( 9 * GRID_FONT_SIZE ) / 2 );
             screen_pos.x = (((col*static_cast<ssize_t>(font->width()))+col)+/*GRID_OFFSET_X*/gridoffset_x);
             screen_pos.y = (((row*static_cast<ssize_t>(font->height()))+row)+GRID_OFFSET_Y);
         }

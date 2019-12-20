@@ -52,9 +52,10 @@ int main( int, char** )
                 WtTime::TimePoint after = WtTime::get_time();
 
                 WtTime::TimeType elapsed = WtTime::get_time_elapsed( before, after );
-                if ( elapsed < WtTime::from_seconds(3) )
+                std::cout << "startup time was " << elapsed.count() << std::endl;
+                if ( elapsed < WtTime::from_milliseconds(500) )
                 {
-                    WtTime::sleep( WtTime::from_seconds(3) - elapsed );
+                    WtTime::sleep( WtTime::from_milliseconds(500) - elapsed );
                 }
 
                 (void)main_menu.show();

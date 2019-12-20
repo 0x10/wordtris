@@ -82,7 +82,7 @@ public:
     {
         const std::string font = "grid_inverse";
         for ( size_t draw_idx = 1;
-              draw_idx < static_cast<size_t>(WtBoard::row_count-drop_until_row);
+              draw_idx < static_cast<size_t>(row_count-drop_until_row);
               draw_idx++ )
         {
             if ( draw_idx <= row_count )
@@ -128,7 +128,7 @@ public:
     /**************************
      *
      *************************/
-    static void construct_pause_animation( WtGridAnimation& pause_animation )
+    static void construct_pause_animation( WtGridAnimation& /*pause_animation*/ )
     {
 #if 0
         const char x = WtBoard::empty_cell;

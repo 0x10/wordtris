@@ -17,6 +17,7 @@
 #define _WT_GAME_CTR_H_
 
 #include "wt_view_if.h"
+#include "wt_storage.h"
 #include "wt_player.h"
 #include "wt_board.h"
 #include "wt_active_letter.h"
@@ -53,12 +54,12 @@ public:
                       WT_BIND_EVENT_HANDLER( WtGameCtr::return_to_menu ) ),
         m_score_summary(),
         //m_game_mode_intro(),
-        m_grid_touch_control( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - ((76*WtBoard::col_count) / 2), 100 ),
-                              WtDim( WtBoard::col_count * 76, WtBoard::row_count * 76 ),
+        m_grid_touch_control( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - static_cast<ssize_t>((76u * (STORAGE.get_settings().gridsize) ) / 2), 100 ),
+                              WtDim( static_cast<ssize_t>(STORAGE.get_settings().gridsize) * 76, static_cast<ssize_t>(STORAGE.get_settings().gridsize) * 76 ),
                               WtDim( 76, 76 ),
                               WT_BIND_EVENT_HANDLER_1( WtGameCtr::notify_click ) ),
-        m_numpad( WtCoord( 0, (WtBoard::row_count * 76) + 130  ), 
-                  WtDim(ACTIVE_WINDOW_WIDTH, ACTIVE_WINDOW_HEIGHT-(WtBoard::row_count * 76)-100  ), 
+        m_numpad( WtCoord( 0, (STORAGE.get_settings().gridsize * 76) + 130  ), 
+                  WtDim(ACTIVE_WINDOW_WIDTH, ACTIVE_WINDOW_HEIGHT-(STORAGE.get_settings().gridsize * 76)-100  ), 
                   WT_BIND_EVENT_HANDLER_1( WtGameCtr::notify_num_click ) ),
         m_pause_btn( WtCoord( (ACTIVE_WINDOW_WIDTH-65)-24, (80-65)/2 ),
                      WtDim( 65, 65 ),
@@ -68,13 +69,11 @@ public:
                        WtDim( ACTIVE_WINDOW_WIDTH, 80 ),
                        "#112238",
                        [](){} ),
-        m_pause_end_animation(""),
+       // m_pause_end_animation(""),
         m_current_update_counter(48),
         m_game_state( GAME_STOPPED ),
         m_hide_hint( false )
     {
-
-        WtGridAnimationBuilder::construct_pause_animation( m_pause_end_animation );
 
         add_button( m_settings_bg );
         add_button( m_pause_btn );
@@ -119,7 +118,7 @@ private:
     {
         ACTIVE_WINDOW.draw_board( m_board, 
                                   m_active,
-                                  true );
+                                  STORAGE.get_settings().show_support_grid );
 
         if ( m_game_state == GAME_ANIMATION_RUNNING )
         {
@@ -284,7 +283,7 @@ private:
                                              m_active.current_row(),
                                              m_active.current_column() + 1 ) )
         {
-            m_active.move_right(); 
+            m_active.move_right( m_board.col_count() ); 
             //m_grid_touch_control.set_direction_seperator_pos( ACTIVE_WINDOW.grid_pos_to_coord( m_active.current_row(), m_active.current_column() ).x );
         }
     }
@@ -386,7 +385,7 @@ private:
 
             case GAME_PAUSED:
                 m_game_state = GAME_STARTED;
-                play_animation( &m_pause_end_animation );
+                //play_animation( &m_pause_end_animation );
                 break;
 
             case GAME_TO_START:
@@ -455,7 +454,7 @@ private:
     WtButton            m_pause_btn;
     WtButton            m_settings_bg;
 
-    WtGridAnimation     m_pause_end_animation; 
+//    WtGridAnimation     m_pause_end_animation; 
 
     uint8_t             m_current_update_counter;
     wt_game_state       m_game_state;

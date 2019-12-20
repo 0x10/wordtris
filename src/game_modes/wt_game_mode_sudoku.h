@@ -156,8 +156,8 @@ public:
         std::string next = WtRandom::get_random_from_sequence<std::string>( m_sudoku_lib );
         std::cout << "picked " << next << std::endl;
         size_t current = 0;
-        for ( uint8_t r = 0; r < WtBoard::row_count; r++ )
-            for ( uint8_t c = 0; c < WtBoard::col_count; c++ )
+        for ( uint8_t r = 0; r < board.row_count(); r++ )
+            for ( uint8_t c = 0; c < board.col_count(); c++ )
             {
                 board.set_cell( r, c, ( next[current] == '0' ? WtBoard::empty_cell : next[current] ) );
                 current++;

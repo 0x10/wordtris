@@ -16,16 +16,21 @@
 #ifndef _WT_BOARD_H_
 #define _WT_BOARD_H_
 
+#include "wt_storage.h"
+
 class WtBoard
 {
+private:
+    static constexpr uint8_t row_cnt = 9;
+    static constexpr uint8_t col_cnt = 9;
 public:
-    static constexpr uint8_t row_count = 9;
-    static constexpr uint8_t col_count = 9;
     static const char empty_cell = '\0';
-    
-    typedef char RowSequence[WtBoard::col_count];
+    typedef char RowSequence[WtBoard::col_cnt];
 
-    WtBoard()
+    WtBoard() :
+        m_board(),
+        m_row_count(WtBoard::row_cnt),
+        m_col_count(WtBoard::col_cnt)
     {
     }
     ~WtBoard() {}
@@ -40,8 +45,8 @@ public:
      *************************/
     void init()
     {
-        for( uint8_t r = 0; r<row_count; r++ )
-            for( uint8_t c = 0; c<col_count; c++ )
+        for( uint8_t r = 0; r<row_count(); r++ )
+            for( uint8_t c = 0; c<col_count(); c++ )
                 set_cell( r, c, empty_cell );
     }
 
@@ -57,12 +62,28 @@ public:
     /**************************
      *
      *************************/
+    uint8_t row_count() const
+    {
+        return STORAGE.get_settings().gridsize;// m_row_count;
+    }
+
+    /**************************
+     *
+     *************************/
+    uint8_t col_count() const
+    {
+        return STORAGE.get_settings().gridsize;//m_col_count;
+    }
+
+    /**************************
+     *
+     *************************/
     bool is_full() const
     {
         bool full = true;
 
-        for( uint8_t r = 0; r<row_count; r++ )
-            for( uint8_t c = 0; c<col_count; c++ )
+        for( uint8_t r = 0; r<row_count(); r++ )
+            for( uint8_t c = 0; c<col_count(); c++ )
                 full = (cell_occupied( r, c ) && full);
 
         return full;
@@ -111,7 +132,7 @@ public:
 
         std::string row("");
 
-        for( uint8_t c_idx = 0; c_idx < WtBoard::col_count; c_idx++ )
+        for( uint8_t c_idx = 0; c_idx < col_count(); c_idx++ )
         {
             row.push_back( ( m_board[r][c_idx] == WtBoard::empty_cell ? 
                                     ' ' :
@@ -131,7 +152,7 @@ public:
 
         std::string col("");
 
-        for( uint8_t r_idx = 0; r_idx < WtBoard::row_count; r_idx++ )
+        for( uint8_t r_idx = 0; r_idx < row_count(); r_idx++ )
         {
             //col.push_back( m_board[r_idx][c] );
             col.insert( col.begin(), ( m_board[r_idx][c] == WtBoard::empty_cell ? 
@@ -154,10 +175,12 @@ public:
      *************************/   
     bool index_valid( uint8_t r, uint8_t c ) const
     {
-        return ( ( r < WtBoard::row_count ) && ( c < WtBoard::col_count ) );
+        return ( ( r < row_count() ) && ( c < col_count() ) );
     }
 private:
-    char m_board[WtBoard::row_count][WtBoard::col_count]; 
+    char m_board[WtBoard::row_cnt][WtBoard::col_cnt]; 
+    uint8_t m_row_count;
+    uint8_t m_col_count;
 };
 
 

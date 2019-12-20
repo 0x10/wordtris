@@ -71,10 +71,10 @@ public:
                                WtL10n_tr( "Show supporting grid" ),
                                STORAGE.get_settings().show_support_grid,
                                WT_BIND_EVENT_HANDLER_1( WtMenuSettings::supporting_grid_changed ) ),
-        m_next_stone_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) + ((m_standard_btn_size.w / 2)-100), offset_y + (m_standard_btn_size.h * 7 )  ),
-                          WtL10n_tr( "Show next stone" ),
-                          STORAGE.get_settings().show_next_stone,
-                          WT_BIND_EVENT_HANDLER_1( WtMenuSettings::show_next_stone_changed ) ),
+        m_small_grid_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) + ((m_standard_btn_size.w / 2)-100), offset_y + (m_standard_btn_size.h * 7 )  ),
+                          WtL10n_tr( "Use small grid" ),
+                          (STORAGE.get_settings().gridsize == 4),
+                          WT_BIND_EVENT_HANDLER_1( WtMenuSettings::use_small_grid_changed ) ),
         m_enable_audio_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) + ((m_standard_btn_size.w / 2)-100), offset_y + (m_standard_btn_size.h * 8 ) +20 ),
                             WtL10n_tr( "Play music and sounds" ),
                             STORAGE.get_settings().enable_audio,
@@ -137,7 +137,7 @@ public:
         add_tristate_button( m_diff_select_btn );
         //add_tristate_button( m_theme_select_btn );
         add_button( m_supporting_grid_btn );
-        add_button( m_next_stone_btn );
+        add_button( m_small_grid_btn );
         add_button( m_enable_audio_btn );
         add_button( m_seperator0 );
         add_button( m_seperator1 );
@@ -220,13 +220,13 @@ private: // no copy allowed
     /**************************
      *
      *************************/
-    void show_next_stone_changed( bool show_next )
+    void use_small_grid_changed( bool use_small )
     {
-        std::cout << "preview " << ( show_next ? "active" : "inactive" ) << std::endl;
+        std::cout << "small grid " << ( use_small ? "active" : "inactive" ) << std::endl;
         WtSettings settings = STORAGE.get_settings();
-        if ( settings.show_next_stone != show_next )
+        if ( settings.gridsize != (use_small ? 4 : 9) )
         {
-            settings.show_next_stone = show_next;
+            settings.gridsize = (use_small ? 4 : 9);
             STORAGE.store_settings( settings );
         }
     }
@@ -263,7 +263,7 @@ private: // no copy allowed
     void entered_view()
     {
         m_supporting_grid_btn.set_checked( STORAGE.get_settings().show_support_grid );
-        m_next_stone_btn.set_checked( STORAGE.get_settings().show_next_stone );
+        m_small_grid_btn.set_checked( STORAGE.get_settings().gridsize == 4 );
         m_enable_audio_btn.set_checked( STORAGE.get_settings().enable_audio );
     }
 
@@ -309,7 +309,7 @@ private:
     WtTriStateButton m_diff_select_btn;
     WtTriStateButton m_theme_select_btn;
     WtCheckboxButton m_supporting_grid_btn;
-    WtCheckboxButton m_next_stone_btn;
+    WtCheckboxButton m_small_grid_btn;
     WtCheckboxButton m_enable_audio_btn;
     WtButton         m_seperator0;
     WtButton         m_seperator1;
