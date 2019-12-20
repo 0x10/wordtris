@@ -100,7 +100,7 @@ public:
     template<typename itemtype>
     static itemtype get_random_from_sequence( std::vector<itemtype>& seq )
     {
-        itemtype result = 0;
+        itemtype result;
         uint8_t buf;
         if ( WtRandom::getrandom( &buf, 1 ) <= 1 )
         {

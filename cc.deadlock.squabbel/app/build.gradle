@@ -11,12 +11,12 @@ android {
     compileSdkVersion 28
     defaultConfig {
         if (buildAsApplication) {
-            applicationId "cc.deadlock.squabbel"
+            applicationId "cc.deadlock.squdoku"
         }
         minSdkVersion 19
         targetSdkVersion 28
         versionCode 3
-        versionName "1.1"
+        versionName "1.0"
         externalNativeBuild {
             ndkBuild {
                 arguments "APP_PLATFORM=android-19"
@@ -46,13 +46,13 @@ android {
             dimension "versions"
             applicationIdSuffix ".lite"
             versionNameSuffix "-lite"
-            resValue "string", "app_name", "Squabbel Lite"
+            resValue "string", "app_name", "Squaddel Lite"
         }
         pro {
             dimension "versions"
             applicationIdSuffix ".pro"
             versionNameSuffix "-pro"
-            resValue "string", "app_name", "Squabbel Pro"
+            resValue "string", "app_name", "Squaddel Pro"
             externalNativeBuild {
                 ndkBuild {
                     arguments "APP_PLATFORM=android-19"
@@ -82,7 +82,7 @@ android {
             variant.outputs.each { output ->
                 def outputFile = output.outputFile
                 if (outputFile != null && outputFile.name.endsWith(".aar")) {
-                    def fileName = "cc.deadlock.squabbel.aar";
+                    def fileName = "cc.deadlock.squaddel.aar";
                     output.outputFile = new File(outputFile.parent, fileName);
                 }
             }
