@@ -98,13 +98,15 @@ public:
      *
      *****************************************************************************/
     template<typename itemtype>
-    static itemtype get_random_from_sequence( std::vector<itemtype>& seq )
+    static itemtype get_random_from_sequence( std::vector<itemtype>& seq, size_t* idx=nullptr )
     {
         itemtype result;
         uint8_t buf;
         if ( WtRandom::getrandom( &buf, 1 ) <= 1 )
         {
-            result = seq[(buf % seq.size() )];
+            size_t index = buf % seq.size();
+            result = seq[index];
+            if ( idx != nullptr ) *idx = index;
         }
         return result;
     }

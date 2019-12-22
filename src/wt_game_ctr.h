@@ -245,20 +245,22 @@ private:
      *************************/
     void notify_num_click( size_t number )
     {
-        std::cout << "num pad clicked at " << number << std::endl;
-        if ( number == 0 )
+        if ( ! m_active_mode->stone_blocked( m_board, m_active.current_row(), m_active.current_column() ) )
         {
-            m_board.set_cell( m_active.current_row(),
-                              m_active.current_column(),
-                              WtBoard::empty_cell );
+            std::cout << "num pad clicked at " << number << std::endl;
+            if ( number == 0 )
+            {
+                m_board.set_cell( m_active.current_row(),
+                                  m_active.current_column(),
+                                  WtBoard::empty_cell );
+            }
+            else
+            {
+                m_board.set_cell( m_active.current_row(),
+                                  m_active.current_column(),
+                                  number + 0x30 );
+            }
         }
-        else
-        {
-            m_board.set_cell( m_active.current_row(),
-                              m_active.current_column(),
-                              number + 0x30 );
-        }
-
     }
 
     /**************************

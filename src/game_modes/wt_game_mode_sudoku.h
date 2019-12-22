@@ -125,7 +125,8 @@ public:
 "872000030006003002040106970000000786000261000463000000087409010100600800020000467",
 "802905030906003002340026000001030786758000394463090100000450013100600809020308407",
 "072000000916080000345020070090504086008201300460807020080050213000070859000000460"
-                    }
+                    },
+        m_active_id(0)
     {
     }
     ~WtGameModeSudoku()
@@ -153,7 +154,7 @@ public:
      *************************/
     void init_game( WtBoard& board, WtPlayer& )
     {
-        std::string next = WtRandom::get_random_from_sequence<std::string>( m_sudoku_lib );
+        std::string next = WtRandom::get_random_from_sequence<std::string>( m_sudoku_lib, &m_active_id );
         std::cout << "picked " << next << std::endl;
         size_t current = 0;
         for ( uint8_t r = 0; r < board.row_count(); r++ )
@@ -178,6 +179,14 @@ public:
     char next_letter()
     {
         return ' ';
+    }
+
+    /**************************
+     *
+     *************************/
+    bool stone_blocked( WtBoard& board, uint8_t r, uint8_t c )
+    {
+        return ( m_sudoku_lib[m_active_id][ r*board.col_count() + c ] != '0' );
     }
 
     /**************************
@@ -366,6 +375,7 @@ private:
 
 private:
     std::vector<std::string> m_sudoku_lib;
+    size_t                   m_active_id;
 };
 
 #endif /* _WT_GAME_MODE_GUESSING_H_ */
