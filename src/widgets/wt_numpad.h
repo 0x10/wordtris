@@ -100,7 +100,8 @@ public:
             WtButton( pos, size, frame_image, nullptr, "" )
         },
 
-        m_on_item_tap( on_item_tap )
+        m_on_item_tap( on_item_tap ),
+        m_is_9x9(true)
     {
 
     
@@ -133,6 +134,7 @@ public:
      *************************/
     void setup_4x4_layout()
     {
+        m_is_9x9 = false;
         m_buttons[0].set_position( WtCoord( m_pos.x + (( m_size.w / 2 ) - ( (m_size.w / 3) / 2)), m_pos.y + 3*(m_item_size.h+2) ) );
         m_buttons[0].set_size( WtDim( m_size.w / 3, m_item_size.h ) );
 
@@ -161,6 +163,7 @@ public:
      *************************/
     void setup_9x9_layout()
     {
+        m_is_9x9 = true;
         m_buttons[0].set_position( WtCoord( m_pos.x + (( m_size.w / 2 ) - ( (m_size.w / 3) / 2)), m_pos.y + 3*(m_item_size.h+2) ) );
         m_buttons[0].set_size( WtDim( m_size.w / 3, m_item_size.h ) );
 
@@ -198,6 +201,8 @@ private:
     template<size_t const idx>
     void on_item_clicked()
     {
+        if (( ! m_is_9x9 ) && (idx > 4))
+            return;
 
         if ( m_on_item_tap ) m_on_item_tap( idx );
     }
@@ -207,7 +212,7 @@ private:
     WtNumPad& operator = (const WtNumPad&);
 
 private:
-    WtCoord     m_pos;
+    WtCoord           m_pos;
     const WtDim       m_size;
     const char*       m_item_image_selected;
     const char*       m_item_image_unselected;
@@ -215,6 +220,7 @@ private:
 
     WtButton          m_buttons[11];
     OnItemTapDelegate m_on_item_tap;
+    bool              m_is_9x9;
 };
 
 #endif /* _WT_NUMPAD_H_ */

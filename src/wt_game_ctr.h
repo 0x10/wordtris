@@ -58,8 +58,8 @@ public:
                               WtDim( static_cast<ssize_t>(STORAGE.get_settings().gridsize) * 76, static_cast<ssize_t>(STORAGE.get_settings().gridsize) * 76 ),
                               WtDim( 76, 76 ),
                               WT_BIND_EVENT_HANDLER_1( WtGameCtr::notify_click ) ),
-        m_numpad( WtCoord( 0, (STORAGE.get_settings().gridsize * 76) + 130  ), 
-                  WtDim(ACTIVE_WINDOW_WIDTH, ACTIVE_WINDOW_HEIGHT-(STORAGE.get_settings().gridsize * 76)-100  ), 
+        m_numpad( WtCoord( 0, ACTIVE_WINDOW_HEIGHT-(4*100+50)/*(STORAGE.get_settings().gridsize * 76) + 130*/  ), 
+                  WtDim(ACTIVE_WINDOW_WIDTH, (4*100+50) /*ACTIVE_WINDOW_HEIGHT-(STORAGE.get_settings().gridsize * 76)-100*/  ), 
                   WT_BIND_EVENT_HANDLER_1( WtGameCtr::notify_num_click ) ),
         m_pause_btn( WtCoord( (ACTIVE_WINDOW_WIDTH-65)-24, (80-65)/2 ),
                      WtDim( 65, 65 ),
@@ -271,7 +271,6 @@ private:
                                              m_active.current_column() - 1 ) )
         {
             m_active.move_left();
-            //m_grid_touch_control.set_direction_seperator_pos( ACTIVE_WINDOW.grid_pos_to_coord( m_active.current_row(), m_active.current_column() ).x );
         }
     }
 
@@ -285,7 +284,6 @@ private:
                                              m_active.current_column() + 1 ) )
         {
             m_active.move_right( m_board.col_count() ); 
-            //m_grid_touch_control.set_direction_seperator_pos( ACTIVE_WINDOW.grid_pos_to_coord( m_active.current_row(), m_active.current_column() ).x );
         }
     }
 
@@ -362,9 +360,6 @@ private:
             m_active.init( m_active_mode->next_letter() );
             m_current_update_counter = get_current_update_counter( m_player );
             m_game_state = GAME_TO_START;
-            //m_grid_touch_control.set_direction_seperator_pos( ACTIVE_WINDOW.grid_pos_to_coord( m_active.current_row(), m_active.current_column() ).x );
-            //
-
         }
     }
 
@@ -429,10 +424,12 @@ private:
      *************************/
     virtual void entered_view()
     {
-        m_numpad.set_position( WtCoord( 0, (STORAGE.get_settings().gridsize * 76) + 130  ) );
+        //m_grid_touch_control.set_position( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - static_cast<ssize_t>((76u * (STORAGE.get_settings().gridsize) ) / 2), 100 ) );
+        //m_grid_touch_control.set_size( WtDim( static_cast<ssize_t>(STORAGE.get_settings().gridsize) * 76, static_cast<ssize_t>(STORAGE.get_settings().gridsize) * 76 ) );
         if ( STORAGE.get_settings().gridsize == 4 )
         {
             m_numpad.setup_4x4_layout();
+
         }
         else
         {

@@ -59,7 +59,21 @@ public:
         return m_clickable;
     }
 
+    /**************************
+     *
+     *************************/
+    void set_position( WtCoord new_pos )
+    {
+        m_pos = new_pos;
+    }
 
+    /**************************
+     *
+     *************************/
+    void set_size( WtDim new_size )
+    {
+        m_size = new_size;
+    }
 public:
     /**************************
      *
@@ -101,8 +115,8 @@ public:
 private:
     WtClickableIf m_clickable;
 
-    const WtCoord   m_pos;
-    const WtDim     m_size;
+    WtCoord   m_pos;
+    WtDim     m_size;
     const WtDim     m_grid_item_size;
 
     OnClickDetected  m_on_click;
