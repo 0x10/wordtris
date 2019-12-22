@@ -116,6 +116,7 @@ private:
      *************************/
     void update_window()
     {
+
         ACTIVE_WINDOW.draw_board( m_board, 
                                   m_active,
                                   STORAGE.get_settings().show_support_grid );
@@ -362,6 +363,7 @@ private:
             m_current_update_counter = get_current_update_counter( m_player );
             m_game_state = GAME_TO_START;
             //m_grid_touch_control.set_direction_seperator_pos( ACTIVE_WINDOW.grid_pos_to_coord( m_active.current_row(), m_active.current_column() ).x );
+            //
 
         }
     }
@@ -427,6 +429,15 @@ private:
      *************************/
     virtual void entered_view()
     {
+        m_numpad.set_position( WtCoord( 0, (STORAGE.get_settings().gridsize * 76) + 130  ) );
+        if ( STORAGE.get_settings().gridsize == 4 )
+        {
+            m_numpad.setup_4x4_layout();
+        }
+        else
+        {
+            m_numpad.setup_9x9_layout();
+        }
         ACTIVE_INPUT.add_active_region( m_grid_touch_control );
     }
 

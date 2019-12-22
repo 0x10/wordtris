@@ -121,9 +121,12 @@ public:
                 else
                 {
                     std::string cell_background = "grid.bmp";
-                    DrawingPolicy::draw_custom_cell_bg( i, j, cell_background );
+                    DrawingPolicy::draw_custom_cell_bg( i, j, cell_background, 155 );
+
+                }
                     if ( show_support_grid )
                     {
+                    std::string cell_background = "grid.bmp";
                         if (( j == active.current_column() ) || ( i == active.current_row() ))
                         {
                             cell_background = "grid_font_helper.bmp";
@@ -131,7 +134,6 @@ public:
                             DrawingPolicy::draw_custom_cell_bg( i, j, cell_background, ( alpha_diff < 255 ? 255 - alpha_diff : 0 ) );
                         }
                     }
-                }
             }
         }
         
@@ -250,9 +252,12 @@ public:
     {
         if ( button.size() != WtDim( 0,0 ) )
         {
-            DrawingPolicy::draw_image( button.position(),
-                                       button.size(),
-                                       button.image() );
+            if ( button.image().length() > 0 )
+            {
+                DrawingPolicy::draw_image( button.position(),
+                                           button.size(),
+                                           button.image() );
+            }
 
             if ( ! button.label().empty() )
             {

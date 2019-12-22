@@ -221,9 +221,10 @@ public:
             }
             else
             {
-                std::string font_bg = "grid_font_bg.bmp";
-                SDL_Color font_col = {0x12, 0x23, 0x39, 255};
-                uint8_t bg_alpha = 255;
+                std::string font_bg = "grid.bmp";
+                //SDL_Color font_col = {0x12, 0x23, 0x39, 255};
+                SDL_Color font_col = {0x4A, 0x90, 0xE2, 255};
+                uint8_t bg_alpha = 155;
                 if ( font != "grid" )
                 {
                     if ( font == "active_grid" )

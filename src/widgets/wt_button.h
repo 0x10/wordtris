@@ -156,6 +156,14 @@ public:
     /**************************
      *
      *************************/
+    void set_size( WtDim new_size )
+    {
+        m_size = new_size;
+    }
+
+    /**************************
+     *
+     *************************/
     WtCoord position() const
     {
         return m_pos;
