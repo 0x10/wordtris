@@ -51,6 +51,7 @@ protected:
         m_text_font_tiny( "text_tiny", TINY_TEXT_FONT_SIZE, TINY_TEXT_FONT_SIZE, SDL_ASSETS"Muli.ttf", TINY_TEXT_FONT_SIZE, true ),
         m_text_font_big( "text_big", BIG_TEXT_FONT_SIZE, BIG_TEXT_FONT_SIZE, SDL_ASSETS"Muli-Bold.ttf", BIG_TEXT_FONT_SIZE, true ),
         m_text_font_small( "text_small", SMALL_TEXT_FONT_SIZE, SMALL_TEXT_FONT_SIZE, SDL_ASSETS"Muli.ttf", SMALL_TEXT_FONT_SIZE, true ),
+        m_gridsize(9),
         m_texture_cache()
     {
 
@@ -443,6 +444,15 @@ public:
         return m_text_font_tiny;
     }
 
+
+    /**************************
+     *
+     *************************/
+    void set_gridsize( const size_t gridsize )
+    {
+        m_gridsize = gridsize;
+    }
+
     /**************************
      *
      *************************/
@@ -483,9 +493,9 @@ private:
         WtCoord screen_pos(0,0);
         if ( NULL != font )
         {
-            uint8_t gridoffset_x = (SDL_WIDTH / 2) - (( 9 * GRID_FONT_SIZE ) / 2 );
+            uint8_t gridoffset_x = (SDL_WIDTH / 2) - (( m_gridsize * GRID_FONT_SIZE ) / 2 );
             screen_pos.x = (((col*static_cast<ssize_t>(font->width()))+col)+/*GRID_OFFSET_X*/gridoffset_x);
-            screen_pos.y = (((row*static_cast<ssize_t>(font->height()))+row)+GRID_OFFSET_Y);
+            screen_pos.y = (((row*static_cast<ssize_t>(font->height()))+row)+( m_gridsize == 9 ? GRID_OFFSET_Y : GRID_OFFSET_Y + GRID_FONT_SIZE ));
         }
         return screen_pos;
     }
@@ -700,6 +710,8 @@ private:
     WtSdlFont     m_text_font_tiny;
     WtSdlFont     m_text_font_big;
     WtSdlFont     m_text_font_small;
+
+    size_t        m_gridsize;
 
     SDL_TextureCache m_texture_cache;
 };

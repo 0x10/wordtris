@@ -159,6 +159,7 @@ public:
     void set_size( WtDim new_size )
     {
         m_size = new_size;
+        m_clickable.set_size( m_size );
     }
 
     /**************************
@@ -175,6 +176,7 @@ public:
     void set_position( WtCoord new_pos )
     {
         m_pos = new_pos;
+        m_clickable.set_position( m_pos );
     }
 
     /**************************

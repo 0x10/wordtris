@@ -109,6 +109,7 @@ public:
                      const WtLetter& active,
                      const bool show_support_grid )
     {
+        DrawingPolicy::set_gridsize( STORAGE.get_settings().gridsize );
         DrawingPolicy::draw_custom_cell_bg( active.current_row(), active.current_column(), "#777777", 70 );
         for( uint8_t i=0 ; i < board.row_count(); i++ )
         {

@@ -54,9 +54,9 @@ public:
                       WT_BIND_EVENT_HANDLER( WtGameCtr::return_to_menu ) ),
         m_score_summary(),
         //m_game_mode_intro(),
-        m_grid_touch_control( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - static_cast<ssize_t>((76u * (STORAGE.get_settings().gridsize) ) / 2), 100 ),
-                              WtDim( static_cast<ssize_t>(STORAGE.get_settings().gridsize) * 76, static_cast<ssize_t>(STORAGE.get_settings().gridsize) * 76 ),
-                              WtDim( 76, 76 ),
+        m_grid_touch_control( ( STORAGE.get_settings().gridsize == 9 ? WtCoord( 18, 100 ) : WtCoord( 208, 177 ) )/*WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - static_cast<ssize_t>((76u * (STORAGE.get_settings().gridsize) ) / 2), 100 )*/,
+                              ( STORAGE.get_settings().gridsize == 9 ? WtDim( 686, 686 ) : WtDim( 307, 307 ) )/*WtDim( static_cast<ssize_t>(STORAGE.get_settings().gridsize) * 76, static_cast<ssize_t>(STORAGE.get_settings().gridsize) * 76 )*/,
+                              WtDim( 77, 77 ),
                               WT_BIND_EVENT_HANDLER_1( WtGameCtr::notify_click ) ),
         m_numpad( WtCoord( 0, ACTIVE_WINDOW_HEIGHT-(4*100+50)/*(STORAGE.get_settings().gridsize * 76) + 130*/  ), 
                   WtDim(ACTIVE_WINDOW_WIDTH, (4*100+50) /*ACTIVE_WINDOW_HEIGHT-(STORAGE.get_settings().gridsize * 76)-100*/  ), 
@@ -69,8 +69,8 @@ public:
                        WtDim( ACTIVE_WINDOW_WIDTH, 80 ),
                        "#0e0e0e",
                        [](){} ),
-        m_grid_bg( WtCoord( /*(ACTIVE_WINDOW_WIDTH / 2) - static_cast<ssize_t>((76u * (STORAGE.get_settings().gridsize) ) / 2)*/17, 99 ),
-                   /*WtDim( static_cast<ssize_t>(STORAGE.get_settings().gridsize) * 76, static_cast<ssize_t>(STORAGE.get_settings().gridsize) * 76 )*/WtDim( 694, 694 ),
+        m_grid_bg( ( STORAGE.get_settings().gridsize == 9 ? WtCoord( 17, 99 ) : WtCoord( 208, 176 ) ),
+                   ( STORAGE.get_settings().gridsize == 9 ? WtDim( 686, 686 ) : WtDim( 307, 307 ) ),
                    ( STORAGE.get_settings().gridsize == 9 ? "sudoku9x9_grid.bmp" : "sudoku4x4_grid.bmp" ),
                    [](){} ),
        // m_pause_end_animation(""),
@@ -431,8 +431,11 @@ private:
      *************************/
     virtual void entered_view()
     {
-        m_grid_touch_control.set_position( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - static_cast<ssize_t>((76u * (STORAGE.get_settings().gridsize) ) / 2), 100 ) );
-        m_grid_touch_control.set_size( WtDim( static_cast<ssize_t>(STORAGE.get_settings().gridsize) * 76, static_cast<ssize_t>(STORAGE.get_settings().gridsize) * 76 ) );
+        m_grid_touch_control.set_position( ( STORAGE.get_settings().gridsize == 9 ? WtCoord( 17, 99 ) : WtCoord( 208, 176 ) )/*WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - static_cast<ssize_t>((76u * (STORAGE.get_settings().gridsize) ) / 2), 100 )*/ );
+        m_grid_touch_control.set_size( ( STORAGE.get_settings().gridsize == 9 ? WtDim( 686, 686 ) : WtDim( 307, 307 ) )/*WtDim( static_cast<ssize_t>(STORAGE.get_settings().gridsize) * 76, static_cast<ssize_t>(STORAGE.get_settings().gridsize) * 76 )*/ );
+        m_grid_bg.set_image( ( STORAGE.get_settings().gridsize == 9 ? "sudoku9x9_grid.bmp" : "sudoku4x4_grid.bmp" ) );
+        m_grid_bg.set_size( ( STORAGE.get_settings().gridsize == 9 ? WtDim( 686, 686 ) : WtDim( 307, 307 ) ) );
+        m_grid_bg.set_position( ( STORAGE.get_settings().gridsize == 9 ? WtCoord( 17, 99 ) : WtCoord( 208, 176 ) ) );
         if ( STORAGE.get_settings().gridsize == 4 )
         {
             m_numpad.setup_4x4_layout();

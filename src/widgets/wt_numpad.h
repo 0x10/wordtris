@@ -138,17 +138,17 @@ public:
         m_buttons[0].set_position( WtCoord( m_pos.x + (( m_size.w / 2 ) - ( (m_size.w / 3) / 2)), m_pos.y + 3*(m_item_size.h+2) ) );
         m_buttons[0].set_size( WtDim( m_size.w / 3, m_item_size.h ) );
 
-        m_buttons[1].set_position( WtCoord( ( m_pos.x + ( (m_size.w / 3)/2 - ((m_size.w/3)/2) ) ) + (((1-1)%3)*(m_size.w / 3)), m_pos.y ) );
-        m_buttons[1].set_size( WtDim( m_size.w / 3-2, m_item_size.h ) );
+        m_buttons[1].set_position( WtCoord( ( m_pos.x + ( (m_size.w / 2)/2 - ((m_size.w/2)/2) ) ) + (((1-1)%2)*(m_size.w / 2)), m_pos.y ) );
+        m_buttons[1].set_size( WtDim( m_size.w / 2, m_item_size.h ) );
 
-        m_buttons[2].set_position( WtCoord( ( m_pos.x + ( (m_size.w / 3)/2 - ((m_size.w/3)/2) ) ) + (((2-1)%3)*(m_size.w / 3)), m_pos.y ) );
-        m_buttons[2].set_size( WtDim( m_size.w / 3, m_item_size.h ) );
+        m_buttons[2].set_position( WtCoord( ( m_pos.x + ( (m_size.w / 2)/2 - ((m_size.w/2)/2) ) ) + (((2-1)%2)*(m_size.w / 2)), m_pos.y ) );
+        m_buttons[2].set_size( WtDim( m_size.w / 2, m_item_size.h ) );
 
-        m_buttons[3].set_position( WtCoord( ( m_pos.x + ( (m_size.w / 3)/2 - ((m_size.w/3)/2) ) ) + (((3-1)%3)*(m_size.w / 3+1)), m_pos.y ) );
-        m_buttons[3].set_size( WtDim( m_size.w / 3, m_item_size.h ) );
+        m_buttons[3].set_position( WtCoord( ( m_pos.x + ( (m_size.w / 2)/2 - ((m_size.w/2)/2) ) ) + (((3-1)%2)*(m_size.w / 2)),  m_pos.y + (m_item_size.h + 2 + m_item_size.h/2)) );
+        m_buttons[3].set_size( WtDim( m_size.w / 2, m_item_size.h ) );
 
-        m_buttons[4].set_position( WtCoord( ( m_pos.x + ( (m_size.w / 3)/2 - ((m_size.w/3)/2) ) ) + (((4-1)%3)*(m_size.w / 3)), m_pos.y + m_item_size.h + 2 ) );
-        m_buttons[4].set_size( WtDim( m_size.w / 3-2, m_item_size.h ) );
+        m_buttons[4].set_position( WtCoord( ( m_pos.x + ( (m_size.w / 2)/2 - ((m_size.w/2)/2) ) ) + (((4-1)%2)*(m_size.w / 2+1)), m_pos.y + (m_item_size.h + 2  + m_item_size.h/2)) );
+        m_buttons[4].set_size( WtDim( m_size.w / 2, m_item_size.h ) );
 
         m_buttons[5].set_size( WtDim( 0,0 ) );
         m_buttons[6].set_size( WtDim( 0,0 ) );
