@@ -80,6 +80,22 @@ public:
     /**************************
      *
      *************************/
+    void set_position( WtCoord new_pos )
+    {
+        m_pos = new_pos;
+    }
+
+    /**************************
+     *
+     *************************/
+    void set_size( WtDim new_size )
+    {
+        std::cout << "new size = " << new_size << std::endl;
+        m_size = new_size;
+    }
+    /**************************
+     *
+     *************************/
     void trigger_press ( WtCoord& pos )
     {
         if ( pos.in_region( m_pos, m_size ) )
@@ -154,8 +170,8 @@ protected:
     PanDetectedDelegate     m_pan;
     MotionDetectedDelegate  m_motion;
     size_t                  m_id;
-    const WtCoord           m_pos;
-    const WtDim             m_size;
+    WtCoord           m_pos;
+    WtDim             m_size;
 
     WtCoord                 m_press_pos;
     WtCoord                 m_active_motion_pos;

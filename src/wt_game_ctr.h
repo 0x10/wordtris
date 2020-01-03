@@ -45,7 +45,7 @@ private:
     } wt_game_state;
 public:
     WtGameCtr() :
-        WtViewIf( "#172d4a", 0, 0, WtTime::TimeType(12500), WT_BIND_EVENT_HANDLER_1( WtGameCtr::on_key_press ), "game_bg_music.ogg" ),
+        WtViewIf( "#202020", 0, 0, WtTime::TimeType(12500), WT_BIND_EVENT_HANDLER_1( WtGameCtr::on_key_press ), "game_bg_music.ogg" ),
         m_player(),
         m_active(),
         m_board(),
@@ -67,8 +67,12 @@ public:
                      WT_BIND_EVENT_HANDLER( WtGameCtr::enter_pause ) ),
         m_settings_bg( WtCoord( 0, 0 ),
                        WtDim( ACTIVE_WINDOW_WIDTH, 80 ),
-                       "#112238",
+                       "#0e0e0e",
                        [](){} ),
+        m_grid_bg( WtCoord( /*(ACTIVE_WINDOW_WIDTH / 2) - static_cast<ssize_t>((76u * (STORAGE.get_settings().gridsize) ) / 2)*/17, 99 ),
+                   /*WtDim( static_cast<ssize_t>(STORAGE.get_settings().gridsize) * 76, static_cast<ssize_t>(STORAGE.get_settings().gridsize) * 76 )*/WtDim( 694, 694 ),
+                   ( STORAGE.get_settings().gridsize == 9 ? "sudoku9x9_grid.bmp" : "sudoku4x4_grid.bmp" ),
+                   [](){} ),
        // m_pause_end_animation(""),
         m_current_update_counter(48),
         m_game_state( GAME_STOPPED ),
@@ -76,6 +80,7 @@ public:
     {
 
         add_button( m_settings_bg );
+        add_button( m_grid_bg );
         add_button( m_pause_btn );
         add_numpad( m_numpad );
 
@@ -426,8 +431,8 @@ private:
      *************************/
     virtual void entered_view()
     {
-        //m_grid_touch_control.set_position( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - static_cast<ssize_t>((76u * (STORAGE.get_settings().gridsize) ) / 2), 100 ) );
-        //m_grid_touch_control.set_size( WtDim( static_cast<ssize_t>(STORAGE.get_settings().gridsize) * 76, static_cast<ssize_t>(STORAGE.get_settings().gridsize) * 76 ) );
+        m_grid_touch_control.set_position( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - static_cast<ssize_t>((76u * (STORAGE.get_settings().gridsize) ) / 2), 100 ) );
+        m_grid_touch_control.set_size( WtDim( static_cast<ssize_t>(STORAGE.get_settings().gridsize) * 76, static_cast<ssize_t>(STORAGE.get_settings().gridsize) * 76 ) );
         if ( STORAGE.get_settings().gridsize == 4 )
         {
             m_numpad.setup_4x4_layout();
@@ -463,6 +468,7 @@ private:
     WtNumPad            m_numpad;
     WtButton            m_pause_btn;
     WtButton            m_settings_bg;
+    WtButton            m_grid_bg;
 
 //    WtGridAnimation     m_pause_end_animation; 
 

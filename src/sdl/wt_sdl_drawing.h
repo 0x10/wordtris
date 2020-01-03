@@ -221,18 +221,19 @@ public:
             }
             else
             {
-                std::string font_bg = "grid.bmp";
+                std::string font_bg = "";// "grid.bmp";
                 //SDL_Color font_col = {0x12, 0x23, 0x39, 255};
-                SDL_Color font_col = {0x4A, 0x90, 0xE2, 255};
+                //SDL_Color font_col = {0x4A, 0x90, 0xE2, 255};
+                SDL_Color font_col = {0x99, 0x99, 0x99, 255};
                 uint8_t bg_alpha = 155;
                 if ( font != "grid" )
                 {
                     if ( font == "active_grid" )
                     {
                         font_bg = "grid_font_bg_active.bmp";
-                        font_col.r = 0x12;
-                        font_col.g = 0x23;
-                        font_col.b = 0x39;
+                        font_col.r = 0xab;
+                        font_col.g = 0xab;
+                        font_col.b = 0xab;
                         font_col.a = 255;
                         if ( value == ' ' )
                             bg_alpha = 75;
@@ -558,8 +559,8 @@ private:
                     small.y = pos.y;
                     small.w = size.w;
                     small.h = size.h;
-//                    draw_red_debug_dot( pos );
-//                    draw_red_debug_dot( WtCoord(pos.x+size.w, pos.y+size.h) );
+                    //draw_red_debug_dot( pos );
+                    //draw_red_debug_dot( WtCoord(pos.x+size.w, pos.y+size.h) );
                     SDL_RenderCopy( m_renderer, text_tex, NULL, &small );
                 }
             }
