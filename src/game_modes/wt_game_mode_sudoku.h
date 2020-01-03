@@ -18,13 +18,14 @@
 
 #include "wt_game_mode_if.h"
 #include "wt_utils.h"
+#include "wt_storage.h"
 #include <set>
 class WtGameModeSudoku : public WtGameModeIf
 {
 public:
     WtGameModeSudoku() :
         WtGameModeIf( "Sudoku" ),
-        m_sudoku_lib{
+        m_sudoku_lib9x9{
 "379000014060010070080009005435007000090040020000800436900700080040080050850000249",
 "070000810000318902281470005400060000690103027000090006900054681106982000057000040",
 "000020010504018972080409005000000108690103027702000000900704080146980703050030000",
@@ -126,6 +127,17 @@ public:
 "802905030906003002340026000001030786758000394463090100000450013100600809020308407",
 "072000000916080000345020070090504086008201300460807020080050213000070859000000460"
                     },
+        m_sudoku_lib4x4{
+"0340400210030210",
+"0040403004030100",
+"0010400000020300",
+"2000003004000001",
+"1040000000000102",
+"0003324004322000",
+"3410020000200143",
+"0130200000030210",
+"0010400000020300"
+        },
         m_active_id(0)
     {
     }
@@ -154,7 +166,7 @@ public:
      *************************/
     void init_game( WtBoard& board, WtPlayer& )
     {
-        std::string next = WtRandom::get_random_from_sequence<std::string>( m_sudoku_lib, &m_active_id );
+        std::string next = WtRandom::get_random_from_sequence<std::string>( ( STORAGE.get_settings().gridsize == 9 ? m_sudoku_lib9x9 : m_sudoku_lib4x4 ), &m_active_id );
         std::cout << "picked " << next << std::endl;
         size_t current = 0;
         for ( uint8_t r = 0; r < board.row_count(); r++ )
@@ -186,7 +198,7 @@ public:
      *************************/
     bool stone_blocked( WtBoard& board, uint8_t r, uint8_t c )
     {
-        return ( m_sudoku_lib[m_active_id][ r*board.col_count() + c ] != '0' );
+        return ( ( STORAGE.get_settings().gridsize == 9 ? m_sudoku_lib9x9[m_active_id][ r*board.col_count() + c ] : m_sudoku_lib4x4[m_active_id][ r*board.col_count() + c ] ) != '0' );
     }
 
     /**************************
@@ -374,7 +386,8 @@ private:
     } 
 
 private:
-    std::vector<std::string> m_sudoku_lib;
+    std::vector<std::string> m_sudoku_lib9x9;
+    std::vector<std::string> m_sudoku_lib4x4;
     size_t                   m_active_id;
 };
 
