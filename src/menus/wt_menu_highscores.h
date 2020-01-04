@@ -22,14 +22,14 @@ class WtMenuHighscores : public WtViewIf
 {
 public:
     WtMenuHighscores() :
-        WtViewIf("#182e4b"),
+        WtViewIf("#202020"),
         m_leave_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (138 / 2), (ACTIVE_WINDOW_HEIGHT - (ACTIVE_WINDOW_HEIGHT / 4))+(124/2) ), 
                      WtDim(138, 124),
                      "next_btn.bmp",
                      WT_BIND_EVENT_HANDLER( WtMenuHighscores::leave ),
                      WtL10n_tr( "B A C K"),
                      WtCoord( 0, 25 ),
-                     WtFont( "#498fe1", "text_big" ) ),
+                     WtFont( "#a8a8a8", "text_big" ) ),
         m_left_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 8)-(80/2), ((ACTIVE_WINDOW_HEIGHT / 8)+150)-(10) ), 
                     WtDim(80, 42), 
                     "left.bmp",
@@ -44,8 +44,8 @@ public:
                        [](){},
                        "",
                        WtCoord( 0, 160 ),
-                       WtFont( "#00bafa", "text_big" ) ),
-        m_list_bg( WtCoord(0, (ACTIVE_WINDOW_HEIGHT / 4)-50), WtDim(ACTIVE_WINDOW_WIDTH, 650), "#122338" ),
+                       WtFont( "#a8a8a8", "text_big" ) ),
+        m_list_bg( WtCoord(0, (ACTIVE_WINDOW_HEIGHT / 4)-50), WtDim(ACTIVE_WINDOW_WIDTH, 650), "#0e0e0e" ),
         m_scores( STORAGE.get_scores() ),
         m_game_mode_ids( GAME_MODE_CTR.get_available_mode_ids() ),
         m_game_mode_names( GAME_MODE_CTR.get_available_mode_names() ),
@@ -118,7 +118,7 @@ private: // no copy allowed
         {
             std::stringstream ss;
             ss << index;
-            ACTIVE_WINDOW.draw_text( entry_pos, ss.str(), "text", "#00bafa" ); 
+            ACTIVE_WINDOW.draw_text( entry_pos, ss.str(), "text", "#b2b2b2" ); 
         }
 
         if ( entry.score > 0 )

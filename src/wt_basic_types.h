@@ -165,7 +165,7 @@ std::ostream & operator << (std::ostream &out, const WtCoord &c)
 class WtFont
 {
 public:
-    WtFont( std::string icolor="#4a90e2", std::string ifontname="text" ) :
+    WtFont( std::string icolor="#a8a8a8", std::string ifontname="text" ) :
         color(icolor),
         fontname(ifontname) {}
 

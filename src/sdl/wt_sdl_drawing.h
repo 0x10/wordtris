@@ -109,7 +109,7 @@ public:
                         
                         SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "best" );
                         TTF_Init();
-                        set_bg("#112238");
+                        set_bg("#202020");
 
                         m_grid_font.load_font_data( m_theme, m_renderer );
                         m_text_font_tiny.load_font_data( m_theme, m_renderer );
@@ -365,7 +365,7 @@ public:
     void draw_text( const WtCoord     pos,
                     const std::string text,
                     const std::string font="text",
-                    const std::string font_color="#4a90e2" )
+                    const std::string font_color="#999999" )
     {
         if ( font == "text" )
         {

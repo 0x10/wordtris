@@ -27,7 +27,7 @@ class WtMenuCtr : public WtViewIf
 {
 public:
     WtMenuCtr() :
-        WtViewIf( "#172d4a", -1, -1, WtTime::TimeType(0), WT_BIND_EVENT_HANDLER_1( WtMenuCtr::handle_key_press ) ),
+        WtViewIf( "#202020", -1, -1, WtTime::TimeType(0), WT_BIND_EVENT_HANDLER_1( WtMenuCtr::handle_key_press ) ),
         m_drag_start_pos(0,0),
         m_was_drag(false),
         m_drag_button_id(0),
@@ -48,14 +48,14 @@ public:
                      WT_BIND_EVENT_HANDLER( WtMenuCtr::game_mode_selected ),
                      WtL10n_tr( "S T A R T"),
                      WtCoord( 0, 25 ),
-                     WtFont( "#498fe1", "text_big" ) ),
+                     WtFont( "#b2b2b2", "text_big" ) ),
         m_select_label( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (366 / 2), (ACTIVE_WINDOW_HEIGHT / 4)-(70/2) ),
                        WtDim( 366, 70 ),
                        "label_select_bbfix.bmp",
                        [](){} ),
         m_settings_bg( WtCoord( 0, 0 ),
                        WtDim( ACTIVE_WINDOW_WIDTH, 80 ),
-                       "#112238",
+                       "#0e0e0e",
                        [](){} ),
         m_game_selection( WtCoord( 0, (ACTIVE_WINDOW_HEIGHT / 2) - (297 / 2) ),
                           WtDim( ACTIVE_WINDOW_WIDTH, 297 ),

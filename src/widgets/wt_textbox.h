@@ -21,7 +21,7 @@
 class WtTextbox
 {
 private:
-    const char* m_textbox_bg = "#182e4b";
+    const char* m_textbox_bg = "#999999";
     const ssize_t m_text_margin = 20;
 public:
     WtTextbox( WtCoord     pos,

@@ -42,8 +42,8 @@ int main( int, char** )
 
                 ACTIVE_WINDOW.clr();
                 //ACTIVE_WINDOW.draw_message(WtL10n_tr("Loading..."));
-                ACTIVE_WINDOW.draw_button( WtButton( WtCoord( (ACTIVE_WINDOW_WIDTH/2)-(347/2), (ACTIVE_WINDOW_HEIGHT / 2) - (202/2)), 
-                                                     WtDim(347,202), 
+                ACTIVE_WINDOW.draw_button( WtButton( WtCoord( (ACTIVE_WINDOW_WIDTH/2)-(307/2), (ACTIVE_WINDOW_HEIGHT / 2) - (307/2)), 
+                                                     WtDim(307,307), 
                                                      "splash_logo.bmp") );
                 ACTIVE_WINDOW.update();
 
@@ -53,9 +53,9 @@ int main( int, char** )
 
                 WtTime::TimeType elapsed = WtTime::get_time_elapsed( before, after );
                 std::cout << "startup time was " << elapsed.count() << std::endl;
-                if ( elapsed < WtTime::from_milliseconds(500) )
+                if ( elapsed < WtTime::from_milliseconds(1000) )
                 {
-                    WtTime::sleep( WtTime::from_milliseconds(500) - elapsed );
+                    WtTime::sleep( WtTime::from_milliseconds(1000) - elapsed );
                 }
 
                 (void)main_menu.show();

@@ -38,7 +38,7 @@ public:
         active_theme( "default" ),
         show_support_grid( true ),
         show_next_stone( true ),
-        enable_audio( true ),
+        enable_audio( false ),
         gridsize(9)
     {}
 
@@ -80,6 +80,7 @@ public:
         show_support_grid = WtStorable::read_boolean( inf, was_eof );
         show_next_stone = WtStorable::read_boolean( inf, was_eof );
         enable_audio = WtStorable::read_boolean( inf, was_eof );
+        enable_audio = false;
         gridsize = WtStorable::read_unsigned<uint8_t>( inf, was_eof );
 
         return ( ! was_eof );

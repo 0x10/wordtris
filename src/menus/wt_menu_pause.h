@@ -33,7 +33,7 @@ private:
 public:
     WtMenuPause( OnRestartDelegate restart_handler,
                  OnQuitDelegate    quit_handler ) :
-        WtViewIf( "#122339", 0, 0 ),
+        WtViewIf( "#202020", 0, 0 ),
         //m_help(),
         m_leave_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (138 / 2), (ACTIVE_WINDOW_HEIGHT - (ACTIVE_WINDOW_HEIGHT / 4))+(124/2) ), 
                      WtDim(138, 124),
@@ -41,21 +41,21 @@ public:
                      WT_BIND_EVENT_HANDLER( WtMenuPause::leave ),
                      WtL10n_tr( "B A C K"),
                      WtCoord( 0, 25 ),
-                     WtFont( "#498fe1", "text_big" ) ),
+                     WtFont( "#a8a8a8", "text_big" ) ),
         m_redo_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 4) - (138 / 2), (ACTIVE_WINDOW_HEIGHT / 2)+100 ), 
                     WtDim(138, 124), 
                     "redo_btn.bmp",
                     WT_BIND_EVENT_HANDLER( WtMenuPause::restart_pressed ),
                     WtL10n_tr("RESTART"),
                     WtCoord( 0, 40 ),
-                    WtFont( "#498fe1", "text_big" ) ),
+                    WtFont( "#a8a8a8", "text_big" ) ),
         m_quit_btn( WtCoord(ACTIVE_WINDOW_WIDTH - ((ACTIVE_WINDOW_WIDTH / 4) + (138 / 2)), (ACTIVE_WINDOW_HEIGHT / 2)+100),
                     WtDim(138, 124), 
                     "quit_btn.bmp",
                     WT_BIND_EVENT_HANDLER( WtMenuPause::quit_pressed ),
                     WtL10n_tr("EXIT GAME"),
                     WtCoord( 0, 40 ),
-                    WtFont( "#498fe1", "text_big" ) ),
+                    WtFont( "#a8a8a8", "text_big" ) ),
         m_help_btn( WtCoord(offset_x - 158, offset_y+50),
                     WtDim(100, 100),
                     "help_btn.bmp",
@@ -88,8 +88,6 @@ public:
         //add_button( m_seperator0 );
         //add_button( m_help_btn );
         add_button( m_supporting_grid_btn );
-        add_button( m_next_stone_btn );
-        add_button( m_enable_audio_btn );
         add_button( m_pause_label );
     }
 

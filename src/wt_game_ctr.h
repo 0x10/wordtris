@@ -45,7 +45,7 @@ private:
     } wt_game_state;
 public:
     WtGameCtr() :
-        WtViewIf( "#202020", 0, 0, WtTime::TimeType(12500), WT_BIND_EVENT_HANDLER_1( WtGameCtr::on_key_press ), "game_bg_music.ogg" ),
+        WtViewIf( "#202020", 0, 0, WtTime::TimeType(12500), WT_BIND_EVENT_HANDLER_1( WtGameCtr::on_key_press ) ),
         m_player(),
         m_active(),
         m_board(),

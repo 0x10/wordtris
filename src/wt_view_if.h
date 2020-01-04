@@ -33,11 +33,11 @@ public:
     using OnKeyPressDelegate = std::function<void(wt_control)>;
     using OnUpdateOverlayDelegate = std::function<void(void)>;
 public:
-    WtViewIf( std::string bg_img="#172d4a", 
+    WtViewIf( std::string bg_img="#202020", 
               ssize_t fade_in=-1,ssize_t fade_out=-1,
               WtTime::TimeType refresh_rate=WtTime::TimeType(0),
               OnKeyPressDelegate on_key_press_handler = nullptr,
-              std::string bg_music="menu_bg_music.ogg" ) :
+              std::string bg_music="" ) :
         m_shall_leave( false ),
         m_shall_exit( false ),
         m_bg( bg_img ),

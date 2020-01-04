@@ -38,7 +38,7 @@ private:
 
 public:
     WtMenuSettings() :
-        WtViewIf("#122339", 1, 1 ),
+        WtViewIf("#202020", 1, 1 ),
         m_current_diff(0),
         m_leave_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (138 / 2), (ACTIVE_WINDOW_HEIGHT - (ACTIVE_WINDOW_HEIGHT / 4))+(124/2) ), 
                      WtDim(138, 124), 
@@ -46,7 +46,7 @@ public:
                      WT_BIND_EVENT_HANDLER( WtMenuSettings::leave ),
                      WtL10n_tr( "B A C K"),
                      WtCoord( 0, 25 ),
-                     WtFont( "#498fe1", "text_big" ) ),
+                     WtFont( "#a8a8a8", "text_big" ) ),
         m_lang_select_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - ((74+74+74+(m_standard_btn_size.w/3-74)*2) / 2), offset_y + m_standard_btn_size.h/2 ),
                            m_standard_btn_size,
                            0,
@@ -81,13 +81,13 @@ public:
                             WT_BIND_EVENT_HANDLER_1( WtMenuSettings::enable_audio_changed ) ),
         m_seperator0( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (m_standard_btn_size.w / 2), offset_y + (m_standard_btn_size.h * 2) + (m_standard_btn_size.h / 2) ),
                       WtDim( m_standard_btn_size.w, 1 ),
-                      "#182e4b" ),
+                      "#a2a2a2" ),
         m_seperator1( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (m_standard_btn_size.w / 2), offset_y + (m_standard_btn_size.h * 5)  ),
                       WtDim( m_standard_btn_size.w, 1 ),
-                      "#182e4b" ),
+                      "#a2a2a2" ),
         m_settings_bg( WtCoord( 0, 0 ),
                        WtDim( ACTIVE_WINDOW_WIDTH, 80 ),
-                       "#172d4a",
+                       "#0e0e0e",
                        [](){} ),
         m_settings_logo( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (134 / 2), 128 ),
                        WtDim( 134, 134 ),
@@ -138,7 +138,7 @@ public:
         //add_tristate_button( m_theme_select_btn );
         add_button( m_supporting_grid_btn );
         add_button( m_small_grid_btn );
-        add_button( m_enable_audio_btn );
+//        add_button( m_enable_audio_btn );
         add_button( m_seperator0 );
         add_button( m_seperator1 );
         add_button( m_settings_logo );
