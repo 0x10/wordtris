@@ -38,7 +38,7 @@ public:
                        WtCoord( 0, 200 ),
                        WtFont( "#a8a8a8", "text_big" ) ),
         m_textbox_bg( WtCoord( 0,(ACTIVE_WINDOW_HEIGHT / 2) - 150 ),
-                      WtDim( ACTIVE_WINDOW_WIDTH, 300 ), "#122338" ),
+                      WtDim( ACTIVE_WINDOW_WIDTH, 300 ), "#0e0e0e" ),
         m_points_txt( WtCoord( (ACTIVE_WINDOW_WIDTH / 8 ) + 160, (ACTIVE_WINDOW_HEIGHT / 2) - 112),
                     WtDim( 1, 1 ),
                    "", [](){},  WtL10n_tr("POINTS") ),
@@ -68,13 +68,15 @@ public:
     {
         // eval if player stat is within first 3 of game mode
         // if true add player at correct position
-        std::cout << "highscore entry: Lvl " << player.get_current_level() << " at " << player.get_points() << " within mode \"" << mode->get_title() << "\"" << std::endl;
+        size_t time_s = std::chrono::duration_cast<std::chrono::seconds>(player.get_current_time()).count();
+        std::cout << "highscore entry: Lvl " << player.get_current_level() << " at " << player.get_points() << " t= " << time_s  << " within mode \"" << mode->get_title() << "\"" << std::endl;
 
         WtScoreEntry new_entry( mode->get_id_string(),
                                 player.get_points(),
-                                player.get_current_level() );
+                                player.get_current_level(),
+                                time_s );
 
-        m_new_highscore   = insert_entry( scores, new_entry );
+        m_new_highscore   = insert_entry_by_time( scores, new_entry );
         m_last_points     = player.get_points();
         m_solved_words[0] = player.get_solved_word_count();
         m_solved_words[1] = player.get_solved_word_count(2);
@@ -177,6 +179,36 @@ private: // no copy allowed
         return entry_added;
     }
 
+    /**************************
+     *
+     *************************/
+    bool insert_entry_by_time( WtHighscores& scores, WtScoreEntry& entry )
+    {
+        bool entry_added = false;
+        size_t game_mode_entries=0;
+        for( size_t idx = 0; ( idx < scores.size() && game_mode_entries < 10 ); idx++ )
+        {
+            if ( scores[idx].game_mode == entry.game_mode )
+            {
+                if ( scores[idx].time_s > entry.time_s )
+                {
+                    WtHighscores::iterator it = scores.begin();
+                    std::advance( it, idx );
+                    scores.insert( it, entry );
+                    entry_added = true;
+                    break;
+                }
+                game_mode_entries++;
+            }
+        }
+
+        if ( ( !entry_added ) && ( game_mode_entries < 10 ) )
+        {
+            scores.push_back( entry );
+            entry_added = true;
+        }
+        return entry_added;
+    }
 private:
     WtButton  m_leave_btn;
     WtButton  m_scores_logo;

@@ -90,7 +90,6 @@ public:
      *************************/
     void set_size( WtDim new_size )
     {
-        std::cout << "new size = " << new_size << std::endl;
         m_size = new_size;
     }
     /**************************

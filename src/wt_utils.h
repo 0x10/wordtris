@@ -22,6 +22,9 @@
 #include <random>
 #include <string>
 #include <thread>
+#include <iostream>
+#include <iomanip>
+#include <sstream>
 
 #define LETTER_COUNT  (26)
 #define MAX_WEIGHT    (351)
@@ -85,6 +88,17 @@ public:
     static void sleep( TimeType t )
     {
         std::this_thread::sleep_for( t );
+    }
+
+    /******************************************************************************
+     *
+     *****************************************************************************/
+    static std::string format_time( TimeType t )
+    {
+        std::stringstream ss;
+        ss << std::setfill('0') << std::setw(2) << std::chrono::duration_cast<std::chrono::minutes>(t).count() << ":";
+        ss << std::setfill('0') << std::setw(2) << ( std::chrono::duration_cast<std::chrono::seconds>(t).count() % 60 );
+        return ss.str();
     }
 };
 

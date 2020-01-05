@@ -115,6 +115,11 @@ public:
     /**************************
      *
      *************************/
+    virtual void pause_time() {}
+
+    /**************************
+     *
+     *************************/
     virtual std::string get_help()
     {
         return WtL10n_tr("no help provided");

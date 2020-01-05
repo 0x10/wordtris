@@ -45,7 +45,7 @@ private:
     } wt_game_state;
 public:
     WtGameCtr() :
-        WtViewIf( "#202020", 0, 0, WtTime::TimeType(12500), WT_BIND_EVENT_HANDLER_1( WtGameCtr::on_key_press ) ),
+        WtViewIf( "#202020", 0, 0, WtTime::TimeType(0/*12500*/), WT_BIND_EVENT_HANDLER_1( WtGameCtr::on_key_press ) ),
         m_player(),
         m_active(),
         m_board(),
@@ -74,7 +74,12 @@ public:
                    ( STORAGE.get_settings().gridsize == 9 ? "sudoku9x9_grid.bmp" : "sudoku4x4_grid.bmp" ),
                    [](){} ),
        // m_pause_end_animation(""),
-        m_current_update_counter(48),
+        m_current_time( WtCoord( 50, 30 ),
+                        WtDim( 10, 10 ),
+                        "#0e0e0e",
+                        [](){},
+                        WtTime::format_time( WtTime::from_seconds(0)) ),
+        m_current_update_counter(4),
         m_game_state( GAME_STOPPED ),
         m_hide_hint( false )
     {
@@ -82,6 +87,7 @@ public:
         add_button( m_settings_bg );
         add_button( m_grid_bg );
         add_button( m_pause_btn );
+        add_button( m_current_time );
         add_numpad( m_numpad );
 
         if ( nullptr != m_active_mode )
@@ -154,57 +160,13 @@ private:
         bool game_over = false;
         animation_played = false;
 
-        if ( m_board.is_full() )
-        {
-            WtGameModeState eval_result( false,
-                                         nullptr );
-            m_active_mode->eval_board( m_board, m_player, eval_result );
-            game_over = eval_result.game_over;
-        }
-#if 0
-        if ( m_active_mode->stone_blocked( m_board,
-                                           m_active.current_row() - 1,
-                                           m_active.current_column() ) )
-        {
+        WtGameModeState eval_result( false,
+                                     nullptr );
+        m_active_mode->eval_board( m_board, m_player, eval_result );
+        game_over = eval_result.game_over;
+        m_current_time.set_label( WtTime::format_time( m_player.get_current_time() ) );
+        
 
-            /* commit ACTIVE to board */
-            m_active_mode->insert_stone_at( m_board, 
-                                            m_active.current_row(), 
-                                            m_active.current_column(), 
-                                            m_active.current_value() );
-
-            m_grid_touch_control.set_direction_seperator_pos( ACTIVE_WINDOW.grid_pos_to_coord( WtBoard::row_count - 1, 5 ).x );
-
-            {
-                WtGameModeState eval_result( false,
-                                             nullptr );
-                m_active_mode->eval_board( m_board, m_player, eval_result );
-
-                if ( !eval_result.animations.empty() )
-                {
-                    for ( size_t a_idx = 0; a_idx < eval_result.animations.size(); a_idx++ )
-                        play_animation( eval_result.animations[a_idx].animation );
-                    animation_played = true;
-                }
-                game_over = eval_result.game_over;
-            }
-
-            if ( !game_over )
-            {
-                /* generate next stone */
-                m_active.get_next( m_active_mode->next_letter() );
-
-
-                game_over = m_active_mode->stone_blocked( m_board,
-                                                          m_active.current_row(),
-                                                          m_active.current_column() );
-            }
-        }
-        else
-        {
-            m_active.single_drop();
-        }
-#endif
         return game_over;
     }
 
@@ -299,7 +261,7 @@ private:
      *************************/
     uint8_t get_current_update_counter( WtPlayer& player )
     {
-        return ( player.get_current_level() < 12 ?  48 - (player.get_current_level()*4) : 4 );
+        return 4;//( player.get_current_level() < 12 ?  48 - (player.get_current_level()*4) : 4 );
     }
 
 
@@ -327,6 +289,7 @@ private:
         if ( m_game_state == GAME_STARTED )
         {
             m_game_state = GAME_PAUSED;
+            m_active_mode->pause_time();
             enter_child_menu( m_pause_menu );
         }
     }
@@ -472,6 +435,7 @@ private:
     WtButton            m_pause_btn;
     WtButton            m_settings_bg;
     WtButton            m_grid_bg;
+    WtButton            m_current_time;
 
 //    WtGridAnimation     m_pause_end_animation; 
 

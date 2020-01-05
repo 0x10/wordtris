@@ -138,7 +138,9 @@ public:
 "0130200000030210",
 "0010400000020300"
         },
-        m_active_id(0)
+        m_active_id(0),
+        m_last_update_time(WtTime::get_time()),
+        m_pause(false)
     {
     }
     ~WtGameModeSudoku()
@@ -168,6 +170,9 @@ public:
     {
         std::string next = WtRandom::get_random_from_sequence<std::string>( ( STORAGE.get_settings().gridsize == 9 ? m_sudoku_lib9x9 : m_sudoku_lib4x4 ), &m_active_id );
         std::cout << "picked " << next << std::endl;
+
+        m_last_update_time = WtTime::get_time();
+        m_pause = false;
         size_t current = 0;
         for ( uint8_t r = 0; r < board.row_count(); r++ )
             for ( uint8_t c = 0; c < board.col_count(); c++ )
@@ -180,11 +185,31 @@ public:
     /**************************
      *
      *************************/
-    virtual void eval_board( WtBoard& board, WtPlayer& , WtGameModeState& gs )
+    virtual void eval_board( WtBoard& board, WtPlayer& player, WtGameModeState& gs )
     {
-       gs.game_over = is_valid_config( board ); 
+        if ( m_pause )
+        {
+            m_pause = false;
+            m_last_update_time = WtTime::get_time();
+        }
+        WtTime::TimeType elapsed_since_last =std::chrono::duration_cast<WtTime::TimeType>(  WtTime::get_time() - m_last_update_time);
+        m_last_update_time = WtTime::get_time();
+        player.set_time( player.get_current_time() + elapsed_since_last );
+        gs.game_over = false;
+        if ( is_valid_config( board ) )
+        {
+            player.letter_dropped( 255 );
+            gs.game_over = true;
+        }
     }
 
+    /**************************
+     *
+     *************************/
+    virtual void pause_time()
+    {
+        m_pause = true;
+    }
     /**************************
      *
      *************************/
@@ -359,29 +384,36 @@ private:
     {
         bool is_valid = true;
 
-        not_in_row( board, 0 );
-        not_in_row( board, 1 );
-        not_in_row( board, 2 );
-        not_in_row( board, 3 );
-        not_in_row( board, 4 );
-        not_in_row( board, 5 );
-        not_in_row( board, 6 );
-        not_in_row( board, 7 );
-        not_in_row( board, 8 );
+        if ( board.is_full() )
+        {
+            not_in_row( board, 0 );
+            not_in_row( board, 1 );
+            not_in_row( board, 2 );
+            not_in_row( board, 3 );
+            not_in_row( board, 4 );
+            not_in_row( board, 5 );
+            not_in_row( board, 6 );
+            not_in_row( board, 7 );
+            not_in_row( board, 8 );
 
-        not_in_col( board, 0 );
-        not_in_col( board, 1 );
-        not_in_col( board, 2 );
-        not_in_col( board, 3 );
-        not_in_col( board, 4 );
-        not_in_col( board, 5 );
-        not_in_col( board, 6 );
-        not_in_col( board, 7 );
-        not_in_col( board, 8 );
+            not_in_col( board, 0 );
+            not_in_col( board, 1 );
+            not_in_col( board, 2 );
+            not_in_col( board, 3 );
+            not_in_col( board, 4 );
+            not_in_col( board, 5 );
+            not_in_col( board, 6 );
+            not_in_col( board, 7 );
+            not_in_col( board, 8 );
 
-        not_in_box( board, 0, 0 );not_in_box( board, 0, 3 );not_in_box( board, 0, 6 );
-        not_in_box( board, 3, 0 );not_in_box( board, 3, 3 );not_in_box( board, 3, 6 );
-        not_in_box( board, 6, 0 );not_in_box( board, 6, 3 );not_in_box( board, 6, 6 );
+            not_in_box( board, 0, 0 );not_in_box( board, 0, 3 );not_in_box( board, 0, 6 );
+            not_in_box( board, 3, 0 );not_in_box( board, 3, 3 );not_in_box( board, 3, 6 );
+            not_in_box( board, 6, 0 );not_in_box( board, 6, 3 );not_in_box( board, 6, 6 );
+        }
+        else
+        {
+            is_valid = false;
+        }
         return is_valid;
     } 
 
@@ -389,6 +421,8 @@ private:
     std::vector<std::string> m_sudoku_lib9x9;
     std::vector<std::string> m_sudoku_lib4x4;
     size_t                   m_active_id;
+    WtTime::TimePoint        m_last_update_time;
+    bool                     m_pause;
 };
 
 #endif /* _WT_GAME_MODE_GUESSING_H_ */
