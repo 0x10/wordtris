@@ -129,20 +129,13 @@ private: // no copy allowed
                 std::string level_label = "Level ";
                 WtDim text_font_size = ACTIVE_WINDOW.get_text_size( level_label );
 
-                ACTIVE_WINDOW.draw_text( entry_pos, level_label );
+//                ACTIVE_WINDOW.draw_text( entry_pos, level_label );
                 entry_pos.x = entry_pos.x + text_font_size.w;
                 std::stringstream ss;
-                ss << entry.level;
+                ss << WtTime::format_time( WtTime::from_seconds( entry.time_s ));
                 ACTIVE_WINDOW.draw_text( entry_pos, ss.str() ); 
             }
 
-            {
-                std::stringstream ss;
-                ss << entry.score;
-                WtDim text_font_size = ACTIVE_WINDOW.get_text_size( ss.str() );
-                entry_pos.x = (ACTIVE_WINDOW_WIDTH - (ACTIVE_WINDOW_WIDTH / 4)) - (text_font_size.w);
-                ACTIVE_WINDOW.draw_text( entry_pos, ss.str() ); 
-            }
         }
     }
 

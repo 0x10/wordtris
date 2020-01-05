@@ -41,7 +41,7 @@ public:
                       WtDim( ACTIVE_WINDOW_WIDTH, 300 ), "#0e0e0e" ),
         m_points_txt( WtCoord( (ACTIVE_WINDOW_WIDTH / 8 ) + 160, (ACTIVE_WINDOW_HEIGHT / 2) - 112),
                     WtDim( 1, 1 ),
-                   "", [](){},  WtL10n_tr("POINTS") ),
+                   "", [](){},  WtL10n_tr("TIME") ),
         m_textbox0( WtCoord( (ACTIVE_WINDOW_WIDTH / 8 ) + 100, (ACTIVE_WINDOW_HEIGHT / 2) - 150),
                     WtDim( 0, 0 ),
                    "", ACTIVE_WINDOW.get_text_font() ),
@@ -49,8 +49,7 @@ public:
                     WtDim( 0, 0 ),
                    "", ACTIVE_WINDOW.get_text_font() ),
         m_new_highscore( false ),
-        m_last_points(0),
-        m_solved_words{0,0,0,0}
+        m_last_time(WtTime::from_seconds(0))
     {
         add_button( m_leave_btn );
         add_button( m_scores_logo );
@@ -77,11 +76,7 @@ public:
                                 time_s );
 
         m_new_highscore   = insert_entry_by_time( scores, new_entry );
-        m_last_points     = player.get_points();
-        m_solved_words[0] = player.get_solved_word_count();
-        m_solved_words[1] = player.get_solved_word_count(2);
-        m_solved_words[2] = player.get_solved_word_count(3);
-        m_solved_words[3] = player.get_solved_word_count(4);
+        m_last_time     = player.get_current_time();
     }
 
 private: // no copy allowed
@@ -108,36 +103,10 @@ private: // no copy allowed
         }
 
         std::string score_summary;
-        std::string points = std::to_string( m_last_points );
+        std::string points = WtTime::format_time( m_last_time );
         tb_lines.push_back( score_summary );
         tb_lines1.push_back( points );
-        tb_lines.push_back("");
-        tb_lines1.push_back( "" );
-        score_summary = WtL10n::translate( WtL10n_tr("SOLVED WORDS" ));
-        points = std::to_string( static_cast<ssize_t>(m_solved_words[0]) );
-        tb_lines1.push_back( points );
-        tb_lines.push_back( score_summary );
-        if ( m_solved_words[1] > 0 )
-        {
-            score_summary = "        2x";
-            points = std::to_string( static_cast<ssize_t>(m_solved_words[1]) );
-            tb_lines.push_back( score_summary );
-            tb_lines1.push_back( points );
-        }
-        if ( m_solved_words[2] > 0 )
-        {
-            score_summary = "        3x";
-            points = std::to_string( static_cast<ssize_t>(m_solved_words[2]) );
-            tb_lines.push_back( score_summary );
-            tb_lines1.push_back( points );
-        }
-        if ( m_solved_words[3] > 0 )
-        {
-            score_summary = "        4x";
-            points = std::to_string( static_cast<ssize_t>(m_solved_words[3]) );
-            tb_lines.push_back( score_summary );
-            tb_lines1.push_back( points );
-        }
+
     }
 
     /**************************
@@ -217,8 +186,7 @@ private:
     WtTextbox m_textbox0;
     WtTextbox m_textbox1;
     bool      m_new_highscore;
-    uint32_t  m_last_points;
-    uint16_t  m_solved_words[4];
+    WtTime::TimeType m_last_time;
 };
 
 #endif /* _WT_MENU_SCORE_SUMMARY_H_ */
