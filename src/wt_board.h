@@ -22,7 +22,7 @@ class WtBoard
 {
 private:
     static constexpr uint8_t row_cnt = 9;
-    static constexpr uint8_t col_cnt = 9;
+    static constexpr uint8_t col_cnt = row_cnt;
     struct HistoryEntry
     {
         uint8_t r;
@@ -37,7 +37,8 @@ public:
         m_board(),
         m_row_count(WtBoard::row_cnt),
         m_col_count(WtBoard::col_cnt),
-        m_history()
+        m_history(),
+        m_board_notes()
     {
     }
     ~WtBoard() {}
@@ -54,7 +55,10 @@ public:
     {
         for( uint8_t r = 0; r<row_count(); r++ )
             for( uint8_t c = 0; c<col_count(); c++ )
+            {
                 set_cell( r, c, empty_cell );
+                clear_notes( r, c );
+            }
         clear_history();
     }
 
@@ -127,7 +131,7 @@ public:
     /**************************
      *
      *************************/
-    bool undo_available()
+    bool undo_available() const
     {
         return m_history.size() > 0;
     }
@@ -215,11 +219,45 @@ public:
     {
         m_history.clear();
     }
+
+    /**************************
+     *
+     *************************/   
+    void clear_notes( uint8_t r, uint8_t c)
+    {
+        for ( bool &notes : m_board_notes[r][c] )
+        {
+            notes = false;
+        }
+    }
+
+    /**************************
+     *
+     *************************/   
+    void set_note( uint8_t r, uint8_t c, uint8_t value )
+    {
+        uint8_t local_value = value - 1;
+        if ( local_value < m_row_count )
+            m_board_notes[r][c][local_value] = true;
+    }
+
+    /**************************
+     *
+     *************************/
+    bool is_note_set( uint8_t r, uint8_t c, uint8_t value )
+    {
+        uint8_t local_value = value - 1;
+        if ( local_value < m_row_count )
+            return m_board_notes[r][c][local_value] == true;
+        else
+            return false;
+    }
 private:
     char m_board[WtBoard::row_cnt][WtBoard::col_cnt]; 
     uint8_t m_row_count;
     uint8_t m_col_count;
     std::vector<HistoryEntry> m_history;
+    bool m_board_notes[WtBoard::row_cnt][WtBoard::col_cnt][WtBoard::row_cnt];
 };
 
 
