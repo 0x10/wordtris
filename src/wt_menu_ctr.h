@@ -25,6 +25,12 @@
 
 class WtMenuCtr : public WtViewIf
 {
+
+private:
+    const WtDim                      m_standard_btn_size = WtDim( 500, 65 );
+
+    static const ssize_t offset_x = (ACTIVE_WINDOW_WIDTH / 2) - ((60+60+60+(500/3-60)*2) / 2);
+    static const ssize_t offset_y = (ACTIVE_WINDOW_HEIGHT / 8) + (ACTIVE_WINDOW_HEIGHT / 8);
 public:
     WtMenuCtr() :
         WtViewIf( "#202020", -1, -1, WtTime::TimeType(0), WT_BIND_EVENT_HANDLER_1( WtMenuCtr::handle_key_press ) ),
@@ -49,7 +55,7 @@ public:
                      WtL10n_tr( "S T A R T"),
                      WtCoord( 0, 25 ),
                      WtFont( "#b2b2b2", "text_big" ) ),
-        m_select_label( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (366 / 2), (ACTIVE_WINDOW_HEIGHT / 4)-(70/2) ),
+        m_select_label( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (366 / 2), (ACTIVE_WINDOW_HEIGHT / 4)-(70) ),
                        WtDim( 366, 70 ),
                        "label_select_bbfix.bmp",
                        [](){} ),
@@ -57,7 +63,7 @@ public:
                        WtDim( ACTIVE_WINDOW_WIDTH, 80 ),
                        "#0e0e0e",
                        [](){} ),
-        m_game_selection( WtCoord( 0, (ACTIVE_WINDOW_HEIGHT / 2) - (297 / 2) ),
+        m_game_selection( WtCoord( 0, (ACTIVE_WINDOW_HEIGHT / 2) - (297 / 2)-70 ),
                           WtDim( ACTIVE_WINDOW_WIDTH, 297 ),
                           GAME_MODE_CTR.get_available_mode_titles(),
 #ifdef WT_PRO_MODE
@@ -66,7 +72,14 @@ public:
                           GAME_MODE_CTR.mode_idx_from_string( "WordtrisClassic" ),                     
 #endif
                           [](size_t){},
-                          false )
+                          false ),
+        m_diff_select_btn( WtCoord( offset_x, offset_y + (m_standard_btn_size.h * 8 )-70 ),
+                           m_standard_btn_size,
+                           0,
+                           WT_BIND_EVENT_HANDLER_1( WtMenuCtr::diff_changed ),
+                           std::array<const char*, 3>{{ WtGameModeIf::get_available_difficulties()[0].second,
+                                                        WtGameModeIf::get_available_difficulties()[1].second,
+                                                        WtGameModeIf::get_available_difficulties()[2].second }} )
     {
         WtL10n::register_lang_change_obsever( WT_BIND_EVENT_HANDLER( WtMenuCtr::language_changed ) );
 
@@ -79,6 +92,7 @@ public:
         add_button( m_start_btn );
         add_button( m_select_label );
         add_horizontal_carousel( m_game_selection );
+        add_tristate_button( m_diff_select_btn );
     }
 
     ~WtMenuCtr() {}
@@ -150,7 +164,26 @@ private:
             do_exit();
         }
     }
+    /**************************
+     *
+     *************************/
+    void diff_changed( uint8_t id )
+    {
+        size_t diff_idx = id;
+        wt_difficulty diffi = WtGameModeIf::get_available_difficulties()[diff_idx].first;
+        WtSettings settings = STORAGE.get_settings();
+        if ( settings.difficulty != diffi )
+        {
+            settings.difficulty = diffi;
+            STORAGE.store_settings( settings );
 
+            WtGameModeIf* active_mode = GAME_MODE_CTR.mode_from_string( STORAGE.get_settings().game_mode );
+            if ( active_mode != INVALID_GAME_MODE )
+            {
+                active_mode->set_difficulty( diffi );
+            }
+        }
+    }
 private:
     WtCoord          m_drag_start_pos;
     bool             m_was_drag;
@@ -167,6 +200,7 @@ private:
     WtButton         m_settings_bg;
 
     WtHorizontalCarousel m_game_selection;
+    WtTriStateButton m_diff_select_btn;
 };
 
 #endif /* _WT_MENU_CTR_H_ */

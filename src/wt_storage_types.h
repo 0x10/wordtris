@@ -115,20 +115,23 @@ public:
                   size_t      points=0,
                   size_t      lvl=0,
                   size_t      t=0,
+                  wt_difficulty d=wt_difficulty_EASY,
                   std::string pl="PLYR" ) :
         player(pl),
         game_mode(mode),
         score(points),
         level(lvl),
-        time_s(t)
+        time_s(t),
+        diff( d )
     {}
     virtual ~WtScoreEntry() {}
 
-    std::string player;
-    std::string game_mode;
-    size_t      score;
-    size_t      level;
-    size_t      time_s;
+    std::string   player;
+    std::string   game_mode;
+    size_t        score;
+    size_t        level;
+    size_t        time_s;
+    wt_difficulty diff;
 
     /**************************
      *
@@ -140,6 +143,7 @@ public:
         WtStorable::write_unsigned<size_t>( of, score );
         WtStorable::write_unsigned<size_t>( of, level );
         WtStorable::write_unsigned<size_t>( of, time_s );
+        WtStorable::write_unsigned<wt_difficulty>( of, diff );
     }
 
     /**************************
@@ -154,6 +158,7 @@ public:
         score = WtStorable::read_unsigned<size_t>( inf, was_eof );
         level = WtStorable::read_unsigned<size_t>( inf, was_eof );
         time_s = WtStorable::read_unsigned<size_t>( inf, was_eof );
+        diff = WtStorable::read_unsigned<wt_difficulty>( inf, was_eof );
 
         return ( ! was_eof );
     }

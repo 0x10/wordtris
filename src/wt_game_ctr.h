@@ -259,7 +259,7 @@ private:
     /**************************
      *
      *************************/
-    uint8_t get_current_update_counter( WtPlayer& player )
+    uint8_t get_current_update_counter( WtPlayer& /*player*/ )
     {
         return 4;//( player.get_current_level() < 12 ?  48 - (player.get_current_level()*4) : 4 );
     }
@@ -394,18 +394,23 @@ private:
      *************************/
     virtual void entered_view()
     {
-        m_grid_touch_control.set_position( ( STORAGE.get_settings().gridsize == 9 ? WtCoord( 17, 99 ) : WtCoord( 208, 176 ) )/*WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - static_cast<ssize_t>((76u * (STORAGE.get_settings().gridsize) ) / 2), 100 )*/ );
-        m_grid_touch_control.set_size( ( STORAGE.get_settings().gridsize == 9 ? WtDim( 686, 686 ) : WtDim( 307, 307 ) )/*WtDim( static_cast<ssize_t>(STORAGE.get_settings().gridsize) * 76, static_cast<ssize_t>(STORAGE.get_settings().gridsize) * 76 )*/ );
-        m_grid_bg.set_image( ( STORAGE.get_settings().gridsize == 9 ? "sudoku9x9_grid.bmp" : "sudoku4x4_grid.bmp" ) );
-        m_grid_bg.set_size( ( STORAGE.get_settings().gridsize == 9 ? WtDim( 686, 686 ) : WtDim( 307, 307 ) ) );
-        m_grid_bg.set_position( ( STORAGE.get_settings().gridsize == 9 ? WtCoord( 17, 99 ) : WtCoord( 208, 176 ) ) );
-        if ( STORAGE.get_settings().gridsize == 4 )
+        if ( m_active_mode->get_id_string() == "Sudoku4" )
         {
+            m_grid_touch_control.set_position( WtCoord( 208, 176 ) );
+            m_grid_touch_control.set_size( WtDim( 307, 307 ) );
+            m_grid_bg.set_image( "sudoku4x4_grid.bmp" );
+            m_grid_bg.set_size( WtDim( 307, 307 ) );
+            m_grid_bg.set_position( WtCoord( 208, 176 ) );
             m_numpad.setup_4x4_layout();
 
         }
         else
         {
+            m_grid_touch_control.set_position( WtCoord( 17, 99 ) );
+            m_grid_touch_control.set_size( WtDim( 686, 686 ) );
+            m_grid_bg.set_image( "sudoku9x9_grid.bmp" );
+            m_grid_bg.set_size( WtDim( 686, 686 ) );
+            m_grid_bg.set_position( WtCoord( 17, 99 ) );
             m_numpad.setup_9x9_layout();
         }
         ACTIVE_INPUT.add_active_region( m_grid_touch_control );

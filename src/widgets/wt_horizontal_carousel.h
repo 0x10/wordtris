@@ -26,7 +26,7 @@ private:
     const char* m_inactive_img = "list_item_inactive.bmp";
     const char* m_selected_img = "list_item_active.bmp";
     const WtDim m_item_img_size = WtDim( 203, 297 );
-    const uint8_t m_item_padding = 24;
+    const uint8_t m_item_padding = 48;
 
 public:
     using OnGameSelected = std::function<void(size_t)>;
@@ -115,7 +115,7 @@ public:
             else
             {
                 ssize_t normalized_id = static_cast<ssize_t>(idx % m_labels.size()) - (m_labels.size() == 1 ? 0 : 1);
-                return WtButton( get_pos_of_item( normalized_id ),
+                return WtButton( get_pos_of_item( normalized_id ) + WtDim( static_cast<ssize_t>(static_cast<size_t>(m_size.w)- ((static_cast<size_t>(m_item_img_size.w)*m_labels.size())+(m_item_padding*(m_labels.size()-1))))/2, 0),
                                  m_item_img_size,
                                  ( idx == m_selected ? m_selected_img : m_inactive_img ),
                                  [](){},
@@ -224,7 +224,7 @@ public:
             for( size_t item_idx = 0; item_idx < m_labels.size(); item_idx++ )
             {
                 ssize_t normalized_id = static_cast<ssize_t>(item_idx) - 1;
-                if ( pos.in_region( get_pos_of_item ( normalized_id ), m_item_img_size ) )
+                if ( pos.in_region( get_pos_of_item ( normalized_id )+ WtDim( static_cast<ssize_t>(static_cast<size_t>(m_size.w) - ((static_cast<size_t>(m_item_img_size.w)*m_labels.size())+(m_item_padding*(m_labels.size()-1))))/2, 0), m_item_img_size ) )
                 {
                     if ( item_idx == m_selected )
                     {

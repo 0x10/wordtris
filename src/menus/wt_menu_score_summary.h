@@ -67,13 +67,14 @@ public:
     {
         // eval if player stat is within first 3 of game mode
         // if true add player at correct position
-        size_t time_s = std::chrono::duration_cast<std::chrono::seconds>(player.get_current_time()).count();
+        size_t time_s = static_cast<size_t>(std::chrono::duration_cast<std::chrono::seconds>(player.get_current_time()).count());
         std::cout << "highscore entry: Lvl " << player.get_current_level() << " at " << player.get_points() << " t= " << time_s  << " within mode \"" << mode->get_title() << "\"" << std::endl;
 
         WtScoreEntry new_entry( mode->get_id_string(),
                                 player.get_points(),
                                 player.get_current_level(),
-                                time_s );
+                                time_s,
+                                mode->get_difficulty() );
 
         m_new_highscore   = insert_entry_by_time( scores, new_entry );
         m_last_time     = player.get_current_time();

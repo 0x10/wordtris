@@ -36,7 +36,7 @@ public:
      *************************/
     WtGameModeIf* default_mode()
     {
-        return &m_modeSudoku;
+        return ( STORAGE.get_settings().gridsize == 9 ? &m_modeSudoku9x9 : &m_modeSudoku4x4 );
     }
 
     /**************************
@@ -129,11 +129,13 @@ private:
     WtGameModeCtr() :
         m_lockedModeAlpha("label_mode_alphabet"),
         m_lockedModeGuess("label_mode_guessing"),
-        m_modeSudoku(),
+        m_modeSudoku4x4(4),
+        m_modeSudoku9x9(9),
         m_available_modes()
     {
 
-        m_available_modes.push_back( &m_modeSudoku );
+        m_available_modes.push_back( &m_modeSudoku4x4 );
+        m_available_modes.push_back( &m_modeSudoku9x9 );
     }
     WtGameModeCtr( const WtGameModeCtr& ); 
     WtGameModeCtr & operator = (const WtGameModeCtr &);
@@ -142,7 +144,8 @@ private:
 private:
     WtGameModeDemo              m_lockedModeAlpha;
     WtGameModeDemo              m_lockedModeGuess;
-    WtGameModeSudoku            m_modeSudoku;
+    WtGameModeSudoku            m_modeSudoku4x4;
+    WtGameModeSudoku            m_modeSudoku9x9;
     std::vector<WtGameModeIf*>  m_available_modes;
 };
 

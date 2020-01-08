@@ -127,13 +127,23 @@ private: // no copy allowed
 
             {
                 std::string level_label = "Level ";
-                WtDim text_font_size = ACTIVE_WINDOW.get_text_size( level_label );
+                std::string diff_text = "";
+                std::vector<std::pair<wt_difficulty, const char*> > diff_label= WtGameModeIf::get_available_difficulties();
+                for( size_t i = 0; i < diff_label.size(); i++ )
+                {
+                    if ( diff_label[i].first == entry.diff )
+                    {
+                        diff_text = std::string("(") + std::string(diff_label[i].second) + std::string(")");
+                    }
+                }
 
-//                ACTIVE_WINDOW.draw_text( entry_pos, level_label );
-                entry_pos.x = entry_pos.x + text_font_size.w;
                 std::stringstream ss;
                 ss << WtTime::format_time( WtTime::from_seconds( entry.time_s ));
-                ACTIVE_WINDOW.draw_text( entry_pos, ss.str() ); 
+                std::string score = ss.str();
+                ACTIVE_WINDOW.draw_text( entry_pos, score ); 
+                WtDim text_font_size = ACTIVE_WINDOW.get_text_size( score+"  " );
+                entry_pos.x = entry_pos.x + text_font_size.w;
+                ACTIVE_WINDOW.draw_text( entry_pos, diff_text );
             }
 
         }

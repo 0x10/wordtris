@@ -23,8 +23,8 @@
 class WtGameModeSudoku : public WtGameModeIf
 {
 public:
-    WtGameModeSudoku() :
-        WtGameModeIf( "Sudoku" ),
+    WtGameModeSudoku( const size_t gridsize ) :
+        WtGameModeIf( (gridsize == 9 ? "Sudoku9" : "Sudoku4" ) ),
         m_sudoku_lib9x9{
 "379000014060010070080009005435007000090040020000800436900700080040080050850000249",
 "070000810000318902281470005400060000690103027000090006900054681106982000057000040",
@@ -140,7 +140,8 @@ public:
         },
         m_active_id(0),
         m_last_update_time(WtTime::get_time()),
-        m_pause(false)
+        m_pause(false),
+        m_gridsize( gridsize )
     {
     }
     ~WtGameModeSudoku()
@@ -152,7 +153,7 @@ public:
      *************************/
     std::string get_title()
     {
-        return "@dark/label_mode_guessing_" + WtL10n::get_language_code() + ".bmp";
+        return ( m_gridsize == 9 ? "@dark/label_mode_guessing_" + WtL10n::get_language_code() + ".bmp" : "@dark/label_mode_classic.bmp");
     }
 
     /**************************
@@ -160,7 +161,7 @@ public:
      *************************/
     std::string get_name()
     {
-        return WtL10n::translate( WtL10n_tr("Sudoku") );
+        return WtL10n::translate( WtL10n_tr((m_gridsize == 9 ? "Sudoku 9x9" : "Sudoku 4x4" )) );
     }
 
     /**************************
@@ -168,7 +169,10 @@ public:
      *************************/
     void init_game( WtBoard& board, WtPlayer& )
     {
-        std::string next = WtRandom::get_random_from_sequence<std::string>( ( STORAGE.get_settings().gridsize == 9 ? m_sudoku_lib9x9 : m_sudoku_lib4x4 ), &m_active_id );
+        WtSettings settings = STORAGE.get_settings();
+        settings.gridsize = m_gridsize;
+        STORAGE.store_settings( settings );
+        std::string next = WtRandom::get_random_from_sequence<std::string>( ( m_gridsize == 9 ? m_sudoku_lib9x9 : m_sudoku_lib4x4 ), &m_active_id );
         std::cout << "picked " << next << std::endl;
 
         m_last_update_time = WtTime::get_time();
@@ -223,7 +227,7 @@ public:
      *************************/
     bool stone_blocked( WtBoard& board, uint8_t r, uint8_t c )
     {
-        return ( ( STORAGE.get_settings().gridsize == 9 ? m_sudoku_lib9x9[m_active_id][ r*board.col_count() + c ] : m_sudoku_lib4x4[m_active_id][ r*board.col_count() + c ] ) != '0' );
+        return ( ( m_gridsize == 9 ? m_sudoku_lib9x9[m_active_id][ r*board.col_count() + c ] : m_sudoku_lib4x4[m_active_id][ r*board.col_count() + c ] ) != '0' );
     }
 
     /**************************
@@ -386,6 +390,7 @@ private:
 
         if ( board.is_full() )
         {
+        #warning recognize 4x4
             not_in_row( board, 0 );
             not_in_row( board, 1 );
             not_in_row( board, 2 );
@@ -423,6 +428,7 @@ private:
     size_t                   m_active_id;
     WtTime::TimePoint        m_last_update_time;
     bool                     m_pause;
+    const size_t             m_gridsize;
 };
 
 #endif /* _WT_GAME_MODE_GUESSING_H_ */

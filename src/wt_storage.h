@@ -164,7 +164,7 @@ public:
         std::cout << "settings.language == " << m_storage_copy.data.settings.language << std::endl;
         std::cout << "settings.game mode == " << m_storage_copy.data.settings.game_mode << std::endl;
         std::cout << "settings.diff == " << static_cast<size_t>(m_storage_copy.data.settings.difficulty) << std::endl;
-        std::cout << "settings.gridsize == " << m_storage_copy.data.settings.gridsize << std::endl;
+        std::cout << "settings.gridsize == " << static_cast<size_t>(m_storage_copy.data.settings.gridsize) << std::endl;
         // distribute
         //
         return read_successful;

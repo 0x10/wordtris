@@ -114,6 +114,13 @@ public:
     /**************************
      *
      *************************/
+    WtCoord operator+( const WtDim& rhs ) const
+    {
+        return WtCoord( x + rhs.w, y + rhs.h );
+    }
+    /**************************
+     *
+     *************************/
     bool near_point( WtCoord pos, size_t distance ) const
     {
         bool result = false;

@@ -47,7 +47,7 @@ public:
                      WtL10n_tr( "B A C K"),
                      WtCoord( 0, 25 ),
                      WtFont( "#a8a8a8", "text_big" ) ),
-        m_lang_select_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - ((74+74+74+(m_standard_btn_size.w/3-74)*2) / 2), offset_y + m_standard_btn_size.h/2 ),
+        m_lang_select_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - ((74+74+74+(m_standard_btn_size.w/3-74)*2) / 2), offset_y + (m_standard_btn_size.h*5)/2 ),
                            m_standard_btn_size,
                            0,
                            WT_BIND_EVENT_HANDLER_1( WtMenuSettings::lang_changed ),
@@ -79,7 +79,7 @@ public:
                             WtL10n_tr( "Play music and sounds" ),
                             STORAGE.get_settings().enable_audio,
                             WT_BIND_EVENT_HANDLER_1( WtMenuSettings::enable_audio_changed ) ),
-        m_seperator0( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (m_standard_btn_size.w / 2), offset_y + (m_standard_btn_size.h * 2) + (m_standard_btn_size.h / 2) ),
+        m_seperator0( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (m_standard_btn_size.w / 2), offset_y + (m_standard_btn_size.h * 5) ),
                       WtDim( m_standard_btn_size.w, 1 ),
                       "#a2a2a2" ),
         m_seperator1( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (m_standard_btn_size.w / 2), offset_y + (m_standard_btn_size.h * 5)  ),
@@ -134,13 +134,13 @@ public:
         //add_button( m_settings_bg );
         add_button( m_leave_btn );
         add_tristate_button( m_lang_select_btn );
-        add_tristate_button( m_diff_select_btn );
+        //add_tristate_button( m_diff_select_btn );
         //add_tristate_button( m_theme_select_btn );
         add_button( m_supporting_grid_btn );
-        add_button( m_small_grid_btn );
+//        add_button( m_small_grid_btn );
 //        add_button( m_enable_audio_btn );
         add_button( m_seperator0 );
-        add_button( m_seperator1 );
+      //  add_button( m_seperator1 );
         add_button( m_settings_logo );
         add_button( m_info_btn );
     }
