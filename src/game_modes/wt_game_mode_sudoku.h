@@ -319,7 +319,7 @@ private:
         // Set to store characters seen so far. 
         std::set<char> st; 
       
-        for (uint8_t c = 0; c < 9; c++) { 
+        for (uint8_t c = 0; c < m_gridsize; c++) { 
             char cell = board.get_cell(row,c);
             // If already encountered before, return false 
             if (st.find(cell) != st.end()) 
@@ -341,7 +341,7 @@ private:
     { 
         std::set<char> st; 
       
-        for (uint8_t r = 0; r < 9; r++) { 
+        for (uint8_t r = 0; r < m_gridsize; r++) { 
             char cell = board.get_cell(r,col);
       
             // If already encountered before, return false 
@@ -364,8 +364,8 @@ private:
     { 
         std::set<char> st; 
       
-        for (uint8_t row = 0; row < 3; row++) { 
-            for (uint8_t col = 0; col < 3; col++) { 
+        for (uint8_t row = 0; row < ( m_gridsize == 9 ? 3 : 2 ); row++) { 
+            for (uint8_t col = 0; col < ( m_gridsize == 9 ? 3 : 2 ); col++) { 
                 char curr = board.get_cell(row + startRow, col + startCol);
       
                 // If already encountered before, return false 
@@ -390,7 +390,6 @@ private:
 
         if ( board.is_full() )
         {
-        #warning recognize 4x4
             not_in_row( board, 0 );
             not_in_row( board, 1 );
             not_in_row( board, 2 );

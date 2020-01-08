@@ -23,6 +23,12 @@ class WtBoard
 private:
     static constexpr uint8_t row_cnt = 9;
     static constexpr uint8_t col_cnt = 9;
+    struct HistoryEntry
+    {
+        uint8_t r;
+        uint8_t c;
+        char value;
+    };
 public:
     static const char empty_cell = '\0';
     typedef char RowSequence[WtBoard::col_cnt];
@@ -30,7 +36,8 @@ public:
     WtBoard() :
         m_board(),
         m_row_count(WtBoard::row_cnt),
-        m_col_count(WtBoard::col_cnt)
+        m_col_count(WtBoard::col_cnt),
+        m_history()
     {
     }
     ~WtBoard() {}
@@ -48,6 +55,7 @@ public:
         for( uint8_t r = 0; r<row_count(); r++ )
             for( uint8_t c = 0; c<col_count(); c++ )
                 set_cell( r, c, empty_cell );
+        clear_history();
     }
 
     /**************************
@@ -97,9 +105,32 @@ public:
                    char    val )
     {
         if ( value_valid( val ) && index_valid( r, c ) )
+        {
+            HistoryEntry action{r, c, m_board[r][c]};
             m_board[r][c] = val;
+            m_history.push_back( action );
+        }
     }
 
+    /**************************
+     *
+     *************************/
+    void undo()
+    {
+        if ( m_history.size() > 0 )
+        {
+            HistoryEntry action = m_history.back();
+            m_history.pop_back();
+            m_board[action.r][action.c] = action.value;
+        }
+    }
+    /**************************
+     *
+     *************************/
+    bool undo_available()
+    {
+        return m_history.size() > 0;
+    }
     /**************************
      *
      *************************/
@@ -177,10 +208,18 @@ public:
     {
         return ( ( r < row_count() ) && ( c < col_count() ) );
     }
+    /**************************
+     *
+     *************************/   
+    void clear_history()
+    {
+        m_history.clear();
+    }
 private:
     char m_board[WtBoard::row_cnt][WtBoard::col_cnt]; 
     uint8_t m_row_count;
     uint8_t m_col_count;
+    std::vector<HistoryEntry> m_history;
 };
 
 
