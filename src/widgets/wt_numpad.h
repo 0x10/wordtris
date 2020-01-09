@@ -103,6 +103,12 @@ public:
                     WtDim( 60,66 ),
                     "edit.bmp",
                     WT_BIND_EVENT_HANDLER( WtNumPad::on_edit_click ) ),
+        m_more_btn( WtCoord( m_pos.x + ((m_size.w / 3)/2 - 60 / 2), m_pos.y + 3*(item_image_size.h+2) ),
+                    WtDim( size.w / 3,item_image_size.h ),
+                    item_image_unselected,
+                    WT_BIND_EVENT_HANDLER( WtNumPad::on_more_click ),
+                    "+",
+                    WtCoord(0,0), WtFont("#999999","text_big")),
         m_on_item_tap( on_item_tap ),
         m_is_9x9(true)
     {
@@ -131,6 +137,15 @@ public:
     {
         return m_edit_btn;
     }
+
+    /**************************
+     *
+     *************************/
+    WtButton& special_button_right()
+    {
+        return m_more_btn;
+    }
+
 
 
     /**************************
@@ -171,6 +186,8 @@ public:
     
         m_edit_btn.set_position( WtCoord( m_pos.x + ((m_size.w / 2)/2 - 60 / 2), m_pos.y + 3*(m_item_size.h+2)+66/4 ) );
 
+        m_more_btn.set_position( WtCoord(m_pos.x + (((4-1)%2)*(m_size.w / 2+1)), m_pos.y + 3*(m_item_size.h+2) ) );
+        m_more_btn.set_size( WtDim( m_size.w / 2, m_item_size.h ) );
     }
 
     /**************************
@@ -209,7 +226,11 @@ public:
         m_buttons[9].set_position( WtCoord( m_pos.x + (((9-1)%3)*(m_size.w / 3+1)), m_pos.y + 2*(m_item_size.h+2) ) );
         m_buttons[9].set_size( WtDim( m_size.w / 3, m_item_size.h ) );
 
+        
         m_edit_btn.set_position( WtCoord( m_pos.x + ((m_size.w / 3)/2 - 60 / 2), m_pos.y + 3*(m_item_size.h+2)+66/4 ) );
+
+        m_more_btn.set_position( WtCoord( m_pos.x + (((9-1)%3)*(m_size.w / 3+1)), m_pos.y + 3*(m_item_size.h+2) ) );
+        m_more_btn.set_size( WtDim( m_size.w / 3, m_item_size.h ) );
     }
 private:
     /**************************
@@ -239,6 +260,14 @@ private:
         }
         if ( m_on_item_tap ) m_on_item_tap( 10 );
     }
+
+    /**************************
+     *
+     *************************/
+    void on_more_click()
+    {
+        if ( m_on_item_tap ) m_on_item_tap( 11 );
+    }
 private:
     WtNumPad( const WtNumPad& ); 
     WtNumPad& operator = (const WtNumPad&);
@@ -252,7 +281,15 @@ private:
 
     WtButton          m_buttons[11];
     WtButton          m_edit_btn;
-    
+    WtButton          m_more_btn;
+   
+    /*
+     * WtButton m_undo_btn
+     * WtButton m_save_btn
+     * WtButton m_restore_btn
+     * WtButton m_back_btn --> 123 for going back from +
+     * */
+
     OnItemTapDelegate m_on_item_tap;
     bool              m_is_9x9;
 };
