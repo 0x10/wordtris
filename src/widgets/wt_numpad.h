@@ -43,55 +43,55 @@ public:
                       WT_BIND_EVENT_HANDLER( WtNumPad::on_item_clicked<0> ),
                       label[0],
                       WtCoord(0,0), WtFont("#999999","text_big")),
-            WtButton( WtCoord( ( pos.x + ( (size.w / 3)/2 - ((size.w/3)/2) ) ) + (((1-1)%3)*(size.w / 3)), pos.y ),
+            WtButton( WtCoord( pos.x + (((1-1)%3)*(size.w / 3)), pos.y ),
                       WtDim( size.w / 3-2, item_image_size.h ),
                       item_image_unselected,
                       WT_BIND_EVENT_HANDLER( WtNumPad::on_item_clicked<1> ),
                       label[1],
                       WtCoord(0,0), WtFont("#999999","text_big") ),
-            WtButton( WtCoord( ( pos.x + ( (size.w / 3)/2 - ((size.w/3)/2) ) ) + (((2-1)%3)*(size.w / 3)), pos.y ),
+            WtButton( WtCoord( pos.x + (((2-1)%3)*(size.w / 3)), pos.y ),
                       WtDim( size.w / 3, item_image_size.h ),
                       item_image_unselected,
                       WT_BIND_EVENT_HANDLER( WtNumPad::on_item_clicked<2> ),
                       label[2],
                       WtCoord(0,0), WtFont("#999999","text_big") ),
-            WtButton( WtCoord( ( pos.x + ( (size.w / 3)/2 - ((size.w/3)/2) ) ) + (((3-1)%3)*(size.w / 3+1)), pos.y ),
+            WtButton( WtCoord( pos.x + (((3-1)%3)*(size.w / 3+1)), pos.y ),
                       WtDim( size.w / 3, item_image_size.h ),
                       item_image_unselected,
                       WT_BIND_EVENT_HANDLER( WtNumPad::on_item_clicked<3> ),
                       label[3],
                       WtCoord(0,0), WtFont("#999999","text_big") ),
-            WtButton( WtCoord( ( pos.x + ( (size.w / 3)/2 - ((size.w/3)/2) ) ) + (((4-1)%3)*(size.w / 3)), pos.y + item_image_size.h + 2 ),
+            WtButton( WtCoord( pos.x + (((4-1)%3)*(size.w / 3)), pos.y + item_image_size.h + 2 ),
                       WtDim( size.w / 3-2, item_image_size.h ),
                       item_image_unselected,
                       WT_BIND_EVENT_HANDLER( WtNumPad::on_item_clicked<4> ),
                       label[4],
                       WtCoord(0,0), WtFont("#999999","text_big") ),
-            WtButton( WtCoord( ( pos.x + ( (size.w / 3)/2 - ((size.w/3)/2) ) ) + (((5-1)%3)*(size.w / 3)), pos.y + item_image_size.h + 2 ),
+            WtButton( WtCoord( pos.x + (((5-1)%3)*(size.w / 3)), pos.y + item_image_size.h + 2 ),
                       WtDim( size.w / 3, item_image_size.h ),
                       item_image_unselected,
                       WT_BIND_EVENT_HANDLER( WtNumPad::on_item_clicked<5> ),
                       label[5],
                       WtCoord(0,0), WtFont("#999999","text_big") ),
-            WtButton( WtCoord( ( pos.x + ( (size.w / 3)/2 - ((size.w/3)/2) ) ) + (((6-1)%3)*(size.w / 3+1)), pos.y + item_image_size.h + 2 ),
+            WtButton( WtCoord( pos.x + (((6-1)%3)*(size.w / 3+1)), pos.y + item_image_size.h + 2 ),
                       WtDim( size.w / 3, item_image_size.h ),
                       item_image_unselected,
                       WT_BIND_EVENT_HANDLER( WtNumPad::on_item_clicked<6> ),
                       label[6],
                       WtCoord(0,0), WtFont("#999999","text_big") ),
-            WtButton( WtCoord( ( pos.x + ( (size.w / 3)/2 - ((size.w/3)/2) ) ) + (((7-1)%3)*(size.w / 3)), pos.y + 2*(item_image_size.h+2) ),
+            WtButton( WtCoord( pos.x + (((7-1)%3)*(size.w / 3)), pos.y + 2*(item_image_size.h+2) ),
                       WtDim( size.w / 3-2, item_image_size.h ),
                       item_image_unselected,
                       WT_BIND_EVENT_HANDLER( WtNumPad::on_item_clicked<7> ),
                       label[7],
                       WtCoord(0,0), WtFont("#999999","text_big") ),
-            WtButton( WtCoord( ( pos.x + ( (size.w / 3)/2 - ((size.w/3)/2) ) ) + (((8-1)%3)*(size.w / 3)), pos.y + 2*(item_image_size.h+2) ),
+            WtButton( WtCoord( pos.x + (((8-1)%3)*(size.w / 3)), pos.y + 2*(item_image_size.h+2) ),
                       WtDim( size.w / 3, item_image_size.h ),
                       item_image_unselected,
                       WT_BIND_EVENT_HANDLER( WtNumPad::on_item_clicked<8> ),
                       label[8],
                       WtCoord(0,0), WtFont("#999999","text_big") ),
-            WtButton( WtCoord( ( pos.x + ( (size.w / 3)/2 - ((size.w/3)/2) ) ) + (((9-1)%3)*(size.w / 3+1)), pos.y + 2*(item_image_size.h+2) ),
+            WtButton( WtCoord( pos.x + (((9-1)%3)*(size.w / 3+1)), pos.y + 2*(item_image_size.h+2) ),
                       WtDim( size.w / 3, item_image_size.h ),
                       item_image_unselected,
                       WT_BIND_EVENT_HANDLER( WtNumPad::on_item_clicked<9> ),
@@ -99,7 +99,10 @@ public:
                       WtCoord(0,0), WtFont("#999999","text_big") ),
             WtButton( pos, size, frame_image, nullptr, "" )
         },
-
+        m_edit_btn( WtCoord( m_pos.x + ((m_size.w / 3)/2 - 60 / 2), m_pos.y + 3*(item_image_size.h+2) ),
+                    WtDim( 60,66 ),
+                    "edit.bmp",
+                    WT_BIND_EVENT_HANDLER( WtNumPad::on_edit_click ) ),
         m_on_item_tap( on_item_tap ),
         m_is_9x9(true)
     {
@@ -124,6 +127,15 @@ public:
     /**************************
      *
      *************************/
+    WtButton& special_button_left()
+    {
+        return m_edit_btn;
+    }
+
+
+    /**************************
+     *
+     *************************/
     void set_position( WtCoord new_pos )
     {
         m_pos = new_pos;
@@ -138,16 +150,16 @@ public:
         m_buttons[0].set_position( WtCoord( m_pos.x + (( m_size.w / 2 ) - ( (m_size.w / 3) / 2)), m_pos.y + 3*(m_item_size.h+2) ) );
         m_buttons[0].set_size( WtDim( m_size.w / 3, m_item_size.h ) );
 
-        m_buttons[1].set_position( WtCoord( ( m_pos.x + ( (m_size.w / 2)/2 - ((m_size.w/2)/2) ) ) + (((1-1)%2)*(m_size.w / 2)), m_pos.y ) );
+        m_buttons[1].set_position( WtCoord( m_pos.x + (((1-1)%2)*(m_size.w / 2)), m_pos.y ) );
         m_buttons[1].set_size( WtDim( m_size.w / 2, m_item_size.h ) );
 
-        m_buttons[2].set_position( WtCoord( ( m_pos.x + ( (m_size.w / 2)/2 - ((m_size.w/2)/2) ) ) + (((2-1)%2)*(m_size.w / 2)), m_pos.y ) );
+        m_buttons[2].set_position( WtCoord( m_pos.x + (((2-1)%2)*(m_size.w / 2)), m_pos.y ) );
         m_buttons[2].set_size( WtDim( m_size.w / 2, m_item_size.h ) );
 
-        m_buttons[3].set_position( WtCoord( ( m_pos.x + ( (m_size.w / 2)/2 - ((m_size.w/2)/2) ) ) + (((3-1)%2)*(m_size.w / 2)),  m_pos.y + (m_item_size.h + 2 + m_item_size.h/2)) );
+        m_buttons[3].set_position( WtCoord( m_pos.x + (((3-1)%2)*(m_size.w / 2)),  m_pos.y + (m_item_size.h + 2 + m_item_size.h/2)) );
         m_buttons[3].set_size( WtDim( m_size.w / 2, m_item_size.h ) );
 
-        m_buttons[4].set_position( WtCoord( ( m_pos.x + ( (m_size.w / 2)/2 - ((m_size.w/2)/2) ) ) + (((4-1)%2)*(m_size.w / 2+1)), m_pos.y + (m_item_size.h + 2  + m_item_size.h/2)) );
+        m_buttons[4].set_position( WtCoord( m_pos.x + (((4-1)%2)*(m_size.w / 2+1)), m_pos.y + (m_item_size.h + 2  + m_item_size.h/2)) );
         m_buttons[4].set_size( WtDim( m_size.w / 2, m_item_size.h ) );
 
         m_buttons[5].set_size( WtDim( 0,0 ) );
@@ -155,6 +167,9 @@ public:
         m_buttons[7].set_size( WtDim( 0,0 ) );
         m_buttons[8].set_size( WtDim( 0,0 ) );
         m_buttons[9].set_size( WtDim( 0,0 ) );
+
+    
+        m_edit_btn.set_position( WtCoord( m_pos.x + ((m_size.w / 2)/2 - 60 / 2), m_pos.y + 3*(m_item_size.h+2)+66/4 ) );
 
     }
 
@@ -167,32 +182,34 @@ public:
         m_buttons[0].set_position( WtCoord( m_pos.x + (( m_size.w / 2 ) - ( (m_size.w / 3) / 2)), m_pos.y + 3*(m_item_size.h+2) ) );
         m_buttons[0].set_size( WtDim( m_size.w / 3, m_item_size.h ) );
 
-        m_buttons[1].set_position( WtCoord( ( m_pos.x + ( (m_size.w / 3)/2 - ((m_size.w/3)/2) ) ) + (((1-1)%3)*(m_size.w / 3)), m_pos.y ) );
+        m_buttons[1].set_position( WtCoord( m_pos.x + (((1-1)%3)*(m_size.w / 3)), m_pos.y ) );
         m_buttons[1].set_size( WtDim( m_size.w / 3-2, m_item_size.h ) );
 
-        m_buttons[2].set_position( WtCoord( ( m_pos.x + ( (m_size.w / 3)/2 - ((m_size.w/3)/2) ) ) + (((2-1)%3)*(m_size.w / 3)), m_pos.y ) );
+        m_buttons[2].set_position( WtCoord( m_pos.x + (((2-1)%3)*(m_size.w / 3)), m_pos.y ) );
         m_buttons[2].set_size( WtDim( m_size.w / 3, m_item_size.h ) );
 
-        m_buttons[3].set_position( WtCoord( ( m_pos.x + ( (m_size.w / 3)/2 - ((m_size.w/3)/2) ) ) + (((3-1)%3)*(m_size.w / 3+1)), m_pos.y ) );
+        m_buttons[3].set_position( WtCoord( m_pos.x + (((3-1)%3)*(m_size.w / 3+1)), m_pos.y ) );
         m_buttons[3].set_size( WtDim( m_size.w / 3, m_item_size.h ) );
 
-        m_buttons[4].set_position( WtCoord( ( m_pos.x + ( (m_size.w / 3)/2 - ((m_size.w/3)/2) ) ) + (((4-1)%3)*(m_size.w / 3)), m_pos.y + m_item_size.h + 2 ) );
+        m_buttons[4].set_position( WtCoord( m_pos.x + (((4-1)%3)*(m_size.w / 3)), m_pos.y + m_item_size.h + 2 ) );
         m_buttons[4].set_size( WtDim( m_size.w / 3-2, m_item_size.h ) );
 
-        m_buttons[5].set_position( WtCoord( ( m_pos.x + ( (m_size.w / 3)/2 - ((m_size.w/3)/2) ) ) + (((5-1)%3)*(m_size.w / 3)), m_pos.y + m_item_size.h + 2 ) );
+        m_buttons[5].set_position( WtCoord( m_pos.x + (((5-1)%3)*(m_size.w / 3)), m_pos.y + m_item_size.h + 2 ) );
         m_buttons[5].set_size( WtDim( m_size.w / 3, m_item_size.h ) );
 
-        m_buttons[6].set_position( WtCoord( ( m_pos.x + ( (m_size.w / 3)/2 - ((m_size.w/3)/2) ) ) + (((6-1)%3)*(m_size.w / 3+1)), m_pos.y + m_item_size.h + 2 ) );
+        m_buttons[6].set_position( WtCoord( m_pos.x + (((6-1)%3)*(m_size.w / 3+1)), m_pos.y + m_item_size.h + 2 ) );
         m_buttons[6].set_size( WtDim( m_size.w / 3, m_item_size.h ) );
 
-        m_buttons[7].set_position( WtCoord( ( m_pos.x + ( (m_size.w / 3)/2 - ((m_size.w/3)/2) ) ) + (((7-1)%3)*(m_size.w / 3)), m_pos.y + 2*(m_item_size.h+2) ) );
+        m_buttons[7].set_position( WtCoord( m_pos.x + (((7-1)%3)*(m_size.w / 3)), m_pos.y + 2*(m_item_size.h+2) ) );
         m_buttons[7].set_size( WtDim( m_size.w / 3-2, m_item_size.h ) );
 
-        m_buttons[8].set_position( WtCoord( ( m_pos.x + ( (m_size.w / 3)/2 - ((m_size.w/3)/2) ) ) + (((8-1)%3)*(m_size.w / 3)), m_pos.y + 2*(m_item_size.h+2) ) );
+        m_buttons[8].set_position( WtCoord( m_pos.x + (((8-1)%3)*(m_size.w / 3)), m_pos.y + 2*(m_item_size.h+2) ) );
         m_buttons[8].set_size( WtDim( m_size.w / 3, m_item_size.h ) );
 
-        m_buttons[9].set_position( WtCoord( ( m_pos.x + ( (m_size.w / 3)/2 - ((m_size.w/3)/2) ) ) + (((9-1)%3)*(m_size.w / 3+1)), m_pos.y + 2*(m_item_size.h+2) ) );
+        m_buttons[9].set_position( WtCoord( m_pos.x + (((9-1)%3)*(m_size.w / 3+1)), m_pos.y + 2*(m_item_size.h+2) ) );
         m_buttons[9].set_size( WtDim( m_size.w / 3, m_item_size.h ) );
+
+        m_edit_btn.set_position( WtCoord( m_pos.x + ((m_size.w / 3)/2 - 60 / 2), m_pos.y + 3*(m_item_size.h+2)+66/4 ) );
     }
 private:
     /**************************
@@ -207,6 +224,21 @@ private:
         if ( m_on_item_tap ) m_on_item_tap( idx );
     }
 
+    /**************************
+     *
+     *************************/
+    void on_edit_click()
+    {
+        if ( m_edit_btn.image() == "edit.bmp" )
+        {
+            m_edit_btn.set_image( "edit_active.bmp" );
+        }
+        else
+        {
+            m_edit_btn.set_image( "edit.bmp" );
+        }
+        if ( m_on_item_tap ) m_on_item_tap( 10 );
+    }
 private:
     WtNumPad( const WtNumPad& ); 
     WtNumPad& operator = (const WtNumPad&);
@@ -219,6 +251,8 @@ private:
     const WtDim       m_item_size;
 
     WtButton          m_buttons[11];
+    WtButton          m_edit_btn;
+    
     OnItemTapDelegate m_on_item_tap;
     bool              m_is_9x9;
 };

@@ -246,6 +246,7 @@ protected:
         m_buttons.push_back( &button.item<7>() );
         m_buttons.push_back( &button.item<8>() );
         m_buttons.push_back( &button.item<9>() );
+        m_buttons.push_back( &button.special_button_left() );
     }
     /**************************
      *
