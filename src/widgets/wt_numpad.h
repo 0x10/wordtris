@@ -111,6 +111,12 @@ public:
                     WT_BIND_EVENT_HANDLER( WtNumPad::on_more_click ),
                     "+",
                     WtCoord(0,0), WtFont("#999999","text_big")),
+        m_undo_btn( WtCoord( m_pos.x, m_pos.y  ),
+                    WtDim( 0,0 ),
+                    item_image_unselected,
+                    WT_BIND_EVENT_HANDLER( WtNumPad::on_undo_click ),
+                    "Undo",
+                    WtCoord(0,0), WtFont("#999999","text_big")),
         m_on_item_tap( on_item_tap ),
         m_on_edit_active( on_edit_active ),
         m_is_9x9(true),
@@ -151,6 +157,13 @@ public:
         return m_more_btn;
     }
 
+    /**************************
+     *
+     *************************/
+    WtButton& special_button_more_1()
+    {
+        return m_undo_btn;
+    }
 
 
     /**************************
@@ -208,6 +221,8 @@ public:
 
         m_more_btn.set_position( WtCoord(m_pos.x + (((4-1)%2)*(m_size.w / 2+1)), m_pos.y + 3*(m_item_size.h+2) ) );
         m_more_btn.set_size( WtDim( m_size.w / 2, m_item_size.h ) );
+
+        m_undo_btn.set_size( WtDim( 0,0 ) );
     }
 
     /**************************
@@ -252,6 +267,7 @@ public:
         m_more_btn.set_label ("+");
         m_more_btn.set_position( WtCoord( m_pos.x + (((9-1)%3)*(m_size.w / 3+1)), m_pos.y + 3*(m_item_size.h+2) ) );
         m_more_btn.set_size( WtDim( m_size.w / 3, m_item_size.h ) );
+        m_undo_btn.set_size( WtDim( 0,0 ) );
     }
 
 private:
@@ -270,6 +286,8 @@ private:
         m_buttons[7].set_size( WtDim(0,0) );
         m_buttons[8].set_size( WtDim(0,0) );
         m_buttons[9].set_size( WtDim(0,0) );
+
+        m_undo_btn.set_size( WtDim( m_size.w, m_item_size.h ) );
         
         m_more_btn.set_label ("-");
     }
@@ -284,7 +302,9 @@ private:
         m_buttons[2].set_size( WtDim(0,0) );
         m_buttons[3].set_size( WtDim(0,0) );
         m_buttons[4].set_size( WtDim(0,0) );
-        
+       
+        m_undo_btn.set_size( WtDim( m_size.w, m_item_size.h ) );
+
         m_more_btn.set_label ("-");
     }
 
@@ -339,6 +359,14 @@ private:
         }
         if ( m_on_item_tap ) m_on_item_tap( 11 );
     }
+
+    /**************************
+     *
+     *************************/
+    void on_undo_click()
+    {
+        if ( m_on_item_tap ) m_on_item_tap( 12 );
+    }
 private:
     WtNumPad( const WtNumPad& ); 
     WtNumPad& operator = (const WtNumPad&);
@@ -353,9 +381,9 @@ private:
     WtButton          m_buttons[11];
     WtButton          m_edit_btn;
     WtButton          m_more_btn;
+    WtButton          m_undo_btn;
    
     /*
-     * WtButton m_undo_btn
      * WtButton m_save_btn
      * WtButton m_restore_btn
      * */

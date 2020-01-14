@@ -259,6 +259,11 @@ private:
             {
                 std::cout << "more pressed\n";
             }
+            else if ( number == 12 )
+            {
+                std::cout << "undo pressed\n";
+                m_board.undo();
+            }
             else
             {}
         }
