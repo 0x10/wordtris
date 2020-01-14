@@ -114,7 +114,8 @@ public:
         m_on_item_tap( on_item_tap ),
         m_on_edit_active( on_edit_active ),
         m_is_9x9(true),
-        m_is_edit_active( false )
+        m_is_edit_active( false ),
+        m_is_more_active( false )
     {
 
     
@@ -168,6 +169,13 @@ public:
         return m_is_edit_active;
     }
 
+    /**************************
+     *
+     *************************/
+    bool is_more_active() const
+    {
+        return m_is_more_active;
+    }
     /**************************
      *
      *************************/
@@ -241,10 +249,45 @@ public:
         
         m_edit_btn.set_position( WtCoord( m_pos.x + ((m_size.w / 3)/2 - 60 / 2), m_pos.y + 3*(m_item_size.h+2)+66/4 ) );
 
+        m_more_btn.set_label ("+");
         m_more_btn.set_position( WtCoord( m_pos.x + (((9-1)%3)*(m_size.w / 3+1)), m_pos.y + 3*(m_item_size.h+2) ) );
         m_more_btn.set_size( WtDim( m_size.w / 3, m_item_size.h ) );
     }
+
 private:
+    /**************************
+     *
+     *************************/
+    void setup_9x9_more()
+    {
+        m_buttons[0].set_size( WtDim(0,0) );
+        m_buttons[1].set_size( WtDim(0,0) );
+        m_buttons[2].set_size( WtDim(0,0) );
+        m_buttons[3].set_size( WtDim(0,0) );
+        m_buttons[4].set_size( WtDim(0,0) );
+        m_buttons[5].set_size( WtDim(0,0) );
+        m_buttons[6].set_size( WtDim(0,0) );
+        m_buttons[7].set_size( WtDim(0,0) );
+        m_buttons[8].set_size( WtDim(0,0) );
+        m_buttons[9].set_size( WtDim(0,0) );
+        
+        m_more_btn.set_label ("-");
+    }
+
+    /**************************
+     *
+     *************************/
+    void setup_4x4_more()
+    {
+        m_buttons[0].set_size( WtDim(0,0) );
+        m_buttons[1].set_size( WtDim(0,0) );
+        m_buttons[2].set_size( WtDim(0,0) );
+        m_buttons[3].set_size( WtDim(0,0) );
+        m_buttons[4].set_size( WtDim(0,0) );
+        
+        m_more_btn.set_label ("-");
+    }
+
     /**************************
      *
      *************************/
@@ -262,16 +305,16 @@ private:
      *************************/
     void on_edit_click()
     {
-        if ( m_edit_btn.image() == "edit.bmp" )
+        if ( !m_is_edit_active )
         {
-            m_edit_btn.set_image( "edit_active.bmp" );
             m_is_edit_active = true;
+            m_edit_btn.set_image( "edit_active.bmp" );
             if ( m_on_edit_active ) m_on_edit_active( m_is_edit_active );
         }
         else
         {
-            m_edit_btn.set_image( "edit.bmp" );
             m_is_edit_active = false;
+            m_edit_btn.set_image( "edit.bmp" );
             if ( m_on_edit_active ) m_on_edit_active( m_is_edit_active );
         }
         if ( m_on_item_tap ) m_on_item_tap( 10 );
@@ -282,6 +325,18 @@ private:
      *************************/
     void on_more_click()
     {
+        if ( ! m_is_more_active )
+        {
+            m_is_more_active = true;
+            if ( m_is_9x9 ) setup_9x9_more();
+            else            setup_4x4_more();
+        }
+        else
+        {
+            m_is_more_active = false;
+            if ( m_is_9x9 ) setup_9x9_layout();
+            else            setup_4x4_layout();
+        }
         if ( m_on_item_tap ) m_on_item_tap( 11 );
     }
 private:
@@ -303,13 +358,13 @@ private:
      * WtButton m_undo_btn
      * WtButton m_save_btn
      * WtButton m_restore_btn
-     * WtButton m_back_btn --> 123 for going back from +
      * */
 
     OnItemTapDelegate m_on_item_tap;
     OnEditActiveDelegate m_on_edit_active;
     bool              m_is_9x9;
     bool              m_is_edit_active;
+    bool              m_is_more_active;
 };
 
 #endif /* _WT_NUMPAD_H_ */
