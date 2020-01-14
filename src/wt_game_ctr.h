@@ -251,21 +251,30 @@ private:
         }
         else
         {
-            if ( number == 10 )
+            switch( number )
             {
-                std::cout << "edit pressed\n";
+                case 10:
+                    std::cout << "edit pressed\n";
+                    break;
+                case 11:
+                    std::cout << "more pressed\n";
+                    break;
+                case 12:
+                    std::cout << "undo pressed\n";
+                    m_board.undo();
+                    break;
+                case 13:
+                    std::cout << "save pressed\n";
+                    m_board.save();
+                    m_numpad.restore_possible( true );
+                    break;
+                case 14:
+                    std::cout << "restore pressed\n";
+                    m_board.restore();
+                    break;
+                default: break;
             }
-            else if ( number == 11 )
-            {
-                std::cout << "more pressed\n";
-            }
-            else if ( number == 12 )
-            {
-                std::cout << "undo pressed\n";
-                m_board.undo();
-            }
-            else
-            {}
+
         }
     }
 

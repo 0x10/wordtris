@@ -38,6 +38,7 @@ public:
         m_row_count(WtBoard::row_cnt),
         m_col_count(WtBoard::col_cnt),
         m_history(),
+        m_checkpoint(""),
         m_board_notes()
     {
     }
@@ -134,6 +135,24 @@ public:
     bool undo_available() const
     {
         return m_history.size() > 0;
+    }
+
+    /**************************
+     *
+     *************************/
+    void save()
+    {
+        m_checkpoint = to_string();
+        std::cout << "saved = " << m_checkpoint << std::endl;
+
+    }
+    /**************************
+     *
+     *************************/
+    void restore()
+    {
+        clear_history();
+        from_string( m_checkpoint );
     }
     /**************************
      *
@@ -252,11 +271,45 @@ public:
         else
             return false;
     }
+
+    /**************************
+     *
+     *************************/
+    std::string to_string() const
+    {
+        //does not work due to empty_cell return std::string( &m_board[0][0], m_row_count * m_col_count); 
+        std::string result = "";
+        for ( uint8_t r = 0; r < row_count(); r++ )
+            for ( uint8_t c = 0; c < col_count(); c++ )
+            {
+                char cell = get_cell( r, c );
+                result.push_back(( cell == WtBoard::empty_cell ? '0' : cell ));
+            }
+        return result;
+    }
+
+    /**************************
+     *
+     *************************/
+    void from_string( std::string s )
+    {
+        size_t current = 0;
+        for ( uint8_t r = 0; r < row_count(); r++ )
+            for ( uint8_t c = 0; c < col_count(); c++ )
+            {
+                if ( current > s.length() )
+                    return;
+
+                set_cell( r, c, ( s[current] == '0' ? WtBoard::empty_cell : s[current] ) );
+                current++;
+            }
+    }
 private:
     char m_board[WtBoard::row_cnt][WtBoard::col_cnt]; 
     uint8_t m_row_count;
     uint8_t m_col_count;
     std::vector<HistoryEntry> m_history;
+    std::string m_checkpoint;
     bool m_board_notes[WtBoard::row_cnt][WtBoard::col_cnt][WtBoard::row_cnt];
 };
 

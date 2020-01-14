@@ -308,6 +308,11 @@ public:
     void restore_possible( bool is_possible )
     {
         m_restore_possible = is_possible;
+        if ( m_restore_possible && m_is_more_active )
+        {
+            if ( m_is_9x9 ) setup_9x9_more();
+            else            setup_4x4_more();
+        }
     }
 private:
     /**************************

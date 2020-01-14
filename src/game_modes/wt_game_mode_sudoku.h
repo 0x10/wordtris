@@ -177,13 +177,8 @@ public:
 
         m_last_update_time = WtTime::get_time();
         m_pause = false;
-        size_t current = 0;
-        for ( uint8_t r = 0; r < board.row_count(); r++ )
-            for ( uint8_t c = 0; c < board.col_count(); c++ )
-            {
-                board.set_cell( r, c, ( next[current] == '0' ? WtBoard::empty_cell : next[current] ) );
-                current++;
-            }
+
+        board.from_string( next );
     }
 
     /**************************
