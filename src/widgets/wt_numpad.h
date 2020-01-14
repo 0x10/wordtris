@@ -117,11 +117,24 @@ public:
                     WT_BIND_EVENT_HANDLER( WtNumPad::on_undo_click ),
                     "Undo",
                     WtCoord(0,0), WtFont("#999999","text_big")),
+        m_save_btn( WtCoord( m_pos.x, m_pos.y+item_image_size.h ),
+                    WtDim( 0,0 ),
+                    item_image_unselected,
+                    WT_BIND_EVENT_HANDLER( WtNumPad::on_save_click ),
+                    "Save",
+                    WtCoord(0,0), WtFont("#999999","text_big")),
+        m_restore_btn( WtCoord( m_pos.x, m_pos.y + 2*item_image_size.h ),
+                    WtDim( 0,0 ),
+                    item_image_unselected,
+                    WT_BIND_EVENT_HANDLER( WtNumPad::on_restore_click ),
+                    "Restore",
+                    WtCoord(0,0), WtFont("#999999","text_big")),
         m_on_item_tap( on_item_tap ),
         m_on_edit_active( on_edit_active ),
         m_is_9x9(true),
         m_is_edit_active( false ),
-        m_is_more_active( false )
+        m_is_more_active( false ),
+        m_restore_possible( false )
     {
 
     
@@ -165,7 +178,21 @@ public:
         return m_undo_btn;
     }
 
+    /**************************
+     *
+     *************************/
+    WtButton& special_button_more_2()
+    {
+        return m_save_btn;
+    }
 
+    /**************************
+     *
+     *************************/
+    WtButton& special_button_more_3()
+    {
+        return m_restore_btn;
+    }
     /**************************
      *
      *************************/
@@ -219,10 +246,13 @@ public:
     
         m_edit_btn.set_position( WtCoord( m_pos.x + ((m_size.w / 2)/2 - 60 / 2), m_pos.y + 3*(m_item_size.h+2)+66/4 ) );
 
+        m_more_btn.set_label ("+");
         m_more_btn.set_position( WtCoord(m_pos.x + (((4-1)%2)*(m_size.w / 2+1)), m_pos.y + 3*(m_item_size.h+2) ) );
         m_more_btn.set_size( WtDim( m_size.w / 2, m_item_size.h ) );
 
         m_undo_btn.set_size( WtDim( 0,0 ) );
+        m_save_btn.set_size( WtDim( 0,0 ) );
+        m_restore_btn.set_size( WtDim( 0,0 ) );
     }
 
     /**************************
@@ -268,8 +298,17 @@ public:
         m_more_btn.set_position( WtCoord( m_pos.x + (((9-1)%3)*(m_size.w / 3+1)), m_pos.y + 3*(m_item_size.h+2) ) );
         m_more_btn.set_size( WtDim( m_size.w / 3, m_item_size.h ) );
         m_undo_btn.set_size( WtDim( 0,0 ) );
+        m_save_btn.set_size( WtDim( 0,0 ) );
+        m_restore_btn.set_size( WtDim( 0,0 ) );
     }
 
+    /**************************
+     *
+     *************************/
+    void restore_possible( bool is_possible )
+    {
+        m_restore_possible = is_possible;
+    }
 private:
     /**************************
      *
@@ -288,6 +327,10 @@ private:
         m_buttons[9].set_size( WtDim(0,0) );
 
         m_undo_btn.set_size( WtDim( m_size.w, m_item_size.h ) );
+        m_save_btn.set_size( WtDim( m_size.w, m_item_size.h ) );
+        m_restore_btn.set_size( WtDim( m_size.w, m_item_size.h ) );
+        if ( m_restore_possible ) m_restore_btn.set_font_color( "#999999" );
+        else                      m_restore_btn.set_font_color( "#333333" );
         
         m_more_btn.set_label ("-");
     }
@@ -304,6 +347,10 @@ private:
         m_buttons[4].set_size( WtDim(0,0) );
        
         m_undo_btn.set_size( WtDim( m_size.w, m_item_size.h ) );
+        m_save_btn.set_size( WtDim( m_size.w, m_item_size.h ) );
+        m_restore_btn.set_size( WtDim( m_size.w, m_item_size.h ) );
+        if ( m_restore_possible ) m_restore_btn.set_font_color( "#999999" );
+        else                      m_restore_btn.set_font_color( "#333333" );
 
         m_more_btn.set_label ("-");
     }
@@ -367,6 +414,24 @@ private:
     {
         if ( m_on_item_tap ) m_on_item_tap( 12 );
     }
+
+
+    /**************************
+     *
+     *************************/
+    void on_save_click()
+    {
+        if ( m_on_item_tap ) m_on_item_tap( 13 );
+    }
+
+    /**************************
+     *
+     *************************/
+    void on_restore_click()
+    {
+        if ( m_restore_possible )
+            if ( m_on_item_tap ) m_on_item_tap( 14 );
+    }
 private:
     WtNumPad( const WtNumPad& ); 
     WtNumPad& operator = (const WtNumPad&);
@@ -382,17 +447,16 @@ private:
     WtButton          m_edit_btn;
     WtButton          m_more_btn;
     WtButton          m_undo_btn;
+    WtButton          m_save_btn;
+    WtButton          m_restore_btn;
    
-    /*
-     * WtButton m_save_btn
-     * WtButton m_restore_btn
-     * */
 
     OnItemTapDelegate m_on_item_tap;
     OnEditActiveDelegate m_on_edit_active;
     bool              m_is_9x9;
     bool              m_is_edit_active;
     bool              m_is_more_active;
+    bool              m_restore_possible;
 };
 
 #endif /* _WT_NUMPAD_H_ */

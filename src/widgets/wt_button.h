@@ -94,6 +94,13 @@ public:
         return m_label_pos;
     }
 
+    /**************************
+     *
+     *************************/
+    void set_font_color( const std::string c )
+    {
+        m_label_font.color = c;
+    }
 
     /**************************
      *
