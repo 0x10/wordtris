@@ -79,7 +79,14 @@ public:
                            WT_BIND_EVENT_HANDLER_1( WtMenuCtr::diff_changed ),
                            std::array<const char*, 3>{{ WtGameModeIf::get_available_difficulties()[0].second,
                                                         WtGameModeIf::get_available_difficulties()[1].second,
-                                                        WtGameModeIf::get_available_difficulties()[2].second }} )
+                                                        WtGameModeIf::get_available_difficulties()[2].second }} ),
+        m_continue_btn( WtCoord( (ACTIVE_WINDOW_WIDTH) - (138 / 2), (ACTIVE_WINDOW_HEIGHT - (ACTIVE_WINDOW_HEIGHT / 4))+(124/2) ),
+                        WtDim( 138, 124 ),
+                        "next_btn.bmp",
+                        nullptr,
+                        WtL10n_tr( "CONTINUE"),
+                        WtCoord( 0, 25 ),
+                        WtFont( "#b2b2b2", "text_big" ))
     {
         WtL10n::register_lang_change_obsever( WT_BIND_EVENT_HANDLER( WtMenuCtr::language_changed ) );
 
@@ -90,6 +97,7 @@ public:
         add_button( m_score_btn );
         add_button( m_setting_btn );
         add_button( m_start_btn );
+        add_button( m_continue_btn );
         add_button( m_select_label );
         add_horizontal_carousel( m_game_selection );
         add_tristate_button( m_diff_select_btn );
@@ -198,6 +206,7 @@ private:
     WtButton         m_start_btn;
     WtButton         m_select_label;
     WtButton         m_settings_bg;
+    WtButton         m_continue_btn;
 
     WtHorizontalCarousel m_game_selection;
     WtTriStateButton m_diff_select_btn;

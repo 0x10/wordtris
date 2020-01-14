@@ -79,6 +79,11 @@ public:
                             WtL10n_tr( "Play music and sounds" ),
                             STORAGE.get_settings().enable_audio,
                             WT_BIND_EVENT_HANDLER_1( WtMenuSettings::enable_audio_changed ) ),
+        m_immediate_error_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) + ((m_standard_btn_size.w / 2)-100), offset_y + (m_standard_btn_size.h *7 ) - 20 ),
+                               WtL10n_tr( "Show errors immediately" ),
+                               false/*STORAGE.get_settings().show_support_grid*/,
+                               /*WT_BIND_EVENT_HANDLER_1( WtMenuSettings::supporting_grid_changed )*/ nullptr ),
+
         m_seperator0( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (m_standard_btn_size.w / 2), offset_y + (m_standard_btn_size.h * 5) ),
                       WtDim( m_standard_btn_size.w, 1 ),
                       "#a2a2a2" ),
@@ -137,6 +142,7 @@ public:
         //add_tristate_button( m_diff_select_btn );
         //add_tristate_button( m_theme_select_btn );
         add_button( m_supporting_grid_btn );
+        add_button( m_immediate_error_btn );
 //        add_button( m_small_grid_btn );
 //        add_button( m_enable_audio_btn );
         add_button( m_seperator0 );
@@ -311,6 +317,7 @@ private:
     WtCheckboxButton m_supporting_grid_btn;
     WtCheckboxButton m_small_grid_btn;
     WtCheckboxButton m_enable_audio_btn;
+    WtCheckboxButton m_immediate_error_btn;
     WtButton         m_seperator0;
     WtButton         m_seperator1;
     WtButton         m_settings_bg;

@@ -67,6 +67,10 @@ public:
                                WtL10n_tr( "Supporting Grid" ),
                                STORAGE.get_settings().show_support_grid,
                                WT_BIND_EVENT_HANDLER_1( WtMenuPause::supporting_grid_changed ) ),
+        m_immediate_error_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) + ((m_standard_btn_size.w / 2)-100), offset_y + 150 + (2*69- 20) ),
+                               WtL10n_tr( "Show errors immediately" ),
+                               false/*STORAGE.get_settings().show_support_grid*/,
+                               /*WT_BIND_EVENT_HANDLER_1( WtMenuSettings::supporting_grid_changed )*/ nullptr ),
         m_next_stone_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) + ((m_standard_btn_size.w / 2)-100), offset_y + 150 + ((69*2)) ),
                           WtL10n_tr( "Show next stone" ),
                           STORAGE.get_settings().show_next_stone,
@@ -88,6 +92,7 @@ public:
         //add_button( m_seperator0 );
         //add_button( m_help_btn );
         add_button( m_supporting_grid_btn );
+        add_button( m_immediate_error_btn );
         add_button( m_pause_label );
     }
 
@@ -190,6 +195,7 @@ private:
     WtButton            m_help_btn;
     WtButton            m_seperator0;
     WtCheckboxButton    m_supporting_grid_btn;
+    WtCheckboxButton m_immediate_error_btn;
     WtCheckboxButton    m_next_stone_btn;
     WtCheckboxButton    m_enable_audio_btn;
     WtButton            m_pause_label;
