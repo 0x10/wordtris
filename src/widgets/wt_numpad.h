@@ -22,10 +22,12 @@ class WtNumPad
 {
 public:
     using OnItemTapDelegate = std::function<void(size_t)>;
+    using OnEditActiveDelegate = std::function<void(bool)>;
 
     WtNumPad( WtCoord pos, 
                       WtDim size,
                       OnItemTapDelegate on_item_tap,
+                      OnEditActiveDelegate on_edit_active = nullptr,
                       const char* item_image_selected = "",
                       const char* item_image_unselected = "",
                       const WtDim item_image_size = WtDim( 200, 100 ),
@@ -110,7 +112,9 @@ public:
                     "+",
                     WtCoord(0,0), WtFont("#999999","text_big")),
         m_on_item_tap( on_item_tap ),
-        m_is_9x9(true)
+        m_on_edit_active( on_edit_active ),
+        m_is_9x9(true),
+        m_is_edit_active( false )
     {
 
     
@@ -154,6 +158,14 @@ public:
     void set_position( WtCoord new_pos )
     {
         m_pos = new_pos;
+    }
+
+    /**************************
+     *
+     *************************/
+    bool is_edit_active() const
+    {
+        return m_is_edit_active;
     }
 
     /**************************
@@ -253,10 +265,14 @@ private:
         if ( m_edit_btn.image() == "edit.bmp" )
         {
             m_edit_btn.set_image( "edit_active.bmp" );
+            m_is_edit_active = true;
+            if ( m_on_edit_active ) m_on_edit_active( m_is_edit_active );
         }
         else
         {
             m_edit_btn.set_image( "edit.bmp" );
+            m_is_edit_active = false;
+            if ( m_on_edit_active ) m_on_edit_active( m_is_edit_active );
         }
         if ( m_on_item_tap ) m_on_item_tap( 10 );
     }
@@ -291,7 +307,9 @@ private:
      * */
 
     OnItemTapDelegate m_on_item_tap;
+    OnEditActiveDelegate m_on_edit_active;
     bool              m_is_9x9;
+    bool              m_is_edit_active;
 };
 
 #endif /* _WT_NUMPAD_H_ */

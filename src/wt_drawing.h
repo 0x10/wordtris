@@ -101,6 +101,31 @@ public:
         draw_level_up_indicator( player, WtCoord( 20, 2 ) );
      }
 
+    /**************************
+     *
+     *************************/
+    void draw_note( const uint8_t  r,
+                    const uint8_t  c,
+                    const uint8_t  v )
+    {
+        std::string text = std::string(1, 0x30 + v);
+        WtCoord grid_pos = DrawingPolicy::grid_pos_to_coord( r, c );
+        WtDim text_size = DrawingPolicy::get_text_size( text, "text_small" );
+
+        grid_pos.x += 5 + ( ((v-1)%3) * (2 * text_size.w + (text_size.w / 2)) );
+        if ( v > 3 )
+        {
+            grid_pos.y += text_size.h;
+            if ( v > 6 )
+            {
+                grid_pos.y += text_size.h;
+            }
+        }
+
+        grid_pos.y -= 5;
+
+        DrawingPolicy::draw_text( grid_pos, text, "text_small", "#757575" );
+    }
 
     /**************************
      *
@@ -129,6 +154,13 @@ public:
                     std::string cell_background = "";// "grid.bmp";
                     DrawingPolicy::draw_custom_cell_bg( i, j, cell_background, 155 );
 
+                    for ( uint8_t note_val : std::array<uint8_t, 9>{1,2,3,4,5,6,7,8,9} )
+                    {
+                        if ( board.is_note_set( i, j, note_val ) )
+                        {
+                            draw_note( i, j, note_val );
+                        }
+                    }
                 }
 
                 if ( show_support_grid )

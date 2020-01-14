@@ -213,22 +213,39 @@ private:
      *************************/
     void notify_num_click( size_t number )
     {
-        if ( number < 9 )
+        if ( number <= 9 )
         {
             if ( ! m_active_mode->stone_blocked( m_board, m_active.current_row(), m_active.current_column() ) )
             {
                 std::cout << "num pad clicked at " << number << std::endl;
                 if ( number == 0 )
                 {
-                    m_board.set_cell( m_active.current_row(),
-                                      m_active.current_column(),
-                                      WtBoard::empty_cell );
+                    if ( m_numpad.is_edit_active() )
+                    {
+                        m_board.clear_notes( m_active.current_row(),
+                                             m_active.current_column() );
+                    }
+                    else
+                    {
+                        m_board.set_cell( m_active.current_row(),
+                                          m_active.current_column(),
+                                          WtBoard::empty_cell );
+                    }
                 }
                 else
                 {
-                    m_board.set_cell( m_active.current_row(),
-                                      m_active.current_column(),
-                                      number + 0x30 );
+                    if ( m_numpad.is_edit_active() )
+                    {
+                        m_board.set_note( m_active.current_row(),
+                                          m_active.current_column(),
+                                          number );
+                    }
+                    else
+                    {
+                        m_board.set_cell( m_active.current_row(),
+                                          m_active.current_column(),
+                                          number + 0x30 );
+                    }
                 }
             }
         }

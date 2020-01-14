@@ -244,7 +244,7 @@ public:
     /**************************
      *
      *************************/
-    bool is_note_set( uint8_t r, uint8_t c, uint8_t value )
+    bool is_note_set( uint8_t r, uint8_t c, uint8_t value ) const
     {
         uint8_t local_value = value - 1;
         if ( local_value < m_row_count )
