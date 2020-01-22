@@ -69,8 +69,8 @@ public:
                                WT_BIND_EVENT_HANDLER_1( WtMenuPause::supporting_grid_changed ) ),
         m_immediate_error_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) + ((m_standard_btn_size.w / 2)-100), offset_y + 150 + (2*69- 20) ),
                                WtL10n_tr( "Show errors immediately" ),
-                               false/*STORAGE.get_settings().show_support_grid*/,
-                               /*WT_BIND_EVENT_HANDLER_1( WtMenuSettings::supporting_grid_changed )*/ nullptr ),
+                               STORAGE.get_settings().show_error_on_input,
+                               WT_BIND_EVENT_HANDLER_1( WtMenuPause::show_error_changed ) ),
         m_next_stone_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) + ((m_standard_btn_size.w / 2)-100), offset_y + 150 + ((69*2)) ),
                           WtL10n_tr( "Show next stone" ),
                           STORAGE.get_settings().show_next_stone,
@@ -175,6 +175,20 @@ private: // no copy allowed
         }
     }
 
+    /**************************
+     *
+     *************************/
+    void show_error_changed( bool enable )
+    {
+        std::cout << "show error " << ( enable ? "active" : "inactive" ) << std::endl;
+        WtSettings settings = STORAGE.get_settings();
+        if ( settings.show_error_on_input != enable )
+        {
+            settings.show_error_on_input = enable;
+            STORAGE.store_settings( settings );
+        }
+    }
+    
 
     /**************************
      * signal

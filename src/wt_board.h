@@ -296,6 +296,15 @@ public:
     /**************************
      *
      *************************/
+    void clear_all_error_flags()
+    {
+        for( uint8_t r = 0; r<row_count(); r++ )
+            for( uint8_t c = 0; c<col_count(); c++ )
+                clear_error_flag( r, c );
+    }
+    /**************************
+     *
+     *************************/
     bool is_erroneous( uint8_t r, uint8_t c ) const
     {
         return m_infos[r][c].error;

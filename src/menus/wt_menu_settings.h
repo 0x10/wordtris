@@ -81,8 +81,8 @@ public:
                             WT_BIND_EVENT_HANDLER_1( WtMenuSettings::enable_audio_changed ) ),
         m_immediate_error_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) + ((m_standard_btn_size.w / 2)-100), offset_y + (m_standard_btn_size.h *7 ) - 20 ),
                                WtL10n_tr( "Show errors immediately" ),
-                               false/*STORAGE.get_settings().show_support_grid*/,
-                               /*WT_BIND_EVENT_HANDLER_1( WtMenuSettings::supporting_grid_changed )*/ nullptr ),
+                               STORAGE.get_settings().show_error_on_input,
+                               WT_BIND_EVENT_HANDLER_1( WtMenuSettings::show_error_changed ) ),
 
         m_seperator0( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (m_standard_btn_size.w / 2), offset_y + (m_standard_btn_size.h * 5) ),
                       WtDim( m_standard_btn_size.w, 1 ),
@@ -253,6 +253,21 @@ private: // no copy allowed
         }
     }
 
+    /**************************
+     *
+     *************************/
+    void show_error_changed( bool enable )
+    {
+        std::cout << "show error " << ( enable ? "active" : "inactive" ) << std::endl;
+        WtSettings settings = STORAGE.get_settings();
+        if ( settings.show_error_on_input != enable )
+        {
+            settings.show_error_on_input = enable;
+            STORAGE.store_settings( settings );
+        }
+    }
+    
+    
     /**************************
      *
      *************************/

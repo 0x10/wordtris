@@ -13,13 +13,63 @@
  *            without written approval of Christian Kranz
  *
  ******************************************************************************/
-#ifndef _WT_GAME_MODE_GUESSING_H_
-#define _WT_GAME_MODE_GUESSING_H_
+#ifndef _WT_GAME_MODE_SUDOKU_H_
+#define _WT_GAME_MODE_SUDOKU_H_
 
 #include "wt_game_mode_if.h"
 #include "wt_utils.h"
 #include "wt_storage.h"
 #include <set>
+
+/**************************
+ *
+ *************************/
+class ErrorMap
+{
+public:
+    ErrorMap() :
+        internal_error_list()
+    {}
+    ~ErrorMap() {}
+
+    /**************************
+     *
+     *************************/
+    size_t size() const
+    {
+        return internal_error_list.size();
+    }
+
+    /**************************
+     *
+     *************************/
+   void retrieve_error( size_t idx, uint8_t& r, uint8_t& c ) const
+   {
+       if ( idx < size() )
+       {
+           size_t encoded = internal_error_list[idx];
+           r = encoded / 10u;
+           c = encoded % 10u;
+       }
+   }
+
+    /**************************
+     *
+     *************************/
+    void add_error( uint8_t r, uint8_t c )
+    {
+        size_t encoded = ( r * 10u ) + c;
+        if ( find( internal_error_list.begin(), 
+                   internal_error_list.end(), 
+                   encoded ) == internal_error_list.end() )
+        {
+            internal_error_list.push_back( encoded );
+        }
+    }
+private:
+    std::vector<size_t> internal_error_list;
+};
+
 class WtGameModeSudoku : public WtGameModeIf
 {
 public:
@@ -184,6 +234,23 @@ public:
     /**************************
      *
      *************************/
+    void mark_errors( WtBoard& board, ErrorMap& detected_errors )
+    {
+        for ( size_t idx = 0; idx < detected_errors.size(); idx++ )
+        {
+            uint8_t row = m_gridsize;
+            uint8_t col = m_gridsize;
+
+            detected_errors.retrieve_error( idx, row, col );
+            
+            if ( ( row != m_gridsize ) && ( col != m_gridsize ) )
+                board.set_erroneous( row, col );
+        }
+    }
+
+    /**************************
+     *
+     *************************/
     virtual void eval_board( WtBoard& board, WtPlayer& player, WtGameModeState& gs )
     {
         if ( m_pause )
@@ -195,10 +262,15 @@ public:
         m_last_update_time = WtTime::get_time();
         player.set_time( player.get_current_time() + elapsed_since_last );
         gs.game_over = false;
-        if ( is_valid_config( board ) )
+        ErrorMap detected_errors;
+        if ( is_valid_config( board, detected_errors ) )
         {
             player.letter_dropped( 255 );
             gs.game_over = true;
+        }
+        else
+        {
+            mark_errors( board, detected_errors );
         }
     }
 
@@ -207,7 +279,12 @@ public:
      *************************/
     virtual void pre_eval_board( WtBoard& board )
     {
-
+        ErrorMap detected_errors;
+        board.clear_all_error_flags();
+        if ( ! is_valid_config( board, detected_errors ) )
+        {
+            mark_errors( board, detected_errors );
+        }
     }
 
     /**************************
@@ -317,7 +394,7 @@ private:
      * Checks whether there is any duplicate  
      * in current row or not 
      *************************/
-    bool not_in_row(WtBoard& board, uint8_t row) 
+    bool not_in_row(WtBoard& board, uint8_t row, ErrorMap& errors ) 
     { 
         // Set to store characters seen so far. 
         std::set<char> st; 
@@ -325,8 +402,11 @@ private:
         for (uint8_t c = 0; c < m_gridsize; c++) { 
             char cell = board.get_cell(row,c);
             // If already encountered before, return false 
-            if (st.find(cell) != st.end()) 
+            if (st.find(cell) != st.end())
+            {
+                errors.add_error( row, c ); 
                 return false; 
+            }
       
             // If it is not an empty cell, insert value 
             // at the current cell in the set 
@@ -340,7 +420,7 @@ private:
      * Checks whether there is any duplicate 
      * in current column or not. 
      *************************/
-    bool not_in_col(WtBoard& board, uint8_t col) 
+    bool not_in_col(WtBoard& board, uint8_t col, ErrorMap& errors ) 
     { 
         std::set<char> st; 
       
@@ -349,7 +429,10 @@ private:
       
             // If already encountered before, return false 
             if (st.find(cell) != st.end()) 
-                return false; 
+            {
+                errors.add_error( r, col ); 
+                return false;
+            }
       
             // If it is not an empty cell, 
             // insert value at the current cell in the set 
@@ -363,7 +446,7 @@ private:
      * Checks whether there is any duplicate 
      * in current 3x3 box or not. 
      *************************/
-    bool not_in_box(WtBoard& board, uint8_t startRow, uint8_t startCol) 
+    bool not_in_box(WtBoard& board, uint8_t startRow, uint8_t startCol, ErrorMap& errors ) 
     { 
         std::set<char> st; 
       
@@ -372,8 +455,11 @@ private:
                 char curr = board.get_cell(row + startRow, col + startCol);
       
                 // If already encountered before, return false 
-                if (st.find(curr) != st.end()) 
-                    return false; 
+                if (st.find(curr) != st.end())
+                {
+                    errors.add_error( row, col ); 
+                    return false;
+                }
       
                 // If it is not an empty cell, 
                 // insert value at current cell in set 
@@ -387,41 +473,41 @@ private:
      * Checks whether current row and current column and 
      * current 3x3 box is valid or not 
      *************************/ 
-    bool is_valid_config(WtBoard& board) 
+    bool is_valid_config( WtBoard& board, ErrorMap& errors ) 
     {
         bool is_valid = true;
 
         if ( board.is_full() )
         {
-            is_valid = is_valid && not_in_row( board, 0 );
-            is_valid = is_valid && not_in_row( board, 1 );
-            is_valid = is_valid && not_in_row( board, 2 );
-            is_valid = is_valid && not_in_row( board, 3 );
-            is_valid = is_valid && not_in_row( board, 4 );
-            is_valid = is_valid && not_in_row( board, 5 );
-            is_valid = is_valid && not_in_row( board, 6 );
-            is_valid = is_valid && not_in_row( board, 7 );
-            is_valid = is_valid && not_in_row( board, 8 );
+            is_valid = is_valid && not_in_row( board, 0, errors );
+            is_valid = is_valid && not_in_row( board, 1, errors );
+            is_valid = is_valid && not_in_row( board, 2, errors );
+            is_valid = is_valid && not_in_row( board, 3, errors );
+            is_valid = is_valid && not_in_row( board, 4, errors );
+            is_valid = is_valid && not_in_row( board, 5, errors );
+            is_valid = is_valid && not_in_row( board, 6, errors );
+            is_valid = is_valid && not_in_row( board, 7, errors );
+            is_valid = is_valid && not_in_row( board, 8, errors );
 
-            is_valid = is_valid && not_in_col( board, 0 );
-            is_valid = is_valid && not_in_col( board, 1 );
-            is_valid = is_valid && not_in_col( board, 2 );
-            is_valid = is_valid && not_in_col( board, 3 );
-            is_valid = is_valid && not_in_col( board, 4 );
-            is_valid = is_valid && not_in_col( board, 5 );
-            is_valid = is_valid && not_in_col( board, 6 );
-            is_valid = is_valid && not_in_col( board, 7 );
-            is_valid = is_valid && not_in_col( board, 8 );
+            is_valid = is_valid && not_in_col( board, 0, errors );
+            is_valid = is_valid && not_in_col( board, 1, errors );
+            is_valid = is_valid && not_in_col( board, 2, errors );
+            is_valid = is_valid && not_in_col( board, 3, errors );
+            is_valid = is_valid && not_in_col( board, 4, errors );
+            is_valid = is_valid && not_in_col( board, 5, errors );
+            is_valid = is_valid && not_in_col( board, 6, errors );
+            is_valid = is_valid && not_in_col( board, 7, errors );
+            is_valid = is_valid && not_in_col( board, 8, errors );
 
-            is_valid = is_valid && not_in_box( board, 0, 0 );
-            is_valid = is_valid && not_in_box( board, 0, 3 );
-            is_valid = is_valid && not_in_box( board, 0, 6 );
-            is_valid = is_valid && not_in_box( board, 3, 0 );
-            is_valid = is_valid && not_in_box( board, 3, 3 );
-            is_valid = is_valid && not_in_box( board, 3, 6 );
-            is_valid = is_valid && not_in_box( board, 6, 0 );
-            is_valid = is_valid && not_in_box( board, 6, 3 );
-            is_valid = is_valid && not_in_box( board, 6, 6 );
+            is_valid = is_valid && not_in_box( board, 0, 0, errors );
+            is_valid = is_valid && not_in_box( board, 0, 3, errors );
+            is_valid = is_valid && not_in_box( board, 0, 6, errors );
+            is_valid = is_valid && not_in_box( board, 3, 0, errors );
+            is_valid = is_valid && not_in_box( board, 3, 3, errors );
+            is_valid = is_valid && not_in_box( board, 3, 6, errors );
+            is_valid = is_valid && not_in_box( board, 6, 0, errors );
+            is_valid = is_valid && not_in_box( board, 6, 3, errors );
+            is_valid = is_valid && not_in_box( board, 6, 6, errors );
         }
         else
         {
@@ -439,4 +525,4 @@ private:
     const size_t             m_gridsize;
 };
 
-#endif /* _WT_GAME_MODE_GUESSING_H_ */
+#endif /* _WT_GAME_MODE_SUDOKU_H_ */
