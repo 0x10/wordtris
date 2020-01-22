@@ -29,17 +29,22 @@ private:
         uint8_t c;
         char value;
     };
+    struct CellInfo
+    {
+        bool error;
+        bool notes[WtBoard::row_cnt];
+    };
 public:
     static const char empty_cell = '\0';
     typedef char RowSequence[WtBoard::col_cnt];
 
     WtBoard() :
         m_board(),
+        m_infos(),
         m_row_count(WtBoard::row_cnt),
         m_col_count(WtBoard::col_cnt),
         m_history(),
-        m_checkpoint(""),
-        m_board_notes()
+        m_checkpoint("")
     {
     }
     ~WtBoard() {}
@@ -244,7 +249,7 @@ public:
      *************************/   
     void clear_notes( uint8_t r, uint8_t c)
     {
-        for ( bool &notes : m_board_notes[r][c] )
+        for ( bool &notes : m_infos[r][c].notes )
         {
             notes = false;
         }
@@ -257,7 +262,7 @@ public:
     {
         uint8_t local_value = value - 1;
         if ( local_value < m_row_count )
-            m_board_notes[r][c][local_value] = true;
+            m_infos[r][c].notes[local_value] = true;
     }
 
     /**************************
@@ -267,9 +272,33 @@ public:
     {
         uint8_t local_value = value - 1;
         if ( local_value < m_row_count )
-            return m_board_notes[r][c][local_value] == true;
+            return m_infos[r][c].notes[local_value] == true;
         else
             return false;
+    }
+
+    /**************************
+     *
+     *************************/
+    void set_erroneous( uint8_t r, uint8_t c )
+    {
+        m_infos[r][c].error = true;
+    }
+
+    /**************************
+     *
+     *************************/
+    void clear_error_flag( uint8_t r, uint8_t c )
+    {
+        m_infos[r][c].error = false;
+    }
+
+    /**************************
+     *
+     *************************/
+    bool is_erroneous( uint8_t r, uint8_t c ) const
+    {
+        return m_infos[r][c].error;
     }
 
     /**************************
@@ -306,11 +335,11 @@ public:
     }
 private:
     char m_board[WtBoard::row_cnt][WtBoard::col_cnt]; 
+    CellInfo m_infos[WtBoard::row_cnt][WtBoard::col_cnt]; 
     uint8_t m_row_count;
     uint8_t m_col_count;
     std::vector<HistoryEntry> m_history;
     std::string m_checkpoint;
-    bool m_board_notes[WtBoard::row_cnt][WtBoard::col_cnt][WtBoard::row_cnt];
 };
 
 

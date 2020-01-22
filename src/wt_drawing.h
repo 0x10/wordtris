@@ -136,18 +136,27 @@ public:
     {
         DrawingPolicy::set_gridsize( STORAGE.get_settings().gridsize );
         DrawingPolicy::draw_custom_cell_bg( active.current_row(), active.current_column(), "#777777", 70 );
+
+        bool draw_error_state = STORAGE.get_settings().show_error_on_input;
+
         for( uint8_t i=0 ; i < board.row_count(); i++ )
         {
             for( uint8_t j=0; j < board.col_count(); j++ )
             {
+
                 char val = board.get_cell( i, j );
 
 
                 if ( val != WtBoard::empty_cell )
                 {
-                    DrawingPolicy::draw_at_grid( i, j, val );
-
-
+                    if ( draw_error_state && board.is_erroneous( i, j ) )
+                    {
+                        DrawingPolicy::draw_at_grid( i, j, val, "grid_error" );
+                    }
+                    else
+                    {
+                        DrawingPolicy::draw_at_grid( i, j, val );
+                    }
                 }
                 else
                 {

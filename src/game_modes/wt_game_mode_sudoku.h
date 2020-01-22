@@ -205,6 +205,14 @@ public:
     /**************************
      *
      *************************/
+    virtual void pre_eval_board( WtBoard& board )
+    {
+
+    }
+
+    /**************************
+     *
+     *************************/
     virtual void pause_time()
     {
         m_pause = true;
@@ -385,29 +393,35 @@ private:
 
         if ( board.is_full() )
         {
-            not_in_row( board, 0 );
-            not_in_row( board, 1 );
-            not_in_row( board, 2 );
-            not_in_row( board, 3 );
-            not_in_row( board, 4 );
-            not_in_row( board, 5 );
-            not_in_row( board, 6 );
-            not_in_row( board, 7 );
-            not_in_row( board, 8 );
+            is_valid = is_valid && not_in_row( board, 0 );
+            is_valid = is_valid && not_in_row( board, 1 );
+            is_valid = is_valid && not_in_row( board, 2 );
+            is_valid = is_valid && not_in_row( board, 3 );
+            is_valid = is_valid && not_in_row( board, 4 );
+            is_valid = is_valid && not_in_row( board, 5 );
+            is_valid = is_valid && not_in_row( board, 6 );
+            is_valid = is_valid && not_in_row( board, 7 );
+            is_valid = is_valid && not_in_row( board, 8 );
 
-            not_in_col( board, 0 );
-            not_in_col( board, 1 );
-            not_in_col( board, 2 );
-            not_in_col( board, 3 );
-            not_in_col( board, 4 );
-            not_in_col( board, 5 );
-            not_in_col( board, 6 );
-            not_in_col( board, 7 );
-            not_in_col( board, 8 );
+            is_valid = is_valid && not_in_col( board, 0 );
+            is_valid = is_valid && not_in_col( board, 1 );
+            is_valid = is_valid && not_in_col( board, 2 );
+            is_valid = is_valid && not_in_col( board, 3 );
+            is_valid = is_valid && not_in_col( board, 4 );
+            is_valid = is_valid && not_in_col( board, 5 );
+            is_valid = is_valid && not_in_col( board, 6 );
+            is_valid = is_valid && not_in_col( board, 7 );
+            is_valid = is_valid && not_in_col( board, 8 );
 
-            not_in_box( board, 0, 0 );not_in_box( board, 0, 3 );not_in_box( board, 0, 6 );
-            not_in_box( board, 3, 0 );not_in_box( board, 3, 3 );not_in_box( board, 3, 6 );
-            not_in_box( board, 6, 0 );not_in_box( board, 6, 3 );not_in_box( board, 6, 6 );
+            is_valid = is_valid && not_in_box( board, 0, 0 );
+            is_valid = is_valid && not_in_box( board, 0, 3 );
+            is_valid = is_valid && not_in_box( board, 0, 6 );
+            is_valid = is_valid && not_in_box( board, 3, 0 );
+            is_valid = is_valid && not_in_box( board, 3, 3 );
+            is_valid = is_valid && not_in_box( board, 3, 6 );
+            is_valid = is_valid && not_in_box( board, 6, 0 );
+            is_valid = is_valid && not_in_box( board, 6, 3 );
+            is_valid = is_valid && not_in_box( board, 6, 6 );
         }
         else
         {

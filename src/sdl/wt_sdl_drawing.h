@@ -239,6 +239,13 @@ public:
                         if ( value == ' ' )
                             bg_alpha = 75;
                     }
+                    else if ( font == "grid_error" )
+                    {
+                        font_col.r = 0xCC;
+                        font_col.g = 0x11;
+                        font_col.b = 0x11;
+                        font_col.a = 255;
+                    }
                     else
                     {
                         font_bg = "grid_font_bg_inverse.bmp";

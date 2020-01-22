@@ -206,10 +206,10 @@ private:
     WtButton         m_start_btn;
     WtButton         m_select_label;
     WtButton         m_settings_bg;
-    WtButton         m_continue_btn;
-
     WtHorizontalCarousel m_game_selection;
     WtTriStateButton m_diff_select_btn;
+    WtButton         m_continue_btn;
+
 };
 
 #endif /* _WT_MENU_CTR_H_ */

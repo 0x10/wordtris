@@ -276,6 +276,11 @@ private:
             }
 
         }
+        
+        if ( STORAGE.get_settings().show_error_on_input )
+        {
+            m_active_mode->pre_eval_board( m_board );
+        }
     }
 
     /**************************
