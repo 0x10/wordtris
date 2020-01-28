@@ -488,6 +488,14 @@ private:
     virtual void left_view()
     {
         ACTIVE_INPUT.remove_active_region( m_grid_touch_control );
+
+        if ( !m_board.is_full() )
+        {
+            std::cout << "store on leave\n";
+            WtSettings settings = STORAGE.get_settings();
+            settings.last_game = m_active_mode->get_current_game_state( m_board );
+            STORAGE.store_settings( settings );
+        }
     }
 
 
