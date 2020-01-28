@@ -442,7 +442,7 @@ private:
         {
             for (uint8_t col = 0; col < ( m_gridsize == 9 ? 3 : 2 ); col++)
             {
-                ValidatorItemPos next{row + startRow,col + startCol};
+                ValidatorItemPos next{static_cast<uint8_t>(row + startRow),static_cast<uint8_t>(col + startCol)};
                 if ( ! insert_or_error( m, board.get_cell(row + startRow, col + startCol), next, errors ) )
                     result = false;
             } 
