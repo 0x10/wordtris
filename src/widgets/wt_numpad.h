@@ -247,8 +247,9 @@ public:
         m_edit_btn.set_position( WtCoord( m_pos.x + ((m_size.w / 2)/2 - 60 / 2), m_pos.y + 3*(m_item_size.h+2)+66/4 ) );
 
         m_more_btn.set_label ("+");
-        m_more_btn.set_position( WtCoord(m_pos.x + (((4-1)%2)*(m_size.w / 2+1)), m_pos.y + 3*(m_item_size.h+2) ) );
-        m_more_btn.set_size( WtDim( m_size.w / 2, m_item_size.h ) );
+        m_more_btn.set_position( WtCoord( m_pos.x + (( m_size.w / 2 ) - ( (m_size.w / 3) / 2)) + (m_size.w / 3) , m_pos.y + 3*(m_item_size.h+2) ) );
+        //( WtCoord(m_pos.x + (((4-1)%3)*(m_size.w / 2+1)), m_pos.y + 3*(m_item_size.h+2) ) );
+        m_more_btn.set_size( WtDim( m_size.w / 6, m_item_size.h ) );
 
         m_undo_btn.set_size( WtDim( 0,0 ) );
         m_save_btn.set_size( WtDim( 0,0 ) );
