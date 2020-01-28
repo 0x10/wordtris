@@ -19,8 +19,7 @@
 #include "wt_game_mode_if.h"
 #include "wt_utils.h"
 #include "wt_storage.h"
-#include <set>
-
+#include <unordered_map>
 /**************************
  *
  *************************/
@@ -64,6 +63,10 @@ public:
                    encoded ) == internal_error_list.end() )
         {
             internal_error_list.push_back( encoded );
+        }
+        else
+        {
+            //std::cout << "error already added\n";
         }
     }
 private:
@@ -236,6 +239,7 @@ public:
      *************************/
     void mark_errors( WtBoard& board, ErrorMap& detected_errors )
     {
+      //  std::cout << "error count "  << detected_errors.size() << "\n";
         for ( size_t idx = 0; idx < detected_errors.size(); idx++ )
         {
             uint8_t row = m_gridsize;
@@ -243,6 +247,8 @@ public:
 
             detected_errors.retrieve_error( idx, row, col );
             
+           // std::cout << "error at "  << size_t(row) << ";" << size_t(col) << "\n";
+
             if ( ( row != m_gridsize ) && ( col != m_gridsize ) )
                 board.set_erroneous( row, col );
         }
@@ -258,19 +264,22 @@ public:
             m_pause = false;
             m_last_update_time = WtTime::get_time();
         }
-        WtTime::TimeType elapsed_since_last =std::chrono::duration_cast<WtTime::TimeType>(  WtTime::get_time() - m_last_update_time);
-        m_last_update_time = WtTime::get_time();
-        player.set_time( player.get_current_time() + elapsed_since_last );
-        gs.game_over = false;
-        ErrorMap detected_errors;
-        if ( is_valid_config( board, detected_errors ) )
+        if ( board.is_full() )
         {
-            player.letter_dropped( 255 );
-            gs.game_over = true;
-        }
-        else
-        {
-            mark_errors( board, detected_errors );
+            WtTime::TimeType elapsed_since_last =std::chrono::duration_cast<WtTime::TimeType>(  WtTime::get_time() - m_last_update_time);
+            m_last_update_time = WtTime::get_time();
+            player.set_time( player.get_current_time() + elapsed_since_last );
+            gs.game_over = false;
+            ErrorMap detected_errors;
+            if ( is_valid_config( board, detected_errors ) )
+            {
+                player.letter_dropped( 255 );
+                gs.game_over = true;
+            }
+            else
+            {
+                mark_errors( board, detected_errors );
+            }
         }
     }
 
@@ -279,10 +288,12 @@ public:
      *************************/
     virtual void pre_eval_board( WtBoard& board )
     {
+        std::cout << "pre eval board\n";
         ErrorMap detected_errors;
         board.clear_all_error_flags();
         if ( ! is_valid_config( board, detected_errors ) )
         {
+            std::cout << "mark errors\n";
             mark_errors( board, detected_errors );
         }
     }
@@ -330,190 +341,159 @@ public:
 private:
     WtGameModeSudoku( const WtGameModeSudoku& ); 
     WtGameModeSudoku & operator = (const WtGameModeSudoku &);
-#if 0
+
+
+    struct ValidatorItemPos
+    {
+        uint8_t r;
+        uint8_t c;
+    };
+
+
     /**************************
-     * Checks whether there is any duplicate  
-     * in current row or not 
+     * 
      *************************/
-    bool not_in_row(WtBoard& board, int row) 
-    { 
-        // Set to store characters seen so far. 
-        size_t sum = 0;
-        for (uint8_t c = 0; c < 9; c++) { 
-            char cell = board.get_cell(row,c);
-      
-            // If it is not an empty cell, insert value 
-            // at the current cell in the set 
-            if (cell != WtBoard::empty_cell) 
-                sum += (cell - 0x30);
-        } 
-        return (sum == 45);
-    } 
-  
-    /**************************
-     * Checks whether there is any duplicate 
-     * in current column or not. 
-     *************************/
-    bool not_in_col(WtBoard& board, int col) 
-    { 
-        size_t sum = 0;
-      
-        for (uint8_t r = 0; r < 9; r++) { 
-            char cell = board.get_cell(r,col);
-      
-            // If it is not an empty cell, 
-            // insert value at the current cell in the set 
-            if (cell != WtBoard::empty_cell) 
-                sum += (cell - 0x30);
-        } 
-        return (sum == 45);
+    bool insert_or_error( std::unordered_map<char, ValidatorItemPos>& m, 
+                          char item,
+                          ValidatorItemPos item_pos,
+                          ErrorMap& errors )
+    {
+        bool result = true;
+        // If it is not an empty cell, 
+        // insert value at the cellent cell in the set 
+        if ( item != WtBoard::empty_cell )
+        {
+            std::unordered_map<char, ValidatorItemPos>::iterator existing = m.find(item);
+            if ( existing != m.end() )
+            {
+                errors.add_error( m[item].r, m[item].c );
+                errors.add_error( item_pos.r, item_pos.c ); 
+
+               // std::cout << "report error pair " << WtCoord( m[item].r, m[item].c ) << " <> " << WtCoord( item_pos.r, item_pos.c ) << ": " << item << "\n";
+
+                result = false; 
+            }
+            else
+            {
+                m[item] = item_pos;
+            }
+        }
+        return result;
     }
 
     /**************************
-     * Checks whether there is any duplicate 
-     * in current 3x3 box or not. 
-     *************************/
-    bool not_in_box(WtBoard& board, int startRow, int startCol) 
-    { 
-        size_t sum = 0;
-      
-        for (uint8_t row = 0; row < 3; row++) { 
-            for (uint8_t col = 0; col < 3; col++) { 
-                char curr = board.get_cell(row + startRow, col + startCol);
-      
-                // If it is not an empty cell, 
-                // insert value at current cell in set 
-                if (curr != WtBoard::empty_cell) 
-                    sum += (cell - 0x30);
-            } 
-        } 
-        return (sum == 45);
-    } 
-#endif
-    /**************************
      * Checks whether there is any duplicate  
-     * in current row or not 
+     * in cellent row or not 
      *************************/
     bool not_in_row(WtBoard& board, uint8_t row, ErrorMap& errors ) 
     { 
+        bool result = true;
         // Set to store characters seen so far. 
-        std::set<char> st; 
-      
-        for (uint8_t c = 0; c < m_gridsize; c++) { 
-            char cell = board.get_cell(row,c);
-            // If already encountered before, return false 
-            if (st.find(cell) != st.end())
-            {
-                errors.add_error( row, c ); 
-                return false; 
-            }
-      
-            // If it is not an empty cell, insert value 
-            // at the current cell in the set 
-            if (cell != WtBoard::empty_cell) 
-                st.insert(cell); 
+        std::unordered_map<char, ValidatorItemPos> m;
+
+        for (uint8_t c = 0; c < m_gridsize; c++)
+        { 
+            ValidatorItemPos next{row,c};
+            if ( ! insert_or_error( m, board.get_cell(row,c), next, errors ) )
+                result = false;
         } 
-        return true; 
+        return result;
     } 
   
     /**************************
      * Checks whether there is any duplicate 
-     * in current column or not. 
+     * in cellent column or not. 
      *************************/
     bool not_in_col(WtBoard& board, uint8_t col, ErrorMap& errors ) 
     { 
-        std::set<char> st; 
+        bool result = true;
+        std::unordered_map<char, ValidatorItemPos> m;
       
-        for (uint8_t r = 0; r < m_gridsize; r++) { 
-            char cell = board.get_cell(r,col);
-      
-            // If already encountered before, return false 
-            if (st.find(cell) != st.end()) 
-            {
-                errors.add_error( r, col ); 
-                return false;
-            }
-      
-            // If it is not an empty cell, 
-            // insert value at the current cell in the set 
-            if (cell != WtBoard::empty_cell) 
-                st.insert(cell); 
+        for (uint8_t r = 0; r < m_gridsize; r++)
+        { 
+            ValidatorItemPos next{r,col};
+            if ( ! insert_or_error( m, board.get_cell(r,col), next, errors ) )
+                result = false;
         } 
-        return true; 
+        return result;
     }
 
     /**************************
      * Checks whether there is any duplicate 
-     * in current 3x3 box or not. 
+     * in cellent 3x3 box or not. 
      *************************/
     bool not_in_box(WtBoard& board, uint8_t startRow, uint8_t startCol, ErrorMap& errors ) 
     { 
-        std::set<char> st; 
+        bool result = true;
+        std::unordered_map<char, ValidatorItemPos> m;
       
-        for (uint8_t row = 0; row < ( m_gridsize == 9 ? 3 : 2 ); row++) { 
-            for (uint8_t col = 0; col < ( m_gridsize == 9 ? 3 : 2 ); col++) { 
-                char curr = board.get_cell(row + startRow, col + startCol);
-      
-                // If already encountered before, return false 
-                if (st.find(curr) != st.end())
-                {
-                    errors.add_error( row, col ); 
-                    return false;
-                }
-      
-                // If it is not an empty cell, 
-                // insert value at current cell in set 
-                if (curr != WtBoard::empty_cell) 
-                    st.insert(curr); 
+        for (uint8_t row = 0; row < ( m_gridsize == 9 ? 3 : 2 ); row++)
+        {
+            for (uint8_t col = 0; col < ( m_gridsize == 9 ? 3 : 2 ); col++)
+            {
+                ValidatorItemPos next{row + startRow,col + startCol};
+                if ( ! insert_or_error( m, board.get_cell(row + startRow, col + startCol), next, errors ) )
+                    result = false;
             } 
         } 
-        return true; 
+        return result;
     } 
     /**************************
-     * Checks whether current row and current column and 
-     * current 3x3 box is valid or not 
+     * Checks whether cellent row and cellent column and 
+     * cellent 3x3 box is valid or not 
      *************************/ 
     bool is_valid_config( WtBoard& board, ErrorMap& errors ) 
     {
-        bool is_valid = true;
-
-        if ( board.is_full() )
+        if ( m_gridsize == 9 )
         {
-            is_valid = is_valid && not_in_row( board, 0, errors );
-            is_valid = is_valid && not_in_row( board, 1, errors );
-            is_valid = is_valid && not_in_row( board, 2, errors );
-            is_valid = is_valid && not_in_row( board, 3, errors );
-            is_valid = is_valid && not_in_row( board, 4, errors );
-            is_valid = is_valid && not_in_row( board, 5, errors );
-            is_valid = is_valid && not_in_row( board, 6, errors );
-            is_valid = is_valid && not_in_row( board, 7, errors );
-            is_valid = is_valid && not_in_row( board, 8, errors );
+            not_in_row( board, 0, errors );
+            not_in_row( board, 1, errors );
+            not_in_row( board, 2, errors );
+            not_in_row( board, 3, errors );
+            not_in_row( board, 4, errors );
+            not_in_row( board, 5, errors );
+            not_in_row( board, 6, errors );
+            not_in_row( board, 7, errors );
+            not_in_row( board, 8, errors );
 
-            is_valid = is_valid && not_in_col( board, 0, errors );
-            is_valid = is_valid && not_in_col( board, 1, errors );
-            is_valid = is_valid && not_in_col( board, 2, errors );
-            is_valid = is_valid && not_in_col( board, 3, errors );
-            is_valid = is_valid && not_in_col( board, 4, errors );
-            is_valid = is_valid && not_in_col( board, 5, errors );
-            is_valid = is_valid && not_in_col( board, 6, errors );
-            is_valid = is_valid && not_in_col( board, 7, errors );
-            is_valid = is_valid && not_in_col( board, 8, errors );
+            not_in_col( board, 0, errors );
+            not_in_col( board, 1, errors );
+            not_in_col( board, 2, errors );
+            not_in_col( board, 3, errors );
+            not_in_col( board, 4, errors );
+            not_in_col( board, 5, errors );
+            not_in_col( board, 6, errors );
+            not_in_col( board, 7, errors );
+            not_in_col( board, 8, errors );
 
-            is_valid = is_valid && not_in_box( board, 0, 0, errors );
-            is_valid = is_valid && not_in_box( board, 0, 3, errors );
-            is_valid = is_valid && not_in_box( board, 0, 6, errors );
-            is_valid = is_valid && not_in_box( board, 3, 0, errors );
-            is_valid = is_valid && not_in_box( board, 3, 3, errors );
-            is_valid = is_valid && not_in_box( board, 3, 6, errors );
-            is_valid = is_valid && not_in_box( board, 6, 0, errors );
-            is_valid = is_valid && not_in_box( board, 6, 3, errors );
-            is_valid = is_valid && not_in_box( board, 6, 6, errors );
+            not_in_box( board, 0, 0, errors );
+            not_in_box( board, 0, 3, errors );
+            not_in_box( board, 0, 6, errors );
+            not_in_box( board, 3, 0, errors );
+            not_in_box( board, 3, 3, errors );
+            not_in_box( board, 3, 6, errors );
+            not_in_box( board, 6, 0, errors );
+            not_in_box( board, 6, 3, errors );
+            not_in_box( board, 6, 6, errors );
         }
         else
         {
-            is_valid = false;
+            not_in_row( board, 0, errors );
+            not_in_row( board, 1, errors );
+            not_in_row( board, 2, errors );
+            not_in_row( board, 3, errors );
+
+            not_in_col( board, 0, errors );
+            not_in_col( board, 1, errors );
+            not_in_col( board, 2, errors );
+            not_in_col( board, 3, errors );
+
+            not_in_box( board, 0, 0, errors );
+            not_in_box( board, 0, 2, errors );
+            not_in_box( board, 2, 2, errors );
+            not_in_box( board, 2, 0, errors );
         }
-        return is_valid;
+        return errors.size() == 0;
     } 
 
 private:

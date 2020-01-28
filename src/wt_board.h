@@ -64,6 +64,7 @@ public:
             {
                 set_cell( r, c, empty_cell );
                 clear_notes( r, c );
+                clear_error_flag( r, c );
             }
         clear_history();
     }
