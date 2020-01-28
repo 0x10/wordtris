@@ -40,7 +40,8 @@ public:
         show_next_stone( true ),
         enable_audio( false ),
         show_error_on_input( false ),
-        gridsize(9)
+        gridsize(9),
+        last_game("")
     {}
 
     virtual ~WtSettings() {}
@@ -53,6 +54,7 @@ public:
     bool          enable_audio;
     bool          show_error_on_input;
     uint8_t       gridsize;
+    std::string   last_game;
     /**************************
      *
      *************************/
@@ -67,6 +69,7 @@ public:
         WtStorable::write_boolean( of, enable_audio );
         WtStorable::write_boolean( of, show_error_on_input );
         WtStorable::write_unsigned<uint8_t>( of, gridsize );
+        WtStorable::write_string( of, last_game );
     }
 
     /**************************
@@ -86,6 +89,7 @@ public:
         enable_audio = false;
         show_error_on_input = WtStorable::read_boolean( inf, was_eof );
         gridsize = WtStorable::read_unsigned<uint8_t>( inf, was_eof );
+        last_game = WtStorable::read_string( inf, was_eof );
 
         return ( ! was_eof );
     }
@@ -105,6 +109,7 @@ public:
         size += WtStorable::get_storage_size( enable_audio );
         size += WtStorable::get_storage_size( show_error_on_input );
         size += WtStorable::get_storage_size( gridsize );
+        size += WtStorable::get_storage_size( last_game );
         return size;
     }
 };

@@ -85,7 +85,7 @@
         /**************************
          * 
          *************************/
-        virtual void init_game( WtBoard&, WtPlayer& ) {}
+        virtual void init_game( WtBoard&, WtPlayer&, std::string ) {}
 
         /**************************
          *
@@ -105,6 +105,12 @@
          *
          *************************/
         virtual void pre_eval_board( WtBoard& ) {}
+
+
+        /**************************
+         *
+         *************************/
+        virtual std::string get_current_game_state( WtBoard& ) { return "";}
 
         /**************************
          *

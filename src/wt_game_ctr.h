@@ -82,7 +82,8 @@ public:
 
         m_current_update_counter(4),
         m_game_state( GAME_STOPPED ),
-        m_hide_hint( false )
+        m_hide_hint( false ),
+        m_restore( false )
     {
 
         add_button( m_settings_bg );
@@ -101,7 +102,7 @@ public:
     /**************************
      *
      *************************/
-    void set_game_mode( WtGameModeIf* mode )
+    void set_game_mode( WtGameModeIf* mode, bool restore )
     {
         if ( NULL != mode )
         {
@@ -116,6 +117,7 @@ public:
             m_active_mode = mode;
 //            m_game_mode_intro.set_game_mode( m_active_mode );
         }
+        m_restore = restore;
     }
 
 
@@ -324,6 +326,12 @@ private:
     void return_to_menu()
     {
         m_game_state = GAME_TO_QUIT;
+        if ( !m_board.is_full() )
+        {
+            WtSettings settings = STORAGE.get_settings();
+            settings.last_game = m_active_mode->get_current_game_state( m_board );
+            STORAGE.store_settings( settings );
+        }
     }
 
     /**************************
@@ -368,7 +376,7 @@ private:
     /**************************
      *
      *************************/
-    void init_game()
+    void init_game( std::string last_game_state="" )
     {
         m_player.reset();
         m_board.init();
@@ -379,7 +387,7 @@ private:
         }
         else
         {
-            m_active_mode->init_game( m_board, m_player );
+            m_active_mode->init_game( m_board, m_player, last_game_state );
             m_active.init( m_active_mode->next_letter() );
             m_current_update_counter = get_current_update_counter( m_player );
             m_game_state = GAME_TO_START;
@@ -396,7 +404,7 @@ private:
             default: break;
 
             case GAME_STOPPED:
-                init_game();
+                init_game( ( m_restore ? STORAGE.get_settings().last_game : "" ) );
                 break;
 
             case GAME_TO_QUIT:
@@ -424,6 +432,11 @@ private:
                         if ( game_over )
                         {
                             ACTIVE_SFX.play_gameover_sound();
+
+                            WtSettings settings = STORAGE.get_settings();
+                            settings.last_game = "";
+                            STORAGE.store_settings( settings );
+
                             leave_game();
                         }
 
@@ -500,6 +513,7 @@ private:
     uint8_t             m_current_update_counter;
     wt_game_state       m_game_state;
     bool                m_hide_hint;
+    bool                m_restore;
 };
 
 

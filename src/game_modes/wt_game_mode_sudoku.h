@@ -220,18 +220,29 @@ public:
     /**************************
      * 
      *************************/
-    void init_game( WtBoard& board, WtPlayer& )
+    void init_game( WtBoard& board, WtPlayer&, std::string last_game_state )
     {
         WtSettings settings = STORAGE.get_settings();
         settings.gridsize = m_gridsize;
         STORAGE.store_settings( settings );
-        std::string next = WtRandom::get_random_from_sequence<std::string>( ( m_gridsize == 9 ? m_sudoku_lib9x9 : m_sudoku_lib4x4 ), &m_active_id );
+        std::string next = last_game_state;
+        if ( next == "" )
+            next = WtRandom::get_random_from_sequence<std::string>( ( m_gridsize == 9 ? m_sudoku_lib9x9 : m_sudoku_lib4x4 ), &m_active_id );
         std::cout << "picked " << next << std::endl;
 
         m_last_update_time = WtTime::get_time();
         m_pause = false;
 
         board.from_string( next );
+    }
+
+
+    /**************************
+     *
+     *************************/
+    virtual std::string get_current_game_state( WtBoard& board )
+    {
+        return board.to_string();
     }
 
     /**************************

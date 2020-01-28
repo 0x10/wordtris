@@ -48,7 +48,7 @@ public:
                        WtDim( 65, 65 ),
                        "settings_logo.bmp",
                        WT_BIND_EVENT_HANDLER( WtMenuCtr::enter_settings_menu ) ),
-        m_start_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (138 / 2), (ACTIVE_WINDOW_HEIGHT - (ACTIVE_WINDOW_HEIGHT / 4))+(124/2) ),
+        m_start_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / (STORAGE.get_settings().last_game != "" ? 3 : 2)) - (138 / 2), (ACTIVE_WINDOW_HEIGHT - (ACTIVE_WINDOW_HEIGHT / 4))+(124/2) ),
                      WtDim( 138, 124 ),
                      "next_btn.bmp",
                      WT_BIND_EVENT_HANDLER( WtMenuCtr::game_mode_selected ),
@@ -80,18 +80,18 @@ public:
                            std::array<const char*, 3>{{ WtGameModeIf::get_available_difficulties()[0].second,
                                                         WtGameModeIf::get_available_difficulties()[1].second,
                                                         WtGameModeIf::get_available_difficulties()[2].second }} ),
-        m_continue_btn( WtCoord( (ACTIVE_WINDOW_WIDTH) - (138 / 2), (ACTIVE_WINDOW_HEIGHT - (ACTIVE_WINDOW_HEIGHT / 4))+(124/2) ),
-                        WtDim( 138, 124 ),
+        m_continue_btn( WtCoord( 2*(ACTIVE_WINDOW_WIDTH / 3) - (138 / 2), (ACTIVE_WINDOW_HEIGHT - (ACTIVE_WINDOW_HEIGHT / 4))+(124/2) ),
+                        (STORAGE.get_settings().last_game != "" ? WtDim( 138, 124 ) : WtDim(0,0) ),
                         "next_btn.bmp",
-                        nullptr,
-                        WtL10n_tr( "CONTINUE"),
+                        WT_BIND_EVENT_HANDLER( WtMenuCtr::continue_game_mode ),
+                        WtL10n_tr( "C O N T."),
                         WtCoord( 0, 25 ),
                         WtFont( "#b2b2b2", "text_big" ))
     {
         WtL10n::register_lang_change_obsever( WT_BIND_EVENT_HANDLER( WtMenuCtr::language_changed ) );
 
         ACTIVE_INPUT.register_key_press_delegate( WT_BIND_EVENT_HANDLER_1( WtMenuCtr::on_key_press ) );
-        m_game_ctr.set_game_mode( GAME_MODE_CTR.mode_from_string( STORAGE.get_settings().game_mode ) );
+        m_game_ctr.set_game_mode( GAME_MODE_CTR.mode_from_string( STORAGE.get_settings().game_mode ), false );
 
         add_button( m_settings_bg );
         add_button( m_score_btn );
@@ -137,6 +137,37 @@ private:
     /**************************
      *
      *************************/
+    void continue_game_mode()
+    {
+    	size_t idx = m_game_selection.selected();
+        std::cout << "selected = " << idx << std::endl;
+        WtGameModeIf* mode = GAME_MODE_CTR.get_available_modes()[idx];
+
+        if ( mode->get_id_string() != "LOCKED" )
+        {
+	        WtSettings settings = STORAGE.get_settings();
+	        
+	        if ( settings.game_mode != mode->get_id_string() )
+	        {
+	            settings.game_mode = mode->get_id_string();
+	            STORAGE.store_settings( settings );
+	        }
+
+	        m_game_ctr.set_game_mode( mode, true );
+	        enter_child_menu( m_game_ctr );
+
+            m_start_btn.set_position( WtCoord( (ACTIVE_WINDOW_WIDTH / (STORAGE.get_settings().last_game != "" ? 3 : 2)) - (138 / 2), (ACTIVE_WINDOW_HEIGHT - (ACTIVE_WINDOW_HEIGHT / 4))+(124/2) ) );
+            m_continue_btn.set_size((STORAGE.get_settings().last_game != "" ? WtDim( 138, 124 ) : WtDim(0,0) ));
+    	}
+    	else
+    	{
+    		//TODO show popup
+    	}
+    }
+
+    /**************************
+     *
+     *************************/
     void game_mode_selected()
     {
     	size_t idx = m_game_selection.selected();
@@ -153,8 +184,10 @@ private:
 	            STORAGE.store_settings( settings );
 	        }
 
-	        m_game_ctr.set_game_mode( mode );
+	        m_game_ctr.set_game_mode( mode, false );
 	        enter_child_menu( m_game_ctr );
+            m_start_btn.set_position( WtCoord( (ACTIVE_WINDOW_WIDTH / (STORAGE.get_settings().last_game != "" ? 3 : 2)) - (138 / 2), (ACTIVE_WINDOW_HEIGHT - (ACTIVE_WINDOW_HEIGHT / 4))+(124/2) ) );
+            m_continue_btn.set_size((STORAGE.get_settings().last_game != "" ? WtDim( 138, 124 ) : WtDim(0,0) ));
     	}
     	else
     	{
