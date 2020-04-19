@@ -36,10 +36,10 @@ public:
         game_mode( "" ),
         difficulty( wt_difficulty_EASY ),
         active_theme( "default" ),
-        show_support_grid( true ),
+        show_support_grid( false ),
         show_next_stone( true ),
         enable_audio( false ),
-        show_error_on_input( false ),
+        show_error_on_input( true ),
         gridsize(9),
         last_game("")
     {}
