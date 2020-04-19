@@ -75,7 +75,7 @@ public:
                           false ),
         m_diff_select_btn( WtCoord( offset_x, offset_y + (m_standard_btn_size.h * 8 )-70 ),
                            m_standard_btn_size,
-                           0,
+                           STORAGE.get_settings().difficulty,
                            WT_BIND_EVENT_HANDLER_1( WtMenuCtr::diff_changed ),
                            std::array<const char*, 3>{{ WtGameModeIf::get_available_difficulties()[0].second,
                                                         WtGameModeIf::get_available_difficulties()[1].second,
