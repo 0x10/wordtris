@@ -379,6 +379,7 @@ private:
     void init_game( std::string last_game_state="" )
     {
         m_player.reset();
+        m_current_time.set_label( WtTime::format_time( m_player.get_current_time() ) );
         m_board.init();
         if ( INVALID_GAME_MODE == m_active_mode )
         {

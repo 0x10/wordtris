@@ -192,7 +192,6 @@ public:
 "0010400000020300"
         },
         m_active_id(0),
-        m_last_update_time(WtTime::get_time()),
         m_pause(false),
         m_gridsize( gridsize )
     {
@@ -230,7 +229,6 @@ public:
             next = WtRandom::get_random_from_sequence<std::string>( ( m_gridsize == 9 ? m_sudoku_lib9x9 : m_sudoku_lib4x4 ), &m_active_id );
         std::cout << "picked " << next << std::endl;
 
-        m_last_update_time = WtTime::get_time();
         m_pause = false;
 
         board.from_string( next );
@@ -273,13 +271,9 @@ public:
         if ( m_pause )
         {
             m_pause = false;
-            m_last_update_time = WtTime::get_time();
         }
         if ( board.is_full() )
         {
-            WtTime::TimeType elapsed_since_last =std::chrono::duration_cast<WtTime::TimeType>(  WtTime::get_time() - m_last_update_time);
-            m_last_update_time = WtTime::get_time();
-            player.set_time( player.get_current_time() + elapsed_since_last );
             gs.game_over = false;
             ErrorMap detected_errors;
             if ( is_valid_config( board, detected_errors ) )
@@ -511,7 +505,6 @@ private:
     std::vector<std::string> m_sudoku_lib9x9;
     std::vector<std::string> m_sudoku_lib4x4;
     size_t                   m_active_id;
-    WtTime::TimePoint        m_last_update_time;
     bool                     m_pause;
     const size_t             m_gridsize;
 };
