@@ -24,6 +24,7 @@
 #include <thread>
 #include <iostream>
 #include <iomanip>
+#include <vector>
 #include <sstream>
 
 #define LETTER_COUNT  (26)
@@ -120,6 +121,23 @@ public:
         {
             size_t index = buf % seq.size();
             result = seq[index];
+            if ( idx != nullptr ) *idx = index;
+        }
+        return result;
+    }
+
+    /******************************************************************************
+     *
+     *****************************************************************************/
+    template<typename itemtype>
+    static typename std::vector<itemtype>::iterator get_random_iter_from_sequence( std::vector<itemtype>& seq, size_t* idx=nullptr )
+    {
+        typename std::vector<itemtype>::iterator result;
+        uint8_t buf;
+        if ( WtRandom::getrandom( &buf, 1 ) <= 1 )
+        {
+            size_t index = buf % seq.size();
+            result = seq.begin()+index;
             if ( idx != nullptr ) *idx = index;
         }
         return result;

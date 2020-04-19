@@ -20,6 +20,7 @@
 #include "wt_utils.h"
 #include "wt_storage.h"
 #include <unordered_map>
+#include <algorithm>
 /**************************
  *
  *************************/
@@ -180,18 +181,16 @@ public:
 "802905030906003002340026000001030786758000394463090100000450013100600809020308407",
 "072000000916080000345020070090504086008201300460807020080050213000070859000000460"
                     },
-        m_sudoku_lib4x4{
-"0340400210030210",
-"0040403004030100",
-"0010400000020300",
-"2000003004000001",
-"1040000000000102",
-"0003324004322000",
-"3410020000200143",
-"0130200000030210",
-"0010400000020300"
+        m_sudoku_seeds4x4{
+"0ab0b00cd00a0cd0",
+"00a0a0b00a0b0c00",
+"00a0b000000c0d00",
+"a00000b00c00000d",
+"a0b0000000000a0c",
+"000aabc00cabb000",
+"abc00d0000d00cba",
+"0ab0c000000b0ca0"
         },
-        m_active_id(0),
         m_pause(false),
         m_gridsize( gridsize )
     {
@@ -226,7 +225,17 @@ public:
         STORAGE.store_settings( settings );
         std::string next = last_game_state;
         if ( next == "" )
-            next = WtRandom::get_random_from_sequence<std::string>( ( m_gridsize == 9 ? m_sudoku_lib9x9 : m_sudoku_lib4x4 ), &m_active_id );
+        {
+            if ( m_gridsize == 9 )
+            {
+                next = WtRandom::get_random_from_sequence<std::string>( m_sudoku_lib9x9 );
+            }
+            else
+            {
+                next = get_next_4x4();
+            }
+            m_active_selected_orig = next;
+        }
         std::cout << "picked " << next << std::endl;
 
         m_pause = false;
@@ -234,6 +243,290 @@ public:
         board.from_string( next );
     }
 
+
+    /**************************
+     *
+     *************************/
+    std::string get_next_4x4()
+    {
+        size_t selected_id = 0;
+        std::string next = WtRandom::get_random_from_sequence<std::string>( m_sudoku_seeds4x4, &selected_id );
+        std::cout << "### picked seed " << next << std::endl;
+
+        /* randomize replace letters with digits
+         * */
+        std::vector<char> digits_pool = {'1','2','3','4'};
+
+        // replace a
+        std::vector<char>::iterator it = WtRandom::get_random_iter_from_sequence<char>( digits_pool );
+        std::replace( next.begin(), next.end(), 'a', *it );
+        digits_pool.erase( it );
+        std::cout << "### seed replace a " << next << std::endl;
+        // replace b
+        it = WtRandom::get_random_iter_from_sequence<char>( digits_pool );
+        std::replace( next.begin(), next.end(), 'b', *it );
+        digits_pool.erase( it );
+        std::cout << "### seed replace b " << next << std::endl;
+        // replace c
+        it = WtRandom::get_random_iter_from_sequence<char>( digits_pool );
+        std::replace( next.begin(), next.end(), 'c', *it );
+        digits_pool.erase( it );
+        std::cout << "### seed replace c " << next << std::endl;
+        // replace d
+        it = WtRandom::get_random_iter_from_sequence<char>( digits_pool );
+        std::replace( next.begin(), next.end(), 'd', *it );
+        digits_pool.erase( it );
+        std::cout << "### seed replace d " << next << std::endl;
+
+        /* randomize rotate by
+         * */
+        std::vector<size_t> rotation_by = {0,90,180,270}; /* NONE, 90, 180, 270 */
+        size_t rotate_by = WtRandom::get_random_from_sequence<size_t>( rotation_by );
+        next = rotate_puzzle4x4( next, rotate_by );
+        std::cout << "### seed rotated " << next << std::endl;
+
+        /* randomize flip
+         * */
+        std::vector<size_t> flip = {0,1,2,3}; /* NONE, hori, vert, both */
+        size_t flip_by = WtRandom::get_random_from_sequence<size_t>( flip );
+        next = flip_puzzle4x4( next, flip_by );
+        std::cout << "### seed flipped " << next << std::endl;
+
+        return next;
+    }
+
+    /**************************
+     *
+     *************************/
+    std::string rotate_puzzle4x4( const std::string puzzle, size_t rotation )
+    {
+        std::string output = puzzle;
+
+        switch( rotation )
+        {
+            default:
+            case 0: break;
+
+            case 90:
+                output[0] = puzzle[3];
+                output[1] = puzzle[7];
+                output[2] = puzzle[11];
+                output[3] = puzzle[15];
+
+                output[4] = puzzle[2];
+                output[5] = puzzle[6];
+                output[6] = puzzle[10];
+                output[7] = puzzle[14];
+                
+                output[8] = puzzle[1];
+                output[9] = puzzle[5];
+                output[10] = puzzle[9];
+                output[11] = puzzle[13];
+                
+                output[12] = puzzle[0];
+                output[13] = puzzle[4];
+                output[14] = puzzle[8];
+                output[15] = puzzle[12];
+                break;
+            case 180:
+                output = rotate_puzzle4x4( output, 90 );
+                output = rotate_puzzle4x4( output, 90 );
+                break;
+            case 270:
+                output = rotate_puzzle4x4( output, 90 );
+                output = rotate_puzzle4x4( output, 90 );
+                output = rotate_puzzle4x4( output, 90 );
+                break;
+        }
+
+        return output;
+    }
+
+    /**************************
+     *
+     *************************/
+    std::string rotate_puzzle9x9( const std::string puzzle, size_t rotation )
+    {
+        std::string output = puzzle;
+
+        switch( rotation )
+        {
+            default:
+            case 0: break;
+
+            case 90:
+                output[0] = puzzle[8];
+                output[1] = puzzle[17];
+                output[2] = puzzle[26];
+                output[3] = puzzle[35];
+                output[4] = puzzle[44];
+                output[5] = puzzle[53];
+                output[6] = puzzle[62];
+                output[7] = puzzle[71];
+                output[8] = puzzle[80];
+
+                output[9] = puzzle[7];
+                output[10] = puzzle[16];
+                output[11] = puzzle[25];
+                output[12] = puzzle[34];
+                output[13] = puzzle[43];
+                output[14] = puzzle[52];
+                output[15] = puzzle[61];
+                output[16] = puzzle[70];
+                output[17] = puzzle[79];
+
+                output[18] = puzzle[6];
+                output[19] = puzzle[15];
+                output[20] = puzzle[24];
+                output[21] = puzzle[33];
+                output[22] = puzzle[42];
+                output[23] = puzzle[51];
+                output[24] = puzzle[60];
+                output[25] = puzzle[69];
+                output[26] = puzzle[78];
+
+
+
+                output[27] = puzzle[5];
+                output[28] = puzzle[14];
+                output[29] = puzzle[23];
+                output[30] = puzzle[32];
+                output[31] = puzzle[41];
+                output[32] = puzzle[50];
+                output[33] = puzzle[59];
+                output[34] = puzzle[68];
+                output[35] = puzzle[77];
+
+                output[36] = puzzle[4];
+                output[37] = puzzle[13];
+                output[38] = puzzle[22];
+                output[39] = puzzle[31];
+                output[40] = puzzle[40];
+                output[41] = puzzle[49];
+                output[42] = puzzle[58];
+                output[43] = puzzle[67];
+                output[44] = puzzle[76];
+
+                output[45] = puzzle[3];
+                output[46] = puzzle[12];
+                output[47] = puzzle[21];
+                output[48] = puzzle[30];
+                output[49] = puzzle[39];
+                output[50] = puzzle[48];
+                output[51] = puzzle[57];
+                output[52] = puzzle[66];
+                output[53] = puzzle[75];
+
+
+
+                output[54] = puzzle[2];
+                output[55] = puzzle[11];
+                output[56] = puzzle[20];
+                output[57] = puzzle[29];
+                output[58] = puzzle[38];
+                output[59] = puzzle[47];
+                output[60] = puzzle[56];
+                output[61] = puzzle[65];
+                output[62] = puzzle[74];
+
+                output[63] = puzzle[1];
+                output[64] = puzzle[10];
+                output[65] = puzzle[19];
+                output[66] = puzzle[28];
+                output[67] = puzzle[37];
+                output[68] = puzzle[46];
+                output[69] = puzzle[55];
+                output[70] = puzzle[64];
+                output[71] = puzzle[73];
+
+                output[72] = puzzle[0];
+                output[73] = puzzle[9];
+                output[74] = puzzle[18];
+                output[75] = puzzle[27];
+                output[76] = puzzle[36];
+                output[77] = puzzle[45];
+                output[78] = puzzle[54];
+                output[79] = puzzle[63];
+                output[80] = puzzle[72];
+
+
+                break;
+            case 180:
+                output = rotate_puzzle4x4( output, 90 );
+                output = rotate_puzzle4x4( output, 90 );
+                break;
+            case 270:
+                output = rotate_puzzle4x4( output, 90 );
+                output = rotate_puzzle4x4( output, 90 );
+                output = rotate_puzzle4x4( output, 90 );
+                break;
+        }
+
+        return output;
+    }
+
+    /**************************
+     *
+     *************************/
+    std::string flip_puzzle4x4( const std::string puzzle, size_t flipby )
+    {
+        std::string output = puzzle;
+
+        switch( flipby )
+        {
+            default:
+            case 0: break;
+
+            case 1: /* horz */
+                output[0] = puzzle[12];
+                output[1] = puzzle[13];
+                output[2] = puzzle[14];
+                output[3] = puzzle[15];
+                
+                output[4] = puzzle[8];
+                output[5] = puzzle[9];
+                output[6] = puzzle[10];
+                output[7] = puzzle[11];
+                
+                output[8] = puzzle[4];
+                output[9] = puzzle[5];
+                output[10] = puzzle[6];
+                output[11] = puzzle[7];
+
+                output[12] = puzzle[0];
+                output[13] = puzzle[1];
+                output[14] = puzzle[2];
+                output[15] = puzzle[3];
+                break;
+            case 2: /* vert */
+                output[0] = puzzle[3];
+                output[1] = puzzle[2];
+                output[2] = puzzle[1];
+                output[3] = puzzle[0];
+                
+                output[4] = puzzle[7];
+                output[5] = puzzle[6];
+                output[6] = puzzle[5];
+                output[7] = puzzle[4];
+                
+                output[8] = puzzle[11];
+                output[9] = puzzle[10];
+                output[10] = puzzle[9];
+                output[11] = puzzle[8];
+
+                output[12] = puzzle[15];
+                output[13] = puzzle[14];
+                output[14] = puzzle[13];
+                output[15] = puzzle[12];
+                break;
+            case 3: /* both */
+                output = flip_puzzle4x4( output, 1 );
+                output = flip_puzzle4x4( output, 2 );
+                break;
+        }
+
+        return output;
+    }
 
     /**************************
      *
@@ -323,7 +616,7 @@ public:
      *************************/
     bool stone_blocked( WtBoard& board, uint8_t r, uint8_t c )
     {
-        return ( ( m_gridsize == 9 ? m_sudoku_lib9x9[m_active_id][ r*board.col_count() + c ] : m_sudoku_lib4x4[m_active_id][ r*board.col_count() + c ] ) != '0' );
+        return m_active_selected_orig[ r*board.col_count() + c ] != '0';
     }
 
     /**************************
@@ -503,8 +796,8 @@ private:
 
 private:
     std::vector<std::string> m_sudoku_lib9x9;
-    std::vector<std::string> m_sudoku_lib4x4;
-    size_t                   m_active_id;
+    std::vector<std::string> m_sudoku_seeds4x4;
+    std::string              m_active_selected_orig;
     bool                     m_pause;
     const size_t             m_gridsize;
 };
