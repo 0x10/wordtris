@@ -257,15 +257,7 @@ public:
                 }
 
                 draw_custom_cell_bg( row, col, font_bg, bg_alpha );
-                if ( value == '*' )
-                {
-                    draw_custom_cell_bg( row, col,
-                                         "bomb.bmp" );
-                }
-                else
-                {
-                    puts_fb( pos.x, pos.y, val_str, selected_font, font_col );
-                }
+                puts_fb( pos.x, pos.y, val_str, selected_font, font_col );
             }
         }
     }
@@ -406,14 +398,7 @@ public:
                 screen_pos.y = working_pos.y - in_cell_y_offset;
 
                 draw_image( working_pos, m_grid_font.size(), "grid_font_bg.bmp" );
-                if ( text == "*" )
-                {
-                    draw_image( working_pos, m_grid_font.size(), "bomb.bmp" );
-                }
-                else
-                {
-                    puts_fb( screen_pos.x, screen_pos.y, t, &m_grid_font, {0x12, 0x23, 0x39, 255}  );
-                }
+                puts_fb( screen_pos.x, screen_pos.y, t, &m_grid_font, {0x12, 0x23, 0x39, 255}  );
                 working_pos.x = working_pos.x + m_grid_font.size().w + 2;
             }
         }
