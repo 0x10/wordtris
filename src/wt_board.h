@@ -259,11 +259,13 @@ public:
     /**************************
      *
      *************************/   
-    void set_note( uint8_t r, uint8_t c, uint8_t value )
+    void toggle_note( uint8_t r, uint8_t c, uint8_t value )
     {
         uint8_t local_value = value - 1;
         if ( local_value < m_row_count )
-            m_infos[r][c].notes[local_value] = true;
+        {
+            m_infos[r][c].notes[local_value] = !m_infos[r][c].notes[local_value];
+        }
     }
 
     /**************************

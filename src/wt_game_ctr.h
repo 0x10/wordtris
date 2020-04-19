@@ -238,7 +238,7 @@ private:
                 {
                     if ( m_numpad.is_edit_active() )
                     {
-                        m_board.set_note( m_active.current_row(),
+                        m_board.toggle_note( m_active.current_row(),
                                           m_active.current_column(),
                                           number );
                     }

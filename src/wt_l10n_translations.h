@@ -30,6 +30,16 @@ const std::vector<WtTranslationTexts> wt_translations = {
          "  D E I N   E R G E B N I S !"/* de */,
          " V O T R E  R É S U L T A T !"/* fr */ }
     },
+    { "+",
+       { "+"/* en */,
+         "+"/* de */,
+         "+"/* fr */ }
+    },
+    { "-",
+       { "-"/* en */,
+         "-"/* de */,
+         "-"/* fr */ }
+    },
     { "B A C K",
        { "B A C K"/* en */,
          "Z U R Ü C K"/* de */,
@@ -75,10 +85,20 @@ const std::vector<WtTranslationTexts> wt_translations = {
          "N E U S T A R T"/* de */,
          "R E D É M A R R E R"/* fr */ }
     },
+    { "Restore",
+       { "Load"/* en */,
+         "Laden"/* de */,
+         "Charge"/* fr */ }
+    },
     { "S T A R T",
        { "S T A R T"/* en */,
          "S T A R T"/* de */,
          "S T A R T"/* fr */ }
+    },
+    { "Save",
+       { "Save"/* en */,
+         "Speichern"/* de */,
+         "Enregistrer"/* fr */ }
     },
     { "Show errors immediately",
        { "Show errors immediately"/* en */,
@@ -119,6 +139,11 @@ const std::vector<WtTranslationTexts> wt_translations = {
        { "Ui Design"/* en */,
          "Ui Design"/* de */,
          "Ui Design"/* fr */ }
+    },
+    { "Undo",
+       { "Undo"/* en */,
+         "Rückgängig"/* de */,
+         "Annuler"/* fr */ }
     },
     { "View Licenses >>",
        { "View Licenses >>"/* en */,
