@@ -249,7 +249,7 @@
         /**************************
          * 
          *************************/
-        virtual void init_game( WtBoard&, WtPlayer& )
+        virtual void init_game( WtBoard&, WtPlayer&, std::string )
         {
 
         }

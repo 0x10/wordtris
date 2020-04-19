@@ -56,13 +56,6 @@ public:
                     WtL10n_tr("EXIT GAME"),
                     WtCoord( 0, 40 ),
                     WtFont( "#a8a8a8", "text_big" ) ),
-        m_help_btn( WtCoord(offset_x - 158, offset_y+50),
-                    WtDim(100, 100),
-                    "help_btn.bmp",
-                    WT_BIND_EVENT_HANDLER( WtMenuPause::help_pressed ) ),
-        m_seperator0( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (m_standard_btn_size.w / 2), offset_y + 150 ),
-                      WtDim( m_standard_btn_size.w, 1 ),
-                      "#182e4b" ),
         m_supporting_grid_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) + ((m_standard_btn_size.w / 2)-100), offset_y + 150 + (69-20) ),
                                WtL10n_tr( "Supporting Grid" ),
                                STORAGE.get_settings().show_support_grid,
@@ -71,14 +64,6 @@ public:
                                WtL10n_tr( "Show errors immediately" ),
                                STORAGE.get_settings().show_error_on_input,
                                WT_BIND_EVENT_HANDLER_1( WtMenuPause::show_error_changed ) ),
-        m_next_stone_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) + ((m_standard_btn_size.w / 2)-100), offset_y + 150 + ((69*2)) ),
-                          WtL10n_tr( "Show next stone" ),
-                          STORAGE.get_settings().show_next_stone,
-                          WT_BIND_EVENT_HANDLER_1( WtMenuPause::show_next_stone_changed ) ),
-        m_enable_audio_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) + ((m_standard_btn_size.w / 2)-100), offset_y + 150 + ((69*3)+20) ),
-                            WtL10n_tr( "Play music and sounds" ),
-                            STORAGE.get_settings().enable_audio,
-                            WT_BIND_EVENT_HANDLER_1( WtMenuPause::enable_audio_changed ) ),
         m_pause_label( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (297 / 2), (ACTIVE_WINDOW_HEIGHT / 8) ),
                        WtDim( 297, 74 ),
                        "label_pause.bmp",
@@ -89,8 +74,6 @@ public:
         add_button( m_leave_btn );
         add_button( m_redo_btn );
         add_button( m_quit_btn );
-        //add_button( m_seperator0 );
-        //add_button( m_help_btn );
         add_button( m_supporting_grid_btn );
         add_button( m_immediate_error_btn );
         add_button( m_pause_label );
@@ -122,13 +105,6 @@ private: // no copy allowed
         leave();
     }
 
-    /**************************
-     *
-     *************************/
-    void help_pressed()
-    {
-        //enter_child_menu( m_help );
-    }
 
     /**************************
      *
@@ -144,36 +120,6 @@ private: // no copy allowed
         }
     }
 
-    /**************************
-     *
-     *************************/
-    void show_next_stone_changed( bool show_next )
-    {
-        std::cout << "preview " << ( show_next ? "active" : "inactive" ) << std::endl;
-        WtSettings settings = STORAGE.get_settings();
-        if ( settings.show_next_stone != show_next )
-        {
-            settings.show_next_stone = show_next;
-            STORAGE.store_settings( settings );
-        }
-    }
-
-
-    /**************************
-     *
-     *************************/
-    void enable_audio_changed( bool enable )
-    {
-        std::cout << "audio " << ( enable ? "active" : "inactive" ) << std::endl;
-        WtSettings settings = STORAGE.get_settings();
-        if ( settings.enable_audio != enable )
-        {
-            settings.enable_audio = enable;
-            STORAGE.store_settings( settings );
-
-            ACTIVE_SFX.toggle_mute( settings.enable_audio );
-        }
-    }
 
     /**************************
      *
@@ -196,22 +142,14 @@ private: // no copy allowed
     void entered_view()
     {
         m_supporting_grid_btn.set_checked( STORAGE.get_settings().show_support_grid );
-        m_next_stone_btn.set_checked( STORAGE.get_settings().show_next_stone );
-        m_enable_audio_btn.set_checked( STORAGE.get_settings().enable_audio );
     }
 
 private:
-    //WtMenuHelp          m_help;
-
     WtButton            m_leave_btn;
     WtButton            m_redo_btn;
     WtButton            m_quit_btn;
-    WtButton            m_help_btn;
-    WtButton            m_seperator0;
     WtCheckboxButton    m_supporting_grid_btn;
     WtCheckboxButton m_immediate_error_btn;
-    WtCheckboxButton    m_next_stone_btn;
-    WtCheckboxButton    m_enable_audio_btn;
     WtButton            m_pause_label;
 
     OnRestartDelegate   m_restart_handler;

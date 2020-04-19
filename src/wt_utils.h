@@ -115,7 +115,7 @@ public:
     template<typename itemtype>
     static itemtype get_random_from_sequence( std::vector<itemtype>& seq, size_t* idx=nullptr )
     {
-        itemtype result;
+        itemtype result = seq[0];
         uint8_t buf;
         if ( WtRandom::getrandom( &buf, 1 ) <= 1 )
         {
@@ -132,12 +132,12 @@ public:
     template<typename itemtype>
     static typename std::vector<itemtype>::iterator get_random_iter_from_sequence( std::vector<itemtype>& seq, size_t* idx=nullptr )
     {
-        typename std::vector<itemtype>::iterator result;
+        typename std::vector<itemtype>::iterator result = seq.end();
         uint8_t buf;
         if ( WtRandom::getrandom( &buf, 1 ) <= 1 )
         {
             size_t index = buf % seq.size();
-            result = seq.begin()+index;
+            result = seq.begin()+static_cast<ssize_t>(index);
             if ( idx != nullptr ) *idx = index;
         }
         return result;

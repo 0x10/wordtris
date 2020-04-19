@@ -60,9 +60,9 @@ public:
     {
 
         add_button( m_leave_btn );
-        add_button( m_text_cc0 );
-        add_button( m_text_cc1 );
-        add_button( m_text_cc2 );
+        //add_button( m_text_cc0 );
+//        add_button( m_text_cc1 );
+  //      add_button( m_text_cc2 );
         add_button( m_text_ofl0 );
         add_button( m_text_olf1 );
 

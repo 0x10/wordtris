@@ -133,7 +133,7 @@ private: // no copy allowed
                 {
                     if ( diff_label[i].first == entry.diff )
                     {
-                        diff_text = std::string("(") + std::string(diff_label[i].second) + std::string(")");
+                        diff_text = std::string("(") + WtL10n::translate( WtGameModeIf::get_available_difficulties()[i].second) + std::string(")");
                     }
                 }
 

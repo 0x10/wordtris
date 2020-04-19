@@ -428,6 +428,7 @@ public:
 "a0b00000c0000dca",
 "a0b00b0000000000"
         },
+        m_active_selected_orig(""),
         m_pause(false),
         m_gridsize( gridsize )
     {
@@ -1153,7 +1154,7 @@ public:
      *************************/
     bool stone_blocked( WtBoard& board, uint8_t r, uint8_t c )
     {
-        return m_active_selected_orig[ r*board.col_count() + c ] != '0';
+        return m_active_selected_orig[ size_t(r)*board.col_count() + size_t(c) ] != '0';
     }
 
     /**************************
