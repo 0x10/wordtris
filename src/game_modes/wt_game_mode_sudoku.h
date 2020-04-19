@@ -569,50 +569,61 @@ public:
         std::vector<char>::iterator it = WtRandom::get_random_iter_from_sequence<char>( digits_pool );
         std::replace( next.begin(), next.end(), 'a', *it );
         digits_pool.erase( it );
+        //std::cout << "### replaced " << next << std::endl;
         // replace b
         it = WtRandom::get_random_iter_from_sequence<char>( digits_pool );
         std::replace( next.begin(), next.end(), 'b', *it );
         digits_pool.erase( it );
+//        std::cout << "### replaced " << next << std::endl;
         // replace c
         it = WtRandom::get_random_iter_from_sequence<char>( digits_pool );
         std::replace( next.begin(), next.end(), 'c', *it );
         digits_pool.erase( it );
+  //      std::cout << "### replaced " << next << std::endl;
         // replace d
         it = WtRandom::get_random_iter_from_sequence<char>( digits_pool );
         std::replace( next.begin(), next.end(), 'd', *it );
         digits_pool.erase( it );
+    //    std::cout << "### replaced " << next << std::endl;
         // replace e
         it = WtRandom::get_random_iter_from_sequence<char>( digits_pool );
         std::replace( next.begin(), next.end(), 'e', *it );
         digits_pool.erase( it );
+      //  std::cout << "### replaced " << next << std::endl;
         // replace f
         it = WtRandom::get_random_iter_from_sequence<char>( digits_pool );
         std::replace( next.begin(), next.end(), 'f', *it );
         digits_pool.erase( it );
+        //std::cout << "### replaced " << next << std::endl;
         // replace g
         it = WtRandom::get_random_iter_from_sequence<char>( digits_pool );
         std::replace( next.begin(), next.end(), 'g', *it );
         digits_pool.erase( it );
+ //       std::cout << "### replaced " << next << std::endl;
         // replace h
         it = WtRandom::get_random_iter_from_sequence<char>( digits_pool );
         std::replace( next.begin(), next.end(), 'h', *it );
         digits_pool.erase( it );
+   //     std::cout << "### replaced " << next << std::endl;
         // replace i
         it = WtRandom::get_random_iter_from_sequence<char>( digits_pool );
         std::replace( next.begin(), next.end(), 'i', *it );
         digits_pool.erase( it );
+     //   std::cout << "### replaced " << next << std::endl;
 
         /* randomize rotate by
          * */
         std::vector<size_t> rotation_by = {0,90,180,270}; /* NONE, 90, 180, 270 */
         size_t rotate_by = WtRandom::get_random_from_sequence<size_t>( rotation_by );
         next = rotate_puzzle9x9( next, rotate_by );
+       // std::cout << "### rotated " << next << std::endl;
 
         /* randomize flip
          * */
         std::vector<size_t> flip = {0,1,2,3}; /* NONE, hori, vert, both */
         size_t flip_by = WtRandom::get_random_from_sequence<size_t>( flip );
         next = flip_puzzle9x9( next, flip_by );
+        //std::cout << "### flipped " << next << std::endl;
 
         return next;
     }
@@ -774,13 +785,13 @@ public:
 
                 break;
             case 180:
-                output = rotate_puzzle4x4( output, 90 );
-                output = rotate_puzzle4x4( output, 90 );
+                output = rotate_puzzle9x9( output, 90 );
+                output = rotate_puzzle9x9( output, 90 );
                 break;
             case 270:
-                output = rotate_puzzle4x4( output, 90 );
-                output = rotate_puzzle4x4( output, 90 );
-                output = rotate_puzzle4x4( output, 90 );
+                output = rotate_puzzle9x9( output, 90 );
+                output = rotate_puzzle9x9( output, 90 );
+                output = rotate_puzzle9x9( output, 90 );
                 break;
         }
 
