@@ -206,7 +206,7 @@ public:
      *************************/
     std::string get_title()
     {
-        return ( m_gridsize == 9 ? "@dark/label_mode_guessing_" + WtL10n::get_language_code() + ".bmp" : "@dark/label_mode_classic.bmp");
+        return ( m_gridsize == 9 ? "@dark/label_mode_9x9.bmp" : "@dark/label_mode_4x4.bmp");
     }
 
     /**************************
