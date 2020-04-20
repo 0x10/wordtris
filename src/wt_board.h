@@ -22,6 +22,7 @@ class WtBoard
 {
 private:
     static constexpr uint8_t row_cnt = 9;
+    static constexpr uint8_t note_cnt = row_cnt;
     static constexpr uint8_t col_cnt = row_cnt;
     struct HistoryEntry
     {
@@ -32,7 +33,7 @@ private:
     struct CellInfo
     {
         bool error;
-        bool notes[WtBoard::row_cnt];
+        bool notes[WtBoard::note_cnt];
     };
 public:
     static const char empty_cell = '\0';
@@ -82,6 +83,14 @@ public:
      *
      *************************/
     uint8_t row_count() const
+    {
+        return STORAGE.get_settings().gridsize;// m_row_count;
+    }
+
+    /**************************
+     *
+     *************************/
+    uint8_t note_count() const
     {
         return STORAGE.get_settings().gridsize;// m_row_count;
     }
@@ -345,6 +354,72 @@ public:
                 current++;
             }
     }
+
+
+    /**************************
+     *
+     *************************/
+    std::string notes_to_string() const
+    {
+        std::string result = "";
+        for ( uint8_t r = 0; r < row_count(); r++ )
+            for ( uint8_t c = 0; c < col_count(); c++ )
+            {
+                bool any_note_set = false;
+                std::string cell_note_string = "";
+                for ( uint8_t n = 0; n < note_count(); n++ )
+                {
+                    if ( m_infos[r][c].notes[n] )
+                    {
+                        any_note_set = true;
+                        cell_note_string.push_back( '1' );
+                    }
+                    else
+                    {
+                        cell_note_string.push_back( '0' );
+                    }
+                }
+                if ( any_note_set )
+                {
+                    result.push_back( static_cast<char>(0x30 + r) );
+                    result.push_back( static_cast<char>(0x30 + c) );
+                    result.append( cell_note_string );
+                }
+            }
+        return result;
+    }
+
+    /**************************
+     *
+     *************************/
+    void notes_from_string( std::string s )
+    {
+        if ( s != "" )
+        {
+            std::cout << "import notes ... " << s << std::endl;
+            size_t processing_index = 0;
+            
+            while( processing_index < s.length() )
+            {
+                uint8_t r = static_cast<uint8_t>(s[processing_index] - 0x30);
+                processing_index++;
+                uint8_t c = static_cast<uint8_t>(s[processing_index] - 0x30);
+                processing_index++;
+
+                for ( uint8_t n = 0; n < note_count(); n++ )
+                {
+                    if ( s[processing_index + n] == '1' )
+                    {
+                        toggle_note( r, c, n+1 );
+                    }
+                }
+
+                processing_index += note_count();
+                std::cout << "notes in cell (" << char(0x30 + r) << ", " << char(0x30 + c) << ")\n";
+            }
+        }
+    }
+
 private:
     char m_board[WtBoard::row_cnt][WtBoard::col_cnt]; 
     CellInfo m_infos[WtBoard::row_cnt][WtBoard::col_cnt]; 

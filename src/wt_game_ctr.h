@@ -330,6 +330,7 @@ private:
      *************************/
     void return_to_menu()
     {
+        m_numpad.disable_edit_mode();
         m_game_state = GAME_TO_QUIT;
         if ( !m_board.is_full() )
         {
@@ -337,6 +338,7 @@ private:
             settings.last_game = m_active_mode->get_current_game_state( m_board );
             settings.last_game_orig = m_active_mode->get_current_game_orig();
             settings.last_game_time = std::chrono::duration_cast<std::chrono::seconds>(m_player.get_current_time()).count();
+            settings.last_game_notes = m_board.notes_to_string();
             STORAGE.store_settings( settings );
         }
     }
@@ -428,9 +430,14 @@ private:
             m_active_mode->init_game( m_board, m_player, 
                                      ( m_restore ? STORAGE.get_settings().last_game : "" ),
                                      ( m_restore ? STORAGE.get_settings().last_game_orig : "" ) );
+            if ( m_restore ) m_board.notes_from_string( STORAGE.get_settings().last_game_notes );
             m_restore = false;
             m_active.init( m_active_mode->next_letter() );
             m_current_update_counter = get_current_update_counter( m_player );
+            if ( STORAGE.get_settings().show_error_on_input )
+            {
+                m_active_mode->pre_eval_board( m_board );
+            }
             m_game_state = GAME_TO_START;
         }
     }

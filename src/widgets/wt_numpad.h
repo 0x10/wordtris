@@ -315,6 +315,14 @@ public:
             else            setup_4x4_more();
         }
     }
+
+    /**************************
+     *
+     *************************/
+    void disable_edit_mode()
+    {
+        on_edit_click();
+    }
 private:
     /**************************
      *
