@@ -41,7 +41,8 @@ public:
         enable_audio( false ),
         show_error_on_input( true ),
         gridsize(9),
-        last_game("")
+        last_game(""),
+        last_game_time(0)
     {}
 
     virtual ~WtSettings() {}
@@ -55,6 +56,7 @@ public:
     bool          show_error_on_input;
     uint8_t       gridsize;
     std::string   last_game;
+    uint32_t      last_game_time;
     /**************************
      *
      *************************/
@@ -70,6 +72,7 @@ public:
         WtStorable::write_boolean( of, show_error_on_input );
         WtStorable::write_unsigned<uint8_t>( of, gridsize );
         WtStorable::write_string( of, last_game );
+        WtStorable::write_unsigned<uint32_t>( of, last_game_time );
     }
 
     /**************************
@@ -90,6 +93,7 @@ public:
         show_error_on_input = WtStorable::read_boolean( inf, was_eof );
         gridsize = WtStorable::read_unsigned<uint8_t>( inf, was_eof );
         last_game = WtStorable::read_string( inf, was_eof );
+        last_game_time = WtStorable::read_unsigned<uint32_t>( inf, was_eof );
 
         return ( ! was_eof );
     }
@@ -110,6 +114,7 @@ public:
         size += WtStorable::get_storage_size( show_error_on_input );
         size += WtStorable::get_storage_size( gridsize );
         size += WtStorable::get_storage_size( last_game );
+        size += WtStorable::get_storage_size( last_game_time );
         return size;
     }
 };
