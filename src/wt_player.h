@@ -29,7 +29,7 @@ public:
         m_points( 0 ),
         m_words{0,0,0,0},
         m_level( 1 ),
-        m_time( WtTime::get_time() )
+        m_time( WtTime::from_seconds(0) )
     {}
     ~WtPlayer() {}
 private: // no copy allowed
@@ -113,7 +113,7 @@ public:
         m_words[2] = 0;
         m_words[3] = 0;
         m_level = 1;
-        m_time = WtTime::get_time();
+        m_time = WtTime::from_seconds(0);
     }
 
     /**************************
@@ -135,16 +135,25 @@ public:
     /**************************
      *
      *************************/
+    void set_time( WtTime::TimeType time )
+    {
+        m_time = time;
+    }
+
+
+    /**************************
+     *
+     *************************/
     uint32_t get_points() const            { return m_points; }
     uint16_t get_solved_word_count( uint8_t successive=1 ) const { return m_words[successive-1];  }
     uint32_t get_current_level() const     { return m_level;  }
-    WtTime::TimeType get_current_time() const { return WtTime::get_time_elapsed(m_time, WtTime::get_time()); }
+    WtTime::TimeType get_current_time() const { return m_time; }
 
 private:
     uint32_t m_points;
     uint16_t m_words[4];
     uint32_t m_level;
-    WtTime::TimePoint m_time;
+    WtTime::TimeType m_time;
 };
 
 

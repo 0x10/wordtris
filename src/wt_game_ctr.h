@@ -83,7 +83,8 @@ public:
         m_current_update_counter(4),
         m_game_state( GAME_STOPPED ),
         m_hide_hint( false ),
-        m_restore( false )
+        m_restore( false ),
+        m_last_update_time(WtTime::get_time())
     {
 
         add_button( m_settings_bg );
@@ -162,6 +163,9 @@ private:
     {
         bool game_over = false;
         animation_played = false;
+
+        m_player.set_time( m_player.get_current_time() + WtTime::get_time_elapsed( m_last_update_time, WtTime::get_time()  ));
+        m_last_update_time = WtTime::get_time();
 
         WtGameModeState eval_result( false,
                                      nullptr );
@@ -352,6 +356,7 @@ private:
             m_game_state = GAME_PAUSED;
             m_active_mode->pause_time();
             enter_child_menu( m_pause_menu );
+            m_last_update_time = WtTime::get_time();
         }
     }
 
@@ -378,7 +383,8 @@ private:
      *************************/
     void init_game( std::string last_game_state="" )
     {
-        m_player.reset();
+        m_player.reset();  
+        m_last_update_time = WtTime::get_time();
         m_current_time.set_label( WtTime::format_time( m_player.get_current_time() ) );
         m_board.init();
         if ( INVALID_GAME_MODE == m_active_mode )
@@ -523,6 +529,7 @@ private:
     wt_game_state       m_game_state;
     bool                m_hide_hint;
     bool                m_restore;
+    WtTime::TimePoint   m_last_update_time;
 };
 
 
