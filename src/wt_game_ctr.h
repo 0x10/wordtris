@@ -334,6 +334,7 @@ private:
         {
             WtSettings settings = STORAGE.get_settings();
             settings.last_game = m_active_mode->get_current_game_state( m_board );
+            settings.last_game_orig = m_active_mode->get_current_game_orig();
             settings.last_game_time = std::chrono::duration_cast<std::chrono::seconds>(m_player.get_current_time()).count();
             STORAGE.store_settings( settings );
         }
@@ -397,7 +398,9 @@ private:
         {
             m_player.set_time( WtTime::from_seconds(( m_restore ? STORAGE.get_settings().last_game_time : 0 ) ) );
             m_active_mode->init_game( m_board, m_player, 
-                                     ( m_restore ? STORAGE.get_settings().last_game : "" ) );
+                                     ( m_restore ? STORAGE.get_settings().last_game : "" ),
+                                     ( m_restore ? STORAGE.get_settings().last_game_orig : "" ) );
+            m_restore = false;
             m_active.init( m_active_mode->next_letter() );
             m_current_update_counter = get_current_update_counter( m_player );
             m_game_state = GAME_TO_START;

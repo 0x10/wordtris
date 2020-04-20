@@ -85,7 +85,7 @@
         /**************************
          * 
          *************************/
-        virtual void init_game( WtBoard&, WtPlayer&, std::string ) {}
+        virtual void init_game( WtBoard&, WtPlayer&, std::string, std::string ) {}
 
         /**************************
          *
@@ -111,6 +111,11 @@
          *
          *************************/
         virtual std::string get_current_game_state( WtBoard& ) { return "";}
+
+        /**************************
+         *
+         *************************/
+        virtual std::string get_current_game_orig() { return ""; }
 
         /**************************
          *
@@ -249,7 +254,7 @@
         /**************************
          * 
          *************************/
-        virtual void init_game( WtBoard&, WtPlayer&, std::string )
+        virtual void init_game( WtBoard&, WtPlayer&, std::string, std::string )
         {
 
         }

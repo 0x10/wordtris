@@ -456,12 +456,16 @@ public:
     /**************************
      * 
      *************************/
-    void init_game( WtBoard& board, WtPlayer&, std::string last_game_state )
+    void init_game( WtBoard& board, 
+                    WtPlayer&, 
+                    std::string last_game_state,
+                    std::string last_game_orig )
     {
         WtSettings settings = STORAGE.get_settings();
         settings.gridsize = m_gridsize;
         STORAGE.store_settings( settings );
-        std::string next = last_game_state;
+        std::string next       = last_game_state;
+        m_active_selected_orig = last_game_orig;
         if ( next == "" )
         {
             wt_difficulty diffi = settings.difficulty;
@@ -1083,6 +1087,14 @@ public:
     virtual std::string get_current_game_state( WtBoard& board )
     {
         return board.to_string();
+    }
+
+    /**************************
+     *
+     *************************/
+    virtual std::string get_current_game_orig()
+    {
+        return m_active_selected_orig;
     }
 
     /**************************
