@@ -41,7 +41,8 @@ private:
         GAME_TO_START,
         GAME_ANIMATION_RUNNING,
         GAME_PAUSED,
-        GAME_TO_QUIT
+        GAME_TO_QUIT,
+        GAME_TO_RESTART
     } wt_game_state;
 public:
     WtGameCtr() :
@@ -345,7 +346,7 @@ private:
      *************************/
     void restart()
     {
-        m_game_state = GAME_STOPPED;
+        m_game_state = GAME_TO_RESTART;
     }
 
     /**************************
@@ -378,6 +379,33 @@ private:
             enter_child_menu( m_score_summary );
         }
         leave();
+    }
+
+    /**************************
+     *
+     *************************/
+    void restart_game()
+    {
+        m_player.reset();  
+        m_last_update_time = WtTime::get_time();
+        m_current_time.set_label( WtTime::format_time( m_player.get_current_time() ) );
+        m_board.init();
+        if ( INVALID_GAME_MODE == m_active_mode )
+        {
+            std::cout << "invalid game mode\n";
+            m_game_state = GAME_TO_QUIT;
+        }
+        else
+        {
+            m_player.set_time( WtTime::from_seconds(( m_restore ? STORAGE.get_settings().last_game_time : 0 ) ) );
+            m_active_mode->init_game( m_board, m_player, 
+                                      m_active_mode->get_current_game_orig(),
+                                      m_active_mode->get_current_game_orig() );
+            m_restore = false;
+            m_active.init( m_active_mode->next_letter() );
+            m_current_update_counter = get_current_update_counter( m_player );
+            m_game_state = GAME_TO_START;
+        }
     }
 
     /**************************
@@ -418,6 +446,10 @@ private:
 
             case GAME_STOPPED:
                 init_game();
+                break;
+
+            case GAME_TO_RESTART:
+                restart_game();
                 break;
 
             case GAME_TO_QUIT:
