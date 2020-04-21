@@ -283,6 +283,7 @@ private:
             }
 
         }
+        m_numpad.undo_possible( m_board.undo_available() );
         
         if ( STORAGE.get_settings().show_error_on_input )
         {
@@ -339,6 +340,7 @@ private:
             settings.last_game_orig = m_active_mode->get_current_game_orig();
             settings.last_game_time = std::chrono::duration_cast<std::chrono::seconds>(m_player.get_current_time()).count();
             settings.last_game_notes = m_board.notes_to_string();
+            settings.last_game_gridsize = m_board.row_count();
             STORAGE.store_settings( settings );
         }
     }
@@ -408,6 +410,7 @@ private:
             m_current_update_counter = get_current_update_counter( m_player );
             m_game_state = GAME_TO_START;
         }
+        m_numpad.disable_edit_mode();
     }
 
     /**************************
@@ -440,6 +443,7 @@ private:
             }
             m_game_state = GAME_TO_START;
         }
+        m_numpad.disable_edit_mode();
     }
 
     /**************************

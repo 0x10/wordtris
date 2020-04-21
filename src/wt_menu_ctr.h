@@ -139,9 +139,20 @@ private:
      *************************/
     void continue_game_mode()
     {
-    	size_t idx = m_game_selection.selected();
-        std::cout << "selected = " << idx << std::endl;
-        WtGameModeIf* mode = GAME_MODE_CTR.get_available_modes()[idx];
+        WtGameModeIf* mode = nullptr;
+
+        if ( STORAGE.get_settings().last_game_gridsize == 4 )
+        {
+            mode = GAME_MODE_CTR.mode_from_string( "Sudoku4" );
+        }
+        else if ( STORAGE.get_settings().last_game_gridsize == 9 )
+        {
+            mode = GAME_MODE_CTR.mode_from_string( "Sudoku9" );
+        }
+        else
+        {
+            mode = GAME_MODE_CTR.get_available_modes()[m_game_selection.selected()];
+        }
 
         if ( mode->get_id_string() != "LOCKED" )
         {

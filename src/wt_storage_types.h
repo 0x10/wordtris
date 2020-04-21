@@ -44,7 +44,8 @@ public:
         last_game(""),
         last_game_orig(""),
         last_game_notes(""),
-        last_game_time(0)
+        last_game_time(0),
+        last_game_gridsize(0)
     {}
 
     virtual ~WtSettings() {}
@@ -61,6 +62,7 @@ public:
     std::string   last_game_orig;
     std::string   last_game_notes;
     uint32_t      last_game_time;
+    uint8_t       last_game_gridsize;
     /**************************
      *
      *************************/
@@ -79,6 +81,7 @@ public:
         WtStorable::write_string( of, last_game_orig );
         WtStorable::write_string( of, last_game_notes );
         WtStorable::write_unsigned<uint32_t>( of, last_game_time );
+        WtStorable::write_unsigned<uint8_t>( of, last_game_gridsize );
     }
 
     /**************************
@@ -102,6 +105,7 @@ public:
         last_game_orig = WtStorable::read_string( inf, was_eof );
         last_game_notes = WtStorable::read_string( inf, was_eof );
         last_game_time = WtStorable::read_unsigned<uint32_t>( inf, was_eof );
+        last_game_gridsize = WtStorable::read_unsigned<uint8_t>( inf, was_eof );
 
         return ( ! was_eof );
     }
@@ -125,6 +129,7 @@ public:
         size += WtStorable::get_storage_size( last_game_orig );
         size += WtStorable::get_storage_size( last_game_notes );
         size += WtStorable::get_storage_size( last_game_time );
+        size += WtStorable::get_storage_size( last_game_gridsize );
         return size;
     }
 };

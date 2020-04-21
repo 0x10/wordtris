@@ -353,6 +353,7 @@ public:
                 set_cell( r, c, ( s[current] == '0' ? WtBoard::empty_cell : s[current] ) );
                 current++;
             }
+        clear_history();
     }
 
 

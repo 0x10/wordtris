@@ -134,7 +134,8 @@ public:
         m_is_9x9(true),
         m_is_edit_active( false ),
         m_is_more_active( false ),
-        m_restore_possible( false )
+        m_restore_possible( false ),
+        m_undo_possible( false )
     {
 
     
@@ -308,8 +309,9 @@ public:
      *************************/
     void restore_possible( bool is_possible )
     {
+        bool old_val = m_restore_possible;
         m_restore_possible = is_possible;
-        if ( m_restore_possible && m_is_more_active )
+        if ( ( m_restore_possible != old_val) && m_is_more_active )
         {
             if ( m_is_9x9 ) setup_9x9_more();
             else            setup_4x4_more();
@@ -319,9 +321,23 @@ public:
     /**************************
      *
      *************************/
+    void undo_possible( bool is_possible )
+    {
+        bool old_val = m_undo_possible;
+        m_undo_possible = is_possible;
+        if ( ( m_undo_possible != old_val ) && m_is_more_active )
+        {
+            if ( m_is_9x9 ) setup_9x9_more();
+            else            setup_4x4_more();
+        }
+    }
+    /**************************
+     *
+     *************************/
     void disable_edit_mode()
     {
-        on_edit_click();
+        if ( m_is_edit_active )
+            on_edit_click();
     }
 private:
     /**************************
@@ -345,7 +361,9 @@ private:
         m_restore_btn.set_size( WtDim( m_size.w, m_item_size.h ) );
         if ( m_restore_possible ) m_restore_btn.set_font_color( "#999999" );
         else                      m_restore_btn.set_font_color( "#333333" );
-        
+        if ( m_undo_possible )    m_undo_btn.set_font_color( "#999999" );
+        else                      m_undo_btn.set_font_color( "#333333" );
+
         m_more_btn.set_label (WtL10n_tr("-"));
     }
 
@@ -365,6 +383,8 @@ private:
         m_restore_btn.set_size( WtDim( m_size.w, m_item_size.h ) );
         if ( m_restore_possible ) m_restore_btn.set_font_color( "#999999" );
         else                      m_restore_btn.set_font_color( "#333333" );
+        if ( m_undo_possible )    m_undo_btn.set_font_color( "#999999" );
+        else                      m_undo_btn.set_font_color( "#333333" );
 
         m_more_btn.set_label (WtL10n_tr("-"));
     }
@@ -471,6 +491,7 @@ private:
     bool              m_is_edit_active;
     bool              m_is_more_active;
     bool              m_restore_possible;
+    bool              m_undo_possible;
 };
 
 #endif /* _WT_NUMPAD_H_ */
