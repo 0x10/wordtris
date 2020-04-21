@@ -238,6 +238,15 @@ private:
                                           m_active.current_column(),
                                           WtBoard::empty_cell );
                     }
+                    m_numpad.set_item_possible( 1, m_active_mode->is_input_possible( m_board, static_cast<char>(1 + 0x30) ) );
+                    m_numpad.set_item_possible( 2, m_active_mode->is_input_possible( m_board, static_cast<char>(2 + 0x30) ) );
+                    m_numpad.set_item_possible( 3, m_active_mode->is_input_possible( m_board, static_cast<char>(3 + 0x30) ) );
+                    m_numpad.set_item_possible( 4, m_active_mode->is_input_possible( m_board, static_cast<char>(4 + 0x30) ) );
+                    m_numpad.set_item_possible( 5, m_active_mode->is_input_possible( m_board, static_cast<char>(5 + 0x30) ) );
+                    m_numpad.set_item_possible( 6, m_active_mode->is_input_possible( m_board, static_cast<char>(6 + 0x30) ) );
+                    m_numpad.set_item_possible( 7, m_active_mode->is_input_possible( m_board, static_cast<char>(7 + 0x30) ) );
+                    m_numpad.set_item_possible( 8, m_active_mode->is_input_possible( m_board, static_cast<char>(8 + 0x30) ) );
+                    m_numpad.set_item_possible( 9, m_active_mode->is_input_possible( m_board, static_cast<char>(9 + 0x30) ) );
                 }
                 else
                 {
@@ -284,6 +293,9 @@ private:
 
         }
         m_numpad.undo_possible( m_board.undo_available() );
+
+        m_numpad.set_item_possible( number, m_active_mode->is_input_possible( m_board, static_cast<char>(number + 0x30) ) );
+
         
         if ( STORAGE.get_settings().show_error_on_input )
         {
@@ -408,6 +420,20 @@ private:
             m_restore = false;
             m_active.init( m_active_mode->next_letter() );
             m_current_update_counter = get_current_update_counter( m_player );
+            for ( size_t input_idx = 1; input_idx <= STORAGE.get_settings().gridsize; input_idx++ )
+            {
+                m_numpad.set_item_possible( input_idx, 
+                                            m_active_mode->is_input_possible( m_board, static_cast<char>(input_idx + 0x30) ) );
+            }
+            m_numpad.set_item_possible( 1, m_active_mode->is_input_possible( m_board, static_cast<char>(1 + 0x30) ) );
+            m_numpad.set_item_possible( 2, m_active_mode->is_input_possible( m_board, static_cast<char>(2 + 0x30) ) );
+            m_numpad.set_item_possible( 3, m_active_mode->is_input_possible( m_board, static_cast<char>(3 + 0x30) ) );
+            m_numpad.set_item_possible( 4, m_active_mode->is_input_possible( m_board, static_cast<char>(4 + 0x30) ) );
+            m_numpad.set_item_possible( 5, m_active_mode->is_input_possible( m_board, static_cast<char>(5 + 0x30) ) );
+            m_numpad.set_item_possible( 6, m_active_mode->is_input_possible( m_board, static_cast<char>(6 + 0x30) ) );
+            m_numpad.set_item_possible( 7, m_active_mode->is_input_possible( m_board, static_cast<char>(7 + 0x30) ) );
+            m_numpad.set_item_possible( 8, m_active_mode->is_input_possible( m_board, static_cast<char>(8 + 0x30) ) );
+            m_numpad.set_item_possible( 9, m_active_mode->is_input_possible( m_board, static_cast<char>(9 + 0x30) ) );
             m_game_state = GAME_TO_START;
         }
         m_numpad.disable_edit_mode();
@@ -441,6 +467,20 @@ private:
             {
                 m_active_mode->pre_eval_board( m_board );
             }
+            for ( size_t input_idx = 1; input_idx <= STORAGE.get_settings().gridsize; input_idx++ )
+            {
+                m_numpad.set_item_possible( input_idx, 
+                                            m_active_mode->is_input_possible( m_board, static_cast<char>(input_idx + 0x30) ) );
+            }
+            m_numpad.set_item_possible( 1, m_active_mode->is_input_possible( m_board, static_cast<char>(1 + 0x30) ) );
+            m_numpad.set_item_possible( 2, m_active_mode->is_input_possible( m_board, static_cast<char>(2 + 0x30) ) );
+            m_numpad.set_item_possible( 3, m_active_mode->is_input_possible( m_board, static_cast<char>(3 + 0x30) ) );
+            m_numpad.set_item_possible( 4, m_active_mode->is_input_possible( m_board, static_cast<char>(4 + 0x30) ) );
+            m_numpad.set_item_possible( 5, m_active_mode->is_input_possible( m_board, static_cast<char>(5 + 0x30) ) );
+            m_numpad.set_item_possible( 6, m_active_mode->is_input_possible( m_board, static_cast<char>(6 + 0x30) ) );
+            m_numpad.set_item_possible( 7, m_active_mode->is_input_possible( m_board, static_cast<char>(7 + 0x30) ) );
+            m_numpad.set_item_possible( 8, m_active_mode->is_input_possible( m_board, static_cast<char>(8 + 0x30) ) );
+            m_numpad.set_item_possible( 9, m_active_mode->is_input_possible( m_board, static_cast<char>(9 + 0x30) ) );
             m_game_state = GAME_TO_START;
         }
         m_numpad.disable_edit_mode();

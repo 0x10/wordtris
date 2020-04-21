@@ -1160,6 +1160,14 @@ public:
     /**************************
      *
      *************************/
+    virtual bool is_input_possible( WtBoard& board, const char input_value )
+    {
+        return ( board.occurence_count( input_value ) < m_gridsize );
+    }
+
+    /**************************
+     *
+     *************************/
     virtual void pause_time()
     {
         m_pause = true;

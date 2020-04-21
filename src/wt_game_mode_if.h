@@ -105,8 +105,10 @@
          *
          *************************/
         virtual void pre_eval_board( WtBoard& ) {}
-
-
+        /**************************
+         *
+         *************************/
+        virtual bool is_input_possible( WtBoard&, const char  ) { return true; }
         /**************************
          *
          *************************/

@@ -101,6 +101,8 @@ public:
                       WtCoord(0,0), WtFont("#999999","text_big") ),
             WtButton( pos, size, frame_image, nullptr, "" )
         },
+        m_btn_possible{ true, true, true, true, true,
+                        true, true, true, true, true },
         m_edit_btn( WtCoord( m_pos.x + ((m_size.w / 3)/2 - 60 / 2), m_pos.y + 3*(item_image_size.h+2) ),
                     WtDim( 60,66 ),
                     "edit.bmp",
@@ -225,26 +227,35 @@ public:
         m_is_9x9 = false;
         m_buttons[0].set_position( WtCoord( m_pos.x + (( m_size.w / 2 ) - ( (m_size.w / 3) / 2)), m_pos.y + 3*(m_item_size.h+2) ) );
         m_buttons[0].set_size( WtDim( m_size.w / 3, m_item_size.h ) );
+        if ( m_btn_possible[0] )   m_buttons[0].set_font_color( "#999999" );
+        else                       m_buttons[0].set_font_color( "#333333" );
 
         m_buttons[1].set_position( WtCoord( m_pos.x + (((1-1)%2)*(m_size.w / 2)), m_pos.y ) );
         m_buttons[1].set_size( WtDim( m_size.w / 2, m_item_size.h ) );
+        if ( m_btn_possible[1] )   m_buttons[1].set_font_color( "#999999" );
+        else                       m_buttons[1].set_font_color( "#333333" );
 
         m_buttons[2].set_position( WtCoord( m_pos.x + (((2-1)%2)*(m_size.w / 2)), m_pos.y ) );
         m_buttons[2].set_size( WtDim( m_size.w / 2, m_item_size.h ) );
+        if ( m_btn_possible[2] )   m_buttons[2].set_font_color( "#999999" );
+        else                       m_buttons[2].set_font_color( "#333333" );
 
         m_buttons[3].set_position( WtCoord( m_pos.x + (((3-1)%2)*(m_size.w / 2)),  m_pos.y + (m_item_size.h + 2 + m_item_size.h/2)) );
         m_buttons[3].set_size( WtDim( m_size.w / 2, m_item_size.h ) );
+        if ( m_btn_possible[3] )   m_buttons[3].set_font_color( "#999999" );
+        else                       m_buttons[3].set_font_color( "#333333" );
 
         m_buttons[4].set_position( WtCoord( m_pos.x + (((4-1)%2)*(m_size.w / 2+1)), m_pos.y + (m_item_size.h + 2  + m_item_size.h/2)) );
         m_buttons[4].set_size( WtDim( m_size.w / 2, m_item_size.h ) );
+        if ( m_btn_possible[4] )   m_buttons[4].set_font_color( "#999999" );
+        else                       m_buttons[4].set_font_color( "#333333" );
 
         m_buttons[5].set_size( WtDim( 0,0 ) );
         m_buttons[6].set_size( WtDim( 0,0 ) );
         m_buttons[7].set_size( WtDim( 0,0 ) );
         m_buttons[8].set_size( WtDim( 0,0 ) );
         m_buttons[9].set_size( WtDim( 0,0 ) );
-
-    
+ 
         m_edit_btn.set_position( WtCoord( m_pos.x + ((m_size.w / 2)/2 - 60 / 2), m_pos.y + 3*(m_item_size.h+2)+66/4 ) );
 
         m_more_btn.set_label (WtL10n_tr("+"));
@@ -265,33 +276,62 @@ public:
         m_is_9x9 = true;
         m_buttons[0].set_position( WtCoord( m_pos.x + (( m_size.w / 2 ) - ( (m_size.w / 3) / 2)), m_pos.y + 3*(m_item_size.h+2) ) );
         m_buttons[0].set_size( WtDim( m_size.w / 3, m_item_size.h ) );
+        if ( m_btn_possible[0] )   m_buttons[0].set_font_color( "#999999" );
+        else                       m_buttons[0].set_font_color( "#333333" );
 
         m_buttons[1].set_position( WtCoord( m_pos.x + (((1-1)%3)*(m_size.w / 3)), m_pos.y ) );
         m_buttons[1].set_size( WtDim( m_size.w / 3-2, m_item_size.h ) );
+        if ( m_btn_possible[1] )   m_buttons[1].set_font_color( "#999999" );
+        else                       m_buttons[1].set_font_color( "#333333" );
+
 
         m_buttons[2].set_position( WtCoord( m_pos.x + (((2-1)%3)*(m_size.w / 3)), m_pos.y ) );
         m_buttons[2].set_size( WtDim( m_size.w / 3, m_item_size.h ) );
+        if ( m_btn_possible[2] )   m_buttons[2].set_font_color( "#999999" );
+        else                       m_buttons[2].set_font_color( "#333333" );
+
 
         m_buttons[3].set_position( WtCoord( m_pos.x + (((3-1)%3)*(m_size.w / 3+1)), m_pos.y ) );
         m_buttons[3].set_size( WtDim( m_size.w / 3, m_item_size.h ) );
+        if ( m_btn_possible[3] )   m_buttons[3].set_font_color( "#999999" );
+        else                       m_buttons[3].set_font_color( "#333333" );
+
 
         m_buttons[4].set_position( WtCoord( m_pos.x + (((4-1)%3)*(m_size.w / 3)), m_pos.y + m_item_size.h + 2 ) );
         m_buttons[4].set_size( WtDim( m_size.w / 3-2, m_item_size.h ) );
+        if ( m_btn_possible[4] )   m_buttons[4].set_font_color( "#999999" );
+        else                       m_buttons[4].set_font_color( "#333333" );
+
 
         m_buttons[5].set_position( WtCoord( m_pos.x + (((5-1)%3)*(m_size.w / 3)), m_pos.y + m_item_size.h + 2 ) );
         m_buttons[5].set_size( WtDim( m_size.w / 3, m_item_size.h ) );
+        if ( m_btn_possible[5] )   m_buttons[5].set_font_color( "#999999" );
+        else                       m_buttons[5].set_font_color( "#333333" );
+
 
         m_buttons[6].set_position( WtCoord( m_pos.x + (((6-1)%3)*(m_size.w / 3+1)), m_pos.y + m_item_size.h + 2 ) );
         m_buttons[6].set_size( WtDim( m_size.w / 3, m_item_size.h ) );
+        if ( m_btn_possible[6] )   m_buttons[6].set_font_color( "#999999" );
+        else                       m_buttons[6].set_font_color( "#333333" );
+
 
         m_buttons[7].set_position( WtCoord( m_pos.x + (((7-1)%3)*(m_size.w / 3)), m_pos.y + 2*(m_item_size.h+2) ) );
         m_buttons[7].set_size( WtDim( m_size.w / 3-2, m_item_size.h ) );
+        if ( m_btn_possible[7] )   m_buttons[7].set_font_color( "#999999" );
+        else                       m_buttons[7].set_font_color( "#333333" );
+
 
         m_buttons[8].set_position( WtCoord( m_pos.x + (((8-1)%3)*(m_size.w / 3)), m_pos.y + 2*(m_item_size.h+2) ) );
         m_buttons[8].set_size( WtDim( m_size.w / 3, m_item_size.h ) );
+        if ( m_btn_possible[8] )   m_buttons[8].set_font_color( "#999999" );
+        else                       m_buttons[8].set_font_color( "#333333" );
+
 
         m_buttons[9].set_position( WtCoord( m_pos.x + (((9-1)%3)*(m_size.w / 3+1)), m_pos.y + 2*(m_item_size.h+2) ) );
         m_buttons[9].set_size( WtDim( m_size.w / 3, m_item_size.h ) );
+        if ( m_btn_possible[9] )   m_buttons[9].set_font_color( "#999999" );
+        else                       m_buttons[9].set_font_color( "#333333" );
+
 
         
         m_edit_btn.set_position( WtCoord( m_pos.x + ((m_size.w / 3)/2 - 60 / 2), m_pos.y + 3*(m_item_size.h+2)+66/4 ) );
@@ -338,6 +378,21 @@ public:
     {
         if ( m_is_edit_active )
             on_edit_click();
+    }
+
+
+    /**************************
+     *
+     *************************/
+    void set_item_possible( const size_t idx, bool is_possible )
+    {
+        bool old_val = m_btn_possible[idx];
+        m_btn_possible[idx] = is_possible;
+        if ( ( m_btn_possible[idx] != old_val ) && !m_is_more_active )
+        {
+            if ( m_is_9x9 ) setup_9x9_layout();
+            else            setup_4x4_layout();
+        }
     }
 private:
     /**************************
@@ -478,6 +533,7 @@ private:
     const WtDim       m_item_size;
 
     WtButton          m_buttons[11];
+    bool              m_btn_possible[10];
     WtButton          m_edit_btn;
     WtButton          m_more_btn;
     WtButton          m_undo_btn;

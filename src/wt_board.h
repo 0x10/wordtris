@@ -120,6 +120,20 @@ public:
     /**************************
      *
      *************************/
+    size_t occurence_count( char val ) const
+    {
+        size_t result = 0;
+
+        for( uint8_t r = 0; r<row_count(); r++ )
+            for( uint8_t c = 0; c<col_count(); c++ )
+                if ( m_board[r][c] == val ) result ++;
+
+        return result;
+    }
+
+    /**************************
+     *
+     *************************/
     void set_cell( uint8_t r,
                    uint8_t c,
                    char    val )
