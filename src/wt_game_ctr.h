@@ -258,9 +258,15 @@ private:
                     }
                     else
                     {
+                        char old_val = m_board.get_cell( m_active.current_row(),
+                                                         m_active.current_column() );
                         m_board.set_cell( m_active.current_row(),
                                           m_active.current_column(),
                                           number + 0x30 );
+                        if ( old_val != WtBoard::empty_cell )
+                        {
+                            m_numpad.set_item_possible( size_t(old_val - 0x30), m_active_mode->is_input_possible( m_board, old_val ) );
+                        }
                     }
                 }
             }
