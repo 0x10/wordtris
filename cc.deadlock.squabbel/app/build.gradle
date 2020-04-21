@@ -46,13 +46,13 @@ android {
             dimension "versions"
             applicationIdSuffix ".lite"
             versionNameSuffix "-lite"
-            resValue "string", "app_name", "Squaddel Lite"
+            resValue "string", "app_name", "Squabbel Sudoku"
         }
         pro {
             dimension "versions"
             applicationIdSuffix ".pro"
             versionNameSuffix "-pro"
-            resValue "string", "app_name", "Squaddel Pro"
+            resValue "string", "app_name", "Squabbel Sudoku"
             externalNativeBuild {
                 ndkBuild {
                     arguments "APP_PLATFORM=android-19"
