@@ -388,8 +388,8 @@ public:
         m_sudoku_seeds4x4_easy{
 "0ab0b00cd00a0cd0",
 "abc00d0000d00cba",
-"a0000abcbcad00a0",
-"da0b0b0000c0a0d0",
+"c0000dbcbcad00c0",
+"da0c0b0000c0a0d0",
 "abcd00b0c0d0b00c",
 "a0bccb0d0a000cda",
 "abcddc0bc0b000d0",
@@ -406,27 +406,26 @@ public:
 "000aabc00cabb000",
 "0ab0c000000b0ca0",
 "00000abcbcad0000",
-"abcd00b0c000b000",
+"abcd00b0c000b0a0",
 "c0d00000a0b00b0a",
-"abc000b0bad00000",
+"abc00cb0bad00000",
 "b00c00b0acd000c0",
 "da000bad000b0c00",
 "c0d0d00cbd0000bd",
-"0b00d0a0c00a0a00"
+"0b00d0a0c00a0a0c"
         },
         m_sudoku_seeds4x4_hard{
 "a00000b00c00000d",
 "00a0b000000c0d00",
 "a0b0000000000a0c",
-"0a000b0000c0a0d0",
-"00a0000cd000a00d",
-"00000000a0b00b0a",
-"a0c000b0bad00000",
+"ca000b0000c0a0d0",
+"00a0000cd000ac0d",
+"000c0d00a0b00b0a",
+"a0c000b0bad00c00",
 "b00c00000cd00000",
-"0000c0db00000b00",
-"a0c00000d00a000c",
-"a0b00000c0000dca",
-"a0b00b0000000000"
+"0000c0db00000b0a",
+"abc00000d00a000c",
+"a0b00000c0000dca"
         },
         m_active_selected_orig(""),
         m_pause(false),
@@ -540,18 +539,21 @@ public:
         it = WtRandom::get_random_iter_from_sequence<char>( digits_pool );
         std::replace( next.begin(), next.end(), 'd', *it );
         digits_pool.erase( it );
+        //std::cout << "### replaced " << next << std::endl;
 
         /* randomize rotate by
          * */
         std::vector<size_t> rotation_by = {0,90,180,270}; /* NONE, 90, 180, 270 */
         size_t rotate_by = WtRandom::get_random_from_sequence<size_t>( rotation_by );
         next = rotate_puzzle4x4( next, rotate_by );
+        //std::cout << "### rotated " << next << std::endl;
 
         /* randomize flip
          * */
         std::vector<size_t> flip = {0,1,2,3}; /* NONE, hori, vert, both */
         size_t flip_by = WtRandom::get_random_from_sequence<size_t>( flip );
         next = flip_puzzle4x4( next, flip_by );
+        //std::cout << "### flipped " << next << std::endl;
 
         return next;
     }
