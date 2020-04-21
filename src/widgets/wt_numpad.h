@@ -257,6 +257,7 @@ public:
         m_buttons[9].set_size( WtDim( 0,0 ) );
  
         m_edit_btn.set_position( WtCoord( m_pos.x + ((m_size.w / 2)/2 - 60 / 2), m_pos.y + 3*(m_item_size.h+2)+66/4 ) );
+        m_edit_btn.set_size( WtDim( 60,66 ) );
 
         m_more_btn.set_label (WtL10n_tr("+"));
         m_more_btn.set_position( WtCoord( m_pos.x + (( m_size.w / 2 ) - ( (m_size.w / 3) / 2)) + (m_size.w / 3) , m_pos.y + 3*(m_item_size.h+2) ) );
@@ -335,6 +336,7 @@ public:
 
         
         m_edit_btn.set_position( WtCoord( m_pos.x + ((m_size.w / 3)/2 - 60 / 2), m_pos.y + 3*(m_item_size.h+2)+66/4 ) );
+        m_edit_btn.set_size( WtDim( 60,66 ) );
 
         m_more_btn.set_label (WtL10n_tr("+"));
         m_more_btn.set_position( WtCoord( m_pos.x + (((9-1)%3)*(m_size.w / 3+1)), m_pos.y + 3*(m_item_size.h+2) ) );
@@ -410,6 +412,7 @@ private:
         m_buttons[7].set_size( WtDim(0,0) );
         m_buttons[8].set_size( WtDim(0,0) );
         m_buttons[9].set_size( WtDim(0,0) );
+        m_edit_btn.set_size( WtDim( 0,0 ) );
 
         m_undo_btn.set_size( WtDim( m_size.w, m_item_size.h ) );
         m_save_btn.set_size( WtDim( m_size.w, m_item_size.h ) );
@@ -432,6 +435,7 @@ private:
         m_buttons[2].set_size( WtDim(0,0) );
         m_buttons[3].set_size( WtDim(0,0) );
         m_buttons[4].set_size( WtDim(0,0) );
+        m_edit_btn.set_size( WtDim( 0,0 ) );
        
         m_undo_btn.set_size( WtDim( m_size.w, m_item_size.h ) );
         m_save_btn.set_size( WtDim( m_size.w, m_item_size.h ) );

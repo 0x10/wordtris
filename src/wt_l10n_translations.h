@@ -31,14 +31,14 @@ const std::vector<WtTranslationTexts> wt_translations = {
          " V O T R E  R É S U L T A T !"/* fr */ }
     },
     { "+",
-       { "+"/* en */,
-         "+"/* de */,
-         "+"/* fr */ }
+       { "More"/* en */,
+         "Mehr"/* de */,
+         "Plus"/* fr */ }
     },
     { "-",
-       { "-"/* en */,
-         "-"/* de */,
-         "-"/* fr */ }
+       { "Back"/* en */,
+         "Zurück"/* de */,
+         "Retour"/* fr */ }
     },
     { "B A C K",
        { "B A C K"/* en */,
