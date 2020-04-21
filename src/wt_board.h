@@ -33,6 +33,7 @@ private:
     struct CellInfo
     {
         bool error;
+        bool fixed;
         bool notes[WtBoard::note_cnt];
     };
 public:
@@ -370,6 +371,30 @@ public:
         clear_history();
     }
 
+    /**************************
+     *
+     *************************/
+    void apply_fixed_mask( std::string s )
+    {
+        size_t current = 0;
+        for ( uint8_t r = 0; r < row_count(); r++ )
+            for ( uint8_t c = 0; c < col_count(); c++ )
+            {
+                if ( current > s.length() )
+                    return;
+
+                m_infos[r][c].fixed = ( s[current] != '0' );
+                current++;
+            }
+    }
+
+    /**************************
+     *
+     *************************/
+    bool is_fixed( uint8_t r, uint8_t c ) const
+    {
+        return m_infos[r][c].fixed;
+    }
 
     /**************************
      *

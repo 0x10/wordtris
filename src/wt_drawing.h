@@ -114,11 +114,25 @@ public:
                 {
                     if ( draw_error_state && board.is_erroneous( i, j ) )
                     {
-                        DrawingPolicy::draw_at_grid( i, j, val, "grid_error" );
+                        if ( board.is_fixed( i, j ) )
+                        {
+                            DrawingPolicy::draw_at_grid( i, j, val, "grid_error_fixed" );
+                        }
+                        else
+                        {
+                            DrawingPolicy::draw_at_grid( i, j, val, "grid_error" );
+                        }
                     }
                     else
                     {
-                        DrawingPolicy::draw_at_grid( i, j, val );
+                        if ( board.is_fixed( i, j ) )
+                        {
+                            DrawingPolicy::draw_at_grid( i, j, val, "grid_fixed" );
+                        }
+                        else
+                        {
+                            DrawingPolicy::draw_at_grid( i, j, val );
+                        }
                     }
                 }
                 else

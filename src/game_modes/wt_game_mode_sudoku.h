@@ -507,6 +507,7 @@ public:
         m_pause = false;
 
         board.from_string( next );
+        board.apply_fixed_mask( m_active_selected_orig );
     }
 
 

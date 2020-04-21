@@ -246,6 +246,20 @@ public:
                         font_col.b = 0x11;
                         font_col.a = 255;
                     }
+                    else if ( font == "grid_fixed" )
+                    {
+                        font_bg = "#191919";
+                        bg_alpha = 255;
+                    }
+                    else if ( font == "grid_error_fixed" )
+                    {
+                        font_col.r = 0xCC;
+                        font_col.g = 0x11;
+                        font_col.b = 0x11;
+                        font_col.a = 255;
+                        font_bg = "#191919";
+                        bg_alpha = 255;
+                    }
                     else
                     {
                         font_bg = "grid_font_bg_inverse.bmp";
