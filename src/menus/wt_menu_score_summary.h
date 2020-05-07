@@ -156,9 +156,11 @@ private: // no copy allowed
     {
         bool entry_added = false;
         size_t game_mode_entries=0;
-        for( size_t idx = 0; ( idx < scores.size() && game_mode_entries < 10 ); idx++ )
+        size_t max_entry_size = 10 * WtGameModeIf::get_available_difficulties().size();
+        for( size_t idx = 0; ( idx < scores.size() && game_mode_entries < max_entry_size ); idx++ )
         {
-            if ( scores[idx].game_mode == entry.game_mode )
+            if (( scores[idx].game_mode == entry.game_mode )
+               && (scores[idx].diff == entry.diff))
             {
                 if ( scores[idx].time_s > entry.time_s )
                 {
@@ -172,7 +174,7 @@ private: // no copy allowed
             }
         }
 
-        if ( ( !entry_added ) && ( game_mode_entries < 10 ) )
+        if ( ( !entry_added ) && ( game_mode_entries < max_entry_size ) )
         {
             scores.push_back( entry );
             entry_added = true;

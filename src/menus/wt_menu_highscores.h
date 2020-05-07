@@ -45,11 +45,27 @@ public:
                        "",
                        WtCoord( 0, 160 ),
                        WtFont( "#a8a8a8", "text_big" ) ),
+        m_diff_left_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 8)-(40/2), ((ACTIVE_WINDOW_HEIGHT / 2))-(10) ), 
+                    WtDim(40, 21), 
+                    "left.bmp",
+                    WT_BIND_EVENT_HANDLER( WtMenuHighscores::show_prev_diff ) ),
+        m_diff_right_btn( WtCoord( (ACTIVE_WINDOW_WIDTH-(ACTIVE_WINDOW_WIDTH / 8))-(40/2), ((ACTIVE_WINDOW_HEIGHT / 2))-(10) ), 
+                     WtDim(40, 21), 
+                     "right.bmp",
+                     WT_BIND_EVENT_HANDLER( WtMenuHighscores::show_next_diff ) ),
+        m_diff_title_btn( WtCoord( (ACTIVE_WINDOW_WIDTH / 2) - (188 / 2), (ACTIVE_WINDOW_HEIGHT / 8)-(134/2) ),
+                       WtDim( 188, 134 ),
+                       "label_score.bmp",
+                       [](){},
+                       "",
+                       WtCoord( 0, 200 ),
+                       WtFont( "#a8a8a8", "text" ) ),
         m_list_bg( WtCoord(0, (ACTIVE_WINDOW_HEIGHT / 4)-50), WtDim(ACTIVE_WINDOW_WIDTH, 650), "#0e0e0e" ),
         m_scores( STORAGE.get_scores() ),
         m_game_mode_ids( GAME_MODE_CTR.get_available_mode_ids() ),
         m_game_mode_names( GAME_MODE_CTR.get_available_mode_names() ),
-        m_selected_mode( 0 )
+        m_selected_mode( 0 ),
+        m_selected_diff( wt_difficulty_EASY )
     {
         WtL10n::register_lang_change_obsever( WT_BIND_EVENT_HANDLER( WtMenuHighscores::language_changed ) );
 
@@ -63,7 +79,11 @@ public:
         }
 #endif
         add_button( m_title_btn );
-        
+        add_button( m_diff_title_btn );
+        add_button( m_diff_left_btn );
+        add_button( m_diff_right_btn );
+
+        set_diff_label();
     }
     ~WtMenuHighscores() {}
 private: // no copy allowed
@@ -95,6 +115,64 @@ private: // no copy allowed
         m_title_btn.set_label( m_game_mode_names[m_selected_mode] );
     }
 
+
+    /**************************
+     *
+     *************************/
+    void set_diff_label()
+    {
+        std::vector<std::pair<wt_difficulty, const char*> > diff_label= WtGameModeIf::get_available_difficulties();
+        for( size_t i = 0; i < diff_label.size(); i++ )
+        {
+            if ( diff_label[i].first == m_selected_diff )
+            {
+                m_diff_title_btn.set_label( WtL10n::translate( WtGameModeIf::get_available_difficulties()[i].second) );
+            }
+        }
+    }
+
+    /**************************
+     *
+     *************************/
+    void show_prev_diff()
+    {
+        switch(m_selected_diff)
+        {
+            case wt_difficulty_EASY:
+                m_selected_diff = wt_difficulty_HARD;
+                break;
+            case wt_difficulty_MEDIUM:
+                m_selected_diff = wt_difficulty_EASY;
+                break;
+            case wt_difficulty_HARD:
+                m_selected_diff = wt_difficulty_MEDIUM;
+                break;
+            default:break;
+        }
+        set_diff_label();
+    }
+
+    /**************************
+     *
+     *************************/
+    void show_next_diff()
+    {
+        switch(m_selected_diff)
+        {
+            case wt_difficulty_EASY:
+                m_selected_diff = wt_difficulty_MEDIUM;
+                break;
+            case wt_difficulty_MEDIUM:
+                m_selected_diff = wt_difficulty_HARD;
+                break;
+            case wt_difficulty_HARD:
+                m_selected_diff = wt_difficulty_EASY;
+                break;
+            default:break;
+        }
+        set_diff_label();
+    }
+
     /**************************
      *
      *************************/
@@ -110,7 +188,7 @@ private: // no copy allowed
     void draw_entry( size_t index, WtScoreEntry& entry )
     {
         WtDim   font_size = ACTIVE_WINDOW.get_font_size();
-        WtCoord entry_pos ( (ACTIVE_WINDOW_WIDTH / 4) ,
+        WtCoord entry_pos ( (ACTIVE_WINDOW_WIDTH / 3) ,
                             (((ACTIVE_WINDOW_HEIGHT / 4)) + (font_size.h + (font_size.h / 2))) );
 
         entry_pos.y = entry_pos.y + ( static_cast<ssize_t>(index) * (font_size.h + (font_size.h)) );
@@ -127,23 +205,11 @@ private: // no copy allowed
 
             {
                 std::string level_label = "Level ";
-                std::string diff_text = "";
-                std::vector<std::pair<wt_difficulty, const char*> > diff_label= WtGameModeIf::get_available_difficulties();
-                for( size_t i = 0; i < diff_label.size(); i++ )
-                {
-                    if ( diff_label[i].first == entry.diff )
-                    {
-                        diff_text = std::string("(") + WtL10n::translate( WtGameModeIf::get_available_difficulties()[i].second) + std::string(")");
-                    }
-                }
 
                 std::stringstream ss;
                 ss << WtTime::format_time( WtTime::from_seconds( entry.time_s ));
                 std::string score = ss.str();
                 ACTIVE_WINDOW.draw_text( entry_pos, score ); 
-                WtDim text_font_size = ACTIVE_WINDOW.get_text_size( score+"  " );
-                entry_pos.x = entry_pos.x + text_font_size.w;
-                ACTIVE_WINDOW.draw_text( entry_pos, diff_text );
             }
 
         }
@@ -154,12 +220,10 @@ private: // no copy allowed
      *************************/
     void entered_view()
     {
-#ifdef WT_PRO_MODE
         m_selected_mode = GAME_MODE_CTR.mode_idx_from_string( STORAGE.get_settings().game_mode );
-#else
-        m_selected_mode = GAME_MODE_CTR.mode_idx_from_string( "WordtrisClassic" );
-#endif
+        m_selected_diff = wt_difficulty_EASY;
         m_title_btn.set_label( m_game_mode_names[m_selected_mode] );
+        set_diff_label();
     }
 
     /**************************
@@ -173,7 +237,8 @@ private: // no copy allowed
         {
             WtScoreEntry entry =  m_scores[e_idx];
 
-            if ( entry.game_mode == m_game_mode_ids[m_selected_mode] )
+            if (( entry.game_mode == m_game_mode_ids[m_selected_mode] )
+              && (entry.diff == m_selected_diff))
             {
                 draw_entry( score_entry, entry );
                 score_entry++;
@@ -194,11 +259,15 @@ private:
     WtButton                       m_left_btn;
     WtButton                       m_right_btn;
     WtButton                       m_title_btn;
+    WtButton                       m_diff_left_btn;
+    WtButton                       m_diff_right_btn;
+    WtButton                       m_diff_title_btn;
     WtButton                       m_list_bg;
     WtHighscores&                  m_scores;
     const std::vector<std::string> m_game_mode_ids;
     std::vector<std::string>       m_game_mode_names;
     size_t                         m_selected_mode;
+    wt_difficulty                  m_selected_diff;
 };
 
 #endif /* _WT_MENU_HIGHSCORES_H_ */
