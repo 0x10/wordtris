@@ -61,8 +61,8 @@ const std::vector<WtTranslationTexts> wt_translations = {
          "F I N I"/* fr */ }
     },
     { "EXIT GAME",
-       { "E X I T"/* en */,
-         "E N D E"/* de */,
+       { "M A I N  M E N U"/* en */,
+         "H A U P T M E N Ü"/* de */,
          "Q U I T T E R"/* fr */ }
     },
     { "Font",
