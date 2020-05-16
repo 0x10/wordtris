@@ -1,0 +1,89 @@
+{
+  "buildFiles": [
+    "/home/krany/coding/hacks/wordtris/android-project/app/jni/Android.mk",
+    "/home/krany/coding/hacks/wordtris/android-project/app/jni/Application.mk"
+  ],
+  "cleanCommands": [
+    "/usr/local/bin/android/android-ndk-r19b/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/home/krany/coding/hacks/wordtris/android-project/app/jni/Android.mk NDK_APPLICATION_MK\u003d/home/krany/coding/hacks/wordtris/android-project/app/jni/Application.mk APP_ABI\u003dx86_64 NDK_ALL_ABIS\u003dx86_64 NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-19 NDK_OUT\u003d/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj NDK_LIBS_OUT\u003d/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/lib APP_CPPFLAGS+\u003d-DWT_PRO_MODE APP_CPPFLAGS+\u003d-O2 APP_CPPFLAGS+\u003d-frtti APP_PLATFORM\u003dandroid-19 APP_PLATFORM\u003dandroid-19 clean"
+  ],
+  "libraries": {
+    "FLAC-proRelease-x86_64": {
+      "artifactName": "FLAC",
+      "buildCommand": "/usr/local/bin/android/android-ndk-r19b/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/home/krany/coding/hacks/wordtris/android-project/app/jni/Android.mk NDK_APPLICATION_MK\u003d/home/krany/coding/hacks/wordtris/android-project/app/jni/Application.mk APP_ABI\u003dx86_64 NDK_ALL_ABIS\u003dx86_64 NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-19 NDK_OUT\u003d/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj NDK_LIBS_OUT\u003d/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/lib APP_CPPFLAGS+\u003d-DWT_PRO_MODE APP_CPPFLAGS+\u003d-O2 APP_CPPFLAGS+\u003d-frtti APP_PLATFORM\u003dandroid-19 APP_PLATFORM\u003dandroid-19 -j9 /home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj/local/x86_64/libFLAC.a",
+      "abi": "x86_64",
+      "output": "/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj/local/x86_64/libFLAC.a"
+    },
+    "hidapi-proRelease-x86_64": {
+      "artifactName": "hidapi",
+      "buildCommand": "/usr/local/bin/android/android-ndk-r19b/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/home/krany/coding/hacks/wordtris/android-project/app/jni/Android.mk NDK_APPLICATION_MK\u003d/home/krany/coding/hacks/wordtris/android-project/app/jni/Application.mk APP_ABI\u003dx86_64 NDK_ALL_ABIS\u003dx86_64 NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-19 NDK_OUT\u003d/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj NDK_LIBS_OUT\u003d/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/lib APP_CPPFLAGS+\u003d-DWT_PRO_MODE APP_CPPFLAGS+\u003d-O2 APP_CPPFLAGS+\u003d-frtti APP_PLATFORM\u003dandroid-19 APP_PLATFORM\u003dandroid-19 -j9 /home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj/local/x86_64/libhidapi.so",
+      "abi": "x86_64",
+      "output": "/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj/local/x86_64/libhidapi.so"
+    },
+    "timidity-proRelease-x86_64": {
+      "artifactName": "timidity",
+      "buildCommand": "/usr/local/bin/android/android-ndk-r19b/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/home/krany/coding/hacks/wordtris/android-project/app/jni/Android.mk NDK_APPLICATION_MK\u003d/home/krany/coding/hacks/wordtris/android-project/app/jni/Application.mk APP_ABI\u003dx86_64 NDK_ALL_ABIS\u003dx86_64 NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-19 NDK_OUT\u003d/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj NDK_LIBS_OUT\u003d/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/lib APP_CPPFLAGS+\u003d-DWT_PRO_MODE APP_CPPFLAGS+\u003d-O2 APP_CPPFLAGS+\u003d-frtti APP_PLATFORM\u003dandroid-19 APP_PLATFORM\u003dandroid-19 -j9 /home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj/local/x86_64/libtimidity.a",
+      "abi": "x86_64",
+      "output": "/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj/local/x86_64/libtimidity.a"
+    },
+    "SDL2_mixer-proRelease-x86_64": {
+      "artifactName": "SDL2_mixer",
+      "buildCommand": "/usr/local/bin/android/android-ndk-r19b/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/home/krany/coding/hacks/wordtris/android-project/app/jni/Android.mk NDK_APPLICATION_MK\u003d/home/krany/coding/hacks/wordtris/android-project/app/jni/Application.mk APP_ABI\u003dx86_64 NDK_ALL_ABIS\u003dx86_64 NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-19 NDK_OUT\u003d/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj NDK_LIBS_OUT\u003d/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/lib APP_CPPFLAGS+\u003d-DWT_PRO_MODE APP_CPPFLAGS+\u003d-O2 APP_CPPFLAGS+\u003d-frtti APP_PLATFORM\u003dandroid-19 APP_PLATFORM\u003dandroid-19 -j9 /home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj/local/x86_64/libSDL2_mixer.so",
+      "abi": "x86_64",
+      "output": "/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj/local/x86_64/libSDL2_mixer.so"
+    },
+    "modplug-proRelease-x86_64": {
+      "artifactName": "modplug",
+      "buildCommand": "/usr/local/bin/android/android-ndk-r19b/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/home/krany/coding/hacks/wordtris/android-project/app/jni/Android.mk NDK_APPLICATION_MK\u003d/home/krany/coding/hacks/wordtris/android-project/app/jni/Application.mk APP_ABI\u003dx86_64 NDK_ALL_ABIS\u003dx86_64 NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-19 NDK_OUT\u003d/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj NDK_LIBS_OUT\u003d/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/lib APP_CPPFLAGS+\u003d-DWT_PRO_MODE APP_CPPFLAGS+\u003d-O2 APP_CPPFLAGS+\u003d-frtti APP_PLATFORM\u003dandroid-19 APP_PLATFORM\u003dandroid-19 -j9 /home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj/local/x86_64/libmodplug.a",
+      "abi": "x86_64",
+      "output": "/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj/local/x86_64/libmodplug.a"
+    },
+    "vorbisidec-proRelease-x86_64": {
+      "artifactName": "vorbisidec",
+      "buildCommand": "/usr/local/bin/android/android-ndk-r19b/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/home/krany/coding/hacks/wordtris/android-project/app/jni/Android.mk NDK_APPLICATION_MK\u003d/home/krany/coding/hacks/wordtris/android-project/app/jni/Application.mk APP_ABI\u003dx86_64 NDK_ALL_ABIS\u003dx86_64 NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-19 NDK_OUT\u003d/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj NDK_LIBS_OUT\u003d/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/lib APP_CPPFLAGS+\u003d-DWT_PRO_MODE APP_CPPFLAGS+\u003d-O2 APP_CPPFLAGS+\u003d-frtti APP_PLATFORM\u003dandroid-19 APP_PLATFORM\u003dandroid-19 -j9 /home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj/local/x86_64/libvorbisidec.a",
+      "abi": "x86_64",
+      "output": "/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj/local/x86_64/libvorbisidec.a"
+    },
+    "freetype-proRelease-x86_64": {
+      "artifactName": "freetype",
+      "buildCommand": "/usr/local/bin/android/android-ndk-r19b/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/home/krany/coding/hacks/wordtris/android-project/app/jni/Android.mk NDK_APPLICATION_MK\u003d/home/krany/coding/hacks/wordtris/android-project/app/jni/Application.mk APP_ABI\u003dx86_64 NDK_ALL_ABIS\u003dx86_64 NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-19 NDK_OUT\u003d/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj NDK_LIBS_OUT\u003d/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/lib APP_CPPFLAGS+\u003d-DWT_PRO_MODE APP_CPPFLAGS+\u003d-O2 APP_CPPFLAGS+\u003d-frtti APP_PLATFORM\u003dandroid-19 APP_PLATFORM\u003dandroid-19 -j9 /home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj/local/x86_64/libfreetype.a",
+      "abi": "x86_64",
+      "output": "/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj/local/x86_64/libfreetype.a"
+    },
+    "main-proRelease-x86_64": {
+      "artifactName": "main",
+      "buildCommand": "/usr/local/bin/android/android-ndk-r19b/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/home/krany/coding/hacks/wordtris/android-project/app/jni/Android.mk NDK_APPLICATION_MK\u003d/home/krany/coding/hacks/wordtris/android-project/app/jni/Application.mk APP_ABI\u003dx86_64 NDK_ALL_ABIS\u003dx86_64 NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-19 NDK_OUT\u003d/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj NDK_LIBS_OUT\u003d/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/lib APP_CPPFLAGS+\u003d-DWT_PRO_MODE APP_CPPFLAGS+\u003d-O2 APP_CPPFLAGS+\u003d-frtti APP_PLATFORM\u003dandroid-19 APP_PLATFORM\u003dandroid-19 -j9 /home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj/local/x86_64/libmain.so",
+      "abi": "x86_64",
+      "output": "/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj/local/x86_64/libmain.so"
+    },
+    "SDL2_ttf-proRelease-x86_64": {
+      "artifactName": "SDL2_ttf",
+      "buildCommand": "/usr/local/bin/android/android-ndk-r19b/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/home/krany/coding/hacks/wordtris/android-project/app/jni/Android.mk NDK_APPLICATION_MK\u003d/home/krany/coding/hacks/wordtris/android-project/app/jni/Application.mk APP_ABI\u003dx86_64 NDK_ALL_ABIS\u003dx86_64 NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-19 NDK_OUT\u003d/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj NDK_LIBS_OUT\u003d/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/lib APP_CPPFLAGS+\u003d-DWT_PRO_MODE APP_CPPFLAGS+\u003d-O2 APP_CPPFLAGS+\u003d-frtti APP_PLATFORM\u003dandroid-19 APP_PLATFORM\u003dandroid-19 -j9 /home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj/local/x86_64/libSDL2_ttf.so",
+      "abi": "x86_64",
+      "output": "/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj/local/x86_64/libSDL2_ttf.so"
+    },
+    "mpg123-proRelease-x86_64": {
+      "artifactName": "mpg123",
+      "buildCommand": "/usr/local/bin/android/android-ndk-r19b/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/home/krany/coding/hacks/wordtris/android-project/app/jni/Android.mk NDK_APPLICATION_MK\u003d/home/krany/coding/hacks/wordtris/android-project/app/jni/Application.mk APP_ABI\u003dx86_64 NDK_ALL_ABIS\u003dx86_64 NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-19 NDK_OUT\u003d/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj NDK_LIBS_OUT\u003d/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/lib APP_CPPFLAGS+\u003d-DWT_PRO_MODE APP_CPPFLAGS+\u003d-O2 APP_CPPFLAGS+\u003d-frtti APP_PLATFORM\u003dandroid-19 APP_PLATFORM\u003dandroid-19 -j9 /home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj/local/x86_64/libmpg123.so",
+      "abi": "x86_64",
+      "output": "/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj/local/x86_64/libmpg123.so"
+    },
+    "cpufeatures-proRelease-x86_64": {
+      "artifactName": "cpufeatures",
+      "buildCommand": "/usr/local/bin/android/android-ndk-r19b/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/home/krany/coding/hacks/wordtris/android-project/app/jni/Android.mk NDK_APPLICATION_MK\u003d/home/krany/coding/hacks/wordtris/android-project/app/jni/Application.mk APP_ABI\u003dx86_64 NDK_ALL_ABIS\u003dx86_64 NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-19 NDK_OUT\u003d/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj NDK_LIBS_OUT\u003d/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/lib APP_CPPFLAGS+\u003d-DWT_PRO_MODE APP_CPPFLAGS+\u003d-O2 APP_CPPFLAGS+\u003d-frtti APP_PLATFORM\u003dandroid-19 APP_PLATFORM\u003dandroid-19 -j9 /home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj/local/x86_64/libcpufeatures.a",
+      "abi": "x86_64",
+      "output": "/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj/local/x86_64/libcpufeatures.a"
+    },
+    "ogg-proRelease-x86_64": {
+      "artifactName": "ogg",
+      "buildCommand": "/usr/local/bin/android/android-ndk-r19b/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/home/krany/coding/hacks/wordtris/android-project/app/jni/Android.mk NDK_APPLICATION_MK\u003d/home/krany/coding/hacks/wordtris/android-project/app/jni/Application.mk APP_ABI\u003dx86_64 NDK_ALL_ABIS\u003dx86_64 NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-19 NDK_OUT\u003d/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj NDK_LIBS_OUT\u003d/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/lib APP_CPPFLAGS+\u003d-DWT_PRO_MODE APP_CPPFLAGS+\u003d-O2 APP_CPPFLAGS+\u003d-frtti APP_PLATFORM\u003dandroid-19 APP_PLATFORM\u003dandroid-19 -j9 /home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj/local/x86_64/libogg.a",
+      "abi": "x86_64",
+      "output": "/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj/local/x86_64/libogg.a"
+    },
+    "SDL2-proRelease-x86_64": {
+      "artifactName": "SDL2",
+      "buildCommand": "/usr/local/bin/android/android-ndk-r19b/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/home/krany/coding/hacks/wordtris/android-project/app/jni/Android.mk NDK_APPLICATION_MK\u003d/home/krany/coding/hacks/wordtris/android-project/app/jni/Application.mk APP_ABI\u003dx86_64 NDK_ALL_ABIS\u003dx86_64 NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-19 NDK_OUT\u003d/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj NDK_LIBS_OUT\u003d/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/lib APP_CPPFLAGS+\u003d-DWT_PRO_MODE APP_CPPFLAGS+\u003d-O2 APP_CPPFLAGS+\u003d-frtti APP_PLATFORM\u003dandroid-19 APP_PLATFORM\u003dandroid-19 -j9 /home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj/local/x86_64/libSDL2.so",
+      "abi": "x86_64",
+      "output": "/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj/local/x86_64/libSDL2.so"
+    }
+  }
+}

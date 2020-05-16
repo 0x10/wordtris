@@ -148,6 +148,13 @@ public:
     /**************************
      *
      *************************/
+    static void clear_lang_change_observer()
+    {
+        WtL10n::instance().m_language_observer.clear();
+    }
+    /**************************
+     *
+     *************************/
     static std::string localize_specials( const std::string sequence )
     {
         std::string locale_seq = sequence;

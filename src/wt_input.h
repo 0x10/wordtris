@@ -57,6 +57,16 @@ public:
     /**************************
      *
      *************************/
+   void clear_all()
+   {
+        m_on_key_press = nullptr;
+        m_on_quit_handler = nullptr;
+        m_active_regions.clear();
+   }
+
+    /**************************
+     *
+     *************************/
     void register_key_press_delegate( const OnKeyPressDelegate& on_key_press  )
     {
         m_on_key_press = on_key_press;

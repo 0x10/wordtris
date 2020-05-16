@@ -1,0 +1,23 @@
+Executable : /usr/local/bin/android/android-ndk-r19b/ndk-build
+arguments : 
+NDK_PROJECT_PATH=null
+APP_BUILD_SCRIPT=/home/krany/coding/hacks/wordtris/android-project/app/jni/Android.mk
+NDK_APPLICATION_MK=/home/krany/coding/hacks/wordtris/android-project/app/jni/Application.mk
+APP_ABI=arm64-v8a
+NDK_ALL_ABIS=arm64-v8a
+NDK_DEBUG=0
+APP_PLATFORM=android-19
+NDK_OUT=/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/obj
+NDK_LIBS_OUT=/home/krany/coding/hacks/wordtris/android-project/app/build/intermediates/ndkBuild/pro/release/lib
+APP_CPPFLAGS+=-DWT_PRO_MODE
+APP_CPPFLAGS+=-O2
+APP_CPPFLAGS+=-frtti
+APP_PLATFORM=android-19
+APP_PLATFORM=android-19
+-j9
+APP_SHORT_COMMANDS=false
+LOCAL_SHORT_COMMANDS=false
+-B
+-n
+jvmArgs : 
+

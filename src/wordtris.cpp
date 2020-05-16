@@ -33,12 +33,14 @@ int main( int, char** )
         }
         if ( ACTIVE_WINDOW.open() )
         {
-            if ( ACTIVE_SFX.open() )
+//            if ( ACTIVE_SFX.open() )
             {
+                WtL10n::clear_lang_change_observer();
+                ACTIVE_INPUT.clear_all();
                 WtSettings settings = STORAGE.get_settings();
                 ACTIVE_WINDOW.set_theme( settings.active_theme );
                 WtL10n::set_language( settings.language );
-                ACTIVE_SFX.toggle_mute( settings.enable_audio );
+                //ACTIVE_SFX.toggle_mute( settings.enable_audio );
 
                 ACTIVE_WINDOW.clr();
                 //ACTIVE_WINDOW.draw_message(WtL10n_tr("Loading..."));
@@ -60,7 +62,7 @@ int main( int, char** )
 
                 (void)main_menu.show();
 
-                ACTIVE_SFX.close();
+           //     ACTIVE_SFX.close();
                 ACTIVE_WINDOW.close();
             }
         }
