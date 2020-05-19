@@ -23,7 +23,7 @@
 #ifdef USE_SYSTEM_SDL
 #include <SDL2/SDL.h>
 #else
-#include "SDL2-2.0.9/include/SDL.h"
+#include "SDL2-2.0.12/include/SDL.h"
 #endif /* USE_SYSTEM_SDL */
 
 #define SDL_ASSETS "assets/"

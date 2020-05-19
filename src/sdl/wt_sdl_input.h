@@ -43,12 +43,23 @@ public:
         {
             switch (sdl_event.type)
             {
+                case SDL_APP_LOWMEMORY:
                 case SDL_QUIT:
                     event.is_key_event = false;
                     event.is_system_event = true;
                     event.key = wt_control_QUIT;
                     break;
+                case SDL_APP_DIDENTERBACKGROUND:
+                    break;
+                case SDL_APP_WILLENTERFOREGROUND:
+                    event.is_system_event = true;
+                    event.key = wt_control_RESUME;
+                    break;
                 case SDL_APP_WILLENTERBACKGROUND:
+                    event.is_system_event = true;
+                    event.key = wt_control_SUSPEND;
+                    break;
+                case SDL_APP_DIDENTERFOREGROUND:
                     event.is_key_event = true;
                     event.key = wt_control_PAUSE;
                     break;

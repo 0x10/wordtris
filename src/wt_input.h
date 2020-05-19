@@ -128,6 +128,14 @@ public:
                     m_shall_be_quit = true;
                     if ( m_on_quit_handler ) m_on_quit_handler();
                 }
+                if ( ev.key == wt_control_SUSPEND )
+                {
+                    WtInputEvent ev_next = m_input_policy.read_input();
+                    while( ! (ev_next.is_system_event && ev_next.key == wt_control_RESUME ) )
+                    {
+                        ev_next = m_input_policy.read_input();
+                    }
+                }
             }
             else
             {

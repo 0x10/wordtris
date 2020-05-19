@@ -458,6 +458,7 @@ private:
         for(size_t idx=0;idx<m_buttons.size();idx++)
         {
             ACTIVE_WINDOW.draw_button( *(m_buttons[idx]) );
+            ACTIVE_INPUT.read();
         }
 
         for(size_t idx=0;idx<m_carousels.size();idx++)
@@ -465,12 +466,14 @@ private:
             for( size_t c_idx = 0; c_idx < m_carousels[idx]->size(); c_idx++ )
             {
                 ACTIVE_WINDOW.draw_button( (*(m_carousels[idx]))[c_idx] );
+                ACTIVE_INPUT.read();
             }
         }
 
         for(size_t idx=0;idx<m_textboxes.size();idx++)
         {
             ACTIVE_WINDOW.draw_textbox( *(m_textboxes[idx]) );
+            ACTIVE_INPUT.read();
         }
 
         if ( m_update_overlay ) m_update_overlay();

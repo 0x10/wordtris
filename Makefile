@@ -12,7 +12,7 @@ INCLUDES=-I./pc_include -I$(BUILD_DIR) -I$(SRC_DIR) -I$(SDL_DIR)/include -I$(SDL
 ANDROID_DIR=cc.deadlock.squabbel
 SRC_DIR=./src
 BUILD_DIR=.
-SDL_DIR=./SDL2-2.0.9
+SDL_DIR=./SDL2-2.0.12
 SDL_TTF_DIR=./SDL2_ttf-2.0.15
 SDL_MIXER_DIR=./SDL2_mixer-2.0.4
 

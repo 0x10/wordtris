@@ -25,6 +25,8 @@ typedef enum wt_controls_tag
     wt_control_QUIT,
     wt_control_PAUSE,
     wt_control_BACK,
+    wt_control_SUSPEND,
+    wt_control_RESUME,
     wt_control_INVALID
 } wt_control;
 
